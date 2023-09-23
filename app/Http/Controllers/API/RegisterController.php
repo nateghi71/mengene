@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\Token;
 use Laravel\Passport\RefreshToken;
-use App\Models\UserCode;
-use Ghasedak\GhasedakApi;
 
 
 class RegisterController extends BaseController
@@ -46,75 +44,6 @@ class RegisterController extends BaseController
         $success['name'] = $user->name;
 
         return $this->sendResponse($success, 'User register successfully.');
-    }
-
-    public function twoFAIndex(User $user)
-    {
-        return response()->json(['message' => 'Two-factor authentication index']);
-    }
-
-    public function twoFAStore(Request $request)
-    {
-        $number = User::where('number', $request->number)->pluck('number')->pop();
-        $request->validate([
-            'number' => ['required', 'string', 'max:11', 'unique:users'],
-        ]);
-
-        $userNumber = $request->number;
-        $code = rand(100000, 999999);
-        UserCode::updateOrCreate(
-            ['user_number' => $request->number],
-            ['code' => $code]
-        );
-        $template = "verification";
-        $api = new GhasedakApi('c882e5b437debd6e6bcb01b345c1ca263b588722fb706cabe5bb76601346bae1');
-//        $api->Verify($userNumber, $template, $code);
-
-//        $userNumber = ['userNumber' => $uNumber];
-//        $request->session()->put($userNumber);
-        Session::put('userNumber', $userNumber);
-        return response()->json(['userNumber' => $userNumber]);
-    }
-
-    public function twoFAResend(Request $request)
-    {
-//        Session::forget('error');
-        $previousCode = UserCode::where('user_number', $request->number)->first();
-        $previousTimestamp = $previousCode->updated_at;
-        $userNumber = $request->number;
-        if ($previousTimestamp->diffInMinutes(now()) >= 2) {
-            $code = rand(100000, 999999);
-            UserCode::updateOrCreate(
-                ['user_number' => $request->number],
-                ['code' => $code]
-            );
-            $template = "verification";
-            $api = new GhasedakApi('c882e5b437debd6e6bcb01b345c1ca263b588722fb706cabe5bb76601346bae1');
-//            $api->Verify($userNumber, $template, $code);
-
-            return response()->json(['userNumber' => $userNumber]);
-        } else {
-            // Return an error message indicating that the user needs to wait before requesting a new code
-            return response()->json(['error' => 'Please wait for 2 minutes before requesting a new code']);
-        }
-    }
-
-    public function twoFAConfirm(Request $request)
-    {
-//        dd($request->session()->get('userNumber'));
-//        dd(Session::get('userNumber'));
-        Session::forget('error');
-        $userNumber = Session::get('userNumber');
-        $code = UserCode::where('user_number', $userNumber)->pluck('code')->pop();
-
-        if ($code === $request->code) {
-            Session::put('user_2fa', 'allowed');
-            Session::put('userNumber', $userNumber);
-
-            return response()->json(['userNumber' => $userNumber]);
-        }
-
-        return response()->json(['error' => 'Invalid verification code']);
     }
 
     /**

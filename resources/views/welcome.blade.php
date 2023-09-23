@@ -1,3 +1,10 @@
+<!-- =======================================================
+    * Template Name: mengene
+    * Updated: Aug 30 2023 with Bootstrap v5.3.1
+    * Template URL: https://vearad.ir
+    * Author: vearad.ir
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,16 +36,7 @@
 
 
 
-    <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
 
-    <!-- =======================================================
-    * Template Name: mengene
-    * Updated: Aug 30 2023 with Bootstrap v5.3.1
-    * Template URL: https://vearad.ir
-    * Author: vearad.ir
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
 </head>
 
 <body style="direction: rtl">
