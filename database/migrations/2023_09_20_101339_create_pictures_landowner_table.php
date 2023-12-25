@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePictureLandownerTable extends Migration
+class CreatePicturesLandownerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,8 @@ class CreatePictureLandownerTable extends Migration
         Schema::create('pictures_landowner', function (Blueprint $table) {
             $table->id();
             $table->foreignId('landowner_id')->constrained('landowners');
-            $table->string('url_image')->nullable();
+            $table->string('image')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers\web;
 
+use App\HelperClasses\LinkGenerator;
+use App\HelperClasses\SmsAPI;
+use App\HelperClasses\UpdateStatusFile;
 use App\Http\Controllers\Controller;
+use App\Models\Landowner;
+use App\Models\RandomLink;
 use App\Models\User;
+use http\Url;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Models\Customer;
@@ -13,172 +19,175 @@ use App\Http\Controllers\API\MyBaseController as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Customer as CustomerResource;
+use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {
     public function index()
     {
-        $user = auth('web')->user();
-        $business = $user->business()->get()->pluck('en_name')->pop();
-        $businesss = $user->business()->get()->pluck('id')->pop();
-//        dd($business);
-//* forbusines       $bis = Business::where('en_name', $business)->get();
-//        foreach ($bis as $bi) {
-//            $users = User::where('id', $bi->user_id)->get();
-//            dump($users);
-//            dump($bi->user_id);
-//        }
-// *       dd($bis);
-//        false gereftan tamam user ha
+        $this->authorize('viewAny' , Customer::class);
+        $user = auth()->user();
 
+        $business = $user->business();
 
-//        dd($business);
-//        $customers = $user->businessCustomer()->where('status', 1)
-//            ->orderBy('is_star', 'desc')->orderBy('expiry_date', 'asc')->get();
-//        $icustomers = $user->businessCustomer()->where('status', 0)
-//            ->orderBy('is_star', 'desc')->orderBy('expiry_date', 'asc')->get();
-//        $user = new User();
-//        $business = $user->business();
-//        dd(Business::where('user_id', auth('web')->id())->get());
-//        $id = Business::where('user_id', auth('web')->id())->pluck('id');
-////        dd($id);
-        if ($user->business && $user->business->is_accepted) {
-            $customers = Customer::where('business_en_name', $business)->where('status', 1)
-                ->orderBy('is_star', 'desc')->orderBy('expiry_date', 'asc')->get();
+        $customers = $business->customers()->where('status', 'active')
+            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+        $icustomers = $business->customers()->where('status', 'unknown')
+            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
 
-            $indexedCustomers = $customers->groupBy('type');
-            $rentCustomers = $indexedCustomers->get('rahn');
-            $buyCustomers = $indexedCustomers->get('buy');
-//            dd($buyCustomers);
-            foreach ($customers as $customer) {
-                if ($customer->expiry_date > Carbon::now()) {
-                    // dd(date(Carbon::now()));
-                    $daysLeft = Carbon::now()->diffInDays($customer->expiry_date) + 1;
-                    $customer->expiry_date = $daysLeft;
-                }
+        $indexedCustomers = $customers->groupBy('type_sale');
+        $rentCustomers = $indexedCustomers->get('rahn');
+        $buyCustomers = $indexedCustomers->get('buy');
+
+        foreach ($customers as $customer) {
+            if ($customer->expire_date > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($customer->expire_date) + 1;
+                $customer->daysLeft = $daysLeft;
             }
-
-            $icustomers = Customer::where('business_en_name', $business)->where('status', 0)
-                ->orderBy('is_star', 'desc')->orderBy('expiry_date', 'asc')->get();
-            $indexediCustomers = $icustomers->groupBy('type');
-            $rentiCustomers = $indexediCustomers->get('rahn');
-            $buyiCustomers = $indexediCustomers->get('buy');
-//            dd($rentiCustomers);
-
-//        return $this->sendResponse(CustomerResource::collection($customers), 'Customers retrieved successfully.');
-            return view('customer.customers', compact('customers', 'icustomers', 'rentCustomers', 'buyCustomers', 'rentiCustomers', 'buyiCustomers'));
-        } else {
-            return view('dashboard', compact('user'));
         }
 
+        $indexediCustomers = $icustomers->groupBy('type_sale');
+        $rentiCustomers = $indexediCustomers->get('rahn');
+        $buyiCustomers = $indexediCustomers->get('buy');
+        return view('customer.index', compact('customers', 'icustomers', 'rentCustomers', 'buyCustomers', 'rentiCustomers', 'buyiCustomers'));
     }
 
     public function dashboard()
     {
-        $user = auth('web')->user();
-        return view('dashboard', compact('user'));
+        return view('dashboard');
     }
 
-    public
-    function show(Customer $customer)
+    public function show(Customer $customer)
     {
-
-        $this->authorize('view', $customer);
-
-//        $customer = Customer::find($id);
-
-        if (is_null($customer)) {
-            return ('Customer not found.');
-        }
-        return view('customer.customer', compact('customer'));
-//        return $this->sendResponse(new CustomerResource($customer), 'Customer retrieved successfully.');
+        $this->authorize('view' , $customer);
+        return view('customer.show', compact('customer'));
     }
 
-    public
-    function create()
+    public function create()
     {
-//        dd('hello');
+        $this->authorize('create' , Customer::class);
         return view('customer.create');
     }
 
-    public
-    function store(Request $request)
+    public function store(Request $request)
     {
-//        $customer = new Customer();
-//        $input = $request->all();
-//        dd(Business::where('user_id', auth('web')->id())->pluck('id')->pop());
-        $request['business_en_name'] = Business::where('user_id', auth('web')->id())->pluck('en_name')->pop();
-        $request['city'] = auth()->user()->pluck('city')->pop();
-
+        $this->authorize('create' , Customer::class);
         $request->validate([
             'name' => 'required',
             'number' => 'required',
-            'address' => 'required',
-            'type' => 'required',
-            'price' => 'required',
-            'rooms' => 'required',
-            'size' => 'required',
-            'status' => 'required',
-            'expiry_date' => 'required',
+            'city' => 'required',
+            'type_sale' => 'required',
+            'type_work' => 'required',
+            'type_build' => 'required',
+            'scale' => 'required',
+            'number_of_rooms' => 'required',
+            'description' => 'required',
+            'rahn_amount' => 'nullable',
+            'rent_amount' => 'nullable',
+            'selling_price' => 'nullable',
+            'elevator' => 'required',
+            'parking' => 'required',
+            'store' => 'required',
+            'floor_number' => 'required',
+            'is_star' => 'required',
+            'expire_date' => 'required'
         ]);
-//        dd($request['status']);
 
-//        if ($validator->fails()) {
-//            return 'invalid values';
-//        }
-//        dd($request['city']);
-        $customer = Customer::create($request->all());
-        return redirect(route('customers'));
-
+        $user = auth()->user();
+        $customer = Customer::create([
+            'name' => $request->name,
+            'number' => $request->number,
+            'city' => $request->city,
+            'type_sale' => $request->type_sale,
+            'type_work' => $request->type_work,
+            'type_build' => $request->type_build,
+            'scale' => $request->scale,
+            'number_of_rooms' => $request->number_of_rooms,
+            'description' => $request->description,
+            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'elevator' => $request->elevator,
+            'parking' => $request->parking,
+            'store' => $request->store,
+            'floor' => $request->floor,
+            'floor_number' => $request->floor_number,
+            'business_id' => $user->business()->first()->id,
+            'user_id' => $user->id,
+            'is_star' => $request->is_star,
+            'expire_date' => $request->expire_date
+        ]);
+        return redirect()->route('customer.index');
     }
 
-    public
-    function edit(Customer $customer)
+    public function edit(Customer $customer)
     {
         $this->authorize('update', $customer);
         return view('customer.edit', compact('customer'));
     }
 
-    public
-    function update(Request $request, Customer $customer)
+    public function update(Request $request, Customer $customer)
     {
         $this->authorize('update', $customer);
+
         $request->validate([
             'name' => 'required',
             'number' => 'required',
             'city' => 'required',
-            'address' => 'required',
-            'type' => 'required',
-            'price' => 'required',
-            'rooms' => 'required',
-            'size' => 'required',
-            'status' => 'required',
-            'expiry_date' => 'required',
+            'type_sale' => 'required',
+            'type_work' => 'required',
+            'type_build' => 'required',
+            'scale' => 'required',
+            'number_of_rooms' => 'required',
+            'description' => 'required',
+            'rahn_amount' => 'nullable',
+            'rent_amount' => 'nullable',
+            'selling_price' => 'nullable',
+            'elevator' => 'required',
+            'parking' => 'required',
+            'store' => 'required',
+            'floor_number' => 'required',
+            'is_star' => 'required',
+            'expire_date' => 'required'
         ]);
-        if ($request->type == 'buy') {
-            $input = $request->all();
-            $input['rent'] = 0;
-            $customer->update($input);
-            return redirect(route('customers'));
-        } else {
-            $customer->update($request->all());
-            return redirect(route('customers'));
-        }
 
+        $customer->update([
+            'name' => $request->name,
+            'number' => $request->number,
+            'city' => $request->city,
+            'type_sale' => $request->type_sale,
+            'type_work' => $request->type_work,
+            'type_build' => $request->type_build,
+            'scale' => $request->scale,
+            'number_of_rooms' => $request->number_of_rooms,
+            'description' => $request->description,
+            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'elevator' => $request->elevator,
+            'parking' => $request->parking,
+            'store' => $request->store,
+            'floor' => $request->floor,
+            'floor_number' => $request->floor_number,
+//            'business_id' => $user->business()->first()->id,
+//            'user_id' => $user->id,
+            'is_star' => $request->is_star,
+            'expire_date' => $request->expire_date
+
+        ]);
+        return redirect()->route('customer.index');
     }
 
-    public
-    function destroy(Customer $customer)
+    public function destroy(Customer $customer)
     {
-        $this->authorize('update', $customer);
+        $this->authorize('delete', $customer);
 
         $customer->delete();
 
         return redirect()->back();
     }
 
-    public
-    function star(Customer $customer)
+    public function star(Customer $customer)
     {
         $this->authorize('update', $customer);
 
@@ -189,40 +198,7 @@ class CustomerController extends Controller
             $customer->is_star = 0;
             $customer->save();
         }
-        return redirect(route('customer', $customer));
-
-    }
-
-    public
-    function status(Customer $customer)
-    {
-        $this->authorize('update', $customer);
-
-        if ($customer->status == 0) {
-            $customer->status = 1;
-            $customer->save();
-        } else {
-            $customer->status = 0;
-            $customer->save();
-        }
         return redirect()->back();
-
-    }
-
-    public
-    function type(Customer $customer)
-    {
-        $this->authorize('update', $customer);
-
-        if ($customer->type == 'buy') {
-            $customer->type = 'rent';
-            $customer->save();
-        } else {
-            $customer->type = 'buy';
-            $customer->save();
-        }
-        return redirect(route('customer', $customer));
-
     }
 
 }

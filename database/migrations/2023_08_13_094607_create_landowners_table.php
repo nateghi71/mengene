@@ -17,27 +17,29 @@ class CreateLandownersTable extends Migration
     {
         Schema::create('landowners', function (Blueprint $table) {
             $table->id();
-            $table->boolean('is_star')->default(false);
-            $table->enum('status', ['active', 'unknow', 'deactive']);
-            $table->enum('type_sale', ['rahn', 'buy']);
-            $table->enum('type_work', ['home', 'office']);
-            $table->enum('type_sale', ['house', 'apartment']);
             $table->string('name');
             $table->string('number');
             $table->string('city');
-            $table->integer('meterage')->nullable();
-            $table->integer('rooms')->nullable();
-            $table->date('expiry_date');
+            $table->enum('status', ['active', 'unknown', 'deActive']);
+            $table->enum('type_sale', ['rahn', 'buy']);
+            $table->enum('type_work', ['home', 'office']);
+            $table->enum('type_build', ['house', 'apartment']);
+            $table->integer('scale')->nullable();
+            $table->integer('number_of_rooms')->nullable();
             $table->text('description');
-            $table->integer('rahnd')->nullable();
-            $table->integer('ejare')->nullable();
-            $table->integer('price')->nullable();
+            $table->integer('rahn_amount')->nullable();
+            $table->integer('rent_amount')->nullable();
+            $table->integer('selling_price')->nullable();
             $table->boolean('elevator')->nullable();
             $table->boolean('parking')->nullable();
             $table->boolean('store')->nullable();
             $table->integer('floor')->nullable();
-            $table->integer('num_floor')->nullable();
-            $table->foreignId('business_id')->constrained('businesses');
+            $table->integer('floor_number')->nullable();
+            $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->boolean('is_star')->default(false);
+            $table->date('expire_date');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

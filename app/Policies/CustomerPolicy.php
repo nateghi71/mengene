@@ -2,112 +2,38 @@
 
 namespace App\Policies;
 
-use App\Models\Business;
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
-use Illuminate\Support\Facades\Auth;
 
 class CustomerPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the business can view any models.
-     *
-     * @param \App\Models\Business $business
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function viewAny(Business $business)
+    public function viewAny(User $user)
     {
-        //
+        return $user->ownedBusiness()->exists() || $user->joinedBusinesses()->wherePivot('is_accepted', 1)->exists();
     }
 
-    /**
-     * Determine whether the business can view the model.
-     *
-     * @param \App\Models\Business $business
-     * @param \App\Models\Customer $customer
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function view($business, Customer $customer)
+    public function view(User $user, Customer $customer)
     {
-//        $id = Business::where('business_id', auth(')->id())->pluck('id');
-//       dd($id);
-//        $customers = Customer::where('business_id', $id)->where('status', 1)
-// fix
-        $business = Business::where('user_id', auth()->id())->pluck('en_name')->pop();
-
-        return $business === $customer->business_en_name
-            ? Response::allow()
-            : Response::deny('You do not own this customer.');
+        return $user->ownedBusiness()->exists() || $user->joinedBusinesses()->wherePivot('is_accepted', 1)->exists();
     }
 
-    /**
-     * Determine whether the business can create models.
-     *
-     * @param \App\Models\Business $business
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function create(Business $business)
+    public function create(User $user)
     {
-        //
+        return $user->ownedBusiness()->exists() || $user->joinedBusinesses()->wherePivot('is_accepted', 1)->exists();
     }
 
-    /**
-     * Determine whether the business can update the model.
-     *
-     * @param \App\Models\Business $business
-     * @param \App\Models\Customer $customer
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function update($business, Customer $customer)
+    public function update(User $user, Customer $customer)
     {
-        //fix
-        $business = Business::where('user_id', auth()->id())->pluck('en_name')->pop();
-
-        return $business === $customer->business_en_name
-            ? Response::allow()
-            : Response::deny('You do not own this customer.');
+        return $user->ownedBusiness()->exists() ||
+            ($user->joinedBusinesses()->wherePivot('is_accepted', 1)->exists() && $customer->user_id === $user->id);
     }
 
-    /**
-     * Determine whether the business can delete the model.
-     *
-     * @param \App\Models\Business $business
-     * @param \App\Models\Customer $customer
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function delete($business, Customer $customer)
+    public function delete(User $user, Customer $customer)
     {
-        $business = Business::where('user_id', auth()->id())->pluck('en_name')->pop();
-
-        return $business === $customer->business_en_name
-            ? Response::allow()
-            : Response::deny('You do not own this customer.');
-    }
-
-    /**
-     * Determine whether the business can restore the model.
-     *
-     * @param \App\Models\Business $business
-     * @param \App\Models\Customer $customer
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function restore(Business $business, Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the business can permanently delete the model.
-     *
-     * @param \App\Models\Business $business
-     * @param \App\Models\Customer $customer
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function forceDelete(Business $business, Customer $customer)
-    {
-        //
+        return $user->ownedBusiness()->exists() ||
+            ($user->joinedBusinesses()->wherePivot('is_accepted', 1)->exists() && $customer->user_id === $user->id);
     }
 }

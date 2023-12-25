@@ -12,7 +12,6 @@ class UserCode extends Model
     public $table = "user_codes";
 
     protected $fillable = [
-        'user_number',
-        'code',
+        'random_string','number_verified','user_number','code'
     ];
 }

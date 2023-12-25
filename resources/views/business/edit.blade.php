@@ -14,6 +14,7 @@
                     <form action="{{route('business.update',$business->id)}}" method="POST"
                           enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         <div>
                             <label for="name">نام:</label>
                             <input type="text" name="name"
@@ -21,7 +22,17 @@
                             @error('name')
                             <div>{{$message}}</div> @enderror
                         </div>
-
+                        <div>
+                            <label for="status">وضعیت: </label>
+                            <select name="status">
+                                <option value="active" {{$business->status === "active" ? 'selected' : '' }}>
+                                    فعال
+                                </option>
+                                <option value="deActive" {{$business->status === "deactive" ? 'selected' : '' }}>
+                                    غیر فعال
+                                </option>
+                            </select>
+                        </div>
                         <label for="en_name">نام انگلیسی: </label>
                         <input type="text" name="en_name" value="{{$business->en_name}}">
                         @error('en_name')
@@ -49,7 +60,8 @@
                         <div>
                             <label for="image">عکس مجوز:</label>
                             @if($business->image)
-                                <img src="{{ $business->image }}" id="oldImagePreview"
+{{--                                {{dd(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')) . $business->image)}}--}}
+                                <img src="{{ asset(env('BUSINESS_IMAGES_UPLOAD_PATH')) . '/' . $business->image }}" id="oldImagePreview"
                                      style="max-width: 80%; height: 400px">
                             @else
                                 <img src="#" id="oldImagePreview" style="display: none; max-width: 80%; height: 400px">

@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Business extends Model
 {
-    use HasFactory;
+    use HasFactory , SoftDeletes;
 
 //    protected $primaryKey = 'en_name';
 //    public $incrementing = false;
@@ -18,18 +19,17 @@ class Business extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'en_name', 'user_id', 'image', 'city', 'area', 'address',
+        'status', 'name', 'en_name', 'user_id', 'image', 'city', 'area', 'address',
     ];
-
 
     public function customers()
     {
-        return $this->hasMany(Customer::class, 'business_en_name', 'en_name');
+        return $this->hasMany(Customer::class, 'business_id', 'id');
     }
 
     public function landowners()
     {
-        return $this->hasMany(Landowner::class, 'business_en_name', 'en_name');
+        return $this->hasMany(Landowner::class, 'business_id', 'id');
     }
 
 //    public function users()
@@ -39,7 +39,7 @@ class Business extends Model
     // Define the relationship with the members
     public function members()
     {
-        return $this->belongsToMany(User::class, 'business_user', 'business_id', 'user_id');
+        return $this->belongsToMany(User::class, 'business_user', 'business_id', 'user_id')->withPivot('is_accepted');
     }
 
     // Define the relationship with the owner
@@ -48,5 +48,9 @@ class Business extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-
+    public function premiumLevel()
+    {
+        return $this->hasOne(Premium::class, 'business_id');
+    }
 }
+

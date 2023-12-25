@@ -140,7 +140,7 @@ h6 {
 # Navigation Menu
 --------------------------------------------------------------*/
 /**
-* Desktop Navigation 
+* Desktop Navigation
 */
 .navbar {
   padding: 0;
@@ -270,7 +270,7 @@ h6 {
 }
 
 /**
-* Mobile Navigation 
+* Mobile Navigation
 */
 .mobile-nav-toggle {
   color: #fff;
@@ -442,6 +442,7 @@ h6 {
   font-size: 32px;
   transition: 0.3s;
   margin-right: 8px;
+  margin-left: 8px;
 }
 
 #hero .btn-watch-video:hover i {

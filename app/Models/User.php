@@ -4,16 +4,17 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens;
-use App\Models\OauthAccessToken;
+//use App\Models\OauthAccessToken;
 use App\Models\Business;
 use App\Models\Customer;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable , HasApiTokens , SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -47,27 +48,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
-    public function businessCustomer()
-    {
-        return $this->hasManyThrough(
-            Customer::class,
-            Business::class,
-//            'user_id',
-//            'business_id',
-//            'id',
-//            'id',
-        );
-    }
-
-    public function businessLandowner()
-    {
-        return $this->hasManyThrough(
-            Customer::class,
-            Business::class,
-        );
-    }
-
     public function ownedBusiness()
     {
         return $this->hasOne(Business::class);
@@ -80,39 +60,29 @@ class User extends Authenticatable
 
     public function joinedBusinesses()
     {
-        return $this->belongsToMany(Business::class, 'business_user', 'user_id', 'business_id');
+        return $this->belongsToMany(Business::class, 'business_user', 'user_id', 'business_id')->withPivot('is_accepted');
     }
 
-    // Check if the user is the owner of any business
-    public function isBusinessOwner()
+    public function business()
     {
-        return $this->ownedBusiness()->exists();
+        if($this->ownedBusiness()->exists())
+            return $this->ownedBusiness()->select('businesses.id', 'businesses.name', 'businesses.en_name', 'businesses.user_id', 'businesses.image', 'businesses.city', 'businesses.area', 'businesses.address', 'businesses.created_at', 'businesses.updated_at')->first();
+
+        elseif ($this->joinedBusinesses()->wherePivot('is_accepted', 1)->exists())
+            return $this->joinedBusinesses()->wherePivot('is_accepted', 1)
+                ->select('businesses.id', 'businesses.name', 'businesses.en_name', 'businesses.user_id', 'businesses.image', 'businesses.city', 'businesses.area', 'businesses.address', 'businesses.created_at', 'businesses.updated_at')->first();
+
+        return null;
     }
 
-    // Check if the user has joined any businesses as a member
-    public function isBusinessMember()
+
+    public function customers()
     {
-        return $this->joinedBusinesses()->wherePivot('is_accepted', 1)->exists();
+        return $this->hasMany(Customer::class);
     }
 
-    // Check if the user is already associated with any business (as owner or member)
-    public function isAssociatedWithBusiness()
+    public function landowners()
     {
-        return $this->isBusinessOwner() || $this->isBusinessMember();
+        return $this->hasMany(Landowner::class);
     }
-
-//        return $this->hasMany(Business::class);
 }
-//projects
-//    id - integer
-//    name - string
-//
-//environments
-//    id - integer
-//    project_id - integer
-//    name - string
-//
-//deployments
-//    id - integer
-//    environment_id - integer
-//    commit_hash - string

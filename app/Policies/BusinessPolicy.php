@@ -2,31 +2,56 @@
 
 namespace App\Policies;
 
-use App\Models\Customer;
-use App\Models\User;
 use App\Models\Business;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
 
 class BusinessPolicy
 {
     use HandlesAuthorization;
 
-
-    public function update(User $user, Business $businessId)
+    public function viewBusinessIndex(User $user)
     {
-        return $businessId->user_id === $user->id
-            ?
-            Response::allow()
-            : Response::deny('You do not own this business.');
+        return $user->ownedBusiness()->exists();
     }
 
-    public function create(User $user)
+    public function createOrJoin(User $user)
     {
-        return !auth()->user()->isAssociatedWithBusiness()
-            ?
-            Response::allow()
-            : Response::deny('You already have a business');
+        return !$user->ownedBusiness()->exists() && !$user->joinedBusinesses()->exists();
     }
 
+    public function updateBusiness(User $user, Business $business)
+    {
+        return $user->ownedBusiness()->exists() && $business->user_id === $user->id;
+    }
+
+    public function deleteBusiness(User $user, Business $business)
+    {
+        return $user->ownedBusiness()->exists() && $business->user_id === $user->id;
+    }
+
+    public function toggleAcceptUser(User $user, Business $business)
+    {
+        return $user->ownedBusiness()->exists() && $business->user_id === $user->id;
+    }
+
+    public function chooseOwner(User $user, Business $business)
+    {
+        return $user->ownedBusiness()->exists() && $business->user_id === $user->id;
+    }
+
+    public function removeMember(User $user, Business $business)
+    {
+        return $user->ownedBusiness()->exists() && $business->user_id === $user->id;
+    }
+
+    public function leaveMember(User $user)
+    {
+        return $user->joinedBusinesses()->exists();
+    }
+
+    public function viewConsultantIndex(User $user)
+    {
+        return $user->joinedBusinesses()->exists();
+    }
 }

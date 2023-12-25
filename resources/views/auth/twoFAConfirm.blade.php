@@ -24,7 +24,7 @@
                     </div>
                 @endif
 
-                <input name="userNumber" type="hidden" value="{{$userNumber}}">
+                <input name="random_string" type="hidden" value="{{$randomString}}">
 
             </div>
             <div class="flex items-center justify-end mt-4">
@@ -45,7 +45,7 @@
         <div class="flex items-center justify-end mt-4">
             <form action="{{ route('2fa.resend') }}" method="POST">
                 @csrf
-                <input name="userNumber" type="hidden" value="{{$userNumber}}">
+                <input name="random_string" type="hidden" value="{{$randomString}}">
                 <button class="underline text-sm text-gray-600 hover:text-gray-900"
                         type="submit">{{ __('ارسال مجدد') }}</button>
 

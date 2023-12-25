@@ -11,16 +11,14 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register')->middleware('2fa');
 
     Route::get('/2fa', [RegisteredUserController::class, 'twoFAIndex'])->name('2fa.index');
     Route::post('/2fa/store', [RegisteredUserController::class, 'twoFAStore'])->name('2fa.store');
     Route::post('/2fa/confirm', [RegisteredUserController::class, 'twoFAConfirm'])->name('2fa.confirm');
-    Route::post('/2fa/reset', [RegisteredUserController::class, 'twoFAResend'])->name('2fa.resend');
+    Route::post('/2fa/resend', [RegisteredUserController::class, 'twoFAResend'])->name('2fa.resend');
 
-
-    Route::post('register', [RegisteredUserController::class, 'store'])->middleware('2fa');
+    Route::get('register', [RegisteredUserController::class, 'register'])->name('register')->middleware('2fa');
+    Route::post('register', [RegisteredUserController::class, 'handle_register'])->name('register.handle')->middleware('2fa');
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');

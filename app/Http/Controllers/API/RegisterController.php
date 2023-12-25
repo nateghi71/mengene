@@ -2,87 +2,174 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
+use App\HelperClasses\SmsAPI;
 use App\Http\Controllers\API\MyBaseController as BaseController;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\UserCode;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Laravel\Passport\Token;
-use Laravel\Passport\RefreshToken;
+use Illuminate\Support\Str;
 
 
 class RegisterController extends BaseController
 {
-    /**
-     * Register api
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function twoFAStore(Request $request)
+    {
+        $validator = Validator::make($request->all() , [
+            'number' => 'required|max:11|digits:11|unique:users,number'
+        ]);
+
+        if($validator->fails())
+        {
+            return $this->sendError('Validation Error', $validator->errors());
+        }
+
+        $userNumber = $request->number;
+        $code = rand(100000, 999999);
+        $randomString = Str::random(12);
+
+        UserCode::create([
+            'user_number' => $userNumber,
+            'code' => $code,
+            'number_verified' => 0,
+            'random_string' => $randomString,
+        ]);
+
+//        $smsApi = new SmsAPI();
+//        $smsApi->sendSms($userNumber , $code);
+
+        $data['random_string'] = $randomString;
+        return $this->sendResponse($data, 'User register successfully.');
+    }
+
+    public function twoFAConfirm(Request $request)
+    {
+        $validator = Validator::make($request->all() , [
+            'code' => 'required|digits:6'
+        ]);
+
+        if($validator->fails())
+        {
+            return $this->sendError('Validation Error', $validator->errors());
+        }
+
+        $userCode = UserCode::where('random_string', $request->random_string)->first();
+
+        if (!$userCode) {
+            return $this->sendError('verifying Error', 'مراحل ثبت نام را از اول اغاز کنید.');
+        }
+
+        if ($userCode->code === $request->code)
+        {
+            $userCode->update([
+                'number_verified' => 1,
+            ]);
+
+            $data['random_string'] = $userCode->random_string;
+            return $this->sendResponse($data, 'User register successfully.');
+        }
+
+        return $this->sendError('verifying Error', 'کد وارد شده اشتباه هست.');
+    }
+
+    public function twoFAResend(Request $request)
+    {
+        $userCode = UserCode::where('random_string', $request->random_string)->first();
+        $previousTimestamp = $userCode->updated_at;
+
+        if ($previousTimestamp->diffInMinutes(now()) >= 2)
+        {
+            $userNumber = $userCode->user_number;
+            $code = rand(100000, 999999);
+            $userCode->update([
+                'code' => $code,
+            ]);
+
+            $smsApi = new SmsAPI();
+            $smsApi->sendSms($userNumber , $code);
+
+            $data['random_string'] = $userCode->random_string ;
+            return $this->sendResponse($data, 'code resend again.');
+
+        }
+        else
+        {
+            // Return an error message indicating that the user needs to wait before requesting a new code
+            $this->sendError('Wait Error', 'لطفا دو دقیقه صبر کنید تا ارسال مجدد کد');
+        }
+    }
+
     public function register(Request $request)
     {
-        $request->merge(['number' => Session::get('userNumber')]);
+        $userCode = UserCode::where('random_string', $request->random_string)->first();
+        $data = array();
+
+        if (!$userCode || !$userCode->number_verified) {
+            return $this->sendError('Error', 'مراحل ثبت نام را از اول اغاز کنید.');
+        }
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'number' => 'required|max:11|digits:11|unique:users,number',
             'city' => 'required|string|max:255',
-            'email' => 'max:255',
+            'email' => 'nullable|max:255',
             'password' => 'required|min:8',
             'c_password' => 'required|same:password',
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+            return $this->sendError('Validation Error', $validator->errors());
         }
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        $success['token'] = $user->createToken('MyApp')->accessToken;
-        $success['name'] = $user->name;
+        try {
+            DB::beginTransaction();
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'number' => $userCode->user_number,
+                'city' => $request->city,
+                'password' => Hash::make($request->password),
+            ]);
 
-        return $this->sendResponse($success, 'User register successfully.');
+            $data['token'] = $user->createToken('MyApp')->plainTextToken;
+            $data['user'] = $user;
+
+            $userCode->delete();
+            DB::commit();
+        }
+        catch (\Exception $e){
+            DB::rollBack();
+            return $this->sendError('Database Error', $e->getMessage());
+        }
+
+        return $this->sendResponse($data, 'User register successfully.');
     }
 
-    /**
-     * Login api
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function login(Request $request)
     {
-        if (Auth::attempt(['number' => $request->number, 'password' => $request->password])) {
-            $user = Auth::user();
-            $success['token'] = $user->createToken('MyApp')->accessToken;
-            $success['name'] = $user->name;
+        $user = User::where('number', $request->number)->first();
 
-            return $this->sendResponse($success, 'User login successfully.');
-        } else {
+        if(!$user)
+        {
             return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
         }
-    }
 
-//    public function logout()
-//    {
-//        if (Auth::check()) {
-//            Auth::user()->AauthAcessToken()->delete();
-//        }
-//    }
+        if (Hash::check($request->password , $user->password)) {
+            $data['token'] = $user->createToken('MyApp')->plainTextToken;
+            $data['user'] = $user;
+
+            return $this->sendResponse($data, 'User login successfully.');
+        } else {
+            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised2']);
+        }
+    }
 
     public function logout()
     {
-        $accessToken = Auth::user()->token();
-        DB::table('oauth_refresh_tokens')
-            ->where('access_token_id', $accessToken->id)
-            ->update([
-                'revoked' => true
-            ]);
-
-        $accessToken->revoke();
+        auth()->user()->tokens()->delete();
         return response()->json([
-            'message' => 'successfuly logout'
+            'message' => 'successfully logout'
         ]);
     }
 }

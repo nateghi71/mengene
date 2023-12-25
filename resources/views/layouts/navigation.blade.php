@@ -1,40 +1,28 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="text-align: right">
-        <div class="flex justify-between h-16" style="flex-direction: row-reverse;">
+        <div class="flex justify-between h-16">
             <div class="flex">
-                <!-- Logo -->
-            {{--                <div class="shrink-0 flex items-center">--}}
-            {{--                    <a href="{{ route('dashboard') }}">--}}
-            {{--                        <x-application-logo class="block h-10 w-auto fill-current text-gray-600"/>--}}
-            {{--                    </a>--}}
-            {{--                </div>--}}
-
-            <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('customers')" :active="request()->routeIs('dashboard')">
-                        {{ __('مشتریان') }}
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('داشبورد') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('landowners')" :active="request()->routeIs('dashboard')">
-                        {{ __('صاحب ملکان') }}
-                    </x-nav-link>
-                </div>
-
-                {{--                {{dd(\App\Models\User::all()->where('business_id',!null)->where('id',auth()->id())->pluck('id')->implode(''))}}--}}
-                @if(auth()->user()->isAssociatedWithBusiness())
-
+                @can('viewBusinessIndex' , \App\Models\Business::class)
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link :href="route('business.index')" :active="request()->routeIs('dashboard')">
-                            {{--                            @if(isset($redDot))--}}
-                            {{--                                <span style="display: inline-block;width: 10px;height: 10px; border-radius: 50%;--}}
-                            {{--                                 background-color: red;"></span>--}}
-                            {{--                            @endif--}}
                             {{ __('مشاهده بیزینس') }}
                         </x-nav-link>
                     </div>
-                @else
+                @endcan
+                @can('viewConsultantIndex' , \App\Models\Business::class)
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('consultant.index')" :active="request()->routeIs('dashboard')">
+                            {{ __('مشاهده بیزینس') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
+                @can('createOrJoin' , \App\Models\Business::class)
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link :href="route('business.create')" :active="request()->routeIs('dashboard')">
                             {{ __('ایجاد بیزینس') }}
@@ -42,19 +30,28 @@
                     </div>
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link>
-                            <form action="{{ route('business.search') }}" method="GET">
+                            <form action="{{ route('consultant.search') }}" method="GET">
                                 <input type="text" size="35px" name="owner_number"
                                        placeholder="جستجوی بیزینس با شماره تلفن مالک">
                                 <button type="submit">جستجو</button>
                             </form>
                         </x-nav-link>
                     </div>
-                @endif
+
+                @endcan
+                @cannot('createOrJoin' , \App\Models\Business::class)
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('داشبورد') }}
+                    <x-nav-link :href="route('customer.index')" :active="request()->routeIs('dashboard')">
+                        {{ __('مشتریان') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('landowner.index')" :active="request()->routeIs('dashboard')">
+                        {{ __('صاحب ملکان') }}
+                    </x-nav-link>
+                </div>
+                @endcannot
+                {{--                {{dd(\App\Models\User::all()->where('business_id',!null)->where('id',auth()->id())->pluck('id')->implode(''))}}--}}
             </div>
 
             <!-- Settings Dropdown -->

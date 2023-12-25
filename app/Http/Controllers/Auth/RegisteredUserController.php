@@ -2,134 +2,146 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\HelperClasses\SmsAPI;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserCode;
 use App\Providers\RouteServiceProvider;
-use Ghasedak\GhasedakApi;
 use http\Message;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        return view('auth.register');
-    }
-
     public function twoFAIndex(User $user)
     {
+//        Session::put('user_2fa', 'allowed');
+//        Session::put('userNumber', rand(10000000000, 99999999999));
+//        return view('auth.register');
+
         return view('auth.twoFAIndex');
     }
 
     public function twoFAStore(Request $request)
     {
-        $number = User::where('number', $request->number)->pluck('number')->pop();
         $request->validate([
-            'number' => ['required', 'string', 'max:11', 'unique:users'],
+            'number' => 'required|max:11|digits:11'
         ]);
 
         $userNumber = $request->number;
         $code = rand(100000, 999999);
-        UserCode::updateOrCreate(
-            ['user_number' => $request->number],
-            ['code' => $code]
-        );
-        $template = "verification";
-        $api = new GhasedakApi('c882e5b437debd6e6bcb01b345c1ca263b588722fb706cabe5bb76601346bae1');
-        $api->Verify($userNumber, $template, $code);
+        $randomString = Str::random(12);
 
-        return view('auth.twoFAConfirm', compact('userNumber'));
+        UserCode::create([
+            'user_number' => $userNumber,
+            'code' => $code,
+            'number_verified' => 0,
+            'random_string' => $randomString,
+        ]);
 
+        $smsApi = new SmsAPI();
+        $smsApi->sendSms($userNumber , $code);
+
+        return view('auth.twoFAConfirm', compact('randomString'));
     }
 
-    public
-    function twoFAResend(Request $request)
+    public function twoFAResend(Request $request)
     {
         Session::forget('error');
-        $previousCode = UserCode::where('user_number', $request->userNumber)->first();
-        $previousTimestamp = $previousCode->updated_at;
-        $userNumber = $request->userNumber;
+        $userCode = UserCode::where('random_string', $request->random_string)->first();
+        $previousTimestamp = $userCode->updated_at;
+        $randomString = $userCode->random_string;
+
         if ($previousTimestamp->diffInMinutes(now()) >= 2) {
+            $userNumber = $userCode->user_number;
             $code = rand(100000, 999999);
-            UserCode::updateOrCreate(
-                ['user_number' => $request->userNumber],
-                ['code' => $code]
-            );
-            $template = "verification";
-            $api = new GhasedakApi('c882e5b437debd6e6bcb01b345c1ca263b588722fb706cabe5bb76601346bae1');
-            $api->Verify($userNumber, $template, $code);
-            return view('auth.twoFAConfirm', compact('userNumber'));
+            $userCode->update([
+                'code' => $code
+            ]);
+
+            $smsApi = new SmsAPI();
+            $smsApi->sendSms($userNumber , $code);
+
+            return view('auth.twoFAConfirm', compact('randomString'));
         } else {
             // Return an error message indicating that the user needs to wait before requesting a new code
             Session::put('error', 'لطفا دو دقیقه صبر کنید تا ارسال مجدد کد');
-            return view('auth.twoFAConfirm', compact('userNumber'));
+            return view('auth.twoFAConfirm', compact('randomString'));
         }
     }
 
-    public
-    function twoFAConfirm(Request $request)
+    public function twoFAConfirm(Request $request)
     {
+        $request->validate([
+            'code' => 'required|digits:6'
+        ]);
+
         Session::forget('error');
-        $code = UserCode::where('user_number', $request->userNumber)->pluck('code')->pop();
-        $userNumber = $request->userNumber;
+        $userCode = UserCode::where('random_string', $request->random_string)->first();
 
-        if ($code === $request->code) {
-            Session::put('user_2fa', 'allowed');
-            Session::put('userNumber', $userNumber);
+        if (!$userCode) {
+            return redirect()->route('2fa.index')->with('error', 'مراحل ثبت نام را از اول اغاز کنید.');
+        }
 
+        $randomString = $userCode->random_string;
+
+        if ($userCode->code === $request->code) {
+            $userCode->update([
+                'number_verified' => 1,
+            ]);
+
+            session()->put('randomString' , $randomString);
             return redirect()->route('register');
-
         }
         Session::put('error', 'کد وارد شده صحیح نیست');
-        return view('auth.twoFAConfirm', compact('userNumber'));
-
+        return view('auth.twoFAConfirm', compact('randomString'));
     }
 
-
-    /**
-     * Handle an incoming registration request.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public
-    function store(Request $request)
+    public function register()
     {
+        return view('auth.register');
+    }
+
+    public function handle_register(Request $request)
+    {
+        $userCode = UserCode::where('random_string', session('randomString'))->first();
+        session()->forget('randomString');
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
             'email' => ['max:255'],
-            'number' => ['required', 'string', 'max:11', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-        $user = User::create([
-            'name' => $request->name,
-            'city' => $request->city,
-            'number' => $request->number,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
 
-        event(new Registered($user));
+        try {
+            DB::beginTransaction();
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'number' => $userCode->user_number,
+                'city' => $request->city,
+                'password' => Hash::make($request->password),
+            ]);
 
-        Auth::login($user);
-        $oldCode = UserCode::where('user_number', $request->number)->first();
-        $oldCode->delete();
+            Auth::login($user);
 
-        return redirect('/dashboard');
+            $userCode->delete();
+
+            DB::commit();
+        }
+        catch (\Exception $e){
+            DB::rollBack();
+            return redirect()->back()->with('error' , 'در دیتابیس خطایی رخ داد.');
+        }
+
+        return redirect()->route('dashboard');
     }
 }

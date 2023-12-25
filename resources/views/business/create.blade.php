@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('ایجاد محصول جدید') }}
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight" style="display: flex; flex-direction:row-reverse">
+            {{ __('ایجاد بیزینس جدید') }}
         </h2>
     </x-slot>
 
@@ -19,6 +19,13 @@
                                    value="{{old('name')}}">
                             @error('name')
                             <div>{{$message}}</div> @enderror
+                        </div>
+                        <div>
+                            <label for="status">وضعیت: </label>
+                            <select name="status">
+                                <option value="active">فعال</option>
+                                <option value="deactive">غیر فعال</option>
+                            </select>
                         </div>
                         <div>
                             <label for="en_name">نام انگلیسی: </label>

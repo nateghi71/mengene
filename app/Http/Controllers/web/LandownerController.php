@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\web;
 
+use App\HelperClasses\LinkGenerator;
+use App\HelperClasses\SmsAPI;
+use App\HelperClasses\UpdateStatusFile;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -11,169 +14,177 @@ use App\Models\Business;
 use Carbon\Carbon;
 use App\Http\Controllers\API\MyBaseController as BaseController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\Landowner as LandownerResource;
 
 class LandownerController extends Controller
 {
     public function index()
     {
-        $user = auth('web')->user();
-        $business = $user->business()->get()->pluck('en_name')->pop();
-        $businesss = $user->business()->get()->pluck('id')->pop();
-//        dd($business);
-//* forbusines       $bis = Business::where('en_name', $business)->get();
-//        foreach ($bis as $bi) {
-//            $users = User::where('id', $bi->user_id)->get();
-//            dump($users);
-//            dump($bi->user_id);
-//        }
-// *       dd($bis);
-//        false gereftan tamam user ha
+        $this->authorize('viewAny' , Landowner::class);
 
+        $user = auth()->user();
+        $business = $user->business();
 
-//        dd($business);
-//        $landowners = $user->businessLandowner()->where('status', 1)
-//            ->orderBy('is_star', 'desc')->orderBy('expiry_date', 'asc')->get();
-//        $ilandowners = $user->businessLandowner()->where('status', 0)
-//            ->orderBy('is_star', 'desc')->orderBy('expiry_date', 'asc')->get();
-//        $user = new User();
-//        $business = $user->business();
-//        dd(Business::where('user_id', auth('web')->id())->get());
-//        $id = Business::where('user_id', auth('web')->id())->pluck('id');
-////        dd($id);
-        if ($user->business && $user->business->is_accepted) {
-            $landowners = Landowner::where('business_en_name', $business)->where('status', 1)
-                ->orderBy('is_star', 'desc')->orderBy('expiry_date', 'asc')->get();
+        $landowners = $business->landowners()->where('status', 'active')
+            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+        $ilandowners = $business->landowners()->where('status', 'unknown')
+            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
 
-            $indexedLandowners = $landowners->groupBy('type');
-            $rentLandowners = $indexedLandowners->get('rahn');
-            $buyLandowners = $indexedLandowners->get('buy');
-//            dd($buyLandowners);
-            foreach ($landowners as $landowner) {
-                if ($landowner->expiry_date > Carbon::now()) {
-                    // dd(date(Carbon::now()));
-                    $daysLeft = Carbon::now()->diffInDays($landowner->expiry_date) + 1;
-                    $landowner->expiry_date = $daysLeft;
-                }
+        $indexedLandowners = $landowners->groupBy('type_sale');
+        $rentLandowners = $indexedLandowners->get('rahn');
+        $buyLandowners = $indexedLandowners->get('buy');
+
+        foreach ($landowners as $landowner) {
+            if ($landowner->expire_date > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($landowner->expire_date) + 1;
+                $landowner->daysLeft = $daysLeft;
             }
-
-            $ilandowners = Landowner::where('business_en_name', $business)->where('status', 0)
-                ->orderBy('is_star', 'desc')->orderBy('expiry_date', 'asc')->get();
-            $indexediLandowners = $ilandowners->groupBy('type');
-            $rentiLandowners = $indexediLandowners->get('rahn');
-            $buyiLandowners = $indexediLandowners->get('buy');
-//            dd($rentiLandowners);
-
-//        return $this->sendResponse(LandownerResource::collection($landowners), 'Landowners retrieved successfully.');
-            return view('landowner.landowners', compact('landowners', 'ilandowners', 'rentLandowners', 'buyLandowners', 'rentiLandowners', 'buyiLandowners'));
-        } else {
-            return view('dashboard', compact('user'));
         }
 
+        $indexediLandowners = $ilandowners->groupBy('type_sale');
+        $rentiLandowners = $indexediLandowners->get('rahn');
+        $buyiLandowners = $indexediLandowners->get('buy');
+
+        return view('landowner.index', compact('landowners', 'ilandowners', 'rentLandowners', 'buyLandowners', 'rentiLandowners', 'buyiLandowners'));
     }
 
-
-    public
-    function show(Landowner $landowner)
+    public function show(Landowner $landowner)
     {
-
         $this->authorize('view', $landowner);
-
-//        $landowner = Landowner::find($id);
-
-        if (is_null($landowner)) {
-            return ('Landowner not found.');
-        }
-        return view('landowner.landowner', compact('landowner'));
-//        return $this->sendResponse(new LandownerResource($landowner), 'Landowner retrieved successfully.');
+        return view('landowner.show', compact('landowner'));
     }
 
-    public
-    function create()
+    public function create()
     {
-//        dd('hello');
+        $this->authorize('create', Landowner::class);
         return view('landowner.create');
     }
 
-    public
-    function store(Request $request)
+    public function store(Request $request)
     {
-//        $landowner = new Landowner();
-//        $input = $request->all();
-//        dd(Business::where('user_id', auth('web')->id())->pluck('id')->pop());
-        $request['business_en_name'] = Business::where('user_id', auth('web')->id())->pluck('en_name')->pop();
-        $request['city'] = auth()->user()->pluck('city')->pop();
-
+        $this->authorize('create', Landowner::class);
         $request->validate([
             'name' => 'required',
             'number' => 'required',
-            'address' => 'required',
-            'type' => 'required',
-            'rooms' => 'required',
-            'size' => 'required',
-            'price' => 'required',
+            'city' => 'required',
             'status' => 'required',
-            'expiry_date' => 'required',
+            'type_sale' => 'required',
+            'type_work' => 'required',
+            'type_build' => 'required',
+            'scale' => 'required',
+            'number_of_rooms' => 'required',
+            'description' => 'required',
+            'rahn_amount' => 'nullable',
+            'rent_amount' => 'nullable',
+            'selling_price' => 'nullable',
+            'elevator' => 'required',
+            'parking' => 'required',
+            'store' => 'required',
+            'floor_number' => 'required',
+            'is_star' => 'required',
+            'expire_date' => 'required'
         ]);
-//        dd($request['status']);
 
-//        if ($validator->fails()) {
-//            return 'invalid values';
-//        }
-//        dd($request['city']);
-        $landowner = Landowner::create($request->all());
-        return redirect(route('landowners'));
+        $user = auth()->user();
+        $landowner = Landowner::create([
+            'name' => $request->name,
+            'number' => $request->number,
+            'city' => $request->city,
+            'status' => $request->status,
+            'type_sale' => $request->type_sale,
+            'type_work' => $request->type_work,
+            'type_build' => $request->type_build,
+            'scale' => $request->scale,
+            'number_of_rooms' => $request->number_of_rooms,
+            'description' => $request->description,
+            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'elevator' => $request->elevator,
+            'parking' => $request->parking,
+            'store' => $request->store,
+            'floor' => $request->floor,
+            'floor_number' => $request->floor_number,
+            'business_id' => $user->business()->first()->id,
+            'user_id' => $user->id,
+            'is_star' => $request->is_star,
+            'expire_date' => $request->expire_date
+        ]);
+        return redirect()->route('landowner.index');
 
     }
 
-    public
-    function edit(Landowner $landowner)
+    public function edit(Landowner $landowner)
     {
         $this->authorize('update', $landowner);
         return view('landowner.edit', compact('landowner'));
     }
 
-    public
-    function update(Request $request, Landowner $landowner)
+    public function update(Request $request, Landowner $landowner)
     {
         $this->authorize('update', $landowner);
         $request->validate([
             'name' => 'required',
             'number' => 'required',
             'city' => 'required',
-            'address' => 'required',
-            'type' => 'required',
-            'rooms' => 'required',
-            'size' => 'required',
-            'price' => 'required',
             'status' => 'required',
-            'expiry_date' => 'required',
+            'type_sale' => 'required',
+            'type_work' => 'required',
+            'type_build' => 'required',
+            'scale' => 'required',
+            'number_of_rooms' => 'required',
+            'description' => 'required',
+            'rahn_amount' => 'nullable',
+            'rent_amount' => 'nullable',
+            'selling_price' => 'nullable',
+            'elevator' => 'required',
+            'parking' => 'required',
+            'store' => 'required',
+            'floor_number' => 'required',
+            'is_star' => 'required',
+            'expire_date' => 'required'
         ]);
-        if ($request->type == 'buy') {
-            $input = $request->all();
-            $input['rent'] = 0;
-            $landowner->update($input);
-            return redirect(route('landowners'));
-        } else {
-            $landowner->update($request->all());
-            return redirect(route('landowners'));
-        }
 
+        $landowner->update([
+            'name' => $request->name,
+            'number' => $request->number,
+            'city' => $request->city,
+            'status' => $request->status,
+            'type_sale' => $request->type_sale,
+            'type_work' => $request->type_work,
+            'type_build' => $request->type_build,
+            'scale' => $request->scale,
+            'number_of_rooms' => $request->number_of_rooms,
+            'description' => $request->description,
+            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'elevator' => $request->elevator,
+            'parking' => $request->parking,
+            'store' => $request->store,
+            'floor' => $request->floor,
+            'floor_number' => $request->floor_number,
+//            'business_id' => $user->business()->first()->id,
+//            'user_id' => $user->id,
+            'is_star' => $request->is_star,
+            'expire_date' => $request->expire_date
+
+        ]);
+
+        return redirect()->route('landowner.index');
     }
 
-    public
-    function destroy(Landowner $landowner)
+    public function destroy(Landowner $landowner)
     {
-        $this->authorize('update', $landowner);
+        $this->authorize('delete', $landowner);
 
         $landowner->delete();
 
         return redirect()->back();
     }
 
-    public
-    function star(Landowner $landowner)
+    public function star(Landowner $landowner)
     {
         $this->authorize('update', $landowner);
 
@@ -184,40 +195,7 @@ class LandownerController extends Controller
             $landowner->is_star = 0;
             $landowner->save();
         }
-        return redirect(route('landowner', $landowner));
-
-    }
-
-    public
-    function status(Landowner $landowner)
-    {
-        $this->authorize('update', $landowner);
-
-        if ($landowner->status == 0) {
-            $landowner->status = 1;
-            $landowner->save();
-        } else {
-            $landowner->status = 0;
-            $landowner->save();
-        }
         return redirect()->back();
 
     }
-
-    public
-    function type(Landowner $landowner)
-    {
-        $this->authorize('update', $landowner);
-
-        if ($landowner->type == 'buy') {
-            $landowner->type = 'rahn';
-            $landowner->save();
-        } else {
-            $landowner->type = 'buy';
-            $landowner->save();
-        }
-        return redirect(route('landowner', $landowner));
-
-    }
-
 }

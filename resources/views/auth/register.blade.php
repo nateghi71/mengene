@@ -9,7 +9,7 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors"/>
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="post" action="{{ route('register.handle') }}">
         @csrf
 
         <!-- Name -->
@@ -17,13 +17,6 @@
                 <x-label for="name" :value="__('Name')"/>
 
                 <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required
-                         autofocus/>
-            </div>
-            <div>
-                <x-label for="number" :value="__('number')"/>
-
-                <x-input id="number" class="block mt-1 w-full" type="text" readonly="readonly" name="number"
-                         value="{{session('userNumber')}}" required
                          autofocus/>
             </div>
             <div>

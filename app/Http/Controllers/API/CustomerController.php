@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\API;
 
+use App\HelperClasses\LinkGenerator;
+use App\HelperClasses\SmsAPI;
+use App\HelperClasses\UpdateStatusFile;
 use App\Http\Controllers\API\MyBaseController as BaseController;
 use App\Http\Resources\CustomerResource;
+use App\Http\Resources\LandownerResource;
 use App\Models\Business;
 use App\Models\Customer;
+use App\Models\Landowner;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -15,50 +21,47 @@ class CustomerController extends BaseController
 {
     public function index()
     {
-        $user = auth('api')->user();
-        $business = $user->business()->get()->pluck('en_name')->pop();
-        $businesss = $user->business()->get()->pluck('id')->pop();
-
-        if ($user->business && $user->business->is_accepted) {
-            $customers = Customer::where('business_en_name', $business)
-                ->where('status', 1)
-                ->orderBy('is_star', 'desc')
-                ->orderBy('expiry_date', 'asc')
-                ->get();
-            $indexedCustomers = $customers->groupBy('type');
-            $rentCustomers = $indexedCustomers->get('rahn');
-            $buyCustomers = $indexedCustomers->get('buy');
-
-            foreach ($customers as $customer) {
-                if ($customer->expiry_date > Carbon::now()) {
-                    // dd(date(Carbon::now()));
-                    $daysLeft = Carbon::now()->diffInDays($customer->expiry_date) + 1;
-                    $customer->expiry_date = $daysLeft;
-                }
-            }
-
-            $icustomers = Customer::where('business_en_name', $business)
-                ->where('status', 0)
-                ->orderBy('is_star', 'desc')
-                ->orderBy('expiry_date', 'asc')
-                ->get();
-            $indexediCustomers = $icustomers->groupBy('type');
-            $rentiCustomers = $indexediCustomers->get('rahn');
-            $buyiCustomers = $indexediCustomers->get('buy');
-
-            return $this->sendResponse([
-                'customers' => CustomerResource::collection($customers),
-                'icustomers' => CustomerResource::collection($icustomers),
-                'rentCustomers' => $rentCustomers ? CustomerResource::collection($rentCustomers) : [],
-                'rentiCustomers' => $rentiCustomers ? CustomerResource::collection($rentiCustomers) : [],
-                'buyCustomers' => $buyCustomers ? CustomerResource::collection($buyCustomers) : [],
-                'buyiCustomers' => $buyiCustomers ? CustomerResource::collection($buyiCustomers) : [],
-
-
-            ], 'Customers retrieved successfully.');
-        } else {
-            return $this->sendError('You are not authorized to access this resource.');
+//        return auth()->user()->joinedBusinesses()->wherePivot('is_accepted', 1)->exists();
+        try
+        {
+            $this->authorize('viewAny' , Customer::class);
         }
+        catch (AuthorizationException $exception)
+        {
+            return response()->json(['message' => 'you dont have a business']);
+        }
+
+        $user = auth()->user();
+        $business = $user->business();
+
+        $customers = $business->customers()->where('status', 'active')
+            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+        $icustomers = $business->customers()->where('status', 'unknown')
+            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+
+        $indexedCustomers = $customers->groupBy('type_sale');
+        $rentCustomers = $indexedCustomers->get('rahn');
+        $buyCustomers = $indexedCustomers->get('buy');
+
+        foreach ($customers as $customer) {
+            if ($customer->expire_date > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($customer->expire_date) + 1;
+                $customer->daysLeft = $daysLeft;
+            }
+        }
+
+        $indexediCustomers = $icustomers->groupBy('type_sale');
+        $rentiCustomers = $indexediCustomers->get('rahn');
+        $buyiCustomers = $indexediCustomers->get('buy');
+
+        return $this->sendResponse([
+            'customers' => CustomerResource::collection($customers),
+            'icustomers' => CustomerResource::collection($icustomers),
+            'rentCustomers' => $rentCustomers ? CustomerResource::collection($rentCustomers) : [],
+            'rentiCustomers' => $rentiCustomers ? CustomerResource::collection($rentiCustomers) : [],
+            'buyCustomers' => $buyCustomers ? CustomerResource::collection($buyCustomers) : [],
+            'buyiCustomers' => $buyiCustomers ? CustomerResource::collection($buyiCustomers) : [],
+        ], 'Customers retrieved successfully.');
     }
 
     public function dashboard()
@@ -69,64 +72,153 @@ class CustomerController extends BaseController
 
     public function show(Customer $customer)
     {
-        $this->authorize('view', $customer);
+        try
+        {
+            $this->authorize('view' , $customer);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return response()->json(['message' => 'you dont have a business']);
+        }
 
-        return $this->sendResponse(new CustomerResource($customer), 'Customer retrieved successfully.');
+        return $this->sendResponse([
+            'customer' => CustomerResource::collection($customer),
+        ],
+            'Customer retrieved successfully');
     }
 
     public function store(Request $request)
     {
+        try
+        {
+            $this->authorize('create' , Customer::class);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return response()->json(['message' => 'you dont have a business']);
+        }
+
         $request->validate([
             'name' => 'required',
             'number' => 'required',
-            'address' => 'required',
-            'type' => 'required',
-            'rooms' => 'required',
-            'size' => 'required',
-            'price' => 'required',
-            'status' => 'required',
-            'expiry_date' => 'required',
+            'city' => 'required',
+            'type_sale' => 'required',
+            'type_work' => 'required',
+            'type_build' => 'required',
+            'scale' => 'required',
+            'number_of_rooms' => 'required',
+            'description' => 'required',
+            'rahn_amount' => 'nullable',
+            'rent_amount' => 'nullable',
+            'selling_price' => 'nullable',
+            'elevator' => 'required',
+            'parking' => 'required',
+            'store' => 'required',
+            'floor_number' => 'required',
+            'is_star' => 'required',
+            'expire_date' => 'required'
         ]);
 
-        $request['business_en_name'] = Business::where('user_id', auth('api')->id())->pluck('en_name')->pop();
-        $request['city'] = auth()->user()->pluck('city')->pop();
-
-        $customer = Customer::create($request->all());
+//        dd($request->all());
+        $user = auth()->user();
+        $customer = Customer::create([
+            'name' => $request->name,
+            'number' => $request->number,
+            'city' => $request->city,
+            'type_sale' => $request->type_sale,
+            'type_work' => $request->type_work,
+            'type_build' => $request->type_build,
+            'scale' => $request->scale,
+            'number_of_rooms' => $request->number_of_rooms,
+            'description' => $request->description,
+            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'elevator' => $request->elevator,
+            'parking' => $request->parking,
+            'store' => $request->store,
+            'floor' => $request->floor,
+            'floor_number' => $request->floor_number,
+            'business_id' => $user->business()->first()->id,
+            'user_id' => $user->id,
+            'is_star' => $request->is_star,
+            'expire_date' => $request->expire_date
+        ]);
 
         return $this->sendResponse(new CustomerResource($customer), 'Customer created successfully.');
     }
 
     public function update(Request $request, Customer $customer)
     {
-        $this->authorize('update', $customer);
+        try
+        {
+            $this->authorize('update' , $customer);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return response()->json(['message' => 'you dont have a business']);
+        }
 
         $request->validate([
             'name' => 'required',
             'number' => 'required',
             'city' => 'required',
-            'address' => 'required',
-            'type' => 'required',
-            'rooms' => 'required',
-            'size' => 'required',
-            'price' => 'required',
-            'status' => 'required',
-            'expiry_date' => 'required',
+            'type_sale' => 'required',
+            'type_work' => 'required',
+            'type_build' => 'required',
+            'scale' => 'required',
+            'number_of_rooms' => 'required',
+            'description' => 'required',
+            'rahn_amount' => 'nullable',
+            'rent_amount' => 'nullable',
+            'selling_price' => 'nullable',
+            'elevator' => 'required',
+            'parking' => 'required',
+            'store' => 'required',
+            'floor_number' => 'required',
+            'is_star' => 'required',
+            'expire_date' => 'required'
         ]);
 
-        if ($request->type == 'buy') {
-            $input = $request->all();
-            $input['rent'] = 0;
-            $customer->update($input);
-        } else {
-            $customer->update($request->all());
-        }
+        $customer->update([
+            'name' => $request->name,
+            'number' => $request->number,
+            'city' => $request->city,
+            'type_sale' => $request->type_sale,
+            'type_work' => $request->type_work,
+            'type_build' => $request->type_build,
+            'scale' => $request->scale,
+            'number_of_rooms' => $request->number_of_rooms,
+            'description' => $request->description,
+            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'elevator' => $request->elevator,
+            'parking' => $request->parking,
+            'store' => $request->store,
+            'floor' => $request->floor,
+            'floor_number' => $request->floor_number,
+//            'business_id' => $user->business()->first()->id,
+//            'user_id' => $user->id,
+            'is_star' => $request->is_star,
+            'expire_date' => $request->expire_date
+
+        ]);
 
         return $this->sendResponse(new CustomerResource($customer), 'Customer updated successfully.');
     }
 
     public function destroy(Customer $customer)
     {
-        $this->authorize('update', $customer);
+        try
+        {
+            $this->authorize('delete' , $customer);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return response()->json(['message' => 'you dont have a business']);
+        }
+//        dd($customer);
 
         $customer->delete();
 
@@ -135,7 +227,14 @@ class CustomerController extends BaseController
 
     public function star(Customer $customer)
     {
-        $this->authorize('update', $customer);
+        try
+        {
+            $this->authorize('update' , $customer);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return response()->json(['message' => 'you dont have a business']);
+        }
 
         $customer->is_star = !$customer->is_star;
         $customer->save();
@@ -143,28 +242,41 @@ class CustomerController extends BaseController
         return $this->sendResponse(new CustomerResource($customer), 'Customer star status updated successfully.');
     }
 
-    public function status(Customer $customer)
-    {
-        $this->authorize('update', $customer);
-
-        $customer->status = !$customer->status;
-        $customer->save();
-
-        return $this->sendResponse(new CustomerResource($customer), 'Customer status updated successfully.');
-    }
-
-    public function type(Customer $customer)
-    {
-        $this->authorize('update', $customer);
-
-        if ($customer->type == 'buy') {
-            $customer->type = 'rent';
-            $customer->save();
-        } else {
-            $customer->type = 'buy';
-            $customer->save();
-        }
-
-        return $this->sendResponse(new CustomerResource($customer), 'Customer type updated successfully.');
-    }
+//
+//    public function showSuggestions(Customer $customer)
+//    {
+//        if ($customer->type_sale == 'buy') {
+//            $minPrice = $customer->price * 0.8; // 80% of the customer's price
+//            $maxPrice = $customer->price * 1.2; // 120% of the customer's price
+//
+//            $customerId = $customer->id;
+//            $suggestions = Landowner::where('status', 'active')
+//                ->whereDoesntHave('suggestedCustomer', function ($query) use ($customerId) {
+//                    $query->where('customer_id', $customerId);
+//                })
+//                ->whereBetween('price', [$minPrice, $maxPrice])
+//                ->orderBy('price', 'asc')->get();
+//
+//        } elseif ($customer->type_sale == 'rahn') {
+//            //20% diff
+//            $minRahn = $customer->rahn * 0.8;
+//            $maxRahn = $customer->rahn * 1.2;
+//            $minEjareh = $customer->ejareh * 0.8;
+//            $maxEjareh = $customer->ejareh * 1.2;
+//
+//            $customerId = $customer->id;
+//            $suggestions = Landowner::where('status', 'active')
+//                ->whereDoesntHave('suggestedCustomer', function ($query) use ($customerId) {
+//                    $query->where('customer_id', $customerId);
+//                })
+//                ->whereBetween('rahn', [$minRahn, $maxRahn])
+//                ->whereBetween('ejareh', [$minEjareh, $maxEjareh])
+//                ->orderBy('rahn', 'asc')
+//                ->orderBy('ejareh', 'asc')
+//                ->get();
+//        }
+//        return $this->sendResponse([
+//            'Suggestions' => LandownerResource::collection($suggestions),
+//        ], 'Suggestions retrieved successfully.');
+//    }
 }

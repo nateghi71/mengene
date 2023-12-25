@@ -10,16 +10,14 @@ class BusinessResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'status' => $this->status,
             'name' => $this->name,
             'en_name' => $this->en_name,
-            'owner_id' => $this->owner_id,
-            'user_id' => $this->user_id,
+            'image' => $this->image,
             'city' => $this->city,
             'area' => $this->area,
-            'image' => $this->image,
             'address' => $this->address,
-            'is_accepted' => $this->is_accepted,
-            // Include any other properties you want to expose
+            'user_id' => $this->user_id,
         ];
     }
 }
