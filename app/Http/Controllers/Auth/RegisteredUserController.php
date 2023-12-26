@@ -20,13 +20,14 @@ use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
-    public function twoFAIndex(User $user)
+    public function twoFANumber()
     {
-//        Session::put('user_2fa', 'allowed');
-//        Session::put('userNumber', rand(10000000000, 99999999999));
-//        return view('auth.register');
-
         return view('auth.twoFAIndex');
+    }
+
+    public function twoFACode()
+    {
+        return view('auth.twoFAConfirm');
     }
 
     public function twoFAStore(Request $request)
@@ -49,15 +50,14 @@ class RegisteredUserController extends Controller
         $smsApi = new SmsAPI();
         $smsApi->sendSms($userNumber , $code);
 
-        return view('auth.twoFAConfirm', compact('randomString'));
+        session()->put('randomString' , $randomString);
+        return redirect()->route('2fa.enter_code');
     }
 
-    public function twoFAResend(Request $request)
+    public function twoFAResend()
     {
-        Session::forget('error');
-        $userCode = UserCode::where('random_string', $request->random_string)->first();
+        $userCode = UserCode::where('random_string', session('randomString'))->first();
         $previousTimestamp = $userCode->updated_at;
-        $randomString = $userCode->random_string;
 
         if ($previousTimestamp->diffInMinutes(now()) >= 2) {
             $userNumber = $userCode->user_number;
@@ -69,11 +69,11 @@ class RegisteredUserController extends Controller
             $smsApi = new SmsAPI();
             $smsApi->sendSms($userNumber , $code);
 
-            return view('auth.twoFAConfirm', compact('randomString'));
+            return redirect()->route('2fa.enter_code');
         } else {
             // Return an error message indicating that the user needs to wait before requesting a new code
-            Session::put('error', 'لطفا دو دقیقه صبر کنید تا ارسال مجدد کد');
-            return view('auth.twoFAConfirm', compact('randomString'));
+
+            return redirect()->route('2fa.enter_code')->with('error', 'لطفا دو دقیقه صبر کنید تا ارسال مجدد کد');
         }
     }
 
@@ -83,25 +83,21 @@ class RegisteredUserController extends Controller
             'code' => 'required|digits:6'
         ]);
 
-        Session::forget('error');
-        $userCode = UserCode::where('random_string', $request->random_string)->first();
+        $userCode = UserCode::where('random_string', session('randomString'))->first();
 
         if (!$userCode) {
             return redirect()->route('2fa.index')->with('error', 'مراحل ثبت نام را از اول اغاز کنید.');
         }
-
-        $randomString = $userCode->random_string;
 
         if ($userCode->code === $request->code) {
             $userCode->update([
                 'number_verified' => 1,
             ]);
 
-            session()->put('randomString' , $randomString);
             return redirect()->route('register');
         }
-        Session::put('error', 'کد وارد شده صحیح نیست');
-        return view('auth.twoFAConfirm', compact('randomString'));
+
+        return redirect()->route('2fa.enter_code')->with('error', 'کد وارد شده صحیح نیست');
     }
 
     public function register()
@@ -112,13 +108,13 @@ class RegisteredUserController extends Controller
     public function handle_register(Request $request)
     {
         $userCode = UserCode::where('random_string', session('randomString'))->first();
-        session()->forget('randomString');
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
             'email' => ['max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => 'required'
         ]);
 
         try {
@@ -134,6 +130,7 @@ class RegisteredUserController extends Controller
             Auth::login($user);
 
             $userCode->delete();
+            session()->forget('randomString');
 
             DB::commit();
         }
@@ -142,6 +139,9 @@ class RegisteredUserController extends Controller
             return redirect()->back()->with('error' , 'در دیتابیس خطایی رخ داد.');
         }
 
-        return redirect()->route('dashboard');
+        if($request->role == 1)
+            return redirect()->route('business.create');
+        elseif ($request->role == 0)
+            return redirect()->route('dashboard');
     }
 }

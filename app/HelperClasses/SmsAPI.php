@@ -12,4 +12,10 @@ class SmsAPI
         $api = new GhasedakApi(env('API_KEY_SMS'));
         $api->Verify($number, $template, $param);
     }
+    public function sendResetPasswordSms($number , $param): void
+    {
+        $template = "passwordReset";
+        $api = new GhasedakApi(env('API_KEY_SMS'));
+        $api->Verify($number, $template, $param);
+    }
 }

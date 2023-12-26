@@ -18,7 +18,7 @@ class NewPasswordController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function create(Request $request)
+    public function enter_newPassword_view(Request $request)
     {
         return view('auth.reset-password', ['request' => $request]);
     }
@@ -31,11 +31,11 @@ class NewPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function update_password(Request $request)
     {
         $request->validate([
             'token' => ['required'],
-            'email' => ['required', 'email'],
+            'number' => 'required|max:11|digits:11',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -43,7 +43,7 @@ class NewPasswordController extends Controller
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
         $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
+            $request->only('number', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),

@@ -17,21 +17,19 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="assets/img/icon_m.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-
+    <link href="Home/assets/img/icon_m.png" rel="icon">
+    <link href="Home/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Vendor CSS Files -->
 
-    <link rel="stylesheet" href="{{ asset('assets/vendor/aos/aos.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/remixicon/remixicon.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('Home/assets/vendor/aos/aos.css') }}">
+    <link rel="stylesheet" href="{{ asset('Home/assets/vendor/boxicons/css/boxicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('Home/assets/vendor/glightbox/css/glightbox.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('Home/assets/vendor/remixicon/remixicon.css') }}">
+    <link rel="stylesheet" href="{{ asset('Home/assets/vendor/swiper/swiper-bundle.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('Home/assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('Home/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('Home/assets/css/style.css') }}">
 
 
 
@@ -98,7 +96,7 @@
 
                 </h2>
                 <div class="d-flex justify-content-center justify-content-lg-start">
-                    <a href="{{route('2fa.index')}}" class="btn-get-started scrollto">ثبت نام</a>
+                    <a href="{{route('2fa.enter_number')}}" class="btn-get-started scrollto">ثبت نام</a>
                     <a href="https://98diha.ir//wp-content/themes/ringtone/app/98diha.apk"
                        class="glightbox btn-watch-video m-2">
                         <i class="bi bi-download"></i>
@@ -111,7 +109,7 @@
                 data-aos-delay="100"
             >
                 <img
-                    src="assets/img/4310987.png"
+                    src="Home/assets/img/4310987.png"
                     class="img-fluid animated"
                     alt=""
                 />
@@ -597,7 +595,7 @@
                                 <i class="bx bx-check"></i>مدیریت مشاورین(اضافه کردن 4 عدد)
                             </li>
                         </ul>
-                        <a href="{{route('2fa.index')}}" class="buy-btn">شروع کنید</a>
+                        <a href="{{route('2fa.enter_number')}}" class="buy-btn">شروع کنید</a>
                     </div>
                 </div>
 
@@ -615,7 +613,7 @@
                             <li><i class="bx bx-check"></i> سامانه پیامکی(نامحدود)</li>
                             <li><i class="bx bx-check"></i>مدیریت مشاورین(نامحدود)</li>
                         </ul>
-                        <a href="{{route('2fa.index')}}" class="buy-btn">شروع کنید</a>
+                        <a href="{{route('2fa.enter_number')}}" class="buy-btn">شروع کنید</a>
                     </div>
                 </div>
 
@@ -638,7 +636,7 @@
                                 <i class="bx bx-check"></i>مدیریت مشاورین(تا 10 عدد مشاور)
                             </li>
                         </ul>
-                        <a href="{{route('2fa.index')}}" class="buy-btn">شروع کنید</a>
+                        <a href="{{route('2fa.enter_number')}}" class="buy-btn">شروع کنید</a>
                     </div>
                 </div>
             </div>
@@ -974,16 +972,16 @@
     ></a>
 
 <!-- Vendor JS Files -->
-<script src="assets/vendor/aos/aos.js"></script>
-<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-<script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-<script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-<script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-<script src="assets/vendor/php-email-form/validate.js"></script>
+<script src="Home/assets/vendor/aos/aos.js"></script>
+<script src="Home/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="Home/assets/vendor/glightbox/js/glightbox.min.js"></script>
+<script src="Home/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="Home/assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="Home/assets/vendor/waypoints/noframework.waypoints.js"></script>
+<script src="Home/assets/vendor/php-email-form/validate.js"></script>
 
 <!-- Template Main JS File -->
-<script src="assets/js/main.js"></script>
+<script src="Home/assets/js/main.js"></script>
 </body>
 
 </html>

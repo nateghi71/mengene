@@ -18,6 +18,11 @@ class ConsultantController extends Controller
         return view('consultant.index', compact('business', 'user'));
     }
 
+    public function findBusiness()
+    {
+        return view('Consultant.find_business');
+    }
+
     public function search(Request $request)
     {
         $this->authorize('createOrJoin', Business::class);

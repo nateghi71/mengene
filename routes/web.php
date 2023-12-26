@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::post('consultant/join', [ConsultantController::class, 'join'])->name('consultant.join');
     Route::post('consultant/search', [ConsultantController::class, 'search'])->name('consultant.search');
     Route::get('consultant', [ConsultantController::class, 'index'])->name('consultant.index');
+    Route::get('consultant/find', [ConsultantController::class, 'findBusiness'])->name('consultant.find');
     Route::get("consultant/{user}/leave", [ConsultantController::class, 'leaveMember'])->name('consultant.leave.member');
 
     Route::resource('landowner' , LandownerController::class);
