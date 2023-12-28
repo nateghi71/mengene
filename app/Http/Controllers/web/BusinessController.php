@@ -46,6 +46,16 @@ class BusinessController extends Controller
         return view('business.index', compact('business', 'user', 'acceptedMember' , 'notAcceptedMember'));
     }
 
+    public function dashboard()
+    {
+        $user = auth()->user();
+        if($user->ownedBusiness()->exists())
+            return redirect()->route('business.index');
+        elseif ($user->joinedBusinesses()->exists())
+            return redirect()->route('consultant.index');
+    }
+
+
     public function create(Request $request)
     {
         $this->authorize('createOrJoin', Business::class);
@@ -56,6 +66,7 @@ class BusinessController extends Controller
     function store(Request $request)
     {
         $this->authorize('createOrJoin', Business::class);
+
         $request->validate([
             'name' => 'required',
             'en_name' => 'required|unique:businesses',

@@ -52,11 +52,6 @@ class CustomerController extends Controller
         return view('customer.index', compact('customers', 'icustomers', 'rentCustomers', 'buyCustomers', 'rentiCustomers', 'buyiCustomers'));
     }
 
-    public function dashboard()
-    {
-        return view('dashboard');
-    }
-
     public function show(Customer $customer)
     {
         $this->authorize('view' , $customer);

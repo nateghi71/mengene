@@ -18,7 +18,7 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{asset("Admin/assets/images/favicon.png")}}" />
 </head>
-<body>
+<body class="rtl">
 <div class="container-scroller">
     <div class="container-fluid page-body-wrapper full-page-wrapper">
         <div class="row w-100 m-0">
@@ -26,7 +26,7 @@
                 <div class="card col-lg-4 mx-auto">
                     <div class="card-body px-5 py-4">
                         <h3 class="card-title text-center mb-3">ایجاد املاکی</h3>
-                        <form action="{{ route('business.store') }}" method="post" class="text-right">
+                        <form action="{{ route('business.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="name"> نام املاکی: *</label>
@@ -62,9 +62,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="address">آدرس: *</label>
-                                <textarea name="address" class="form-control" id="address" placeholder="آدرس" rows="4">
-                                    {{old('address')}}
-                                </textarea>
+                                <textarea name="address" class="form-control" id="address" placeholder="آدرس" rows="4">{{old('address')}}</textarea>
                                 @error('address')
                                 <div class="alert-danger">{{$message}}</div>
                                 @enderror
@@ -72,7 +70,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="image">عکس: *</label>
-                                <input type="file" name="image" class="form-control" value="{{old('image')}}" id="image" placeholder="عکس">
+                                <input type="file" name="image" class="form-control" id="image" placeholder="عکس">
                                 @error('image')
                                 <div class="alert-danger">{{$message}}</div>
                                 @enderror

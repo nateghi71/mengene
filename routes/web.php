@@ -29,7 +29,7 @@ Route::get('/', function () {
 //    return view('dashboard');
 //})->middleware(['auth'])->name('dashboard');
 
-Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('dashboard')
+Route::get('/dashboard', [BusinessController::class, 'dashboard'])->name('dashboard')
     ->middleware('auth');
 
 Route::get('/confirmation/{type}/{token}', [RandomLinkController::class, 'confirmPage'])
