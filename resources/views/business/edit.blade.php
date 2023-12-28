@@ -1,125 +1,109 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight" style="text-align: right">
-            {{ __('ویرایش بیزینس') }}
-        </h2>
-    </x-slot>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ایجاد املاکی</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{asset("Admin/assets/vendors/mdi/css/materialdesignicons.min.css")}}">
+    <link rel="stylesheet" href="{{asset("Admin/assets/vendors/css/vendor.bundle.base.css")}}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{asset("Admin/assets/css/style.css")}}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{{asset("Admin/assets/images/favicon.png")}}" />
+</head>
+<body>
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="row w-100 m-0">
+            <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                <div class="card col-lg-4 mx-auto">
+                    <div class="card-body px-5 py-4">
+                        <h3 class="card-title text-center mb-3">ایجاد املاکی</h3>
+                        <form action="{{route('business.update',$business->id)}}" method="post" class="text-right">
+                            @csrf
+                            @method('PUT')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg" style="text-align: right">
-                <div class="p-6 bg-white border-b border-gray-200"
-                     style="text-align: right;">
-                    {{--                    {{dd($business)}}--}}
-                    <form action="{{route('business.update',$business->id)}}" method="POST"
-                          enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div>
-                            <label for="name">نام:</label>
-                            <input type="text" name="name"
-                                   value="{{$business->name}}">
-                            @error('name')
-                            <div>{{$message}}</div> @enderror
-                        </div>
-                        <div>
-                            <label for="status">وضعیت: </label>
-                            <select name="status">
-                                <option value="active" {{$business->status === "active" ? 'selected' : '' }}>
-                                    فعال
-                                </option>
-                                <option value="deActive" {{$business->status === "deactive" ? 'selected' : '' }}>
-                                    غیر فعال
-                                </option>
-                            </select>
-                        </div>
-                        <label for="en_name">نام انگلیسی: </label>
-                        <input type="text" name="en_name" value="{{$business->en_name}}">
-                        @error('en_name')
-                        <div>{{$message}}</div> @enderror
-                        <div>
-                            <label for="city">شهر:</label>
-                            <input type="text" name="city" value="{{$business->city}}">
-                            @error('city')
-                            <div>{{$message}}</div> @enderror
-                        </div>
-                        <div>
-                            <label for="area">منطقه:</label>
-                            <input type="text" name="area" value="{{$business->area}}">
-                            @error('area')
-                            <div>{{$message}}</div> @enderror
-                        </div>
-                        <div>
-                            <label for="address">آدرس:</label>
-                            <textarea name="address" style="width: 500px; height: 150px">
-                               {{$business->address}}
-                            </textarea>
-                            @error('address')
-                            <div>{{$message}}</div> @enderror
-                        </div>
-                        <div>
-                            <label for="image">عکس مجوز:</label>
-                            @if($business->image)
-{{--                                {{dd(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')) . $business->image)}}--}}
-                                <img src="{{ asset(env('BUSINESS_IMAGES_UPLOAD_PATH')) . '/' . $business->image }}" id="oldImagePreview"
-                                     style="max-width: 80%; height: 400px">
-                            @else
-                                <img src="#" id="oldImagePreview" style="display: none; max-width: 80%; height: 400px">
-                            @endif
-                            <input type="file" name="image" id="imageInput">
-                            @error('image')
-                            <div>{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div>
-                            <img id="newImagePreview" src="#" alt="Preview"
-                                 style="max-width: 80%; height: 400px; display: none;">
-                        </div>
-                        <div>
-                            <div>
-                                <button type="submit">ذخیره</button>
+                            <div class="form-group">
+                                <label for="name"> نام املاکی: *</label>
+                                <input type="text" name="name" class="form-control" id="name" value="{{$business->name}}" placeholder="نام املاکی">
+                                @error('name')
+                                <div class="alert-danger">{{$message}}</div>
+                                @enderror
+
                             </div>
-                        </div>
-                    </form>
+                            <div class="form-group">
+                                <label for="en_name">نام انگلیسی: *</label>
+                                <input type="text" name="en_name" class="form-control" value="{{$business->en_name}}" id="en_name" placeholder="نام انگلیسی">
+                                @error('en_name')
+                                <div class="alert-danger">{{$message}}</div>
+                                @enderror
+
+                            </div>
+                            <div class="form-group">
+                                <label for="city">شهر:</label>
+                                <input type="text" name="city" class="form-control" value="{{$business->city}}" id="city" placeholder="شهر">
+                                @error('city')
+                                <div class="alert-danger">{{$message}}</div>
+                                @enderror
+
+                            </div>
+                            <div class="form-group">
+                                <label for="area">منطقه: *</label>
+                                <input type="text" name="area" class="form-control" value="{{$business->area}}" id="area" placeholder="منطقه">
+                                @error('area')
+                                <div class="alert-danger">{{$message}}</div>
+                                @enderror
+
+                            </div>
+                            <div class="form-group">
+                                <label for="address">آدرس: *</label>
+                                <textarea name="address" class="form-control" id="address" placeholder="آدرس" rows="4">
+                                    {{$business->address}}
+                                </textarea>
+                                @error('address')
+                                <div class="alert-danger">{{$message}}</div>
+                                @enderror
+
+                            </div>
+                            <div class="form-group">
+                                <label for="image">عکس: *</label>
+                                <input type="file" name="image" class="form-control" id="image" placeholder="عکس">
+                                @error('image')
+                                <div class="alert-danger">{{$message}}</div>
+                                @enderror
+                            </div>
+                            <div class="text-center pt-3">
+                                <button type="submit" class="btn btn-primary w-100 enter-btn">ایجاد</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <br>
-                <a href="{{route('business.index')}}">بازگشت</a>
-
             </div>
+            <!-- content-wrapper ends -->
         </div>
+        <!-- row ends -->
     </div>
-    <script>
-        // Get the file input element
-        const imageInput = document.getElementById('imageInput');
-
-        // Get the image preview elements
-        const oldImagePreview = document.getElementById('oldImagePreview');
-        const newImagePreview = document.getElementById('newImagePreview');
-
-        // Set the existing image source as the initial preview
-        oldImagePreview.style.display = 'block';
-
-        // Add an event listener to the file input field
-        imageInput.addEventListener('change', function () {
-            // Check if a file is selected
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-
-                // Set the new image source to the selected file
-                reader.onload = function (e) {
-                    newImagePreview.src = e.target.result;
-                    newImagePreview.style.display = 'block';
-                    oldImagePreview.style.display = 'none';
-                };
-
-                // Read the selected file as a data URL
-                reader.readAsDataURL(this.files[0]);
-            } else {
-                // No file selected, reset the new image preview
-                newImagePreview.src = '';
-                newImagePreview.style.display = 'none';
-                oldImagePreview.style.display = 'block';
-            }
-        });
-    </script>
-</x-app-layout>
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+<!-- plugins:js -->
+<script src="{{asset("Admin/assets/vendors/js/vendor.bundle.base.js")}}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="{{asset("Admin/assets/js/off-canvas.js")}}"></script>
+<script src="{{asset("Admin/assets/js/hoverable-collapse.js")}}"></script>
+<script src="{{asset("Admin/assets/js/misc.js")}}"></script>
+<script src="{{asset("Admin/assets/js/settings.js")}}"></script>
+<script src="{{asset("Admin/assets/js/todolist.js")}}"></script>
+<!-- endinject -->
+</body>
+</html>

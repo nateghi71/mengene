@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
     public function twoFAStore(Request $request)
     {
         $request->validate([
-            'number' => 'required|max:11|digits:11'
+            'number' => 'required|max:11|digits:11|unique:users,number'
         ]);
 
         $userNumber = $request->number;
@@ -47,8 +47,8 @@ class RegisteredUserController extends Controller
             'random_string' => $randomString,
         ]);
 
-        $smsApi = new SmsAPI();
-        $smsApi->sendSms($userNumber , $code);
+//        $smsApi = new SmsAPI();
+//        $smsApi->sendSms($userNumber , $code);
 
         session()->put('randomString' , $randomString);
         return redirect()->route('2fa.enter_code');
@@ -142,6 +142,6 @@ class RegisteredUserController extends Controller
         if($request->role == 1)
             return redirect()->route('business.create');
         elseif ($request->role == 0)
-            return redirect()->route('dashboard');
+            return redirect()->route('consultant.find');
     }
 }

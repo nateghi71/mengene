@@ -28,7 +28,7 @@ class Check2FA
         }
         else
         {
-            return redirect()->route('2fa.index')->with('error', 'مراحل ثبت نام را از اول اغاز کنید.');
+            return redirect()->route('2fa.enter_number')->with('error', 'مراحل ثبت نام را از اول اغاز کنید.');
         }
 
         return $next($request);

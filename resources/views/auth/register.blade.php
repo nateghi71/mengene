@@ -56,7 +56,7 @@
                         </select>
                     </div>
                     <div class="text-center pt-3">
-                    <button type="submit" class="btn btn-primary btn-block enter-btn">ثبت نام</button>
+                    <button type="submit" class="btn btn-primary w-100 enter-btn">ثبت نام</button>
                   </div>
                 </form>
               </div>

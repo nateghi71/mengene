@@ -32,9 +32,9 @@
                                 <input type="text" name="number" class="form-control" id="number">
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary btn-block enter-btn">ارسال کد</button>
+                                <button type="submit" class="btn btn-primary w-100 enter-btn">ارسال کد</button>
                             </div>
-                            <p class="sign-up text-center">حساب کاربری دارید؟<a href="{{route('login')}}"> ورود</a></p>
+                            <p class="sign-up text-center">حساب کاربری دارید؟<a class="text-decoration-none" href="{{route('login')}}"> ورود</a></p>
                         </form>
                     </div>
                 </div>

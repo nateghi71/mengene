@@ -33,7 +33,7 @@ class ConsultantController extends Controller
         })->first();
 
         if (!$business) {
-            return redirect()->back()->with('message' , 'No business found for the given owner number');
+            return redirect()->back()->with('error' , 'املاکی برای شماره موردنظر یافت نشد.');
         }
 
         return view('consultant.search', compact('business'));
@@ -47,7 +47,7 @@ class ConsultantController extends Controller
         $business = Business::where('id', $request->business_id)->first();
         $business->members()->attach($user);
 
-        return redirect()->route('consultant.index')
+        return redirect()->route('dashboard')
             ->with('success', 'You have successfully joined the business.');
     }
 

@@ -1,41 +1,59 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="ar" dir="rtl">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Corona Admin</title>
     <!-- plugins:css -->
-    <link rel="stylesheet" href="Admin/assets/vendors/mdi/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="Admin/assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
+    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/css/vendor.bundle.base.css')}}">
     <!-- endinject -->
     <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="Admin/assets/vendors/jvectormap/jquery-jvectormap.css">
-    <link rel="stylesheet" href="Admin/assets/vendors/flag-icon-css/css/flag-icon.min.css">
-    <link rel="stylesheet" href="Admin/assets/vendors/owl-carousel-2/owl.carousel.min.css">
-    <link rel="stylesheet" href="Admin/assets/vendors/owl-carousel-2/owl.theme.default.min.css">
+    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/jvectormap/jquery-jvectormap.css')}}">
+    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/flag-icon-css/css/flag-icon.min.css')}}">
+    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/owl-carousel-2/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/owl-carousel-2/owl.theme.default.min.css')}}">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
     <!-- Layout styles -->
-    <link rel="stylesheet" href="Admin/assets/css/style.css">
+    <link rel="stylesheet" href="{{asset('Admin/assets/css/style.css')}}">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="Admin/assets/images/favicon.png" />
+    <link rel="shortcut icon" href="{{asset('Admin/assets/images/favicon.png')}}" />
   </head>
-  <body style="direction: rtl">
+  <body class="rtl">
     <div class="container-scroller">
+{{--      <div class="row p-0 m-0 proBanner" id="proBanner">--}}
+{{--        <div class="col-md-12 p-0 m-0">--}}
+{{--          <div class="card-body card-body-padding d-flex align-items-center justify-content-between">--}}
+{{--            <div class="ps-lg-1">--}}
+{{--              <div class="d-flex align-items-center justify-content-between">--}}
+{{--                <p class="mb-0 font-weight-medium me-3 buy-now-text">Free 24/7 customer support, updates, and more with this template!</p>--}}
+{{--                <a href="https://www.bootstrapdash.com/product/corona-free/?utm_source=organic&utm_medium=banner&utm_campaign=buynow_demo" target="_blank" class="btn me-2 buy-now-btn border-0">Get Pro</a>--}}
+{{--              </div>--}}
+{{--            </div>--}}
+{{--            <div class="d-flex align-items-center justify-content-between">--}}
+{{--              <a href="https://www.bootstrapdash.com/product/corona-free/"><i class="mdi mdi-home me-3 text-white"></i></a>--}}
+{{--              <button id="bannerClose" class="btn border-0 p-0">--}}
+{{--                <i class="mdi mdi-close text-white me-0"></i>--}}
+{{--              </button>--}}
+{{--            </div>--}}
+{{--          </div>--}}
+{{--        </div>--}}
+{{--      </div>--}}
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-          <a class="sidebar-brand brand-logo" href="index.html"><img src="Admin/assets/images/logo.svg" alt="logo" /></a>
-          <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="Admin/assets/images/logo-mini.svg" alt="logo" /></a>
+          <a class="sidebar-brand brand-logo" href="index.html"><img src="{{asset('Admin/assets/images/logo.svg')}}" alt="logo" /></a>
+          <a class="sidebar-brand brand-logo-mini" href="index.html"><img src="{{asset('Admin/assets/images/logo-mini.svg')}}" alt="logo" /></a>
         </div>
         <ul class="nav">
           <li class="nav-item profile">
             <div class="profile-desc">
               <div class="profile-pic">
                 <div class="count-indicator">
-                  <img class="img-xs rounded-circle " src="Admin/assets/images/faces/face15.jpg" alt="">
+                  <img class="img-xs rounded-circle " src="{{asset('Admin/assets/images/faces/face15.jpg')}}" alt="">
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
@@ -43,7 +61,7 @@
                   <span>Gold Member</span>
                 </div>
               </div>
-              <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+              <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
               <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
                 <a href="#" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
@@ -81,7 +99,7 @@
             </div>
           </li>
           <li class="nav-item nav-category">
-            <span class="nav-link">داشبورد</span>
+            <span class="nav-link">Navigation</span>
           </li>
           <li class="nav-item menu-items">
             <a class="nav-link" href="index.html">
@@ -92,7 +110,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <span class="menu-icon">
                 <i class="mdi mdi-laptop"></i>
               </span>
@@ -101,14 +119,14 @@
             </a>
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.blade.php">Buttons</a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.blade.php">Dropdowns</a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.blade.php">Typography</a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
               </ul>
             </div>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/forms/basic_elements.blade.php">
+            <a class="nav-link" href="pages/forms/basic_elements.html">
               <span class="menu-icon">
                 <i class="mdi mdi-playlist-play"></i>
               </span>
@@ -116,7 +134,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/tables/basic-table.blade.php">
+            <a class="nav-link" href="pages/tables/basic-table.html">
               <span class="menu-icon">
                 <i class="mdi mdi-table-large"></i>
               </span>
@@ -124,7 +142,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/charts/chartjs.blade.php">
+            <a class="nav-link" href="pages/charts/chartjs.html">
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>
@@ -132,7 +150,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/icons/mdi.blade.php">
+            <a class="nav-link" href="pages/icons/mdi.html">
               <span class="menu-icon">
                 <i class="mdi mdi-contacts"></i>
               </span>
@@ -140,7 +158,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+            <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <span class="menu-icon">
                 <i class="mdi mdi-security"></i>
               </span>
@@ -149,9 +167,9 @@
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.blade.php"> Blank Page </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.blade.php"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.blade.php"> 500 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
                 <li class="nav-item"> <a class="nav-link" href="pages/samples/login.blade.php"> Login </a></li>
                 <li class="nav-item"> <a class="nav-link" href="pages/samples/register.blade.php"> Register </a></li>
               </ul>
@@ -187,7 +205,7 @@
             </ul>
             <ul class="navbar-nav navbar-nav-right">
               <li class="nav-item dropdown d-none d-lg-block">
-                <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="dropdown" aria-expanded="false" href="#">+ Create New Project</a>
+                <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-bs-toggle="dropdown" aria-expanded="false" href="#">+ Create New Project</a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
                   <h6 class="p-3 mb-0">Projects</h6>
                   <div class="dropdown-divider"></div>
@@ -233,7 +251,7 @@
                 </a>
               </li>
               <li class="nav-item dropdown border-left">
-                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                   <i class="mdi mdi-email"></i>
                   <span class="count bg-success"></span>
                 </a>
@@ -242,7 +260,7 @@
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item preview-item">
                     <div class="preview-thumbnail">
-                      <img src="assets/images/faces/face4.jpg" alt="image" class="rounded-circle profile-pic">
+                      <img src="{{asset('Admin/assets/images/faces/face4.jpg')}}" alt="image" class="rounded-circle profile-pic">
                     </div>
                     <div class="preview-item-content">
                       <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
@@ -252,7 +270,7 @@
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item preview-item">
                     <div class="preview-thumbnail">
-                      <img src="assets/images/faces/face2.jpg" alt="image" class="rounded-circle profile-pic">
+                      <img src="{{asset('Admin/assets/images/faces/face2.jpg')}}" alt="image" class="rounded-circle profile-pic">
                     </div>
                     <div class="preview-item-content">
                       <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>
@@ -262,7 +280,7 @@
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item preview-item">
                     <div class="preview-thumbnail">
-                      <img src="assets/images/faces/face3.jpg" alt="image" class="rounded-circle profile-pic">
+                      <img src="{{asset('Admin/assets/images/faces/face3.jpg')}}" alt="image" class="rounded-circle profile-pic">
                     </div>
                     <div class="preview-item-content">
                       <p class="preview-subject ellipsis mb-1">Profile picture updated</p>
@@ -274,7 +292,7 @@
                 </div>
               </li>
               <li class="nav-item dropdown border-left">
-                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
                   <i class="mdi mdi-bell"></i>
                   <span class="count bg-danger"></span>
                 </a>
@@ -321,9 +339,9 @@
                 </div>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                   <div class="navbar-profile">
-                    <img class="img-xs rounded-circle" src="assets/images/faces/face15.jpg" alt="">
+                    <img class="img-xs rounded-circle" src="{{asset('Admin/assets/images/faces/face15.jpg')}}" alt="">
                     <p class="mb-0 d-none d-sm-block navbar-profile-name">Henry Klein</p>
                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                   </div>
@@ -377,7 +395,7 @@
                         <h4 class="mb-1 mb-sm-0">Want even more features?</h4>
                         <p class="mb-0 font-weight-normal d-none d-sm-block">Check out our Pro version with 5 unique layouts!</p>
                       </div>
-                      <div class="col-3 col-sm-2 col-xl-2 pl-0 text-center">
+                      <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
                           <a href="https://www.bootstrapdash.com/product/corona-admin-template/" target="_blank" class="btn btn-outline-light btn-rounded get-started-btn">Upgrade to PRO</a>
                         </span>
@@ -395,7 +413,7 @@
                       <div class="col-9">
                         <div class="d-flex align-items-center align-self-start">
                           <h3 class="mb-0">$12.34</h3>
-                          <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">+3.5%</p>
                         </div>
                       </div>
                       <div class="col-3">
@@ -415,7 +433,7 @@
                       <div class="col-9">
                         <div class="d-flex align-items-center align-self-start">
                           <h3 class="mb-0">$17.34</h3>
-                          <p class="text-success ml-2 mb-0 font-weight-medium">+11%</p>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">+11%</p>
                         </div>
                       </div>
                       <div class="col-3">
@@ -435,7 +453,7 @@
                       <div class="col-9">
                         <div class="d-flex align-items-center align-self-start">
                           <h3 class="mb-0">$12.34</h3>
-                          <p class="text-danger ml-2 mb-0 font-weight-medium">-2.4%</p>
+                          <p class="text-danger ms-2 mb-0 font-weight-medium">-2.4%</p>
                         </div>
                       </div>
                       <div class="col-3">
@@ -455,7 +473,7 @@
                       <div class="col-9">
                         <div class="d-flex align-items-center align-self-start">
                           <h3 class="mb-0">$31.53</h3>
-                          <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">+3.5%</p>
                         </div>
                       </div>
                       <div class="col-3">
@@ -517,7 +535,7 @@
                                 <h6 class="preview-subject">Admin dashboard design</h6>
                                 <p class="text-muted mb-0">Broadcast web app mockup</p>
                               </div>
-                              <div class="mr-auto text-sm-right pt-2 pt-sm-0">
+                              <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                 <p class="text-muted">15 minutes ago</p>
                                 <p class="text-muted mb-0">30 tasks, 5 issues </p>
                               </div>
@@ -534,7 +552,7 @@
                                 <h6 class="preview-subject">Wordpress Development</h6>
                                 <p class="text-muted mb-0">Upload new design</p>
                               </div>
-                              <div class="mr-auto text-sm-right pt-2 pt-sm-0">
+                              <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                 <p class="text-muted">1 hour ago</p>
                                 <p class="text-muted mb-0">23 tasks, 5 issues </p>
                               </div>
@@ -551,7 +569,7 @@
                                 <h6 class="preview-subject">Project meeting</h6>
                                 <p class="text-muted mb-0">New project discussion</p>
                               </div>
-                              <div class="mr-auto text-sm-right pt-2 pt-sm-0">
+                              <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                 <p class="text-muted">35 minutes ago</p>
                                 <p class="text-muted mb-0">15 tasks, 2 issues</p>
                               </div>
@@ -568,7 +586,7 @@
                                 <h6 class="preview-subject">Broadcast Mail</h6>
                                 <p class="text-muted mb-0">Sent release details to team</p>
                               </div>
-                              <div class="mr-auto text-sm-right pt-2 pt-sm-0">
+                              <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                 <p class="text-muted">55 minutes ago</p>
                                 <p class="text-muted mb-0">35 tasks, 7 issues </p>
                               </div>
@@ -585,7 +603,7 @@
                                 <h6 class="preview-subject">UI Design</h6>
                                 <p class="text-muted mb-0">New application planning</p>
                               </div>
-                              <div class="mr-auto text-sm-right pt-2 pt-sm-0">
+                              <div class="me-auto text-sm-right pt-2 pt-sm-0">
                                 <p class="text-muted">50 minutes ago</p>
                                 <p class="text-muted mb-0">27 tasks, 4 issues </p>
                               </div>
@@ -607,12 +625,12 @@
                       <div class="col-8 col-sm-12 col-xl-8 my-auto">
                         <div class="d-flex d-sm-block d-md-flex align-items-center">
                           <h2 class="mb-0">$32123</h2>
-                          <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">+3.5%</p>
                         </div>
                         <h6 class="text-muted font-weight-normal">11.38% Since last month</h6>
                       </div>
                       <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                        <i class="icon-lg mdi mdi-codepen text-primary ml-auto"></i>
+                        <i class="icon-lg mdi mdi-codepen text-primary ms-auto"></i>
                       </div>
                     </div>
                   </div>
@@ -626,12 +644,12 @@
                       <div class="col-8 col-sm-12 col-xl-8 my-auto">
                         <div class="d-flex d-sm-block d-md-flex align-items-center">
                           <h2 class="mb-0">$45850</h2>
-                          <p class="text-success ml-2 mb-0 font-weight-medium">+8.3%</p>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">+8.3%</p>
                         </div>
                         <h6 class="text-muted font-weight-normal"> 9.61% Since last month</h6>
                       </div>
                       <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                        <i class="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
+                        <i class="icon-lg mdi mdi-wallet-travel text-danger ms-auto"></i>
                       </div>
                     </div>
                   </div>
@@ -645,12 +663,12 @@
                       <div class="col-8 col-sm-12 col-xl-8 my-auto">
                         <div class="d-flex d-sm-block d-md-flex align-items-center">
                           <h2 class="mb-0">$2039</h2>
-                          <p class="text-danger ml-2 mb-0 font-weight-medium">-2.1% </p>
+                          <p class="text-danger ms-2 mb-0 font-weight-medium">-2.1% </p>
                         </div>
                         <h6 class="text-muted font-weight-normal">2.27% Since last month</h6>
                       </div>
                       <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                        <i class="icon-lg mdi mdi-monitor text-success ml-auto"></i>
+                        <i class="icon-lg mdi mdi-monitor text-success ms-auto"></i>
                       </div>
                     </div>
                   </div>
@@ -693,7 +711,7 @@
                             </td>
                             <td>
                               <img src="assets/images/faces/face1.jpg" alt="image" />
-                              <span class="pl-2">Henry Klein</span>
+                              <span class="ps-2">Henry Klein</span>
                             </td>
                             <td> 02312 </td>
                             <td> $14,500 </td>
@@ -714,7 +732,7 @@
                             </td>
                             <td>
                               <img src="assets/images/faces/face2.jpg" alt="image" />
-                              <span class="pl-2">Estella Bryan</span>
+                              <span class="ps-2">Estella Bryan</span>
                             </td>
                             <td> 02312 </td>
                             <td> $14,500 </td>
@@ -735,7 +753,7 @@
                             </td>
                             <td>
                               <img src="assets/images/faces/face5.jpg" alt="image" />
-                              <span class="pl-2">Lucy Abbott</span>
+                              <span class="ps-2">Lucy Abbott</span>
                             </td>
                             <td> 02312 </td>
                             <td> $14,500 </td>
@@ -756,7 +774,7 @@
                             </td>
                             <td>
                               <img src="assets/images/faces/face3.jpg" alt="image" />
-                              <span class="pl-2">Peter Gill</span>
+                              <span class="ps-2">Peter Gill</span>
                             </td>
                             <td> 02312 </td>
                             <td> $14,500 </td>
@@ -777,7 +795,7 @@
                             </td>
                             <td>
                               <img src="assets/images/faces/face4.jpg" alt="image" />
-                              <span class="pl-2">Sallie Reyes</span>
+                              <span class="ps-2">Sallie Reyes</span>
                             </td>
                             <td> 02312 </td>
                             <td> $14,500 </td>
@@ -1030,8 +1048,8 @@
           <!-- partial:partials/_footer.html -->
           <footer class="footer">
             <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin templates</a> from Bootstrapdash.com</span>
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2021</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
             </div>
           </footer>
           <!-- partial -->
@@ -1042,24 +1060,25 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="{{asset('Admin/assets/vendors/js/vendor.bundle.base.js')}}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
-    <script src="assets/vendors/chart.js/Chart.min.js"></script>
-    <script src="assets/vendors/progressbar.js/progressbar.min.js"></script>
-    <script src="assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
-    <script src="assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+    <script src="{{asset('Admin/assets/vendors/chart.js/Chart.min.js')}}"></script>
+    <script src="{{asset('Admin/assets/vendors/progressbar.js/progressbar.min.js')}}"></script>
+    <script src="{{asset('Admin/assets/vendors/jvectormap/jquery-jvectormap.min.js')}}"></script>
+    <script src="{{asset('Admin/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
+    <script src="{{asset('Admin/assets/vendors/owl-carousel-2/owl.carousel.min.js')}}"></script>
+    <script src="{{asset('Admin/assets/js/jquery.cookie.js')}}" type="text/javascript"></script>
     <!-- End plugin js for this page -->
     <!-- inject:js -->
-    <script src="assets/js/off-canvas.js"></script>
-    <script src="assets/js/hoverable-collapse.js"></script>
-    <script src="assets/js/misc.js"></script>
-    <script src="assets/js/settings.js"></script>
-    <script src="assets/js/todolist.js"></script>
+    <script src="{{asset('Admin/assets/js/off-canvas.js')}}"></script>
+    <script src="{{asset('Admin/assets/js/hoverable-collapse.js')}}"></script>
+    <script src="{{asset('Admin/assets/js/misc.js')}}"></script>
+    <script src="{{asset('Admin/assets/js/settings.js')}}"></script>
+    <script src="{{asset('Admin/assets/js/todolist.js')}}"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
-    <script src="assets/js/dashboard.js"></script>
+    <script src="{{asset('Admin/assets/js/dashboard.js')}}"></script>
     <!-- End custom js for this page -->
   </body>
 </html>

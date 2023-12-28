@@ -57,7 +57,6 @@ class BusinessController extends Controller
     {
         $this->authorize('createOrJoin', Business::class);
         $request->validate([
-            'status' => 'required',
             'name' => 'required',
             'en_name' => 'required|unique:businesses',
             'city' => 'required',
@@ -75,7 +74,6 @@ class BusinessController extends Controller
         }
 
         $business = Business::create([
-            'status' => $request->status,
             'name' => $request->name,
             'en_name' => $request->en_name,
             'user_id' => $user->id,
@@ -102,7 +100,6 @@ class BusinessController extends Controller
     {
         $this->authorize('updateBusiness' , $business);
         $request->validate([
-            'status' => 'required',
             'name' => 'required',
             'en_name' => [
                 'required',
@@ -121,7 +118,6 @@ class BusinessController extends Controller
         }
 
         $business->update([
-            'status' => $request->status,
             'name' => $request->name,
             'en_name' => $request->en_name,
             'image' => $request->hasFile('image') ? $imageName : $business->image,

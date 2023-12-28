@@ -18,7 +18,7 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="Admin/assets/images/favicon.png" />
   </head>
-  <body>
+  <body class="rtl">
     <div class="container-scroller">
       <div class="container-fluid page-body-wrapper full-page-wrapper">
         <div class="row w-100 m-0">
@@ -37,16 +37,18 @@
                         <input type="password" name="password" class="form-control" id="password">
                     </div>
                   <div class="form-group d-flex align-items-center justify-content-between">
-                      <a href="{{ route('password.request') }}" class="forgot-pass">فراموشی پسورد</a>
                       <div class="form-check">
-                          <input type="checkbox" name="remember_me" class="form-check-input">
-                          <label class="form-check-label pr-4">مرا بخاطر بسپار </label>
+                          <label class="form-check-label">
+                              <input type="checkbox" name="remember_me" class="form-check-input">مرا بخاطر بسپار
+                          </label>
                       </div>
+                      <a href="{{ route('password.request') }}" class="forgot-pass text-decoration-none">فراموشی پسورد</a>
+
                   </div>
                   <div class="text-center">
-                    <button type="submit" class="btn btn-primary btn-block enter-btn">ورود</button>
+                    <button type="submit" class="btn btn-primary w-100 enter-btn">ورود</button>
                   </div>
-                  <p class="sign-up">ایا ثبت نام نکرده اید؟<a href="{{route('register')}}"> ثبت نام</a></p>
+                  <p class="sign-up">ایا ثبت نام نکرده اید؟<a class="text-decoration-none" href="{{route('2fa.enter_number')}}"> ثبت نام</a></p>
                 </form>
               </div>
             </div>
