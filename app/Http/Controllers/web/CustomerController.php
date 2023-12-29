@@ -169,7 +169,6 @@ class CustomerController extends Controller
             'user_id' => $user->id,
             'is_star' => $request->is_star,
             'expire_date' => $request->expire_date
-
         ]);
         return redirect()->route('customer.index');
     }

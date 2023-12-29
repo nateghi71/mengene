@@ -136,7 +136,26 @@
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
                                             <p class="text-">{{$business->address}}</p>
-                                            <p class="text-muted mb-0">{{$user->number}}</p>
+                                            <p class="text-muted mb-0">{{$business->owner->number}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="preview-item border-bottom">
+                                    <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-info">
+                                            <i class="mdi mdi-clock"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content d-sm-flex flex-grow">
+                                        <div class="flex-grow">
+                                            <h6 class="preview-subject">عکس :</h6>
+                                            <p class="text-muted mb-0"></p>
+                                        </div>
+                                        <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
+                                            <p class="text-">
+                                                <img src="{{asset(env('BUSINESS_IMAGES_UPLOAD_PATH')) .'/'. $business->image}}" width="50">
+                                            </p>
+                                            <p class="text-muted mb-0"></p>
                                         </div>
                                     </div>
                                 </div>

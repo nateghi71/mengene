@@ -20332,6 +20332,13 @@ div.tagsinput {
   background: #fa424a; }
 
 /* Sidebar */
+.rtl .sidebar .nav .nav-item .nav-link .menu-icon {
+    margin-right: 0;
+    margin-left: 0.5em;
+}
+.rtl .sidebar .nav {
+    padding-right: 0;
+}
 .sidebar {
   min-height: calc(100vh - 70px);
   background: #191c24;

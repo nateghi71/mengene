@@ -59,7 +59,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-9">
-                            <a href="{{route('customer.create')}}" class="text-decoration-none text-white">
+                            <a href="{{route('landowner.create')}}" class="text-decoration-none text-white">
                                 <div class="d-flex align-items-center align-self-start">
                                     <h3 class="mb-0">ایجاد مالک جدید</h3>
                                     <p class="text-success ms-2 mb-0 font-weight-medium pe-3">+</p>

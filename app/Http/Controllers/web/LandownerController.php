@@ -68,7 +68,6 @@ class LandownerController extends Controller
             'name' => 'required',
             'number' => 'required',
             'city' => 'required',
-            'status' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
@@ -91,7 +90,6 @@ class LandownerController extends Controller
             'name' => $request->name,
             'number' => $request->number,
             'city' => $request->city,
-            'status' => $request->status,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
@@ -112,7 +110,6 @@ class LandownerController extends Controller
             'expire_date' => $request->expire_date
         ]);
         return redirect()->route('landowner.index');
-
     }
 
     public function edit(Landowner $landowner)
@@ -128,7 +125,6 @@ class LandownerController extends Controller
             'name' => 'required',
             'number' => 'required',
             'city' => 'required',
-            'status' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
@@ -151,7 +147,6 @@ class LandownerController extends Controller
             'name' => $request->name,
             'number' => $request->number,
             'city' => $request->city,
-            'status' => $request->status,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
