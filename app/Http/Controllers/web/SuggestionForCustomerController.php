@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Landowner;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SuggestionForCustomerController extends Controller
@@ -43,6 +44,13 @@ class SuggestionForCustomerController extends Controller
                 ->orderBy('rent_amount' , 'asc')->limit(10)->get();
         }
 
+        foreach ($suggestions as $suggestion) {
+            if ($suggestion->expire_date > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($suggestion->expire_date) + 1;
+                $suggestion->daysLeft = $daysLeft;
+            }
+        }
+
         return view('customer.suggestion' , compact('suggestions' , 'customer'));
     }
 
@@ -61,7 +69,7 @@ class SuggestionForCustomerController extends Controller
             ['type' => $link->type , 'token' => $link->token]);
 
         $smsApi = new SmsAPI();
-//        $smsApi->sendSms($customer->number , $link);
+//        $smsApi->sendSmsLink($customer->number , $link);
 
         return redirect()->back();
     }

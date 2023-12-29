@@ -7,6 +7,7 @@ use App\HelperClasses\SmsAPI;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Landowner;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SuggestionForLandOwnerController extends Controller
@@ -41,6 +42,14 @@ class SuggestionForLandOwnerController extends Controller
                 ->orderBy('rent_amount' , 'asc')->limit(10)->get();
         }
 
+        foreach ($suggestions as $suggestion) {
+            if ($suggestion->expire_date > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($suggestion->expire_date) + 1;
+                $suggestion->daysLeft = $daysLeft;
+            }
+        }
+
+
         return view('landowner.suggestion' , compact('suggestions' ,'landowner'));
     }
 
@@ -59,7 +68,7 @@ class SuggestionForLandOwnerController extends Controller
             ['type' => $link->type , 'token' => $link->token]);
 
         $smsApi = new SmsAPI();
-//        $smsApi->sendSms($landowner->number , $link);
+//        $smsApi->sendSmsLink($landowner->number , $link);
 
         return redirect()->back();
     }

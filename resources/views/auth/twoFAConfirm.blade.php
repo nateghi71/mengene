@@ -1,69 +1,32 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>ثبت نام</title>
-    <!-- plugins:css -->
-    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
-    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/css/vendor.bundle.base.css')}}">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
-    <!-- endinject -->
-    <!-- Layout styles -->
-    <link rel="stylesheet" href="{{asset('Admin/assets/css/style.css')}}">
-    <!-- End layout styles -->
-    <link rel="shortcut icon" href="{{asset('Admin/assets/images/favicon.png')}}" />
-</head>
-<body class="rtl">
-<div class="container-scroller">
-    <div class="container-fluid page-body-wrapper full-page-wrapper">
-        <div class="row w-100 m-0">
-            <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
-                <div class="card col-lg-4 mx-auto">
-                    <div class="card-body px-5 py-5">
-                        <form action="{{ route('2fa.confirm') }}" method="post">
-                            @csrf
-                            <div class="form-group">
-                                <label for="code">ورود کد</label>
-                                <input type="text" name="code" class="form-control" id="code">
-                            </div>
-                            @if (session('error'))
-                                <div class="alert alert-danger">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
-                            <div class="text-center d-flex justify-content-between">
-                                <button type="submit" class="btn btn-primary enter-btn">تایید</button>
-                                <div>
-                                    <a href="{{ route('2fa.resend') }}" class="btn btn-danger enter-btn">ارسال مجدد</a>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+@extends('layouts.auth')
+
+@section('title' , 'ثبت نام')
+
+@section('scripts')
+@endsection
+
+@section('content')
+    <form action="{{ route('2fa.confirm') }}" method="post">
+        @csrf
+        <div class="form-group">
+            <label for="code">ورود کد</label>
+            <input type="text" name="code" value="{{old('code')}}" class="form-control" id="code">
+            @error('code')
+            <div class="alert alert-danger">
+                {{$message}}
             </div>
-            <!-- content-wrapper ends -->
+            @enderror
         </div>
-        <!-- row ends -->
-    </div>
-    <!-- page-body-wrapper ends -->
-</div>
-<!-- container-scroller -->
-<!-- plugins:js -->
-<script src="{{asset('Admin/assets/vendors/js/vendor.bundle.base.js')}}"></script>
-<!-- endinject -->
-<!-- Plugin js for this page -->
-<!-- End plugin js for this page -->
-<!-- inject:js -->
-<script src="{{asset('Admin/assets/js/off-canvas.js')}}"></script>
-<script src="{{asset('Admin/assets/js/hoverable-collapse.js')}}"></script>
-<script src="{{asset('Admin/assets/js/misc.js')}}"></script>
-<script src="{{asset('Admin/assets/js/settings.js')}}"></script>
-<script src="{{asset('Admin/assets/js/todolist.js')}}"></script>
-<!-- endinject -->
-</body>
-</html>
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+        <div class="text-center d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary enter-btn">تایید</button>
+            <div>
+                <a href="{{ route('2fa.resend') }}" class="btn btn-danger enter-btn">ارسال مجدد</a>
+            </div>
+        </div>
+    </form>
+@endsection

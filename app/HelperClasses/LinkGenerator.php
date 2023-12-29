@@ -13,7 +13,7 @@ class LinkGenerator
     public function generateLinkForCustomer(Customer $customer , $type , $suggest_id = null)
     {
         $randomString = Str::random(15);
-        $expirationTime = Carbon::now()->addSecond(50);
+        $expirationTime = Carbon::now()->addDays(7);
 
         $randomLink = $customer->links()->create([
             'guest_number' => $customer->number,
@@ -29,7 +29,7 @@ class LinkGenerator
     public function updateLink(RandomLink $link)
     {
         $randomString = Str::random(15);
-        $expirationTime = Carbon::now()->addSecond(50);
+        $expirationTime = Carbon::now()->addDays(7);
         $link->increment('number_try');
 
         $link->update([
@@ -42,7 +42,7 @@ class LinkGenerator
     public function generateLinkForLandowner(Landowner $landowner , $type , $suggest_id = null)
     {
         $randomString = Str::random(12);
-        $expirationTime = Carbon::now()->addSecond(50);
+        $expirationTime = Carbon::now()->addDays(7);
 
         $randomLink = $landowner->links()->create([
             'guest_number' => $landowner->number,

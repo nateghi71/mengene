@@ -62,6 +62,7 @@ class RandomLinkController extends Controller
             $requestedPerson->update([
                 'status' => 'deActive'
             ]);
+            $requestedPerson->delete();
         }
 
         $randomLink->delete();

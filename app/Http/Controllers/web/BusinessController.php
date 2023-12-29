@@ -31,6 +31,7 @@ class BusinessController extends Controller
         $notAcceptedMember = collect();
         $user = auth()->user();
         $business = $user->ownedBusiness()->first();
+        $business->loadCount(['customers' , 'landowners']);
         $members = $business->members;
         foreach ($members as $member) {
             $customers = Customer::where('user_id', $member->id)->count();
@@ -53,6 +54,8 @@ class BusinessController extends Controller
             return redirect()->route('business.index');
         elseif ($user->joinedBusinesses()->exists())
             return redirect()->route('consultant.index');
+        else
+            return redirect()->route('business.create');
     }
 
 
@@ -98,7 +101,7 @@ class BusinessController extends Controller
 //        $premiumInput['level'] = 'free';
 //        $premiumInput['expire_date'] = Carbon::now()->addYear();
 //        $premium = Premium::create($premiumInput);
-        return redirect(route('business.index'));
+        return redirect()->route('dashboard');
     }
 
     public function edit(Business $business)
@@ -137,7 +140,7 @@ class BusinessController extends Controller
             'address' => $request->address
         ]);
 
-        return redirect(route('business.index'));
+        return redirect()->route('dashboard');
     }
 
     public function destroy(Business $business)
@@ -162,7 +165,7 @@ class BusinessController extends Controller
         $member->is_accepted = !$member->is_accepted;
         $member->save();
 
-        return redirect()->route('business.index')->with('success', 'User acceptance has been modified successfully.');
+        return redirect()->route('dashboard')->with('success', 'User acceptance has been modified successfully.');
     }
 
     public function chooseOwner(User $user)
@@ -180,7 +183,7 @@ class BusinessController extends Controller
         $business->user_id = $user->id;
         $business->update();
 
-        return redirect()->route('business.index')->with('success', 'User acceptance has been modified successfully.');
+        return redirect()->route('dashboard')->with('success', 'User acceptance has been modified successfully.');
     }
 
     public function removeMember(User $user)
@@ -189,7 +192,7 @@ class BusinessController extends Controller
         $this->authorize('removeMember', $business);
 
         $business->members()->detach($user);
-        return redirect()->route('business.index')->with('success', 'مشاور مورد نظر با موفقیت حذف شد');
+        return redirect()->route('dashboard')->with('success', 'مشاور مورد نظر با موفقیت حذف شد');
     }
 
 }

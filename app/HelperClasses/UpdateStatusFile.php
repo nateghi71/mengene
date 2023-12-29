@@ -28,7 +28,7 @@ class UpdateStatusFile
                     ['type' => $link->type , 'token' => $link->token]);
 
                 $smsApi = new SmsAPI();
-//                $smsApi->sendSms($customer->number , $link);
+//                $smsApi->sendSmsLink($customer->number , $link);
             }
             elseif($customer->status == 'unknown')
             {
@@ -42,7 +42,7 @@ class UpdateStatusFile
                         ['type' => $updatedLink->type , 'token' => $updatedLink->token]);
 
                     $smsApi = new SmsAPI();
-//                $smsApi->sendSms($customer->number , $updatedLink);
+//                $smsApi->sendSmsLink($customer->number , $updatedLink);
 
                 }
                 else
@@ -75,7 +75,7 @@ class UpdateStatusFile
                     ['type' => $link->type , 'token' => $link->token]);
 
                 $smsApi = new SmsAPI();
-//                $smsApi->sendSms($landowner->number , $link);
+//                $smsApi->sendSmsLink($landowner->number , $link);
             }
             elseif($landowner->status == 'unknown')
             {
@@ -89,7 +89,7 @@ class UpdateStatusFile
                         ['type' => $updatedLink->type , 'token' => $updatedLink->token]);
 
                     $smsApi = new SmsAPI();
-//                $smsApi->sendSms($customer->number , $updatedLink);
+//                $smsApi->sendSmsLink($customer->number , $updatedLink);
 
                 }
                 else

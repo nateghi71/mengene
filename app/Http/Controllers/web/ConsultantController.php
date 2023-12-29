@@ -15,6 +15,7 @@ class ConsultantController extends Controller
 
         $user = auth()->user();
         $business = $user->joinedBusinesses()->first();
+        $business->loadCount(['customers' , 'landowners']);
         return view('consultant.index', compact('business', 'user'));
     }
 
@@ -25,6 +26,10 @@ class ConsultantController extends Controller
 
     public function search(Request $request)
     {
+        $request->validate([
+            'owner_number' => 'required|max:11|digits:11'
+        ]);
+
         $this->authorize('createOrJoin', Business::class);
 
         $ownerNumber = $request->input('owner_number');

@@ -146,6 +146,7 @@ class CustomerController extends Controller
             'expire_date' => 'required'
         ]);
 
+        $user = auth()->user();
         $customer->update([
             'name' => $request->name,
             'number' => $request->number,
@@ -164,8 +165,8 @@ class CustomerController extends Controller
             'store' => $request->store,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
-//            'business_id' => $user->business()->first()->id,
-//            'user_id' => $user->id,
+            'business_id' => $user->business()->first()->id,
+            'user_id' => $user->id,
             'is_star' => $request->is_star,
             'expire_date' => $request->expire_date
 

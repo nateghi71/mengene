@@ -3137,7 +3137,7 @@ var trim = String.prototype.trim ?
 
   // HACK
   // Don't animate/transition first layout
-  // Or don't animate/transition other layouts
+  // Or don't animate/transition other layouts2
   proto._getIsInstant = function() {
     var isLayoutInstant = this._getOption('layoutInstant');
     var isInstant = isLayoutInstant !== undefined ? isLayoutInstant :
