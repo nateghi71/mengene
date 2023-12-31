@@ -23,33 +23,43 @@ use Illuminate\Support\Str;
 
 class CustomerController extends Controller
 {
-    public function index()
+    public function َََََindex($status)
     {
-        $this->authorize('viewAny' , Customer::class);
-        $user = auth()->user();
+        if ($status == 'active' || $status == 'unknown' || $status == 'deActive')
+        {
+            $this->authorize('viewAny' , Customer::class);
+            $user = auth()->user();
 
-        $business = $user->business();
+            $business = $user->business();
 
-        $customers = $business->customers()->where('status', 'active')
-            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
-        $icustomers = $business->customers()->where('status', 'unknown')
-            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+            $buyCustomers = $business->customers()->where('status', $status)->where('type_sale' , 'buy')
+                ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->paginate(
+                    $perPage = 5, $columns = ['*'], $pageName = 'buy'
+                )->fragment('buy')->withQueryString();
 
-        $indexedCustomers = $customers->groupBy('type_sale');
-        $rentCustomers = $indexedCustomers->get('rahn');
-        $buyCustomers = $indexedCustomers->get('buy');
-
-        foreach ($customers as $customer) {
-            if ($customer->expire_date > Carbon::now()) {
-                $daysLeft = Carbon::now()->diffInDays($customer->expire_date) + 1;
-                $customer->daysLeft = $daysLeft;
+            foreach ($buyCustomers as $customer) {
+                if ($customer->expire_date > Carbon::now()) {
+                    $daysLeft = Carbon::now()->diffInDays($customer->expire_date) + 1;
+                    $customer->daysLeft = $daysLeft;
+                }
             }
+
+            $rahnCustomers = $business->customers()->where('status', $status)->where('type_sale' , 'rahn')
+                ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->paginate(
+                    $perPage = 5, $columns = ['*'], $pageName = 'rahn'
+                )->fragment('rahn')->withQueryString();
+
+            foreach ($rahnCustomers as $customer) {
+                if ($customer->expire_date > Carbon::now()) {
+                    $daysLeft = Carbon::now()->diffInDays($customer->expire_date) + 1;
+                    $customer->daysLeft = $daysLeft;
+                }
+            }
+
+            return view('customer.index', compact('buyCustomers' , 'rahnCustomers'));
         }
 
-        $indexediCustomers = $icustomers->groupBy('type_sale');
-        $rentiCustomers = $indexediCustomers->get('rahn');
-        $buyiCustomers = $indexediCustomers->get('buy');
-        return view('customer.index', compact('customers', 'icustomers', 'rentCustomers', 'buyCustomers', 'rentiCustomers', 'buyiCustomers'));
+        abort(404);
     }
 
     public function show(Customer $customer)

@@ -56,12 +56,14 @@ Route::middleware('auth')->group(function () {
     Route::get('consultant/find', [ConsultantController::class, 'findBusiness'])->name('consultant.find');
     Route::get("consultant/{user}/leave", [ConsultantController::class, 'leaveMember'])->name('consultant.leave.member');
 
-    Route::resource('landowner' , LandownerController::class);
+    Route::resource('landowner' , LandownerController::class)->except('index');
+    Route::get('landowner/{status}/landowner', [LandownerController::class, 'index'])->name('landowner.index');
     Route::get('landowner/star/{landowner}', [LandownerController::class, 'star'])->name('landowner.star');
     Route::get('landowner/suggestion/{landowner}', [SuggestionForLandOwnerController::class, 'suggested_customer'])->name('landowner.suggestions');
     Route::post('landowner/suggestion/block', [SuggestionForLandOwnerController::class, 'send_block_message'])->name('landowner.send_block_message');
 
-    Route::resource('customer' , CustomerController::class);
+    Route::resource('customer' , CustomerController::class)->except('index');
+    Route::get('customer/{status}/customer', [CustomerController::class, 'َََََindex'])->name('customer.index');
     Route::get('customer/star/{customer}', [CustomerController::class, 'star'])->name('customer.star');
     Route::get('customer/suggestion/{customer}', [SuggestionForCustomerController::class, 'suggested_landowner'])->name('customer.suggestions');
     Route::post('customer/suggestion/block', [SuggestionForCustomerController::class, 'send_block_message'])->name('customer.send_block_message');

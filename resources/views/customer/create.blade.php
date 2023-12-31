@@ -1,4 +1,4 @@
-@extends('layouts.dashboard' , ['showBanner' => false , 'sectionName' => 'ایجاد متقاضی'])
+@extends('layouts.dashboard' , ['sectionName' => 'ایجاد متقاضی'])
 
 @section('title' , 'ایجاد متقاضی')
 
@@ -44,7 +44,7 @@
         <div class="card-body px-5 py-4">
             <div class="d-flex justify-content-between">
                 <div><h3 class="card-title mb-3">ایجاد متقاضی</h3></div>
-                <div><a href="{{route('customer.index')}}" class="btn btn-primary p-2">نمایش متقاضیان</a></div>
+                <div><a href="{{route('customer.index',['status' => 'active'])}}" class="btn btn-primary p-2">نمایش متقاضیان</a></div>
             </div>
             <hr>
             <form action="{{route('customer.store')}}" method="post">

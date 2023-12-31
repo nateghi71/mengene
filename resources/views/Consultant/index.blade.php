@@ -1,84 +1,168 @@
-@extends('layouts.dashboard' , ['showBanner' => true , 'sectionName' => 'داشبورد'])
+@extends('layouts.dashboard' , ['sectionName' => 'داشبورد'])
 
 @section('title' , 'داشبورد')
 
 @section('scripts')
+    <script>
+        if ($("#transaction-history").length) {
+            let business = @json($business);
+            let landowner = (business.landowners_count * 100 )/(business.customers_count + business.landowners_count);
+            let customer = (business.customers_count * 100 )/(business.customers_count + business.landowners_count);
+            var areaData = {
+                labels: [ "مالک","متقاضی"],
+                datasets: [{
+                    data: [(landowner).toFixed(1), (customer).toFixed(1)],
+                    backgroundColor: [
+                        "#00d25b","#ffab00"
+                    ]
+                }
+                ]
+            };
+            var areaOptions = {
+                responsive: true,
+                maintainAspectRatio: true,
+                segmentShowStroke: false,
+                cutoutPercentage: 70,
+                elements: {
+                    arc: {
+                        borderWidth: 0
+                    }
+                },
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    enabled: true
+                }
+            }
+            var transactionhistoryChartPlugins = {
+                beforeDraw: function(chart) {
+                    var width = chart.chart.width,
+                        height = chart.chart.height,
+                        ctx = chart.chart.ctx;
+
+                    ctx.restore();
+                    var fontSize = 1;
+                    ctx.font = fontSize + "rem sans-serif";
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = "middle";
+                    ctx.fillStyle = "#ffffff";
+
+                    var text = business.customers_count + business.landowners_count,
+                        textX = Math.round((width - ctx.measureText(text).width) / 2),
+                        textY = height / 2.4;
+
+                    ctx.fillText(text, textX, textY);
+
+                    ctx.restore();
+                    var fontSize = 0.75;
+                    ctx.font = fontSize + "rem sans-serif";
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = "middle";
+                    ctx.fillStyle = "#6c7293";
+
+                    var texts = "تعداد کل",
+                        textsX = Math.round((width - ctx.measureText(text).width) / 2.2),
+                        textsY = height / 1.7;
+
+                    ctx.fillText(texts, textsX, textsY);
+                    ctx.save();
+                }
+            }
+            var transactionhistoryChartCanvas = $("#transaction-history").get(0).getContext("2d");
+            var transactionhistoryChart = new Chart(transactionhistoryChartCanvas, {
+                type: 'doughnut',
+                data: areaData,
+                options: areaOptions,
+                plugins: transactionhistoryChartPlugins
+            });
+        }
+    </script>
 @endsection
 
 @section('content')
     <div class="row">
-        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-9">
-                            <a href="{{route('customer.index')}}" class="text-decoration-none text-white">
-                                <div class="d-flex align-items-center align-self-start">
-                                    <h3 class="mb-0">نمایش متقاضیان</h3>
-                                    <p class="text-info ms-2 mb-0 font-weight-medium pe-3">*</p>
-                                </div>
-                            </a>
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card corona-gradient-card">
+                <div class="card-body py-0 px-0 px-sm-3">
+                    <div class="row align-items-center">
+                        <div class="col-4 col-sm-3 col-xl-2">
+                            <img src="{{asset('Admin/assets/images/dashboard/Group126@2x.png')}}" class="gradient-corona-img img-fluid" alt="">
                         </div>
-                        <div class="col-3">
-                            <div class="icon icon-box-info ">
-                                <span class="mdi mdi-account-search icon-item"></span>
-                            </div>
+                        <div class="col-5 col-sm-7 col-xl-8 p-0">
+                            <h4 class="mb-1 mb-sm-0">شما هم اکنون در داشبورد هستید!</h4>
+                            <p class="mb-0 font-weight-normal d-none d-sm-block">خوش امدید</p>
                         </div>
-                    </div>
-                    <h6 class="text-muted font-weight-normal">دیدن</h6>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-9">
-                            <a href="{{route('landowner.index')}}" class="text-decoration-none text-white">
-                                <div class="d-flex align-items-center align-self-start">
-                                    <h3 class="mb-0">نمایش مالکان</h3>
-                                    <p class="text-info ms-2 mb-0 font-weight-medium pe-3">*</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-3">
-                            <div class="icon icon-box-info ">
-                                <span class="mdi mdi-account-search icon-item"></span>
-                            </div>
+                        <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
+                        <span>
+                          <a href="{{route('dashboard')}}" class="btn btn-outline-light btn-rounded get-started-btn">داشبورد</a>
+                        </span>
                         </div>
                     </div>
-                    <h6 class="text-muted font-weight-normal">دیدن</h6>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="row">
-        <div class="col-md-4 grid-margin stretch-card">
+        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">تعداد فایل ها</h4>
-                    <canvas id="transaction-history" class="transaction-chart"></canvas>
-                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                        <div class="text-md-center text-xl-left">
-                            <h6 class="mb-1">تعداد متقاضیان</h6>
-                            <p class="text-muted mb-0">{{\Carbon\Carbon::now()}}</p>
-                        </div>
-                        <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                            <h6 class="font-weight-bold mb-0">{{$business->customers_count}}</h6>
+                <a href="{{route('customer.index',['status' => 'active'])}}" class="text-decoration-none text-white">
+                    <div class="card-body">
+                        <div class="icon">
+                            <span class="mdi mdi-account-search icon-item text-info"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
+                                <h3 class="mb-0">نمایش متقاضیان</h3>
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                        <div class="text-md-center text-xl-left">
-                            <h6 class="mb-1">تعداد مالکان</h6>
-                            <p class="text-muted mb-0">{{\Carbon\Carbon::now()}}</p>
-                        </div>
-                        <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                            <h6 class="font-weight-bold mb-0">{{$business->landowners_count}}</h6>
-                        </div>
-                    </div>
-                </div>
+                </a>
             </div>
         </div>
+        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+            <div class="card">
+                <a href="{{route('landowner.index',['status' => 'active'])}}" class="text-decoration-none text-white">
+                    <div class="card-body">
+                        <div class="icon">
+                            <span class="mdi mdi-account-search icon-item text-info"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
+                                <h3 class="mb-0">نمایش مالکان</h3>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+            <div class="card">
+                <a href="{{route('customer.create')}}" class="text-decoration-none text-white">
+                    <div class="card-body">
+                        <div class="icon">
+                            <span class="mdi mdi-account-plus icon-item text-success"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-success">
+                                <h3 class="mb-0">ایجاد متقاضی</h3>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+            <div class="card">
+                <a href="{{route('landowner.create')}}" class="text-decoration-none text-white">
+                    <div class="card-body">
+                        <div class="icon">
+                            <span class="mdi mdi-account-plus icon-item text-success"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-success">
+                                <h3 class="mb-0">ایجاد مالک</h3>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-8 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
@@ -205,49 +289,29 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
+        <div class="col-md-4 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-9">
-                            <a href="{{route('customer.create')}}" class="text-decoration-none text-white">
-                                <div class="d-flex align-items-center align-self-start">
-                                    <h3 class="mb-0">متقاضی ملک</h3>
-                                    <p class="text-success ms-2 mb-0 font-weight-medium pe-3">+</p>
-                                </div>
-                            </a>
+                    <h4 class="card-title">تعداد فایل ها</h4>
+                    <canvas id="transaction-history" class="transaction-chart"></canvas>
+                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
+                        <div class="text-md-center text-xl-left">
+                            <h6 class="mb-1">تعداد متقاضیان</h6>
+                            <p class="text-muted mb-0">{{\Carbon\Carbon::now()}}</p>
                         </div>
-                        <div class="col-3">
-                            <div class="icon icon-box-success ">
-                                <span class="mdi mdi-account-search icon-item"></span>
-                            </div>
+                        <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
+                            <h6 class="font-weight-bold mb-0">{{$business->customers_count}}</h6>
                         </div>
                     </div>
-                    <h6 class="text-muted font-weight-normal">اضافه کردن</h6>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-9">
-                            <a href="{{route('landowner.create')}}" class="text-decoration-none text-white">
-                                <div class="d-flex align-items-center align-self-start">
-                                    <h3 class="mb-0">فروشنده ملک</h3>
-                                    <p class="text-success ms-2 mb-0 font-weight-medium pe-3">+</p>
-                                </div>
-                            </a>
+                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
+                        <div class="text-md-center text-xl-left">
+                            <h6 class="mb-1">تعداد مالکان</h6>
+                            <p class="text-muted mb-0">{{\Carbon\Carbon::now()}}</p>
                         </div>
-                        <div class="col-3">
-                            <div class="icon icon-box-success">
-                                <span class="mdi mdi-bullhorn icon-item"></span>
-                            </div>
+                        <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
+                            <h6 class="font-weight-bold mb-0">{{$business->landowners_count}}</h6>
                         </div>
                     </div>
-                    <h6 class="text-muted font-weight-normal">اضافه کردن</h6>
                 </div>
             </div>
         </div>

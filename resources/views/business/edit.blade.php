@@ -1,4 +1,4 @@
-@extends('layouts.dashboard' , ['showBanner' => false , 'sectionName' => 'ویرایش بیزنس'])
+@extends('layouts.dashboard' , ['sectionName' => 'ویرایش بیزنس'])
 
 @section('title' , 'ویرایش بیزنس')
 
@@ -8,7 +8,12 @@
 @section('content')
     <div class="card col-md-6 mx-auto">
         <div class="card-body px-5 py-4">
-            <h3 class="card-title text-center mb-3">ویرایش املاکی</h3>
+            <div class="d-flex justify-content-between">
+                <div><h3 class="card-title text-center mb-3">ویرایش املاکی</h3></div>
+                <div><a href="{{route('dashboard')}}" class="btn btn-primary p-2">داشبورد</a></div>
+            </div>
+            <hr>
+
             <form action="{{route('business.update',$business->id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')

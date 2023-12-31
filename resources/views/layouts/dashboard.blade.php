@@ -33,7 +33,6 @@
                 <!-- partial -->
                 <div class="main-panel">
                     <div class="content-wrapper">
-                        @includeWhen( $showBanner ,'sections.banner' , ['sectionName' => $sectionName])
                         @yield('content')
                     </div>
                     <!-- content-wrapper ends -->

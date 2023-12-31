@@ -74,7 +74,7 @@
             </a>
             <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="{{route('customer.index')}}">نمایش متقاضیان</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{route('customer.index',['status' => 'active'])}}">نمایش متقاضیان</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{route('customer.create')}}">ایجاد متقاضی</a></li>
                 </ul>
             </div>
@@ -89,7 +89,7 @@
             </a>
             <div class="collapse" id="auth">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="{{route('landowner.index')}}"> نمایش مالکان </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{route('landowner.index',['status' => 'active'])}}"> نمایش مالکان </a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{route('landowner.create')}}"> ایجاد مالک</a></li>
                 </ul>
             </div>

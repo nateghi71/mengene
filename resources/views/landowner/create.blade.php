@@ -1,4 +1,4 @@
-@extends('layouts.dashboard' , ['showBanner' => false , 'sectionName' => 'ایجاد مالک'])
+@extends('layouts.dashboard' , ['sectionName' => 'ایجاد مالک'])
 
 @section('title' , 'ایجتد مالک')
 
@@ -44,7 +44,7 @@
         <div class="card-body px-5 py-4">
             <div class="d-flex justify-content-between">
                 <div><h3 class="card-title mb-3">ایجاد مالک</h3></div>
-                <div><a href="{{route('landowner.index')}}" class="btn btn-primary p-2">نمایش مالکان</a></div>
+                <div><a href="{{route('landowner.index',['status' => 'active'])}}" class="btn btn-primary p-2">نمایش مالکان</a></div>
             </div>
             <hr>
 

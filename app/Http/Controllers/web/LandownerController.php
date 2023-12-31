@@ -19,34 +19,42 @@ use Illuminate\Support\Facades\Validator;
 
 class LandownerController extends Controller
 {
-    public function index()
+    public function index($status)
     {
-        $this->authorize('viewAny' , Landowner::class);
+        if ($status == 'active' || $status == 'unknown' || $status == 'deActive')
+        {
+            $this->authorize('viewAny' , Landowner::class);
+            $user = auth()->user();
 
-        $user = auth()->user();
-        $business = $user->business();
+            $business = $user->business();
 
-        $landowners = $business->landowners()->where('status', 'active')
-            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
-        $ilandowners = $business->landowners()->where('status', 'unknown')
-            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+            $buyLandowners = $business->landowners()->where('status', $status)->where('type_sale' , 'buy')
+                ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->paginate(
+                    $perPage = 5, $columns = ['*'], $pageName = 'buy'
+                )->fragment('buy')->withQueryString();
 
-        $indexedLandowners = $landowners->groupBy('type_sale');
-        $rentLandowners = $indexedLandowners->get('rahn');
-        $buyLandowners = $indexedLandowners->get('buy');
-
-        foreach ($landowners as $landowner) {
-            if ($landowner->expire_date > Carbon::now()) {
-                $daysLeft = Carbon::now()->diffInDays($landowner->expire_date) + 1;
-                $landowner->daysLeft = $daysLeft;
+            foreach ($buyLandowners as $landowner) {
+                if ($landowner->expire_date > Carbon::now()) {
+                    $daysLeft = Carbon::now()->diffInDays($landowner->expire_date) + 1;
+                    $landowner->daysLeft = $daysLeft;
+                }
             }
+
+            $rahnLandowners = $business->landowners()->where('status', $status)->where('type_sale' , 'rahn')
+                ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->paginate(
+                    $perPage = 5, $columns = ['*'], $pageName = 'rahn'
+                )->fragment('rahn')->withQueryString();
+
+            foreach ($rahnLandowners as $landowner) {
+                if ($landowner->expire_date > Carbon::now()) {
+                    $daysLeft = Carbon::now()->diffInDays($landowner->expire_date) + 1;
+                    $landowner->daysLeft = $daysLeft;
+                }
+            }
+            return view('landowner.index', compact('buyLandowners' , 'rahnLandowners'));
         }
 
-        $indexediLandowners = $ilandowners->groupBy('type_sale');
-        $rentiLandowners = $indexediLandowners->get('rahn');
-        $buyiLandowners = $indexediLandowners->get('buy');
-
-        return view('landowner.index', compact('landowners', 'ilandowners', 'rentLandowners', 'buyLandowners', 'rentiLandowners', 'buyiLandowners'));
+        abort(404);
     }
 
     public function show(Landowner $landowner)

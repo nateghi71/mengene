@@ -27,24 +27,18 @@ class BusinessController extends Controller
     {
         $this->authorize('viewBusinessIndex' , Business::class);
 
-        $acceptedMember = collect();
-        $notAcceptedMember = collect();
         $user = auth()->user();
-        $business = $user->ownedBusiness()->first();
-        $business->loadCount(['customers' , 'landowners']);
-        $members = $business->members;
-        foreach ($members as $member) {
-            $customers = Customer::where('user_id', $member->id)->count();
-            $landowners = Landowner::where('user_id', $member->id)->count();
-            $member->added = $customers + $landowners;
+        $business = $user->ownedBusiness()->withCount('customers' , 'landowners')->first();
 
-            if($member->pivot->is_accepted === 1)
-                $acceptedMember->push($member);
-            elseif ($member->pivot->is_accepted === 0)
-                $notAcceptedMember->push($member);
-        }
+        $acceptedMembers = $business->members()->wherePivot('is_accepted' , 1)->withCount('customers' , 'landowners')->paginate(
+            $perPage = 5, $columns = ['*'], $pageName = 'accepted'
+        )->fragment('accepted')->withQueryString();
 
-        return view('business.index', compact('business', 'user', 'acceptedMember' , 'notAcceptedMember'));
+        $notAcceptedMembers = $business->members()->wherePivot('is_accepted' , 0)->withCount('customers' , 'landowners')->paginate(
+            $perPage = 5, $columns = ['*'], $pageName = 'notAccepted'
+        )->fragment('notAccepted')->withQueryString();
+
+        return view('business.index', compact('business', 'acceptedMembers' , 'notAcceptedMembers'));
     }
 
     public function dashboard()
