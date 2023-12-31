@@ -195,7 +195,7 @@
                                 <div class="preview-item border-bottom">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-primary">
-                                            <i class="mdi mdi-file-document"></i>
+                                            <i class="mdi mdi-rename-box"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content d-sm-flex flex-grow">
@@ -212,7 +212,7 @@
                                 <div class="preview-item border-bottom">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-success">
-                                            <i class="mdi mdi-cloud-download"></i>
+                                            <i class="mdi mdi-city"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content d-sm-flex flex-grow">
@@ -228,8 +228,8 @@
                                 </div>
                                 <div class="preview-item border-bottom">
                                     <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-info">
-                                            <i class="mdi mdi-clock"></i>
+                                        <div class="preview-icon bg-warning">
+                                            <i class="mdi mdi-city"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content d-sm-flex flex-grow">
@@ -246,7 +246,7 @@
                                 <div class="preview-item border-bottom">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-info">
-                                            <i class="mdi mdi-clock"></i>
+                                            <i class="mdi mdi-file-image"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content d-sm-flex flex-grow">
@@ -265,7 +265,7 @@
                                 <div class="preview-item">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-warning">
-                                            <i class="mdi mdi-chart-pie"></i>
+                                            <i class="mdi mdi-delete"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content d-sm-flex flex-grow">

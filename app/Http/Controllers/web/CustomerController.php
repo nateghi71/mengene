@@ -90,11 +90,11 @@ class CustomerController extends Controller
             'rahn_amount' => 'nullable',
             'rent_amount' => 'nullable',
             'selling_price' => 'nullable',
-            'elevator' => 'required',
-            'parking' => 'required',
-            'store' => 'required',
+            'elevator' => 'nullable',
+            'parking' => 'nullable',
+            'store' => 'nullable',
             'floor_number' => 'required',
-            'is_star' => 'required',
+            'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 
@@ -112,14 +112,14 @@ class CustomerController extends Controller
             'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
             'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
             'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
-            'elevator' => $request->elevator,
-            'parking' => $request->parking,
-            'store' => $request->store,
+            'elevator' => $request->has('elevator') ? 1 : 0,
+            'parking' => $request->has('parking') ? 1 : 0,
+            'store' => $request->has('store') ? 1 : 0,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
             'business_id' => $user->business()->first()->id,
             'user_id' => $user->id,
-            'is_star' => $request->is_star,
+            'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
         return redirect()->route('customer.index');
@@ -148,16 +148,16 @@ class CustomerController extends Controller
             'rahn_amount' => 'nullable',
             'rent_amount' => 'nullable',
             'selling_price' => 'nullable',
-            'elevator' => 'required',
-            'parking' => 'required',
-            'store' => 'required',
+            'elevator' => 'nullable',
+            'parking' => 'nullable',
+            'store' => 'nullable',
             'floor_number' => 'required',
-            'is_star' => 'required',
+            'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 
-        $user = auth()->user();
-        $customer->update([
+//        $user = auth()->user();
+        $customer = Customer::create([
             'name' => $request->name,
             'number' => $request->number,
             'city' => $request->city,
@@ -170,14 +170,14 @@ class CustomerController extends Controller
             'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
             'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
             'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
-            'elevator' => $request->elevator,
-            'parking' => $request->parking,
-            'store' => $request->store,
+            'elevator' => $request->has('elevator') ? 1 : 0,
+            'parking' => $request->has('parking') ? 1 : 0,
+            'store' => $request->has('store') ? 1 : 0,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
-            'business_id' => $user->business()->first()->id,
-            'user_id' => $user->id,
-            'is_star' => $request->is_star,
+//            'business_id' => $user->business()->first()->id,
+//            'user_id' => $user->id,
+            'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
         return redirect()->route('customer.index');

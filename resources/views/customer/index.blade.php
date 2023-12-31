@@ -124,7 +124,7 @@
                 <div class="card-body">
                     <h4 class="card-title">لیست درخواست های خرید</h4>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table text-center">
                             <thead>
                             <tr>
                                 <th> # </th>
@@ -132,6 +132,7 @@
                                 <th> نام </th>
                                 <th> شماره تماس </th>
                                 <th> نوع </th>
+                                <th> قیمت </th>
                                 <th> متراژ </th>
                                 <th>اعتبار </th>
                                 <th> پیشنهادات </th>
@@ -156,16 +157,17 @@
                                             خرید
                                         @endif
                                     </td>
+                                    <td>{{$buyCustomer->selling_price}}</td>
                                     <td>{{$buyCustomer->scale}}</td>
                                     <td>{{$buyCustomer->daysLeft ? $buyCustomer->daysLeft . ' روز' : 'منقضی'}} </td>
-                                    <td><a class="btn btn-outline-success text-decoration-none" href="{{route('customer.suggestions',$buyCustomer->id)}}">پیشنهادات</a></td>
-                                    <td><a class="btn btn-outline-info  text-decoration-none" href="{{route('customer.show',$buyCustomer->id)}}">نمایش</a></td>
-                                    <td><a class="btn btn-outline-warning text-decoration-none" href="{{route('customer.edit',$buyCustomer->id)}}">ویرایش</a></td>
+                                    <td><a class="btn btn-outline-success text-decoration-none" href="{{route('customer.suggestions',$buyCustomer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
+                                    <td><a class="btn btn-outline-info  text-decoration-none" href="{{route('customer.show',$buyCustomer->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                    <td><a class="btn btn-outline-warning text-decoration-none" href="{{route('customer.edit',$buyCustomer->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
                                     <td>
                                         <form action="{{route('customer.destroy',$buyCustomer->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-outline-danger" type="submit">حذف</button>
+                                            <button class="btn btn-outline-danger" type="submit"><i class="mdi mdi-delete"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -186,7 +188,7 @@
                 <div class="card-body">
                     <h4 class="card-title">لیست درخواست های رهن</h4>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table text-center">
                             <thead>
                             <tr>
                                 <th> # </th>
@@ -194,6 +196,8 @@
                                 <th> نام </th>
                                 <th> شماره تماس </th>
                                 <th> نوع </th>
+                                <th> رهن </th>
+                                <th> کرایه </th>
                                 <th> متراژ </th>
                                 <th>اعتبار </th>
                                 <th> پیشنهادات </th>
@@ -218,16 +222,18 @@
                                             خرید
                                         @endif
                                     </td>
+                                    <td>{{$rahnCustomer->rahn_amount}}</td>
+                                    <td>{{$rahnCustomer->rent_amount}}</td>
                                     <td>{{$rahnCustomer->scale}}</td>
                                     <td>{{$rahnCustomer->daysLeft  ? $rahnCustomer->daysLeft . ' روز'  : 'منقضی'}} </td>
-                                    <td><a class="btn btn-outline-success text-decoration-none" href="{{route('customer.suggestions',$rahnCustomer->id)}}">پیشنهادات</a></td>
-                                    <td><a class="btn btn-outline-info  text-decoration-none" href="{{route('customer.show',$rahnCustomer->id)}}">نمایش</a></td>
-                                    <td><a class="btn btn-outline-warning text-decoration-none" href="{{route('customer.edit',$rahnCustomer->id)}}">ویرایش</a></td>
+                                    <td><a class="btn btn-outline-success text-decoration-none" href="{{route('customer.suggestions',$rahnCustomer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
+                                    <td><a class="btn btn-outline-info  text-decoration-none" href="{{route('customer.show',$rahnCustomer->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                    <td><a class="btn btn-outline-warning text-decoration-none" href="{{route('customer.edit',$rahnCustomer->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
                                     <td>
                                         <form action="{{route('customer.destroy',$rahnCustomer->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-outline-danger" type="submit">حذف</button>
+                                            <button class="btn btn-outline-danger" type="submit"><i class="mdi mdi-delete"></i></button>
                                         </form>
                                     </td>
                                 </tr>

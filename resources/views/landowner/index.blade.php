@@ -126,7 +126,7 @@
                 <div class="card-body">
                     <h4 class="card-title">لیست درخواست های فروش</h4>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table text-center">
                             <thead>
                             <tr>
                                 <th> # </th>
@@ -134,6 +134,7 @@
                                 <th> نام </th>
                                 <th> شماره تماس </th>
                                 <th> نوع </th>
+                                <th> قیمت </th>
                                 <th> متراژ </th>
                                 <th>اعتبار </th>
                                 <th> پیشنهادات </th>
@@ -158,16 +159,17 @@
                                             فروشی
                                         @endif
                                     </td>
+                                    <td>{{$buyLandowner->selling_price}}</td>
                                     <td>{{$buyLandowner->scale}}</td>
                                     <td>{{$buyLandowner->daysLeft ? $buyLandowner->daysLeft . ' روز' : 'منقضی'}}</td>
-                                    <td><a class="btn btn-outline-success text-decoration-none" href="{{route('landowner.suggestions',$buyLandowner->id)}}">پیشنهادات</a></td>
-                                    <td><a class="btn btn-outline-info text-decoration-none" href="{{route('landowner.show',$buyLandowner->id)}}">نمایش</a></td>
-                                    <td><a class="btn btn-outline-warning text-decoration-none" href="{{route('landowner.edit',$buyLandowner->id)}}">ویرایش</a></td>
+                                    <td><a class="btn btn-outline-success text-decoration-none" href="{{route('landowner.suggestions',$buyLandowner->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
+                                    <td><a class="btn btn-outline-info text-decoration-none" href="{{route('landowner.show',$buyLandowner->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                    <td><a class="btn btn-outline-warning text-decoration-none" href="{{route('landowner.edit',$buyLandowner->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
                                     <td>
                                         <form action="{{route('landowner.destroy',$buyLandowner->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-outline-danger" type="submit">حذف</button>
+                                            <button class="btn btn-outline-danger" type="submit"><i class="mdi mdi-delete"></i></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -186,7 +188,7 @@
                 <div class="card-body">
                     <h4 class="card-title">لیست درخواست های رهن</h4>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table text-center">
                             <thead>
                             <tr>
                                 <th> # </th>
@@ -194,6 +196,8 @@
                                 <th> نام </th>
                                 <th> شماره تماس </th>
                                 <th> نوع </th>
+                                <th> رهن </th>
+                                <th> کرایه </th>
                                 <th> متراژ </th>
                                 <th>اعتبار </th>
                                 <th> پیشنهادات </th>
@@ -218,16 +222,18 @@
                                             فروشی
                                         @endif
                                     </td>
+                                    <td>{{$rahnLandowner->rahn_amount}}</td>
+                                    <td>{{$rahnLandowner->rent_amount}}</td>
                                     <td>{{$rahnLandowner->scale}}</td>
                                     <td>{{$rahnLandowner->daysLeft ? $rahnLandowner->daysLeft . ' روز' : 'منقضی'}} </td>
-                                    <td><a class="btn btn-outline-success text-decoration-none" href="{{route('landowner.suggestions',$rahnLandowner->id)}}">پیشنهادات</a></td>
-                                    <td><a class="btn btn-outline-info text-decoration-none" href="{{route('landowner.show',$rahnLandowner->id)}}">نمایش</a></td>
-                                    <td><a class="btn btn-outline-warning text-decoration-none" href="{{route('landowner.edit',$rahnLandowner->id)}}">ویرایش</a></td>
+                                    <td><a class="btn btn-outline-success text-decoration-none" href="{{route('landowner.suggestions',$rahnLandowner->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
+                                    <td><a class="btn btn-outline-info text-decoration-none" href="{{route('landowner.show',$rahnLandowner->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                    <td><a class="btn btn-outline-warning text-decoration-none" href="{{route('landowner.edit',$rahnLandowner->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
                                     <td>
                                         <form action="{{route('landowner.destroy',$rahnLandowner->id)}}" method="post">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-outline-danger" type="submit">حذف</button>
+                                            <button class="btn btn-outline-danger" type="submit"><i class="mdi mdi-delete"></i></button>
                                         </form>
                                     </td>
                                 </tr>

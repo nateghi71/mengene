@@ -193,7 +193,7 @@
                                 <div class="preview-item border-bottom">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-success">
-                                            <i class="mdi mdi-cloud-download"></i>
+                                            <i class="mdi mdi-city"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content d-sm-flex flex-grow">
@@ -209,8 +209,8 @@
                                 </div>
                                 <div class="preview-item border-bottom">
                                     <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-info">
-                                            <i class="mdi mdi-clock"></i>
+                                        <div class="preview-icon bg-warning">
+                                            <i class="mdi mdi-city"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content d-sm-flex flex-grow">
@@ -227,7 +227,7 @@
                                 <div class="preview-item border-bottom">
                                     <div class="preview-thumbnail">
                                         <div class="preview-icon bg-info">
-                                            <i class="mdi mdi-clock"></i>
+                                            <i class="mdi mdi-file-image"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content d-sm-flex flex-grow">
@@ -245,8 +245,8 @@
                                 </div>
                                 <div class="preview-item border-bottom">
                                     <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-danger">
-                                            <i class="mdi mdi-email-open"></i>
+                                        <div class="preview-icon bg-warning">
+                                            <i class="mdi mdi-tooltip-edit"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content d-sm-flex flex-grow">
@@ -266,8 +266,8 @@
                                 </div>
                                 <div class="preview-item">
                                     <div class="preview-thumbnail">
-                                        <div class="preview-icon bg-warning">
-                                            <i class="mdi mdi-chart-pie"></i>
+                                        <div class="preview-icon bg-danger">
+                                            <i class="mdi mdi-delete"></i>
                                         </div>
                                     </div>
                                     <div class="preview-item-content d-sm-flex flex-grow">
@@ -326,26 +326,26 @@
                 <div class="card-body">
                     <h4 class="card-title">اعضای قبول شده</h4>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table text-center">
                             <thead>
                             <tr>
+                                <th> # </th>
                                 <th> نام </th>
                                 <th> شماره تماس </th>
                                 <th> ایمیل </th>
                                 <th> شهر </th>
                                 <th> تعداد آگهی های ثبت کرده </th>
-                                <th> غیرفعال کردن </th>
                                 <th> انتخاب مالک </th>
+                                <th> غیرفعال کردن </th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($acceptedMembers as $member)
+                            @foreach($acceptedMembers as $key => $member)
                                 <tr>
-                                    <td>
-                                        <span class="ps-2">{{$member->name}}</span>
-                                    </td>
+                                    <td>{{$acceptedMembers->firstItem() + $key}}</td>
+                                    <td>{{$member->name}}</td>
                                     <td> {{$member->number}} </td>
-                                    <td> {{$member->email}}</td>
+                                    <td> {{$member->email ?? '-'}}</td>
                                     <td> {{$member->city}} </td>
                                     <td> {{$member->customers_count + $member->landowners_count}} </td>
                                     <td>
@@ -371,25 +371,25 @@
                 <div class="card-body">
                     <h4 class="card-title">اعضای قبول نشده</h4>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table text-center">
                             <thead>
                             <tr>
+                                <th> # </th>
                                 <th> نام </th>
                                 <th> شماره تماس </th>
                                 <th> ایمیل </th>
                                 <th> شهر </th>
-                                <th> غیرفعال کردن </th>
-                                <th> انتخاب مالک </th>
+                                <th> قبول کردن </th>
+                                <th>حذف </th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($notAcceptedMembers as $member)
+                            @foreach($notAcceptedMembers as $key => $member)
                                 <tr>
-                                    <td>
-                                        <span class="ps-2">{{$member->name}}</span>
-                                    </td>
+                                    <td>{{$notAcceptedMembers->firstItem() + $key}}</td>
+                                    <td>{{$member->name}}</td>
                                     <td> {{$member->number}} </td>
-                                    <td> {{$member->email}}</td>
+                                    <td> {{$member->email ?? '-'}}</td>
                                     <td> {{$member->city}} </td>
                                     <td>
                                         <a class="badge badge-outline-success text-decoration-none" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}">قبول</a>
