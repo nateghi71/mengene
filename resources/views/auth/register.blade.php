@@ -7,7 +7,7 @@
 
 @section('content')
     <h3 class="card-title text-center mb-3">ثبت نام</h3>
-    <form action="{{ route('register.handle') }}" method="post">
+    <form action="{{ route('register.handle') }}" method="post" autocomplete="off">
         @csrf
         <div class="form-group">
             <label for="name"> نام *</label>

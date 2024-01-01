@@ -43,6 +43,13 @@
                 z.style.display = "none";
             }
         }
+        $(document).ready(function() {
+            $("#expire_date").persianDatepicker({
+                format: 'YYYY/MM/DD',
+                initialValueType: 'persian',
+                autoClose: true
+            });
+        });
 
     </script>
 @endsection
@@ -55,7 +62,7 @@
                 <div><a href="{{route('customer.index',['status' => 'active'])}}" class="btn btn-primary p-2">نمایش متقاضیان</a></div>
             </div>
             <hr>
-            <form action="{{route('customer.update' , $customer->id)}}" method="post">
+            <form action="{{route('customer.update' , $customer->id)}}" method="post" autocomplete="off">
                 @csrf
                 @method('PUT')
                 <div class="row mb-4">
@@ -129,7 +136,7 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="type_work">نوع کار:</label>
+                        <label for="type_work">نوع مسکن:</label>
                         <select class="form-control" name="type_work" id="type_work">
                             <option value="home" {{$customer->type_work === "home" ? 'select' : '' }}>خانه</option>
                             <option value="office" {{$customer->type_work === "office" ? 'select' : '' }}>دفتر</option>
@@ -165,7 +172,7 @@
 
                     <div class="form-group col-md-3">
                         <label for="expire_date">تاریخ اعتبار:</label>
-                        <input type="date" name="expire_date" class="form-control" value="{{$customer->expire_date}}" id="expire_date" placeholder="تاریخ اعتبار">
+                        <input type="text" name="expire_date" class="form-control" value="{{$customer->expire_date}}" id="expire_date" placeholder="تاریخ اعتبار">
                         @error('expire_date')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
@@ -202,7 +209,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="store" class="form-check-label">
-                                <input type="checkbox" name="store" id="store" class="form-check-input" {{$customer->store === 1 ? 'store' : '' }}>انبار
+                                <input type="checkbox" name="store" id="store" class="form-check-input" {{$customer->store === 1 ? 'checked' : '' }}>انبار
                             </label>
                         </div>
                         @error('store')

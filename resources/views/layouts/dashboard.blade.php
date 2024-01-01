@@ -2,6 +2,9 @@
 <html lang="ar" dir="rtl">
     <head>
         <!-- Required meta tags -->
+{{--            @vite(['resources/css/app.css', 'resources/js/app.js'])--}}
+
+
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>@yield('title' , 'mengene')</title>
@@ -19,8 +22,20 @@
         <!-- endinject -->
         <!-- Layout styles -->
         <link rel="stylesheet" href="{{asset('Admin/assets/css/style.css')}}">
+        <link rel="stylesheet" href="{{asset('Admin/assets/css/datePicker/persian-datepicker.css')}}"/>
         <!-- End layout styles -->
-        <link rel="shortcut icon" href="{{asset('Admin/assets/images/favicon.png')}}" />
+        <link rel="shortcut icon" href="{{asset('Home/assets/img/icon_m.png')}}" />
+        <style>
+            input, select, textarea{
+                color: white !important;
+            }
+
+            textarea:focus, input:focus {
+                color: white !important;
+            }
+        </style>
+
+        @yield('head')
     </head>
     <body class="rtl">
         <div class="container-scroller">
@@ -48,6 +63,7 @@
         <!-- plugins:js -->
         <script src="{{asset('Admin/assets/vendors/js/vendor.bundle.base.js')}}"></script>
         <!-- endinject -->
+
         <!-- Plugin js for this page -->
         <script src="{{asset('Admin/assets/vendors/chart.js/Chart.min.js')}}"></script>
         <script src="{{asset('Admin/assets/vendors/progressbar.js/progressbar.min.js')}}"></script>
@@ -65,6 +81,9 @@
         <!-- endinject -->
         <!-- Custom js for this page -->
         <script src="{{asset('Admin/assets/js/dashboard.js')}}"></script>
+
+        <script src="{{asset('Admin/assets/js/datePicker/persian-date.js')}}"></script>
+        <script src="{{asset('Admin/assets/js/datePicker/persian-datepicker.js')}}"></script>
         <!-- End custom js for this page -->
         @yield('scripts')
     </body>

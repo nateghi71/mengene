@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Landowner;
 use App\Models\RandomLink;
 use App\Models\User;
+use Hekmatinasser\Verta\Facades\Verta;
 use http\Url;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -99,7 +100,7 @@ class CustomerController extends Controller
         ]);
 
         $user = auth()->user();
-        $customer = Customer::create([
+        Customer::create([
             'name' => $request->name,
             'number' => $request->number,
             'city' => $request->city,
@@ -120,13 +121,14 @@ class CustomerController extends Controller
             'business_id' => $user->business()->first()->id,
             'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
-            'expire_date' => $request->expire_date
+            'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')
         ]);
-        return redirect()->route('customer.index');
+        return redirect()->route('customer.index',['status' => 'active']);
     }
 
     public function edit(Customer $customer)
     {
+        $customer->expire_date = verta($customer->expire_date)->format('Y-m-d');
         $this->authorize('update', $customer);
         return view('customer.edit', compact('customer'));
     }
@@ -157,7 +159,7 @@ class CustomerController extends Controller
         ]);
 
 //        $user = auth()->user();
-        $customer = Customer::create([
+        $customer->update([
             'name' => $request->name,
             'number' => $request->number,
             'city' => $request->city,
@@ -178,9 +180,9 @@ class CustomerController extends Controller
 //            'business_id' => $user->business()->first()->id,
 //            'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
-            'expire_date' => $request->expire_date
+            'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')
         ]);
-        return redirect()->route('customer.index');
+        return redirect()->route('customer.index',['status' => 'active']);
     }
 
     public function destroy(Customer $customer)

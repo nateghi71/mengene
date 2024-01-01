@@ -7,7 +7,7 @@
 
 @section('content')
     <h3 class="card-title text-center mb-3">ورود</h3>
-    <form action="{{route('login.handle')}}" method="post">
+    <form action="{{route('login.handle')}}" method="post" autocomplete="off">
         @csrf
         <div class="form-group">
             <label for="number">تلفن همراه</label>

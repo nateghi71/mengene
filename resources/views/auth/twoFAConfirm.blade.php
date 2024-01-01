@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-    <form action="{{ route('2fa.confirm') }}" method="post">
+    <form action="{{ route('2fa.confirm') }}" method="post" autocomplete="off">
         @csrf
         <div class="form-group">
             <label for="code">ورود کد</label>

@@ -7,7 +7,7 @@
 
 @section('content')
     <h3 class="card-title text-center mb-3">ایجاد املاکی</h3>
-    <form action="{{ route('business.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('business.store') }}" method="post" enctype="multipart/form-data" autocomplete="off">
         @csrf
         <div class="form-group">
             <label for="name"> نام املاکی: *</label>

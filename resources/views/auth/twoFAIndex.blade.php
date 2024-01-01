@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-    <form action="{{ route('2fa.store') }}" method="post">
+    <form action="{{ route('2fa.store') }}" method="post" autocomplete="off">
         @csrf
         <div class="form-group">
             <label for="number">تلفن همراه</label>

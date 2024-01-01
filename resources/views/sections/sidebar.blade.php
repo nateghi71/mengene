@@ -1,7 +1,8 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top pe-5">
-        <a class="sidebar-brand brand-logo text-decoration-none text-info" href="{{route('dashboard')}}">منگنه</a>
-        <a class="sidebar-brand brand-logo-mini text-decoration-none text-info" href="{{route('dashboard')}}">منگنه</a>
+        <img width="40" height="40" src="{{asset('Home/assets/img/icon_m.png')}}">
+        <a class="sidebar-brand brand-logo text-decoration-none text-white" href="{{route('dashboard')}}">مِنگِنه</a>
+        <a class="sidebar-brand brand-logo-mini text-decoration-none text-white" href="{{route('dashboard')}}">مِنگِنه</a>
     </div>
     <ul class="nav">
         <li class="nav-item profile">

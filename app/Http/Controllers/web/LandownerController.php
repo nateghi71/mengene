@@ -7,6 +7,7 @@ use App\HelperClasses\SmsAPI;
 use App\HelperClasses\UpdateStatusFile;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Models\Landowner;
@@ -85,11 +86,11 @@ class LandownerController extends Controller
             'rahn_amount' => 'nullable',
             'rent_amount' => 'nullable',
             'selling_price' => 'nullable',
-            'elevator' => 'required',
-            'parking' => 'required',
-            'store' => 'required',
+            'elevator' => 'nullable',
+            'parking' => 'nullable',
+            'store' => 'nullable',
             'floor_number' => 'required',
-            'is_star' => 'required',
+            'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 
@@ -107,21 +108,22 @@ class LandownerController extends Controller
             'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
             'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
             'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
-            'elevator' => $request->elevator,
-            'parking' => $request->parking,
-            'store' => $request->store,
+            'elevator' => $request->has('elevator') ? 1 : 0,
+            'parking' => $request->has('parking') ? 1 : 0,
+            'store' => $request->has('store') ? 1 : 0,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
             'business_id' => $user->business()->first()->id,
             'user_id' => $user->id,
-            'is_star' => $request->is_star,
-            'expire_date' => $request->expire_date
+            'is_star' => $request->has('is_star') ? 1 : 0 ,
+            'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')
         ]);
-        return redirect()->route('landowner.index');
+        return redirect()->route('landowner.index',['status' => 'active']);
     }
 
     public function edit(Landowner $landowner)
     {
+        $landowner->expire_date = verta($landowner->expire_date)->format('Y-m-d');
         $this->authorize('update', $landowner);
         return view('landowner.edit', compact('landowner'));
     }
@@ -142,15 +144,15 @@ class LandownerController extends Controller
             'rahn_amount' => 'nullable',
             'rent_amount' => 'nullable',
             'selling_price' => 'nullable',
-            'elevator' => 'required',
-            'parking' => 'required',
-            'store' => 'required',
+            'elevator' => 'nullable',
+            'parking' => 'nullable',
+            'store' => 'nullable',
             'floor_number' => 'required',
-            'is_star' => 'required',
+            'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 
-        $user = auth()->user();
+//        $user = auth()->user();
         $landowner->update([
             'name' => $request->name,
             'number' => $request->number,
@@ -164,19 +166,18 @@ class LandownerController extends Controller
             'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
             'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
             'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
-            'elevator' => $request->elevator,
-            'parking' => $request->parking,
-            'store' => $request->store,
+            'elevator' => $request->has('elevator') ? 1 : 0,
+            'parking' => $request->has('parking') ? 1 : 0,
+            'store' => $request->has('store') ? 1 : 0,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
-            'business_id' => $user->business()->first()->id,
-            'user_id' => $user->id,
-            'is_star' => $request->is_star,
-            'expire_date' => $request->expire_date
-
+//            'business_id' => $user->business()->first()->id,
+//            'user_id' => $user->id,
+            'is_star' => $request->has('is_star') ? 1 : 0 ,
+            'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')
         ]);
 
-        return redirect()->route('landowner.index');
+        return redirect()->route('landowner.index',['status' => 'active']);
     }
 
     public function destroy(Landowner $landowner)

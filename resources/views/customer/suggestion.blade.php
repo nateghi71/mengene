@@ -38,33 +38,25 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>#</th>
                                 <th>نام</th>
-                                <th>ستاره</th>
                                 <th>شماره تماس</th>
-                                <th>شهر</th>
                                 <th>نوع</th>
-                                <th>قیمت/رهن</th>
+                                <th>قیمت</th>
+                                <th>رهن</th>
                                 <th>کرایه</th>
                                 <th>متراژ</th>
-                                <th>تعداد اتاق</th>
-                                <th>توضیحات و آدرس</th>
                                 <th>مدت اعتبار</th>
+                                <th>نمایش</th>
                                 <th>وضعیت</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($suggestions as $suggestion)
+                            @foreach($suggestions as $key => $suggestion)
                                 <tr>
-                                    <td>{{$suggestion->id}}</td>
-                                    <td><a href="{{route('landowner.show',$suggestion->id)}}">{{$suggestion->name}} </a></td>
-                                    <td>
-                                        @if($suggestion->is_star)
-                                            *
-                                        @endif
-                                    </td>
+                                    <td>{{$key + 1}}</td>
+                                    <td>{{$suggestion->name}}</td>
                                     <td>{{$suggestion->number}}</td>
-                                    <td>{{$suggestion->city}}</td>
                                     <td>
                                         @if($suggestion->type_sale == 'rahn')
                                             رهن و اجاره
@@ -72,12 +64,12 @@
                                             فروشی
                                         @endif
                                     </td>
-                                    <td>{{$suggestion->selling_price ?? $suggestion->rahn_amount}}</td>
-                                    <td>{{$suggestion->rent_amount}}</td>
+                                    <td>{{$suggestion->selling_price ?? '-'}}</td>
+                                    <td>{{$suggestion->rahn_amount ?? '-'}}</td>
+                                    <td>{{$suggestion->rent_amount ?? '-'}}</td>
                                     <td>{{$suggestion->scale}}</td>
-                                    <td>{{$suggestion->number_of_rooms}}</td>
-                                    <td>{{$suggestion->description}}</td>
                                     <td>{{$suggestion->daysLeft ?? 'منقضی'}}</td>
+                                    <td><a class="btn btn-outline-info text-decoration-none" href="{{route('landowner.show',$suggestion->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                     <td>
                                         <form action="{{route('customer.send_block_message')}}" method="post">
                                             @csrf

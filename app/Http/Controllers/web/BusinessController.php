@@ -8,6 +8,7 @@ use App\Models\Landowner;
 use App\Models\Premium;
 use App\Models\User;
 use Carbon\Carbon;
+use Hekmatinasser\Verta\Facades\Verta;
 use http\Env\Response;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -25,6 +26,8 @@ class BusinessController extends Controller
 {
     public function index()
     {
+//        dd(Carbon::now()->toJalali());
+
         $this->authorize('viewBusinessIndex' , Business::class);
 
         $user = auth()->user();

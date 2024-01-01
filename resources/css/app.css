@@ -1,3 +1,1 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "persian-datepicker/dist/css/persian-datepicker.css";

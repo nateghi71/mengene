@@ -42,6 +42,13 @@
                 z.style.display = "none";
             }
         }
+        $(document).ready(function() {
+            $("#expire_date").persianDatepicker({
+                format: 'YYYY/MM/DD',
+                initialValueType: 'persian',
+                autoClose: true
+            });
+        });
 
     </script>
 @endsection
@@ -55,7 +62,7 @@
             </div>
             <hr>
 
-            <form action="{{route('landowner.update' , $landowner->id)}}" method="post">
+            <form action="{{route('landowner.update' , $landowner->id)}}" method="post" autocomplete="off">
                 @csrf
                 @method('PUT')
 
@@ -130,7 +137,7 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="type_work">نوع کار:</label>
+                        <label for="type_work">نوع مسکن:</label>
                         <select class="form-control" name="type_work" id="type_work">
                             <option value="home" {{$landowner->type_work === "home" ? 'select' : '' }}>خانه</option>
                             <option value="office" {{$landowner->type_work === "office" ? 'select' : '' }}>دفتر</option>
@@ -166,7 +173,7 @@
 
                     <div class="form-group col-md-3">
                         <label for="expire_date">تاریخ اعتبار:</label>
-                        <input type="date" name="expire_date" class="form-control" value="{{$landowner->expire_date}}" id="expire_date" placeholder="تاریخ اعتبار">
+                        <input type="text" name="expire_date" class="form-control" value="{{$landowner->expire_date}}" id="expire_date" placeholder="تاریخ اعتبار">
                         @error('expire_date')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
@@ -203,7 +210,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="store" class="form-check-label">
-                                <input type="checkbox" name="store" id="store" class="form-check-input" {{$landowner->store === 1 ? 'store' : '' }}>انبار
+                                <input type="checkbox" name="store" id="store" class="form-check-input" {{$landowner->store === 1 ? 'checked' : '' }}>انبار
                             </label>
                         </div>
                         @error('store')

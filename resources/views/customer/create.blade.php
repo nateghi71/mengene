@@ -2,7 +2,11 @@
 
 @section('title' , 'ایجاد متقاضی')
 
+@section('head')
+@endsection
+
 @section('scripts')
+
     <script>
         buyFunction();
         function buyFunction() {
@@ -35,6 +39,13 @@
             }
         }
 
+        $(document).ready(function() {
+            $("#expire_date").persianDatepicker({
+                initialValue: false,
+                format: 'YYYY/MM/DD',
+                autoClose: true
+            });
+        });
     </script>
 
 @endsection
@@ -47,7 +58,7 @@
                 <div><a href="{{route('customer.index',['status' => 'active'])}}" class="btn btn-primary p-2">نمایش متقاضیان</a></div>
             </div>
             <hr>
-            <form action="{{route('customer.store')}}" method="post">
+            <form action="{{route('customer.store')}}" method="post" autocomplete="off">
                 @csrf
 
                 <div class="row mb-4">
@@ -121,7 +132,7 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="type_work">نوع کار:</label>
+                        <label for="type_work">نوع مسکن:</label>
                         <select class="form-control" name="type_work" id="type_work">
                             <option value="home">خانه</option>
                             <option value="office">دفتر</option>
@@ -157,7 +168,7 @@
 
                     <div class="form-group col-md-3">
                         <label for="expire_date">تاریخ اعتبار:</label>
-                        <input type="date" name="expire_date" class="form-control" value="{{old('expire_date')}}" id="expire_date" placeholder="تاریخ اعتبار">
+                        <input type="text" name="expire_date" class="form-control" value="{{old('expire_date')}}" id="expire_date" placeholder="تاریخ اعتبار">
                         @error('expire_date')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror

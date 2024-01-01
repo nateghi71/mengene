@@ -14,7 +14,7 @@
             </div>
             <hr>
 
-            <form action="{{route('business.update',$business->id)}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('business.update',$business->id)}}" method="post" enctype="multipart/form-data" autocomplete="off">
                 @csrf
                 @method('PUT')
 

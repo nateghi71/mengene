@@ -40,7 +40,9 @@
 <!-- ======= Header ======= -->
 <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
-        <h1 class="logo "><a href="dashboard.blade.php">مِنگِنه</a></h1>
+        <h1 class="logo ">
+            <img src="{{asset('Home/assets/img/icon_m.png')}}">
+            <a href="dashboard.blade.php">مِنگِنه</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="dashboard.blade.php" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
@@ -90,14 +92,14 @@
                 data-aos="fade-up"
                 data-aos-delay="200"
             >
-                <h1>مِنگِنه دستیاری حرفه ای برای خرید، فروش و اجاره ملک</h1>
+                <h1>مِنگِنه2 دستیاری حرفه ای برای خرید، فروش و اجاره ملک</h1>
                 <h2>ابزاری مفید و کاربردی برای <span class="fw-bold">املاکی های</span> سراسر کشور
                     <p>  - با داشتن نرم افزار قدرتمند و همیشه همراه !</p>
 
                 </h2>
                 <div class="d-flex justify-content-center justify-content-lg-start">
                     <a href="{{route('2fa.enter_number')}}" class="btn-get-started scrollto">ثبت نام</a>
-                    <a href="https://98diha.ir//wp-content/themes/ringtone/app/98diha.apk"
+                    <a href="https://98diha.ir//wp-content/themes/ringtone/api/mengene.apk"
                        class="glightbox btn-watch-video m-2">
                         <i class="bi bi-download"></i>
                         <h5 class="m-1" >نرم افزار اندروید</h5></a>
@@ -591,11 +593,11 @@
                             <li class="na">
                                 <i class="bx bx-x"></i> <span>سامانه پیامکی</span>
                             </li>
-                            <li>
-                                <i class="bx bx-check"></i>مدیریت مشاورین(اضافه کردن 4 عدد)
+                            <li class="na">
+                                <i class="bx bx-x"></i> <span>مدیریت مشاورین</span>
                             </li>
                         </ul>
-                        <a href="{{route('2fa.enter_number')}}" class="buy-btn">شروع کنید</a>
+                        <a href="{{route('2fa.enter_number')}}" class="buy-btn">پلن فعلی</a>
                     </div>
                 </div>
 
@@ -605,7 +607,7 @@
                     data-aos-delay="200"
                 >
                     <div class="box featured">
-                        <h3>سالانه 1,200</h3>
+                        <h3>سالانه 899 تومان</h3>
                         <!-- <h4><sup>$</sup>29<span>per month</span></h4> -->
                         <ul>
                             <li><i class="bx bx-check"></i> ثبت اطلاعات متقاضی</li>
@@ -623,7 +625,7 @@
                     data-aos-delay="300"
                 >
                     <div class="box">
-                        <h3>سالانه 900</h3>
+                        <h3>سه ماهه 299 تومان</h3>
                         <!-- <h4><sup>$</sup>49<span>per month</span></h4> -->
                         <ul>
                             <li><i class="bx bx-check"></i> ثبت اطلاعات متقاضی</li>
@@ -633,7 +635,7 @@
                                 sms)
                             </li>
                             <li>
-                                <i class="bx bx-check"></i>مدیریت مشاورین(تا 10 عدد مشاور)
+                                <i class="bx bx-check"></i>مدیریت مشاورین(تا 4 عدد مشاور)
                             </li>
                         </ul>
                         <a href="{{route('2fa.enter_number')}}" class="buy-btn">شروع کنید</a>

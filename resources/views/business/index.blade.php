@@ -107,12 +107,12 @@
     <div class="row">
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div class="card">
-                <a href="{{route('customer.index',['status' => 'active'])}}" class="text-decoration-none text-white">
+                <a href="{{route('landowner.create')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-info"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
-                                <h3 class="mb-0">نمایش متقاضیان</h3>
+                            <span class="mdi mdi-account-plus icon-item text-success"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-success">
+                                <h3 class="mb-0">ایجاد مالک</h3>
                             </div>
                         </div>
                     </div>
@@ -149,18 +149,20 @@
         </div>
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div class="card">
-                <a href="{{route('landowner.create')}}" class="text-decoration-none text-white">
+                <a href="{{route('customer.index',['status' => 'active'])}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <span class="mdi mdi-account-plus icon-item text-success"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-success">
-                                <h3 class="mb-0">ایجاد مالک</h3>
+                            <span class="mdi mdi-account-search icon-item text-info"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
+                                <h3 class="mb-0">نمایش متقاضیان</h3>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
+
+
     </div>
     <div class="row">
         <div class="col-md-8 grid-margin stretch-card">
@@ -301,7 +303,7 @@
                     <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
                         <div class="text-md-center text-xl-left">
                             <h6 class="mb-1">تعداد متقاضیان</h6>
-                            <p class="text-muted mb-0">{{\Carbon\Carbon::now()}}</p>
+                            <p class="text-muted mb-0">{{\Carbon\Carbon::now()->toJalali()->formatJalaliDatetime()}}</p>
                         </div>
                         <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
                             <h6 class="font-weight-bold mb-0">{{$business->customers_count}}</h6>
@@ -310,7 +312,7 @@
                     <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
                         <div class="text-md-center text-xl-left">
                             <h6 class="mb-1">تعداد مالکان</h6>
-                            <p class="text-muted mb-0">{{\Carbon\Carbon::now()}}</p>
+                            <p class="text-muted mb-0">{{\Carbon\Carbon::now()->toJalali()->formatJalaliDatetime()}}</p>
                         </div>
                         <div class="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
                             <h6 class="font-weight-bold mb-0">{{$business->landowners_count}}</h6>
@@ -324,7 +326,7 @@
         <div class="col-12 grid-margin">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">اعضای قبول شده</h4>
+                    <h4 class="card-title">مشاورهای تایید شده</h4>
                     <div class="table-responsive">
                         <table class="table text-center">
                             <thead>
@@ -349,11 +351,11 @@
                                     <td> {{$member->city}} </td>
                                     <td> {{$member->customers_count + $member->landowners_count}} </td>
                                     <td>
-                                        <a class="badge badge-outline-success text-decoration-none" href="{{ route('business.chooseOwner', ['user' => $member->id]) }}">انتخاب مالک</a>
+                                        <a class="btn btn-outline-success text-decoration-none" href="{{ route('business.chooseOwner', ['user' => $member->id]) }}">انتخاب مالک</a>
 
                                     </td>
                                     <td>
-                                        <a class="badge badge-outline-danger text-decoration-none" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}" >غیرفعال</a>
+                                        <a class="btn btn-outline-danger text-decoration-none" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}" >غیرفعال</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -369,7 +371,7 @@
         <div class="col-12 grid-margin">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">اعضای قبول نشده</h4>
+                    <h4 class="card-title">مشاورهای تایید نشده</h4>
                     <div class="table-responsive">
                         <table class="table text-center">
                             <thead>
@@ -392,10 +394,10 @@
                                     <td> {{$member->email ?? '-'}}</td>
                                     <td> {{$member->city}} </td>
                                     <td>
-                                        <a class="badge badge-outline-success text-decoration-none" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}">قبول</a>
+                                        <a class="btn btn-outline-success text-decoration-none" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}">قبول</a>
                                     </td>
                                     <td>
-                                        <a class="badge badge-outline-danger text-decoration-none" href="{{route('business.remove.member',['user'=>$member->id])}}" >حذف</a>
+                                        <a class="btn btn-outline-danger text-decoration-none" href="{{route('business.remove.member',['user'=>$member->id])}}" >حذف</a>
                                     </td>
                                 </tr>
                             @endforeach

@@ -16,7 +16,17 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{asset('Admin/assets/css/style.css')}}">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="{{asset('Admin/assets/images/favicon.png')}}" />
+    <link rel="shortcut icon" href="{{asset('Home/assets/img/icon_m.png')}}" />
+    <style>
+        input, select, textarea{
+            color: white !important;
+        }
+
+        textarea:focus, input:focus {
+            color: white !important;
+        }
+    </style>
+
 </head>
 <body class="rtl">
 <div class="container-scroller">

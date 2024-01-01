@@ -1,6 +1,6 @@
 @extends('layouts.dashboard' , ['sectionName' => 'ایجاد مالک'])
 
-@section('title' , 'ایجتد مالک')
+@section('title' , 'ایجاد مالک')
 
 @section('scripts')
     <script>
@@ -34,6 +34,13 @@
                 z.style.display = "none";
             }
         }
+        $(document).ready(function() {
+            $("#expire_date").persianDatepicker({
+                initialValue: false,
+                format: 'YYYY/MM/DD',
+                autoClose: true
+            });
+        });
 
     </script>
 
@@ -48,7 +55,7 @@
             </div>
             <hr>
 
-            <form action="{{route('landowner.store')}}" method="post">
+            <form action="{{route('landowner.store')}}" method="post" autocomplete="off">
                 @csrf
                 <div class="row mb-4">
                     <div class="form-group d-flex align-items-center">
@@ -121,7 +128,7 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="type_work">نوع کار:</label>
+                        <label for="type_work">نوع مسکن:</label>
                         <select class="form-control" name="type_work" id="type_work">
                             <option value="home">خانه</option>
                             <option value="office">دفتر</option>
@@ -157,7 +164,7 @@
 
                     <div class="form-group col-md-3">
                         <label for="expire_date">تاریخ اعتبار:</label>
-                        <input type="date" name="expire_date" class="form-control" value="{{old('expire_date')}}" id="expire_date" placeholder="تاریخ اعتبار">
+                        <input type="text" name="expire_date" class="form-control" value="{{old('expire_date')}}" id="expire_date" placeholder="تاریخ اعتبار">
                         @error('expire_date')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
