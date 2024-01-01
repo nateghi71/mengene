@@ -68,7 +68,7 @@ class SuggestionForLandOwnerController extends Controller
             ['type' => $link->type , 'token' => $link->token]);
 
         $smsApi = new SmsAPI();
-//        $smsApi->sendSmsLink($landowner->number , $link);
+        $smsApi->sendSmsLink($landowner->number , $link);
 
         return redirect()->back();
     }

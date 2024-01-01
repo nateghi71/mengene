@@ -69,7 +69,7 @@ class SuggestionForCustomerController extends Controller
             ['type' => $link->type , 'token' => $link->token]);
 
         $smsApi = new SmsAPI();
-//        $smsApi->sendSmsLink($customer->number , $link);
+        $smsApi->sendSmsLink($customer->number , $link);
 
         return redirect()->back();
     }
