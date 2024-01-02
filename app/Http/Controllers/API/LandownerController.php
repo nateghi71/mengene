@@ -130,7 +130,7 @@ class LandownerController extends BaseController
             'store' => $request->store,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
-            'business_id' => $user->business()->first()->id,
+            'business_id' => $user->business()->id,
             'user_id' => $user->id,
             'is_star' => $request->is_star,
             'expire_date' => $request->expire_date
@@ -191,7 +191,7 @@ class LandownerController extends BaseController
             'store' => $request->store,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
-//            'business_id' => $user->business()->first()->id,
+//            'business_id' => $user->business()->id,
 //            'user_id' => $user->id,
             'is_star' => $request->is_star,
             'expire_date' => $request->expire_date

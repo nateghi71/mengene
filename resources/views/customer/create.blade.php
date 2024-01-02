@@ -147,7 +147,7 @@
                             <option value="house">ویلایی</option>
                             <option value="apartment">ساختمان</option>
                         </select>
-                        @error('type_work')
+                        @error('type_build')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
@@ -185,7 +185,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="elevator" class="form-check-label">
-                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input">اسانسور
+                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>اسانسور
                             </label>
                         </div>
                         @error('elevator')
@@ -195,7 +195,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="parking" class="form-check-label">
-                                <input type="checkbox" name="parking" id="parking" class="form-check-input">پارکینگ
+                                <input type="checkbox" name="parking" id="parking" class="form-check-input" {{ old('parking') == 'on' ? 'checked' : '' }}>پارکینگ
                             </label>
                         </div>
                         @error('parking')
@@ -205,7 +205,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="store" class="form-check-label">
-                                <input type="checkbox" name="store" id="store" class="form-check-input">انبار
+                                <input type="checkbox" name="store" id="store" class="form-check-input" {{ old('store') == 'on' ? 'checked' : '' }}>انبار
                             </label>
                         </div>
                         @error('store')
@@ -215,7 +215,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="is_star" class="form-check-label">
-                                <input type="checkbox" name="is_star" id="is_star" class="form-check-input">ستاره
+                                <input type="checkbox" name="is_star" id="is_star" class="form-check-input" {{ old('is_star') == 'on' ? 'checked' : '' }}>ستاره
                             </label>
                         </div>
                         @error('is_star')

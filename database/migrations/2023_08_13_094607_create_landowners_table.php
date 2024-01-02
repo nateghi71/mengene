@@ -27,9 +27,9 @@ class CreateLandownersTable extends Migration
             $table->integer('scale')->nullable();
             $table->integer('number_of_rooms')->nullable();
             $table->text('description');
-            $table->integer('rahn_amount')->nullable();
-            $table->integer('rent_amount')->nullable();
-            $table->integer('selling_price')->nullable();
+            $table->unsignedBigInteger('rahn_amount')->nullable();
+            $table->unsignedBigInteger('rent_amount')->nullable();
+            $table->unsignedBigInteger('selling_price')->nullable();
             $table->boolean('elevator')->nullable();
             $table->boolean('parking')->nullable();
             $table->boolean('store')->nullable();

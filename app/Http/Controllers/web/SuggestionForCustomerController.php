@@ -23,7 +23,7 @@ class SuggestionForCustomerController extends Controller
             $minPrice = $customer->selling_price * 0.8; // 80% of the customer's price
             $maxPrice = $customer->selling_price * 1.2; // 120% of the customer's price
 
-            $suggestions = Landowner::where('status', 'active')->where('business_id', $business->id)
+            $suggestions = Landowner::where('status', 'active')->where('business_id', $business->id)->where('type_sale', 'buy')
                 ->whereDoesntHave('suggestedCustomer', function ($query) use ($customerId) {
                     $query->where('customer_id', $customerId)->where('suggest_business' , 1);
                 })->whereBetween('selling_price', [$minPrice, $maxPrice])->orderBy('selling_price' , 'asc')->limit(10)->get();
@@ -36,7 +36,7 @@ class SuggestionForCustomerController extends Controller
             $minRent = $customer->rent_amount * 0.8;
             $maxRent = $customer->rent_amount * 1.2;
 
-            $suggestions = Landowner::where('status', 'active')->where('business_id', $business->id)
+            $suggestions = Landowner::where('status', 'active')->where('business_id', $business->id)->where('type_sale', 'rahn')
                 ->whereDoesntHave('suggestedCustomer', function ($query) use ($customerId) {
                     $query->where('customer_id', $customerId)->where('suggest_business' , 1);
                 })->whereBetween('rahn_amount', [$minRahn, $maxRahn])
