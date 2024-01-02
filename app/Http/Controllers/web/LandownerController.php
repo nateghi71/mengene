@@ -17,6 +17,7 @@ use App\Http\Controllers\API\MyBaseController as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class LandownerController extends Controller
 {
@@ -72,6 +73,7 @@ class LandownerController extends Controller
 
     public function store(Request $request)
     {
+
         $this->authorize('create', Landowner::class);
         $request->validate([
             'name' => 'required',
@@ -83,9 +85,9 @@ class LandownerController extends Controller
             'scale' => 'required',
             'number_of_rooms' => 'required',
             'description' => 'required',
-            'rahn_amount' => 'nullable',
-            'rent_amount' => 'nullable',
-            'selling_price' => 'nullable',
+            'rahn_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
+            'rent_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
+            'selling_price' => Rule::requiredIf($request->type_sale == 'buy'),
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -113,7 +115,7 @@ class LandownerController extends Controller
             'store' => $request->has('store') ? 1 : 0,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
-            'business_id' => $user->business()->first()->id,
+            'business_id' => $user->business()->id,
             'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')
@@ -141,9 +143,9 @@ class LandownerController extends Controller
             'scale' => 'required',
             'number_of_rooms' => 'required',
             'description' => 'required',
-            'rahn_amount' => 'nullable',
-            'rent_amount' => 'nullable',
-            'selling_price' => 'nullable',
+            'rahn_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
+            'rent_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
+            'selling_price' => Rule::requiredIf($request->type_sale == 'buy'),
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -171,7 +173,7 @@ class LandownerController extends Controller
             'store' => $request->has('store') ? 1 : 0,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
-//            'business_id' => $user->business()->first()->id,
+//            'business_id' => $user->business()->id,
 //            'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')

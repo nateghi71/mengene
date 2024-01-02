@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
     public function twoFAStore(Request $request)
     {
         $request->validate([
-            'number' => 'required|max:11|digits:11|unique:users,number'
+            'number' => 'required|digits:11|unique:users,number'
         ]);
 
         $userNumber = $request->number;

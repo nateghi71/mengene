@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Customer as CustomerResource;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class CustomerController extends Controller
 {
@@ -88,9 +89,9 @@ class CustomerController extends Controller
             'scale' => 'required',
             'number_of_rooms' => 'required',
             'description' => 'required',
-            'rahn_amount' => 'nullable',
-            'rent_amount' => 'nullable',
-            'selling_price' => 'nullable',
+            'rahn_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
+            'rent_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
+            'selling_price' => Rule::requiredIf($request->type_sale == 'buy'),
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -118,7 +119,7 @@ class CustomerController extends Controller
             'store' => $request->has('store') ? 1 : 0,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
-            'business_id' => $user->business()->first()->id,
+            'business_id' => $user->business()->id,
             'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')
@@ -147,9 +148,9 @@ class CustomerController extends Controller
             'scale' => 'required',
             'number_of_rooms' => 'required',
             'description' => 'required',
-            'rahn_amount' => 'nullable',
-            'rent_amount' => 'nullable',
-            'selling_price' => 'nullable',
+            'rahn_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
+            'rent_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
+            'selling_price' => Rule::requiredIf($request->type_sale == 'buy'),
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -177,7 +178,7 @@ class CustomerController extends Controller
             'store' => $request->has('store') ? 1 : 0,
             'floor' => $request->floor,
             'floor_number' => $request->floor_number,
-//            'business_id' => $user->business()->first()->id,
+//            'business_id' => $user->business()->id,
 //            'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')

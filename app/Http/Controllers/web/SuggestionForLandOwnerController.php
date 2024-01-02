@@ -21,7 +21,7 @@ class SuggestionForLandOwnerController extends Controller
             $minPrice = $landowner->selling_price * 0.8; // 80% of the customer's price
             $maxPrice = $landowner->selling_price * 1.2; // 120% of the customer's price
 
-            $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)
+            $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)->where('type_sale', 'buy')
                 ->whereDoesntHave('suggestedLandowner', function ($query) use ($landownerId) {
                     $query->where('landowner_id', $landownerId)->where('suggest_business' , 1);
                 })->whereBetween('selling_price', [$minPrice, $maxPrice])->orderBy('selling_price' , 'asc')->limit(10)->get();
@@ -34,7 +34,7 @@ class SuggestionForLandOwnerController extends Controller
             $minRent = $landowner->rent_amount * 0.8;
             $maxRent = $landowner->rent_amount * 1.2;
 
-            $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)
+            $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)->where('type_sale', 'rahn')
                 ->whereDoesntHave('suggestedLandowner', function ($query) use ($landownerId) {
                     $query->where('landowner_id', $landownerId)->where('suggest_business' , 1);
                 })->whereBetween('rahn_amount', [$minRahn, $maxRahn])
@@ -48,7 +48,6 @@ class SuggestionForLandOwnerController extends Controller
                 $suggestion->daysLeft = $daysLeft;
             }
         }
-
 
         return view('landowner.suggestion' , compact('suggestions' ,'landowner'));
     }
