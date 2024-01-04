@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
     public function twoFAStore(Request $request)
     {
         $request->validate([
-            'number' => 'required|max:11|digits:11|unique:users,number'
+            'number' => 'required|numeric|digits:11|unique:users,number'
         ]);
 
         $userNumber = $request->number;
@@ -47,8 +47,8 @@ class RegisteredUserController extends Controller
             'random_string' => $randomString,
         ]);
 
-        $smsApi = new SmsAPI();
-        $smsApi->sendSmsCode($userNumber , $code);
+//        $smsApi = new SmsAPI();
+//        $smsApi->sendSmsCode($userNumber , $code);
 
         session()->put('randomString' , $randomString);
         return redirect()->route('2fa.enter_code');
@@ -80,7 +80,7 @@ class RegisteredUserController extends Controller
     public function twoFAConfirm(Request $request)
     {
         $request->validate([
-            'code' => 'required|digits:6'
+            'code' => 'required|numeric|digits:6'
         ]);
 
         $userCode = UserCode::where('random_string', session('randomString'))->first();
@@ -112,7 +112,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
-            'email' => ['max:255'],
+            'email' => ['nullable' , 'max:255' , 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => 'required'
         ]);

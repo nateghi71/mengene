@@ -96,7 +96,7 @@
                                 <td>{{$landowner->floor_number}}</td>
                             </tr>
                             <tr>
-                                <td>تاریخ اعتبار</td>
+                                <td>زمان باقیمانده</td>
                                 <td>{{$landowner->expire_date}}</td>
                             </tr>
                             <tr>

@@ -51,7 +51,7 @@
             });
         });
 
-        function separateNum(input , show) {
+        function separateNum(input , show = null) {
             var nStr = input.value + '';
             nStr = nStr.replace(/\,/g, "");
             x = nStr.split('.');
@@ -62,23 +62,32 @@
                 x1 = x1.replace(rgx, '$1' + ',' + '$2');
             }
             input.value = x1 + x2;
-            if (input.value)
+            if(show)
             {
-                let amount = input.value.replaceAll(',', '')
-                amount = parseFloat(amount);
-                if (amount < 1000) {
-                    show.textContent = amount + ' میلیون تومان';
+                if (input.value)
+                {
+                    let amount = input.value.replaceAll(',', '')
+                    amount = parseFloat(amount);
+                    if (amount < 1000) {
+                        show.textContent = amount + ' میلیون تومان';
+                    }
+                    else {
+                        amount = (amount / 1000).toFixed(3)
+                        show.textContent = amount.toString().replaceAll('.', '/') + ' میلیارد تومان';
+                    }
                 }
-                else {
-                    amount = (amount / 1000).toFixed(3)
-                    show.textContent = amount.toString().replaceAll('.', '/') + ' میلیارد تومان';
+                else
+                {
+                    show.textContent = '';
                 }
-            }
-            else
-            {
-                show.textContent = '';
             }
         }
+
+        let scaleElement = $('#scale');
+        separateNum(scaleElement.get(0));
+        scaleElement.on('keyup' , function (e){
+            separateNum(this);
+        });
 
         let priceElement = $('#selling_price');
         separateNum(priceElement.get(0) , $('#show_selling_price').get(0));
@@ -142,7 +151,8 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="number">شماره تماس:</label>
-                        <input type="text" name="number" class="form-control" value="{{$customer->number}}" id="number" placeholder="شماره تماس">
+                        <input type="text" name="number" class="form-control" value="{{$customer->number}}" id="number" placeholder="شماره تماس"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('number')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
@@ -156,7 +166,8 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="scale">متراژ:</label>
-                        <input type="text" name="scale" class="form-control" value="{{$customer->scale}}" id="scale" placeholder="متراژ">
+                        <input type="text" name="scale" class="form-control" value="{{$customer->scale}}" id="scale" placeholder="متراژ"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('scale')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
@@ -166,7 +177,8 @@
                             <label for="selling_price">قیمت:</label>
                             <p id="show_selling_price"></p>
                         </div>
-                        <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{$customer->selling_price}}" id="selling_price" placeholder="قیمت">
+                        <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{$customer->selling_price}}" id="selling_price" placeholder="قیمت"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('selling_price')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
@@ -176,7 +188,8 @@
                             <label for="rahn_amount">رهن:</label>
                             <p id="show_rahn_amount"></p>
                         </div>
-                        <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{$customer->rahn_amount}}" id="rahn_amount" placeholder="رهن">
+                        <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{$customer->rahn_amount}}" id="rahn_amount" placeholder="رهن"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rahn_amount')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
@@ -186,7 +199,8 @@
                             <label for="rent_amount">اجاره:</label>
                             <p id="show_rent_amount"></p>
                         </div>
-                        <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{$customer->rent_amount}}" id="rent_amount" placeholder="اجاره">
+                        <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{$customer->rent_amount}}" id="rent_amount" placeholder="اجاره"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rent_amount')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
@@ -213,22 +227,25 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="number_of_rooms">تعداد اتاق:</label>
-                        <input type="text" name="number_of_rooms" class="form-control" value="{{$customer->number_of_rooms}}" id="number_of_rooms" placeholder="تعداد اتاق">
+                        <input type="text" name="number_of_rooms" class="form-control" value="{{$customer->number_of_rooms}}" id="number_of_rooms" placeholder="تعداد اتاق"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('number_of_rooms')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
                         <label for="floor_number">شماره طبقه:</label>
-                        <input type="text" name="floor_number" class="form-control" value="{{$customer->floor_number}}" id="floor_number" placeholder="شماره طبقه">
+                        <input type="text" name="floor_number" class="form-control" value="{{$customer->floor_number}}" id="floor_number" placeholder="شماره طبقه"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('floor_number')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
 
                     <div class="form-group col-md-3">
-                        <label for="expire_date">تاریخ اعتبار:</label>
-                        <input type="text" name="expire_date" class="form-control" value="{{$customer->expire_date}}" id="expire_date" placeholder="تاریخ اعتبار">
+                        <label for="expire_date">زمان باقیمانده:</label>
+                        <input type="text" name="expire_date" class="form-control" value="{{$customer->expire_date}}" id="expire_date" placeholder="زمان باقیمانده"
+                               onkeypress="return false">
                         @error('expire_date')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror

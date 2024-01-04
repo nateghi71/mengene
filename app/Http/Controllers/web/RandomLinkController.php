@@ -50,7 +50,7 @@ class RandomLinkController extends Controller
 
         if($request->response == 1)
         {
-            $message = "اعتبار شما تمدید شد.";
+            $message = "زمان باقیمانده شما تمدید شد.";
             $requestedPerson->update([
                 'expire_date' =>Carbon::now()->addDays(30)->toDate(),
                 'status' => 'active'

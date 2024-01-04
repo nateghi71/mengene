@@ -34,8 +34,6 @@
                 color: white !important;
             }
         </style>
-
-        @yield('head')
     </head>
     <body class="rtl">
         <div class="container-scroller">

@@ -95,7 +95,7 @@
                                 <td>{{$customer->floor_number}}</td>
                             </tr>
                             <tr>
-                                <td>تاریخ اعتبار</td>
+                                <td>زمان باقیمانده</td>
                                 <td>{{$customer->expire_date}}</td>
                             </tr>
                             <tr>

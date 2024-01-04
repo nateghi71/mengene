@@ -19912,7 +19912,7 @@ div.tagsinput {
   background-size: cover; }
 
 .auth.register-half-bg {
-  /*background: url("../images/auth/Login_bg2.jpg");*/
+  background: url("../images/auth/lockscreen-bg.jpg");
   background-size: cover; }
 
 .auth.lock-full-bg {

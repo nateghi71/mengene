@@ -35,7 +35,7 @@ return [
     'can' => 'The :attribute field contains an unauthorized value.',
     'confirmed' => 'مقدار :attribute با پسورد مطابقت ندارد.',
     'current_password' => 'The password is incorrect.',
-    'date' => 'The :attribute field must be a valid date.',
+    'date' => 'فیلد :attribute باید یک فرمت تاریخ معتبر باشد',
     'date_equals' => 'The :attribute field must be a date equal to :date.',
     'date_format' => 'The :attribute field must match the format :format.',
     'decimal' => 'The :attribute field must have :decimal decimal places.',
@@ -114,11 +114,7 @@ return [
     'multiple_of' => 'The :attribute field must be a multiple of :value.',
     'not_in' => 'The selected :attribute is invalid.',
     'not_regex' => 'The :attribute field format is invalid.',
-<<<<<<< HEAD
     'numeric' => 'فیلد :attribute باید به صورت عددی باشد.',
-=======
-    'numeric' => 'The :attribute field must be a number.',
->>>>>>> 0da86ad6633e08e7e82ebbfbdecac488512cd4a7
     'password' => [
         'letters' => 'The :attribute field must contain at least one letter.',
         'mixed' => 'The :attribute field must contain at least one uppercase and one lowercase letter.',
@@ -205,7 +201,7 @@ return [
         'type_work' => 'نوع مسکن' ,
         'type_build' => 'نوع ساختمان' ,
         'floor_number' => 'تعداد اتاق' ,
-        'expire_date' => 'تاریخ اعتبار' ,
+        'expire_date' => 'زمان باقیمانده' ,
         'description' => 'توضیحات و آدرس' ,
         'elevator' => 'اسانسور' ,
         'parking' => 'پارکینگ' ,
