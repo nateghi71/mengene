@@ -26,7 +26,7 @@
 
         </div>
         <div class="form-group">
-            <label for="city">شهر:</label>
+            <label for="city">شهر املاک:</label>
             <input type="text" name="city" class="form-control" value="{{old('city')}}" id="city" placeholder="شهر">
             @error('city')
             <div class="alert-danger">{{$message}}</div>
@@ -34,7 +34,7 @@
 
         </div>
         <div class="form-group">
-            <label for="area">منطقه: *</label>
+            <label for="area">مناطق شهرداری: *</label>
             <input type="text" name="area" class="form-control" value="{{old('area')}}" id="area" placeholder="منطقه">
             @error('area')
             <div class="alert-danger">{{$message}}</div>
@@ -50,7 +50,7 @@
 
         </div>
         <div class="form-group">
-            <label for="image">عکس: *</label>
+            <label for="image">عکس مجوز کسب: *</label>
             <input type="file" name="image" class="form-control" id="image" placeholder="عکس">
             @error('image')
             <div class="alert-danger">{{$message}}</div>

@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
     public function twoFAStore(Request $request)
     {
         $request->validate([
-            'number' => 'required|digits:11|unique:users,number'
+            'number' => 'required|digits:11|numeric|unique:users,number'
         ]);
 
         $userNumber = $request->number;
@@ -80,7 +80,7 @@ class RegisteredUserController extends Controller
     public function twoFAConfirm(Request $request)
     {
         $request->validate([
-            'code' => 'required|digits:6'
+            'code' => 'required|numeric|digits:6'
         ]);
 
         $userCode = UserCode::where('random_string', session('randomString'))->first();
@@ -112,7 +112,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
-            'email' => ['max:255'],
+            'email' => ['max:255' , 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => 'required'
         ]);

@@ -10,7 +10,7 @@
     <form action="{{ route('register.handle') }}" method="post" autocomplete="off">
         @csrf
         <div class="form-group">
-            <label for="name"> نام *</label>
+            <label for="name"> نام و نام خانوادگی *</label>
             <input type="text" name="name" value="{{old('name')}}" class="form-control" id="name" placeholder="نام">
             @error('name')
             <div class="alert alert-danger">
@@ -29,7 +29,7 @@
         </div>
         <div class="form-group">
             <label for="email">ایمیل</label>
-            <input type="text" name="email" value="{{old('email')}}" class="form-control" id="email" placeholder="ایمیل">
+            <input type="email" name="email" value="{{old('email')}}" class="form-control" id="email" placeholder="ایمیل">
             @error('email')
             <div class="alert alert-danger">
                 {{$message}}

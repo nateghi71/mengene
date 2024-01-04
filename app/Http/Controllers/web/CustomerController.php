@@ -78,10 +78,14 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
+        $request['selling_price'] = str_replace( ',', '', $request->selling_price );
+        $request['rahn_amount'] = str_replace( ',', '', $request->rahn_amount );
+        $request['rent_amount'] = str_replace( ',', '', $request->rent_amount );
+
         $this->authorize('create' , Customer::class);
         $request->validate([
             'name' => 'required',
-            'number' => 'required',
+            'number' => 'required|numeric',
             'city' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
@@ -89,9 +93,9 @@ class CustomerController extends Controller
             'scale' => 'required',
             'number_of_rooms' => 'required',
             'description' => 'required',
-            'rahn_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
-            'rent_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
-            'selling_price' => Rule::requiredIf($request->type_sale == 'buy'),
+            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
+            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
+            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -111,9 +115,9 @@ class CustomerController extends Controller
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
@@ -136,6 +140,10 @@ class CustomerController extends Controller
 
     public function update(Request $request, Customer $customer)
     {
+        $request['selling_price'] = str_replace( ',', '', $request->selling_price );
+        $request['rahn_amount'] = str_replace( ',', '', $request->rahn_amount );
+        $request['rent_amount'] = str_replace( ',', '', $request->rent_amount );
+
         $this->authorize('update', $customer);
 
         $request->validate([
@@ -148,9 +156,9 @@ class CustomerController extends Controller
             'scale' => 'required',
             'number_of_rooms' => 'required',
             'description' => 'required',
-            'rahn_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
-            'rent_amount' => Rule::requiredIf($request->type_sale == 'rahn'),
-            'selling_price' => Rule::requiredIf($request->type_sale == 'buy'),
+            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
+            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
+            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -170,9 +178,9 @@ class CustomerController extends Controller
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,

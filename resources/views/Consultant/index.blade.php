@@ -95,7 +95,7 @@
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
-                          <a href="{{route('dashboard')}}" class="btn btn-outline-light btn-rounded get-started-btn">داشبورد</a>
+                          <span class="btn btn-outline-light btn-rounded get-started-btn">داشبورد</span>
                         </span>
                         </div>
                     </div>

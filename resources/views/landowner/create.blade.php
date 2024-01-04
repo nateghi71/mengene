@@ -41,6 +41,52 @@
                 autoClose: true
             });
         });
+        function separateNum(input , show) {
+            var nStr = input.value + '';
+            nStr = nStr.replace(/\,/g, "");
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            input.value = x1 + x2;
+            if (input.value)
+            {
+                let amount = input.value.replaceAll(',', '')
+                amount = parseFloat(amount);
+                if (amount < 1000) {
+                    show.textContent = amount + ' میلیون تومان';
+                }
+                else {
+                    amount = (amount / 1000).toFixed(3)
+                    show.textContent = amount.toString().replaceAll('.', '/') + ' میلیارد تومان';
+                }
+            }
+            else
+            {
+                show.textContent = '';
+            }
+        }
+
+        let priceElement = $('#selling_price');
+        separateNum(priceElement.get(0) , $('#show_selling_price').get(0));
+        priceElement.on('keyup' , function (e){
+            separateNum(this , $('#show_selling_price').get(0));
+        });
+
+        let rahnElement = $('#rahn_amount');
+        separateNum(rahnElement.get(0) , $('#show_rahn_amount').get(0));
+        rahnElement.on('keyup' , function (e){
+            separateNum(this , $('#show_rahn_amount').get(0));
+        });
+
+        let rentElement = $('#rent_amount');
+        separateNum(rentElement.get(0) , $('#show_rent_amount').get(0));
+        rentElement.on('keyup' , function (e){
+            separateNum(this , $('#show_rent_amount').get(0));
+        });
 
     </script>
 
@@ -63,7 +109,7 @@
                         <div class="col-sm-3">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale1">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" checked> خرید </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" checked> فروش </label>
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -79,7 +125,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="name"> نام:</label>
+                        <label for="name"> نام و نام خانوادگی:</label>
                         <input type="text" name="name" class="form-control" id="name" value="{{old('name')}}" placeholder="نام">
                         @error('name')
                         <div class="alert-danger">{{$message}}</div>
@@ -107,22 +153,31 @@
                         @enderror
                     </div>
                     <div id="myDIV" class="form-group col-md-3" style="display: block">
-                        <label for="selling_price">قیمت:</label>
-                        <input type="text" name="selling_price" class="form-control" value="{{old('selling_price')}}" id="selling_price" placeholder="قیمت">
+                        <div class="d-flex justify-content-between">
+                            <label for="selling_price">قیمت:</label>
+                            <p id="show_selling_price"></p>
+                        </div>
+                        <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{old('selling_price')}}" id="selling_price" placeholder="قیمت">
                         @error('selling_price')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div id="meDIV1" class="form-group col-md-3" style="display: none">
-                        <label for="rahn_amount">رهن:</label>
-                        <input type="text" name="rahn_amount" class="form-control" value="{{old('rahn_amount')}}" id="rahn_amount" placeholder="رهن">
+                        <div class="d-flex justify-content-between">
+                            <label for="rahn_amount">رهن:</label>
+                            <p id="show_rahn_amount"></p>
+                        </div>
+                        <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{old('rahn_amount')}}" id="rahn_amount" placeholder="رهن">
                         @error('rahn_amount')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div id="meDIV2" class="form-group col-md-3" style="display: none">
-                        <label for="rent_amount">اجاره:</label>
-                        <input type="text" name="rent_amount" class="form-control" value="{{old('rent_amount')}}" id="rent_amount" placeholder="اجاره">
+                        <div class="d-flex justify-content-between">
+                            <label for="rent_amount">اجاره:</label>
+                            <p id="show_rent_amount"></p>
+                        </div>
+                        <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{old('rent_amount')}}" id="rent_amount" placeholder="اجاره">
                         @error('rent_amount')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
