@@ -114,7 +114,11 @@ return [
     'multiple_of' => 'The :attribute field must be a multiple of :value.',
     'not_in' => 'The selected :attribute is invalid.',
     'not_regex' => 'The :attribute field format is invalid.',
+<<<<<<< HEAD
     'numeric' => 'فیلد :attribute باید به صورت عددی باشد.',
+=======
+    'numeric' => 'The :attribute field must be a number.',
+>>>>>>> 0da86ad6633e08e7e82ebbfbdecac488512cd4a7
     'password' => [
         'letters' => 'The :attribute field must contain at least one letter.',
         'mixed' => 'The :attribute field must contain at least one uppercase and one lowercase letter.',
