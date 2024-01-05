@@ -16,7 +16,7 @@ class UpdateStatusFile
         $customers = Customer::where('expire_date', '<', Carbon::now())->get();
 
         foreach ($customers as $customer) {
-            if($customer->status == 'active')
+            if($customer->getRawOriginal('status') == 'active')
             {
                 $customer->update([
                     'status' =>'unknown'
@@ -30,7 +30,7 @@ class UpdateStatusFile
                 $smsApi = new SmsAPI();
 //                $smsApi->sendSmsLink($customer->number , $link);
             }
-            elseif($customer->status == 'unknown')
+            elseif($customer->getRawOriginal('status') == 'unknown')
             {
                 $link = RandomLink::where('linkable_type' , Customer::class)->where('linkable_id', $customer->id)->
                     where('expires_at' , '<' , Carbon::now())->first();
@@ -62,7 +62,7 @@ class UpdateStatusFile
         $landowners = Landowner::where('expire_date', '<', Carbon::now())->get();
 
         foreach ($landowners as $landowner) {
-            if($landowner->status == 'active')
+            if($landowner->getRawOriginal('status') == 'active')
             {
 
                 $landowner->update([
@@ -77,7 +77,7 @@ class UpdateStatusFile
                 $smsApi = new SmsAPI();
 //                $smsApi->sendSmsLink($landowner->number , $link);
             }
-            elseif($landowner->status == 'unknown')
+            elseif($landowner->getRawOriginal('status') == 'unknown')
             {
                 $link = RandomLink::where('linkable_type' , Landowner::class)->where('linkable_id', $landowner->id)->
                 where('expires_at' , '<' , Carbon::now())->first();

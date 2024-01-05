@@ -3,53 +3,6 @@
 @section('title' , 'مالکان')
 
 @section('scripts')
-    <script>
-        function allFunction() {
-            var x = document.getElementById("allDiv");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            }
-            var y = document.getElementById("rentDiv");
-            if (y.style.display === "block") {
-                y.style.display = "none";
-            }
-            var z = document.getElementById("buyDiv");
-            if (z.style.display === "block") {
-                z.style.display = "none";
-            }
-        }
-
-        function rentFunction() {
-            var x = document.getElementById("allDiv");
-            if (x.style.display === "block") {
-                x.style.display = "none";
-            }
-            var y = document.getElementById("rentDiv");
-            if (y.style.display === "none") {
-                y.style.display = "block";
-            }
-            var z = document.getElementById("buyDiv");
-            if (z.style.display === "block") {
-                z.style.display = "none";
-            }
-        }
-
-        function buyFunction() {
-            var x = document.getElementById("allDiv");
-            if (x.style.display === "block") {
-                x.style.display = "none";
-            }
-            var y = document.getElementById("rentDiv");
-            if (y.style.display === "block") {
-                y.style.display = "none";
-            }
-            var z = document.getElementById("buyDiv");
-            if (z.style.display === "none") {
-                z.style.display = "block";
-            }
-        }
-    </script>
-
 @endsection
 
 @section('content')
@@ -130,6 +83,7 @@
                             <thead>
                             <tr>
                                 <th> # </th>
+                                <th> وضعیت </th>
                                 <th> ستاره </th>
                                 <th> نام </th>
                                 <th> شماره تماس </th>
@@ -148,17 +102,20 @@
                                 <tr>
                                     <td>{{$buyLandowners->firstItem() + $key}}</td>
                                     <td>
-                                        <a class="text-decoration-none" href="{{route('landowner.star',$buyLandowner->id)}}">{!!$buyLandowner->is_star ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
+                                        @if($buyLandowner->getRawOriginal('status') == 'active')
+                                            <span class="mdi mdi-checkbox-blank-circle text-success"></span>
+                                        @elseif($buyLandowner->getRawOriginal('status') == 'unknown')
+                                            <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
+                                        @else
+                                            <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a class="text-decoration-none" href="{{route('landowner.star',$buyLandowner->id)}}">{!!$buyLandowner->getRawOriginal('is_star') ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
                                     </td>
                                     <td>{{$buyLandowner->name}}</td>
                                     <td>{{$buyLandowner->number}}</td>
-                                    <td>
-                                        @if($buyLandowner->type_sale == 'rahn')
-                                            رهن و اجاره
-                                        @else
-                                            فروشی
-                                        @endif
-                                    </td>
+                                    <td>{{$buyLandowner->type_sale}}</td>
                                     <td>{{$buyLandowner->selling_price}}</td>
                                     <td>{{$buyLandowner->scale}}</td>
                                     <td>{{$buyLandowner->daysLeft ? $buyLandowner->daysLeft . ' روز' : 'منقضی'}}</td>
@@ -192,12 +149,12 @@
                             <thead>
                             <tr>
                                 <th> # </th>
+                                <th> وضعیت </th>
                                 <th> ستاره </th>
                                 <th> نام </th>
                                 <th> شماره تماس </th>
                                 <th> نوع </th>
                                 <th> رهن </th>
-                                <th> کرایه </th>
                                 <th> متراژ </th>
                                 <th>زمان باقیمانده </th>
                                 <th> پیشنهادات </th>
@@ -211,19 +168,21 @@
                                 <tr>
                                     <td>{{$rahnLandowners->firstItem() + $key}}</td>
                                     <td>
-                                        <a class="text-decoration-none" href="{{route('landowner.star',$rahnLandowner->id)}}">{!!$rahnLandowner->is_star ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
+                                        @if($rahnLandowner->getRawOriginal('status') == 'active')
+                                            <span class="mdi mdi-checkbox-blank-circle text-success"></span>
+                                        @elseif($rahnLandowner->getRawOriginal('status') == 'unknown')
+                                            <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
+                                        @else
+                                            <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a class="text-decoration-none" href="{{route('landowner.star',$rahnLandowner->id)}}">{!!$rahnLandowner->getRawOriginal('is_star') ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
                                     </td>
                                     <td>{{$rahnLandowner->name}}</td>
                                     <td>{{$rahnLandowner->number}}</td>
-                                    <td>
-                                        @if($rahnLandowner->type_sale == 'rahn')
-                                            رهن و اجاره
-                                        @else
-                                            فروشی
-                                        @endif
-                                    </td>
+                                    <td>{{$rahnLandowner->type_sale}}</td>
                                     <td>{{$rahnLandowner->rahn_amount}}</td>
-                                    <td>{{$rahnLandowner->rent_amount}}</td>
                                     <td>{{$rahnLandowner->scale}}</td>
                                     <td>{{$rahnLandowner->daysLeft ? $rahnLandowner->daysLeft . ' روز' : 'منقضی'}} </td>
                                     <td><a class="btn btn-outline-success text-decoration-none" href="{{route('landowner.suggestions',$rahnLandowner->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>

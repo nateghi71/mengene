@@ -36,8 +36,8 @@ class LandownerController extends Controller
                 )->fragment('buy')->withQueryString();
 
             foreach ($buyLandowners as $landowner) {
-                if ($landowner->expire_date > Carbon::now()) {
-                    $daysLeft = Carbon::now()->diffInDays($landowner->expire_date) + 1;
+                if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
+                    $daysLeft = Carbon::now()->diffInDays($landowner->getRawOriginal('expire_date')) + 1;
                     $landowner->daysLeft = $daysLeft;
                 }
             }
@@ -48,8 +48,8 @@ class LandownerController extends Controller
                 )->fragment('rahn')->withQueryString();
 
             foreach ($rahnLandowners as $landowner) {
-                if ($landowner->expire_date > Carbon::now()) {
-                    $daysLeft = Carbon::now()->diffInDays($landowner->expire_date) + 1;
+                if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
+                    $daysLeft = Carbon::now()->diffInDays($landowner->getRawOriginal('expire_date')) + 1;
                     $landowner->daysLeft = $daysLeft;
                 }
             }
@@ -73,10 +73,6 @@ class LandownerController extends Controller
 
     public function store(Request $request)
     {
-        $request['selling_price'] = str_replace( ',', '', $request->selling_price );
-        $request['rahn_amount'] = str_replace( ',', '', $request->rahn_amount );
-        $request['rent_amount'] = str_replace( ',', '', $request->rent_amount );
-
         $this->authorize('create', Landowner::class);
         $request->validate([
             'name' => 'required',
@@ -85,12 +81,12 @@ class LandownerController extends Controller
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required|numeric',
+            'scale' => 'required',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
-            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
+            'rahn_amount' => 'exclude_if:type_sale,buy',
+            'rent_amount' => 'exclude_if:type_sale,buy',
+            'selling_price' => 'exclude_if:type_sale,rahn',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -110,9 +106,9 @@ class LandownerController extends Controller
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
+            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : 0,
+            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : 0,
+            'selling_price' => $request->filled('selling_price') ? $request->selling_price : 0,
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
@@ -121,24 +117,19 @@ class LandownerController extends Controller
             'business_id' => $user->business()->id,
             'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
-            'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')
+            'expire_date' => $request->expire_date
         ]);
         return redirect()->route('landowner.index',['status' => 'active']);
     }
 
     public function edit(Landowner $landowner)
     {
-        $landowner->expire_date = verta($landowner->expire_date)->format('Y-m-d');
         $this->authorize('update', $landowner);
         return view('landowner.edit', compact('landowner'));
     }
 
     public function update(Request $request, Landowner $landowner)
     {
-        $request['selling_price'] = str_replace( ',', '', $request->selling_price );
-        $request['rahn_amount'] = str_replace( ',', '', $request->rahn_amount );
-        $request['rent_amount'] = str_replace( ',', '', $request->rent_amount );
-
         $this->authorize('update', $landowner);
         $request->validate([
             'name' => 'required',
@@ -147,12 +138,12 @@ class LandownerController extends Controller
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required|numeric',
+            'scale' => 'required',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
-            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
+            'rahn_amount' => 'exclude_if:type_sale,buy',
+            'rent_amount' => 'exclude_if:type_sale,buy',
+            'selling_price' => 'exclude_if:type_sale,rahn',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -172,9 +163,9 @@ class LandownerController extends Controller
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
+            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : 0,
+            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : 0,
+            'selling_price' => $request->filled('selling_price') ? $request->selling_price : 0,
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
@@ -183,7 +174,7 @@ class LandownerController extends Controller
 //            'business_id' => $user->business()->id,
 //            'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
-            'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')
+            'expire_date' => $request->expire_date
         ]);
 
         return redirect()->route('landowner.index',['status' => 'active']);
@@ -202,7 +193,7 @@ class LandownerController extends Controller
     {
         $this->authorize('update', $landowner);
 
-        if ($landowner->is_star == 0) {
+        if ($landowner->getRawOriginal('is_star') == 0) {
             $landowner->is_star = 1;
             $landowner->save();
         } else {

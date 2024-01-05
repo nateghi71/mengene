@@ -35,7 +35,7 @@
   }
 
   /**
-   * Easy on scroll event listener 
+   * Easy on scroll event listener
    */
   const onscroll = (el, listener) => {
     el.addEventListener('scroll', listener)
@@ -112,7 +112,7 @@
    */
   on('click', '.mobile-nav-toggle', function(e) {
     select('#navbar').classList.toggle('navbar-mobile')
-    this.classList.toggle('bi-list')
+    this.classList.toggle('mdi mdi-close')
     this.classList.toggle('bi-x')
   })
 
@@ -166,7 +166,7 @@
   }
 
   /**
-   * Initiate  glightbox 
+   * Initiate  glightbox
    */
   const glightbox = GLightbox({
     selector: '.glightbox'
@@ -220,7 +220,7 @@
   });
 
   /**
-   * Initiate portfolio lightbox 
+   * Initiate portfolio lightbox
    */
   const portfolioLightbox = GLightbox({
     selector: '.portfolio-lightbox'

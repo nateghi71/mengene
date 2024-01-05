@@ -69,7 +69,7 @@ class BusinessController extends Controller
 
         $request->validate([
             'name' => 'required',
-            'en_name' => 'required|unique:businesses',
+            'en_name' => 'required',
             'city' => 'required',
             'area' => 'required',
             'address' => 'required',

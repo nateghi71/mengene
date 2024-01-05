@@ -16,6 +16,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class LandownerController extends BaseController
 {
@@ -90,23 +91,22 @@ class LandownerController extends BaseController
 
         $request->validate([
             'name' => 'required',
-            'number' => 'required',
+            'number' => 'required|numeric',
             'city' => 'required',
-            'status' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required',
-            'number_of_rooms' => 'required',
+            'scale' => 'required|numeric',
+            'number_of_rooms' => 'required|numeric',
             'description' => 'required',
-            'rahn_amount' => 'nullable',
-            'rent_amount' => 'nullable',
-            'selling_price' => 'nullable',
-            'elevator' => 'required',
-            'parking' => 'required',
-            'store' => 'required',
-            'floor_number' => 'required',
-            'is_star' => 'required',
+            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
+            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
+            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
+            'elevator' => 'nullable',
+            'parking' => 'nullable',
+            'store' => 'nullable',
+            'floor_number' => 'required|numeric',
+            'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 
@@ -122,9 +122,9 @@ class LandownerController extends BaseController
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
             'elevator' => $request->elevator,
             'parking' => $request->parking,
             'store' => $request->store,
@@ -228,8 +228,13 @@ class LandownerController extends BaseController
             return response()->json(['message' => 'you dont have a business']);
         }
 
-        $landowner->is_star = !$landowner->is_star;
-        $landowner->save();
+        if ($landowner->getRawOriginal('is_star') == 0) {
+            $landowner->is_star = 1;
+            $landowner->save();
+        } else {
+            $landowner->is_star = 0;
+            $landowner->save();
+        }
 
         return $this->sendResponse(new LandownerResource($landowner), 'Landowner star status updated successfully.');
     }

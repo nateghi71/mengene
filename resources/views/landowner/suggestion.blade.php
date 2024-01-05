@@ -43,9 +43,9 @@
                                     <th>نام</th>
                                     <th>شماره تماس</th>
                                     <th>نوع</th>
-                                    @if($suggestions->first()->type_sale == 'buy')
+                                    @if($suggestions->first()->getRawOriginal('type_sale') == 'buy')
                                         <th>قیمت</th>
-                                    @elseif($suggestions->first()->type_sale == 'rahn')
+                                    @elseif($suggestions->first()->getRawOriginal('type_sale') == 'rahn')
                                         <th>رهن</th>
                                         <th>کرایه</th>
                                     @endif
@@ -61,16 +61,10 @@
                                         <td>{{$key + 1}}</td>
                                         <td>{{$suggestion->name}}</td>
                                         <td>{{$suggestion->number}}</td>
-                                        <td>
-                                            @if($suggestion->type_sale == 'rahn')
-                                                رهن و اجاره
-                                            @else
-                                                فروشی
-                                            @endif
-                                        </td>
-                                        @if($suggestions->first()->type_sale == 'buy')
+                                        <td>{{$suggestion->type_sale}}</td>
+                                        @if($suggestion->getRawOriginal('type_sale') == 'buy')
                                             <td>{{$suggestion->selling_price}}</td>
-                                        @elseif($suggestions->first()->type_sale == 'rahn')
+                                        @elseif($suggestion->getRawOriginal('type_sale') == 'rahn')
                                             <td>{{$suggestion->rahn_amount}}</td>
                                             <td>{{$suggestion->rent_amount}}</td>
                                         @endif

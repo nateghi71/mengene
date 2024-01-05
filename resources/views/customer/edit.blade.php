@@ -5,7 +5,7 @@
 @section('scripts')
 
     <script>
-        if("{{ $customer->type_sale === "buy" }}")
+        if("{{ $customer->getRawOriginal('type_sale') === "buy" }}")
         {
             buyFunction()
         }
@@ -107,6 +107,35 @@
             separateNum(this , $('#show_rent_amount').get(0));
         });
 
+        let label = $('#is_star_label')
+        let star = $('#is_star')
+
+        label.on('click' , function (){
+            if(!label.is('.checked'))
+            {
+                label.addClass('checked')
+                label.html('<span class="mdi mdi-star fs-4 text-warning"></span>')
+                star.prop('checked' , true)
+            }
+            else
+            {
+                label.removeClass('checked')
+                label.html('<span class="mdi mdi-star-outline fs-4 text-warning"></span>')
+                star.prop('checked' , false)
+            }
+        });
+
+        if(star.prop('checked') == true)
+        {
+            label.addClass('checked')
+            label.html('<span class="mdi mdi-star fs-4 text-warning"></span>')
+        }
+        else
+        {
+            label.removeClass('checked')
+            label.html('<span class="mdi mdi-star-outline fs-4 text-warning"></span>')
+        }
+
     </script>
 @endsection
 
@@ -127,13 +156,13 @@
                         <div class="col-sm-3">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale1">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" {{$customer->type_sale === "buy" ? 'checked' : '' }}> خرید </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" {{$customer->getRawOriginal('type_sale') === "buy" ? 'checked' : '' }}> خرید </label>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale2">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn" {{$customer->type_sale === "rahn" ? 'checked' : '' }}> رهن و اجاره </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn" {{$customer->getRawOriginal('type_sale') === "rahn" ? 'checked' : '' }}> رهن و اجاره </label>
                             </div>
                         </div>
                         @error('type_sale')
@@ -166,7 +195,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="scale">متراژ:</label>
-                        <input type="text" name="scale" class="form-control" value="{{$customer->scale}}" id="scale" placeholder="متراژ"
+                        <input type="text" name="scale" class="form-control" value="{{$customer->getRawOriginal('scale')}}" id="scale" placeholder="متراژ"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('scale')
                         <div class="alert-danger">{{$message}}</div>
@@ -177,7 +206,7 @@
                             <label for="selling_price">قیمت:</label>
                             <p id="show_selling_price"></p>
                         </div>
-                        <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{$customer->selling_price}}" id="selling_price" placeholder="قیمت"
+                        <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{$customer->getRawOriginal('selling_price')}}" id="selling_price" placeholder="قیمت"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('selling_price')
                         <div class="alert-danger">{{$message}}</div>
@@ -188,7 +217,7 @@
                             <label for="rahn_amount">رهن:</label>
                             <p id="show_rahn_amount"></p>
                         </div>
-                        <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{$customer->rahn_amount}}" id="rahn_amount" placeholder="رهن"
+                        <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{$customer->getRawOriginal('rahn_amount')}}" id="rahn_amount" placeholder="رهن"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rahn_amount')
                         <div class="alert-danger">{{$message}}</div>
@@ -199,7 +228,7 @@
                             <label for="rent_amount">اجاره:</label>
                             <p id="show_rent_amount"></p>
                         </div>
-                        <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{$customer->rent_amount}}" id="rent_amount" placeholder="اجاره"
+                        <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{$customer->getRawOriginal('rent_amount')}}" id="rent_amount" placeholder="اجاره"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rent_amount')
                         <div class="alert-danger">{{$message}}</div>
@@ -208,8 +237,8 @@
                     <div class="form-group col-md-3">
                         <label for="type_work">نوع مسکن:</label>
                         <select class="form-control" name="type_work" id="type_work">
-                            <option value="home" {{$customer->type_work === "home" ? 'select' : '' }}>خانه</option>
-                            <option value="office" {{$customer->type_work === "office" ? 'select' : '' }}>دفتر</option>
+                            <option value="home" {{$customer->getRawOriginal('type_work') === "home" ? 'select' : '' }}>خانه</option>
+                            <option value="office" {{$customer->getRawOriginal('type_work') === "office" ? 'select' : '' }}>دفتر</option>
                         </select>
                         @error('type_work')
                         <div class="alert-danger">{{$message}}</div>
@@ -218,8 +247,8 @@
                     <div class="form-group col-md-3">
                         <label for="type_build">نوع ساختمان:</label>
                         <select class="form-control" name="type_build" id="type_build">
-                            <option value="house" {{$customer->type_build === "house" ? 'select' : '' }}>ویلایی</option>
-                            <option value="apartment" {{$customer->type_build === "apartment" ? 'select' : '' }}>ساختمان</option>
+                            <option value="house" {{$customer->getRawOriginal('type_build') === "house" ? 'select' : '' }}>ویلایی</option>
+                            <option value="apartment" {{$customer->getRawOriginal('type_build') === "apartment" ? 'select' : '' }}>ساختمان</option>
                         </select>
                         @error('type_work')
                         <div class="alert-danger">{{$message}}</div>
@@ -261,8 +290,18 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <div class="form-check">
+                            <label id="is_star_label" class="form-check-label"><span class="mdi mdi-star-outline fs-4 text-warning"></span></label>
+                            <input type="checkbox" name="is_star" id="is_star" class="d-none" {{$customer->getRawOriginal('is_star') === 1 ? 'checked' : '' }}>
+                        </div>
+                        @error('is_star')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <div class="form-check">
                             <label for="elevator" class="form-check-label">
-                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{$customer->elevator === 1 ? 'checked' : '' }}>اسانسور
+                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{$customer->getRawOriginal('elevator') === 1 ? 'checked' : '' }}>اسانسور
                             </label>
                         </div>
                         @error('elevator')
@@ -272,7 +311,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="parking" class="form-check-label">
-                                <input type="checkbox" name="parking" id="parking" class="form-check-input" {{$customer->parking === 1 ? 'checked' : '' }}>پارکینگ
+                                <input type="checkbox" name="parking" id="parking" class="form-check-input" {{$customer->getRawOriginal('parking') === 1 ? 'checked' : '' }}>پارکینگ
                             </label>
                         </div>
                         @error('parking')
@@ -282,20 +321,10 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="store" class="form-check-label">
-                                <input type="checkbox" name="store" id="store" class="form-check-input" {{$customer->store === 1 ? 'checked' : '' }}>انبار
+                                <input type="checkbox" name="store" id="store" class="form-check-input" {{$customer->getRawOriginal('store') === 1 ? 'checked' : '' }}>انبار
                             </label>
                         </div>
                         @error('store')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <div class="form-check">
-                            <label for="is_star" class="form-check-label">
-                                <input type="checkbox" name="is_star" id="is_star" class="form-check-input" {{$customer->is_star === 1 ? 'checked' : '' }}>ستاره
-                            </label>
-                        </div>
-                        @error('is_star')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>

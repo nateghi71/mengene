@@ -27,9 +27,9 @@ class LandownerFactory extends Factory
             'scale' => $this->faker->numberBetween(50,300),
             'number_of_rooms' => $this->faker->numberBetween(0,10),
             'description' => $this->faker->randomElement(['طبرسی' , 'پیروزی', 'استقلال', 'مهراباد']),
-            'rahn_amount' => $type_sale === "rahn" ? rand(1,9) * 10 : null,
-            'rent_amount' => $type_sale === "rahn" ? rand(1,9) : null,
-            'selling_price' => $type_sale === "buy" ? rand(1,9) * 100 : null,
+            'rahn_amount' => $type_sale === "rahn" ? rand(1,9) * 10 : 0,
+            'rent_amount' => $type_sale === "rahn" ? rand(1,9) : 0,
+            'selling_price' => $type_sale === "buy" ? rand(1,9) * 100 : 0,
             'elevator' => $this->faker->boolean,
             'parking' => $this->faker->boolean,
             'store' => $this->faker->boolean,
@@ -37,7 +37,7 @@ class LandownerFactory extends Factory
             'business_id' => 1,
             'user_id' => rand(1,2),
             'is_star' => 0,
-            'expire_date' => $this->faker->dateTimeBetween(new Carbon('last day of november 2023') , Carbon::now()->addDays(90))
+            'expire_date' => $this->faker->dateTimeBetween(Carbon::parse('last day of november 2023'), Carbon::now()->addDays(90))
         ];
     }
 }

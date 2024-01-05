@@ -22,7 +22,7 @@ class CreateBusinessesTable extends Migration
             $table->string('city');
             $table->string('area');
             $table->text('address');
-            $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -95,5 +95,20 @@
                 </ul>
             </div>
         </li>
+        <li class="nav-item menu-items">
+            <a class="nav-link" data-bs-toggle="collapse" href="#android" aria-expanded="false" aria-controls="android">
+              <span class="menu-icon">
+                <i class="mdi mdi-android"></i>
+              </span>
+                <span class="menu-title pe-2">دانلود اپلیکیشن</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="android">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="https://98diha.ir//wp-content/themes/ringtone/api/mengene.apk"> دانلود مستقیم اپلیکیشن </a></li>
+                    <li class="nav-item"> <a class="nav-link" href="#"> دانلود اپلیکیشن از بازار </a></li>
+                </ul>
+            </div>
+        </li>
     </ul>
 </nav>

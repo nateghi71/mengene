@@ -25,6 +25,44 @@
         textarea:focus, input:focus {
             color: white !important;
         }
+        /*--------------------------------------------------------------
+# Preloader
+--------------------------------------------------------------*/
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            overflow: hidden;
+            background: #000000;
+        }
+
+        #preloader:before {
+            content: "";
+            position: fixed;
+            top: calc(50% - 30px);
+            left: calc(50% - 30px);
+            border: 6px solid #37517e;
+            border-top-color: #fff;
+            border-bottom-color: #fff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: animate-preloader 1s linear infinite;
+        }
+
+        @keyframes animate-preloader {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
     </style>
 @yield('head')
 </head>
@@ -38,7 +76,8 @@
         <!-- row ends -->
     </div>
     <!-- page-body-wrapper ends -->
-</div>
+
+    <div id="preloader"></div>
 <!-- container-scroller -->
 <!-- plugins:js -->
 <script src="{{asset('Admin/assets/vendors/js/vendor.bundle.base.js')}}"></script>
@@ -51,6 +90,17 @@
 <script src="{{asset('Admin/assets/js/misc.js')}}"></script>
 <script src="{{asset('Admin/assets/js/settings.js')}}"></script>
 <script src="{{asset('Admin/assets/js/todolist.js')}}"></script>
+
+<script>
+    let preloader = $('#preloader');
+    if (preloader) {
+        console.log(preloader.get(0))
+        window.addEventListener('load', () => {
+            preloader.remove()
+        });
+    }
+</script>
+
 <!-- endinject -->
 @yield('scripts')
 </body>

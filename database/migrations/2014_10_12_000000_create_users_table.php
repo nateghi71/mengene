@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $table->string('number')->index()->unique();
             $table->string('password');
             $table->string('city');
-            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });

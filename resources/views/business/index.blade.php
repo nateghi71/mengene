@@ -262,7 +262,7 @@
                                                     ویرایش
                                                 </a>
                                             </p>
-                                            <p class="text-muted mb-0">{{$business->updated_at}} </p>
+                                            <p class="text-muted mb-0">{{verta($business->updated_at)}} </p>
                                         </div>
                                     </div>
                                 </div>

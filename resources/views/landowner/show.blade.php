@@ -45,6 +45,11 @@
                             </thead>
                             <tbody>
                             <tr>
+                                <td>وضعیت</td>
+                                <td>{{$landowner->status}}</td>
+                            </tr>
+
+                            <tr>
                                 <td>نوع</td>
                                 <td>{{$landowner->type_sale}}</td>
                             </tr>
@@ -61,19 +66,19 @@
                                 <td>{{$landowner->city}}</td>
                             </tr>
                             <tr>
-                                <td>نوع کار</td>
+                                <td>نوع مسکن</td>
                                 <td>{{$landowner->type_work}}</td>
                             </tr>
                             <tr>
                                 <td>نوع ساختمان</td>
                                 <td>{{$landowner->type_build}}</td>
                             </tr>
-                            @if($landowner->type_sale == 'buy')
+                            @if($landowner->getRawOriginal('type_sale') == 'buy')
                                 <tr>
                                     <td>قیمت</td>
                                     <td>{{$landowner->selling_price}}</td>
                                 </tr>
-                            @elseif($landowner->type_sale == 'rahn')
+                            @elseif($landowner->getRawOriginal('type_sale') == 'rahn')
                                 <tr>
                                     <td>رهن</td>
                                     <td>{{$landowner->rahn_amount}}</td>
@@ -101,19 +106,19 @@
                             </tr>
                             <tr>
                                 <td>اسانسور</td>
-                                <td>{{$landowner->elevator == 1 ? 'دارد' : 'ندارد'}}</td>
+                                <td>{{$landowner->elevator}}</td>
                             </tr>
                             <tr>
                                 <td>پارکینگ</td>
-                                <td>{{$landowner->parking == 1 ? 'دارد' : 'ندارد'}}</td>
+                                <td>{{$landowner->parking}}</td>
                             </tr>
                             <tr>
                                 <td>انبار</td>
-                                <td>{{$landowner->store == 1 ? 'دارد' : 'ندارد'}}</td>
+                                <td>{{$landowner->store}}</td>
                             </tr>
                             <tr>
                                 <td>ستاره</td>
-                                <td>{{$landowner->is_star == 1 ? 'دارد' : 'ندارد'}}</td>
+                                <td>{{$landowner->is_star}}</td>
                             </tr>
                             <tr>
                                 <td>توضیحات و آدرس</td>

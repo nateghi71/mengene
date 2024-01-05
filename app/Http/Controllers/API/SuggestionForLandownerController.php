@@ -15,12 +15,12 @@ class SuggestionForLandownerController extends BaseController
 {
     public function suggested_customer(Landowner $landowner)
     {
-        $business = $landowner->user->business()->first();
+        $business = $landowner->user->business();
         $landownerId = $landowner->id;
-        if ($landowner->type_sale == 'buy')
+        if ($landowner->getRawOriginal('type_sale') == 'buy')
         {
-            $minPrice = $landowner->selling_price * 0.8; // 80% of the customer's price
-            $maxPrice = $landowner->selling_price * 1.2; // 120% of the customer's price
+            $minPrice = $landowner->getRawOriginal('selling_price') * 0.8; // 80% of the customer's price
+            $maxPrice = $landowner->getRawOriginal('selling_price') * 1.2; // 120% of the customer's price
 
             $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)
                 ->whereDoesntHave('suggestedLandowner', function ($query) use ($landownerId) {
@@ -30,10 +30,10 @@ class SuggestionForLandownerController extends BaseController
         else
         {
             //20% diff
-            $minRahn = $landowner->rahn_amount * 0.8;
-            $maxRahn = $landowner->rahn_amount * 1.2;
-            $minRent = $landowner->rent_amount * 0.8;
-            $maxRent = $landowner->rent_amount * 1.2;
+            $minRahn = $landowner->getRawOriginal('rahn_amount') * 0.8;
+            $maxRahn = $landowner->getRawOriginal('rahn_amount') * 1.2;
+            $minRent = $landowner->getRawOriginal('rent_amount') * 0.8;
+            $maxRent = $landowner->getRawOriginal('rent_amount') * 1.2;
 
             $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)
                 ->whereDoesntHave('suggestedLandowner', function ($query) use ($landownerId) {

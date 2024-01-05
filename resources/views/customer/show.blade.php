@@ -44,11 +44,15 @@
                             </thead>
                             <tbody>
                             <tr>
+                                <td>وضعیت</td>
+                                <td>{{$customer->status}}</td>
+                            </tr>
+                            <tr>
                                 <td>نوع</td>
                                 <td>{{$customer->type_sale}}</td>
                             </tr>
                             <tr>
-                                <td>نام</td>
+                                <td>نام و نام خانوادگی</td>
                                 <td>{{$customer->name}}</td>
                             </tr>
                             <tr>
@@ -60,19 +64,19 @@
                                 <td>{{$customer->city}}</td>
                             </tr>
                             <tr>
-                                <td>نوع کار</td>
+                                <td>نوع مسکن</td>
                                 <td>{{$customer->type_work}}</td>
                             </tr>
                             <tr>
                                 <td>نوع ساختمان</td>
                                 <td>{{$customer->type_build}}</td>
                             </tr>
-                            @if($customer->type_sale == 'buy')
+                            @if($customer->getRawOriginal('type_sale') == 'buy')
                                 <tr>
                                     <td>قیمت</td>
                                     <td>{{$customer->selling_price}}</td>
                                 </tr>
-                            @elseif($customer->type_sale == 'rahn')
+                            @elseif($customer->getRawOriginal('type_sale') == 'rahn')
                                 <tr>
                                     <td>رهن</td>
                                     <td>{{$customer->rahn_amount}}</td>
@@ -100,19 +104,19 @@
                             </tr>
                             <tr>
                                 <td>اسانسور</td>
-                                <td>{{$customer->elevator == 1 ? 'دارد' : 'ندارد'}}</td>
+                                <td>{{$customer->elevator}}</td>
                             </tr>
                             <tr>
                                 <td>پارکینگ</td>
-                                <td>{{$customer->parking == 1 ? 'دارد' : 'ندارد'}}</td>
+                                <td>{{$customer->parking}}</td>
                             </tr>
                             <tr>
                                 <td>انبار</td>
-                                <td>{{$customer->store == 1 ? 'دارد' : 'ندارد'}}</td>
+                                <td>{{$customer->store}}</td>
                             </tr>
                             <tr>
                                 <td>ستاره</td>
-                                <td>{{$customer->is_star == 1 ? 'دارد' : 'ندارد'}}</td>
+                                <td>{{$customer->is_star}}</td>
                             </tr>
                             <tr>
                                 <td>توضیحات و آدرس</td>

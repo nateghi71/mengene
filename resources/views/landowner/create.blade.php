@@ -97,6 +97,23 @@
             separateNum(this , $('#show_rent_amount').get(0));
         });
 
+        $('#is_star_label').on('click' , function (){
+            let label = $(this)
+            let star = $('#is_star')
+            if(!label.is('.checked'))
+            {
+                label.addClass('checked')
+                label.html('<span class="mdi mdi-star fs-4 text-warning"></span>')
+                star.prop('checked' , true)
+            }
+            else
+            {
+                label.removeClass('checked')
+                label.html('<span class="mdi mdi-star-outline fs-4 text-warning"></span>')
+                star.prop('checked' , false)
+            }
+        });
+
     </script>
 
 @endsection
@@ -252,6 +269,15 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <div class="form-check">
+                            <label id="is_star_label" class="form-check-label"><span class="mdi mdi-star-outline fs-4 text-warning"></span></label>
+                            <input type="checkbox" name="is_star" id="is_star" class="d-none" {{ old('is_star') == 'on' ? 'checked' : '' }}>
+                        </div>
+                        @error('is_star')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="form-check">
                             <label for="elevator" class="form-check-label">
                                 <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>اسانسور
                             </label>
@@ -277,16 +303,6 @@
                             </label>
                         </div>
                         @error('store')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <div class="form-check">
-                            <label for="is_star" class="form-check-label">
-                                <input type="checkbox" name="is_star" id="is_star" class="form-check-input" {{ old('is_star') == 'on' ? 'checked' : '' }}>ستاره
-                            </label>
-                        </div>
-                        @error('is_star')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>

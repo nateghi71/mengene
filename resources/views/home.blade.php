@@ -17,11 +17,11 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="Home/assets/img/icon_m.png" rel="icon">
-    <link href="Home/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="{{asset('Home/assets/img/icon_m.png')}}" rel="icon">
+    <link href="{{asset('Home/assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
 
     <!-- Vendor CSS Files -->
-
+    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
     <link rel="stylesheet" href="{{ asset('Home/assets/vendor/aos/aos.css') }}">
     <link rel="stylesheet" href="{{ asset('Home/assets/vendor/boxicons/css/boxicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('Home/assets/vendor/glightbox/css/glightbox.min.css') }}">
@@ -53,7 +53,7 @@
 
                 <li><a class="nav-link scrollto" href="#pricing">تعرفه ها</a></li>
                 <li><a class="nav-link scrollto" href="#contact">ارتباط با ما</a></li>
-                <li><a class="nav-link scrollto" href="#footer">درباره ما</a></li>
+{{--                <li><a class="nav-link scrollto" href="#footer">درباره ما</a></li>--}}
                 <li>
                 </li>
                 <!-- <li><a class="nav-link scrollto" href="#team">Team</a></li> -->
@@ -77,7 +77,7 @@
                 <!-- <li><a class="nav-link scrollto" href="#contact">Contact</a></li> -->
                 <!-- <li><a class="getstarted scrollto" href="#about">ورود</a></li> -->
             </ul>
-            <i class="bi bi-list mobile-nav-toggle"></i>
+            <i class="mdi mdi-format-list-bulleted mobile-nav-toggle"></i>
         </nav>
         <!-- .navbar -->
     </div>
@@ -93,7 +93,7 @@
                 data-aos="fade-up"
                 data-aos-delay="200"
             >
-                <h1>مِنگِنه2 دستیاری حرفه ای برای خرید، فروش و اجاره ملک</h1>
+                <h1>مِنگِنه دستیاری حرفه ای برای خرید، فروش و اجاره ملک</h1>
                 <h2>ابزاری مفید و کاربردی برای <span class="fw-bold">املاکی های</span> سراسر کشور
                     <p>  - با داشتن نرم افزار قدرتمند و همیشه همراه !</p>
 
@@ -102,7 +102,7 @@
                     <a href="{{route('2fa.enter_number')}}" class="btn-get-started scrollto">ثبت نام</a>
                     <a href="https://98diha.ir//wp-content/themes/ringtone/api/mengene.apk"
                        class="glightbox btn-watch-video m-2">
-                        <i class="bi bi-download"></i>
+                        <i class="mdi mdi-android"></i>
                         <h5 class="m-1" >نرم افزار اندروید</h5></a>
                 </div>
             </div>
@@ -316,8 +316,8 @@
                     data-aos="zoom-in"
                     data-aos-delay="100"
                 >
-                    <div class="icon-box">
-                        <div class="icon"><i class="bx bx-file"></i></div>
+                    <div class="icon-box w-100">
+                        <div class="icon"><i class="mdi mdi-account-plus"></i></div>
                         <h4><a href="">ثبت اطلاعات متقاضی</a></h4>
                         <p>برای پیدا کردن خانه(رهن و خرید)</p>
                     </div>
@@ -328,8 +328,8 @@
                     data-aos="zoom-in"
                     data-aos-delay="200"
                 >
-                    <div class="icon-box">
-                        <div class="icon"><i class="bx bx-file"></i></div>
+                    <div class="icon-box w-100">
+                        <div class="icon"><i class="mdi mdi-home"></i></div>
                         <h4><a href="">ثبت اطلاعات ملک</a></h4>
                         <p>داشتن بانک اطلاعاتی از املاک</p>
                     </div>
@@ -340,8 +340,8 @@
                     data-aos="zoom-in"
                     data-aos-delay="300"
                 >
-                    <div class="icon-box">
-                        <div class="icon"><i class="bx bx-mail-send"></i></div>
+                    <div class="icon-box w-100">
+                        <div class="icon"><i class="mdi mdi-message"></i></div>
                         <h4><a href="">سامانه پیامکی</a></h4>
                         <p>با هر ثبت مشتری پیامکی برای تایید ارسال میشود</p>
                     </div>
@@ -352,8 +352,8 @@
                     data-aos="zoom-in"
                     data-aos-delay="400"
                 >
-                    <div class="icon-box">
-                        <div class="icon"><i class="bx bx-layer"></i></div>
+                    <div class="icon-box w-100">
+                        <div class="icon"><i class="mdi mdi-account-multiple"></i></div>
                         <h4><a href="">مدیریت مشاورین</a></h4>
                         <p>مشاهده اطلاعات ثبتی از طرف مشاورین و ...</p>
                     </div>
@@ -590,13 +590,13 @@
                         <h3>رایگان</h3>
                         <!-- <h4><sup>$</sup>0<span>per month</span></h4> -->
                         <ul>
-                            <li><i class="bx bx-check"></i> ثبت اطلاعات متقاضی</li>
-                            <li><i class="bx bx-check"></i>ثبت اطلاعات ملک</li>
+                            <li><i class="mdi mdi-check"></i> ثبت اطلاعات متقاضی</li>
+                            <li><i class="mdi mdi-check"></i>ثبت اطلاعات ملک</li>
                             <li class="na">
-                                <i class="bx bx-x"></i> <span>سامانه پیامکی</span>
+                                <i class="mdi mdi-check"></i> <span>سامانه پیامکی</span>
                             </li>
                             <li class="na">
-                                <i class="bx bx-x"></i> <span>مدیریت مشاورین</span>
+                                <i class="mdi mdi-check"></i> <span>مدیریت مشاورین</span>
                             </li>
                         </ul>
                         <a href="{{route('2fa.enter_number')}}" class="buy-btn">پلن فعلی</a>
@@ -612,10 +612,10 @@
                         <h3>سالانه 899 تومان</h3>
                         <!-- <h4><sup>$</sup>29<span>per month</span></h4> -->
                         <ul>
-                            <li><i class="bx bx-check"></i> ثبت اطلاعات متقاضی</li>
-                            <li><i class="bx bx-check"></i> ثبت اطلاعات ملک</li>
-                            <li><i class="bx bx-check"></i> سامانه پیامکی(نامحدود)</li>
-                            <li><i class="bx bx-check"></i>مدیریت مشاورین(نامحدود)</li>
+                            <li><i class="mdi mdi-check"></i> ثبت اطلاعات متقاضی</li>
+                            <li><i class="mdi mdi-check"></i> ثبت اطلاعات ملک</li>
+                            <li><i class="mdi mdi-check"></i> سامانه پیامکی(نامحدود)</li>
+                            <li><i class="mdi mdi-check"></i>مدیریت مشاورین(نامحدود)</li>
                         </ul>
                         <a href="{{route('2fa.enter_number')}}" class="buy-btn">شروع کنید</a>
                     </div>
@@ -630,14 +630,14 @@
                         <h3>سه ماهه 299 تومان</h3>
                         <!-- <h4><sup>$</sup>49<span>per month</span></h4> -->
                         <ul>
-                            <li><i class="bx bx-check"></i> ثبت اطلاعات متقاضی</li>
-                            <li><i class="bx bx-check"></i> ثبت اطلاعات ملک</li>
+                            <li><i class="mdi mdi-check"></i> ثبت اطلاعات متقاضی</li>
+                            <li><i class="mdi mdi-check"></i> ثبت اطلاعات ملک</li>
                             <li>
-                                <i class="bx bx-check"></i> سامانه پیامکی(تا سقف ماهانه 1000
+                                <i class="mdi mdi-check"></i> سامانه پیامکی(تا سقف ماهانه 1000
                                 sms)
                             </li>
                             <li>
-                                <i class="bx bx-check"></i>مدیریت مشاورین(تا 4 عدد مشاور)
+                                <i class="mdi mdi-check"></i>مدیریت مشاورین(تا 4 عدد مشاور)
                             </li>
                         </ul>
                         <a href="{{route('2fa.enter_number')}}" class="buy-btn">شروع کنید</a>
@@ -668,14 +668,14 @@
                   </li> -->
 
                     <li data-aos="fade-up" data-aos-delay="200">
-                        <i class="bx bx-help-circle icon-help"></i>
+                        <i class="mdi mdi-help-circle icon-help"></i>
                         <a
                             data-bs-toggle="collapse"
                             data-bs-target="#faq-list-2"
                             class="collapsed"
                         >برای استفاده از چه امکاناتی می توانم رایگان ثبت نام کنم؟
-                            <i class="bx bx-chevron-down icon-show"></i
-                            ><i class="bx bx-chevron-up icon-close"></i
+                            <i class="mdi mdi-chevron-down icon-show"></i
+                            ><i class="mdi mdi-chevron-up icon-close"></i
                             ></a>
                         <div
                             id="faq-list-2"
@@ -689,15 +689,15 @@
                     </li>
 
                     <li data-aos="fade-up" data-aos-delay="300">
-                        <i class="bx bx-help-circle icon-help"></i>
+                        <i class="mdi mdi-help-circle icon-help"></i>
                         <a
                             data-bs-toggle="collapse"
                             data-bs-target="#faq-list-3"
                             class="collapsed"
                         >
                             سرویس های پولی شما شامل چه خدماتی است؟
-                            <i class="bx bx-chevron-down icon-show"></i
-                            ><i class="bx bx-chevron-up icon-close"></i
+                            <i class="mdi mdi-chevron-down icon-show"></i
+                            ><i class="mdi mdi-chevron-up icon-close"></i
                             ></a>
                         <div
                             id="faq-list-3"
@@ -711,16 +711,15 @@
                     </li>
 
                     <li data-aos="fade-up" data-aos-delay="400">
-                        <i class="bx bx-help-circle icon-help"></i>
+                        <i class="mdi mdi-help-circle icon-help"></i>
                         <a
                             data-bs-toggle="collapse"
                             data-bs-target="#faq-list-4"
                             class="collapsed"
                         >
-                            چگونه می‌توانم مشاورین خود را مدیریت کنم؟<i
-                                class="bx bx-chevron-down icon-show"
-                            ></i
-                            ><i class="bx bx-chevron-up icon-close"></i
+                            چگونه می‌توانم مشاورین خود را مدیریت کنم؟
+                            <i class="mdi mdi-chevron-down icon-show"></i
+                            ><i class="mdi mdi-chevron-up icon-close"></i
                             ></a>
                         <div
                             id="faq-list-4"
@@ -734,15 +733,14 @@
                     </li>
 
                     <li data-aos="fade-up" data-aos-delay="500">
-                        <i class="bx bx-help-circle icon-help"></i>
+                        <i class="mdi mdi-help-circle icon-help"></i>
                         <a
                             data-bs-toggle="collapse"
                             data-bs-target="#faq-list-5"
                             class="collapsed"
-                        >چگونه می‌توانم به املاکی خودم متصل شوم؟<i
-                                class="bx bx-chevron-down icon-show"
-                            ></i
-                            ><i class="bx bx-chevron-up icon-close"></i
+                        >چگونه می‌توانم به املاکی خودم متصل شوم؟
+                            <i class="mdi mdi-chevron-down icon-show"></i
+                            ><i class="mdi mdi-chevron-up icon-close"></i
                             ></a>
                         <div
                             id="faq-list-5"
@@ -772,19 +770,19 @@
                 <div class="col-lg-5 d-flex align-items-stretch">
                     <div class="info">
                         <div class="address">
-                            <i class="bi bi-geo-alt"></i>
+                            <i class="mdi mdi-home"></i>
                             <h4>آدرس:</h4>
                             <p>پیروزی 10 ،پلاک 167</p>
                         </div>
 
                         <div class="email">
-                            <i class="bi bi-envelope"></i>
+                            <i class="mdi mdi-email"></i>
                             <h4>ایمیل:</h4>
                             <p>vearad.ir@gmail.com</p>
                         </div>
 
                         <div class="phone">
-                            <i class="bi bi-phone"></i>
+                            <i class="mdi mdi-cellphone-android"></i>
                             <h4>تلفن:</h4>
                             <p>09358668218</p>
                         </div>
@@ -892,13 +890,13 @@
                     <h4> لینک های مفید</h4>
                     <ul>
                         <li>
-                            <i class="bx bx-chevron-right"></i> <a href="{{route('welcome')}}">خانه</a>
+                            <i class="mdi mdi-chevron-right"></i> <a href="{{route('welcome')}}">خانه</a>
                         </li>
                         <li>
-                            <i class="bx bx-chevron-right"></i> <a href="#"> درباره ما</a>
+                            <i class="mdi mdi-chevron-right"></i> <a href="#"> درباره ما</a>
                         </li>
                         <li>
-                            <i class="bx bx-chevron-right"></i> <a href="{{route('packages.index')}}">خدمات</a>
+                            <i class="mdi mdi-chevron-right"></i> <a href="#">خدمات</a>
                         </li>
                         <!-- <li>
                           <i class="bx bx-chevron-right"></i>
@@ -915,18 +913,18 @@
                     <h4>سرویس  </h4>
                     <ul>
                         <li>
-                            <i class="bx bx-chevron-right"></i> <a href="{{route('dashboard')}}"> ثبت اطلاعات متقاضی</a>
+                            <i class="mdi mdi-chevron-right"></i> <a href="{{route('dashboard')}}"> ثبت اطلاعات متقاضی</a>
                         </li>
                         <li>
-                            <i class="bx bx-chevron-right"></i>
+                            <i class="mdi mdi-chevron-right"></i>
                             <a href="{{route('dashboard')}}">ثبت اطلاعات ملک </a>
                         </li>
                         <li>
-                            <i class="bx bx-chevron-right"></i>
+                            <i class="mdi mdi-chevron-right"></i>
                             <a href="{{route('dashboard')}}"> سامانه پیامکی</a>
                         </li>
                         <li>
-                            <i class="bx bx-chevron-right"></i> <a href="{{route('dashboard')}}">مدیریت مشاورین</a>
+                            <i class="mdi mdi-chevron-right"></i> <a href="{{route('dashboard')}}">مدیریت مشاورین</a>
                         </li>
 
                     </ul>
@@ -939,13 +937,13 @@
                       derita valies
                     </p> -->
                     <div class="social-links mt-3">
-                        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-                        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+                        <a href="#" class="twitter"><i class="mdi mdi-twitter"></i></a>
+                        <a href="#" class="facebook"><i class="mdi mdi-facebook"></i></a>
                         <a href="#" class="instagram"
-                        ><i class="bx bxl-instagram"></i
+                        ><i class="mdi mdi-instagram"></i
                             ></a>
-                        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+                        <a href="#" class="google-plus"><i class="mdi mdi-google-plus"></i></a>
+                        <a href="#" class="linkedin"><i class="mdi mdi-linkedin"></i></a>
                     </div>
                 </div>
             </div>
@@ -972,7 +970,7 @@
 <a
     href="#"
     class="back-to-top d-flex align-items-center justify-content-center"
-><i class="bi bi-arrow-up-short"></i
+><i class="mdi mdi-arrow-up-bold"></i
     ></a>
 
 <!-- Vendor JS Files -->

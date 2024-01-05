@@ -16,6 +16,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class CustomerController extends BaseController
 {
@@ -44,8 +45,8 @@ class CustomerController extends BaseController
         $buyCustomers = $indexedCustomers->get('buy');
 
         foreach ($customers as $customer) {
-            if ($customer->expire_date > Carbon::now()) {
-                $daysLeft = Carbon::now()->diffInDays($customer->expire_date) + 1;
+            if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($customer->getRawOriginal('expire_date')) + 1;
                 $customer->daysLeft = $daysLeft;
             }
         }
@@ -100,22 +101,22 @@ class CustomerController extends BaseController
 
         $request->validate([
             'name' => 'required',
-            'number' => 'required',
+            'number' => 'required|numeric',
             'city' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required',
-            'number_of_rooms' => 'required',
+            'scale' => 'required|numeric',
+            'number_of_rooms' => 'required|numeric',
             'description' => 'required',
-            'rahn_amount' => 'nullable',
-            'rent_amount' => 'nullable',
-            'selling_price' => 'nullable',
-            'elevator' => 'required',
-            'parking' => 'required',
-            'store' => 'required',
-            'floor_number' => 'required',
-            'is_star' => 'required',
+            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
+            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
+            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
+            'elevator' => 'nullable',
+            'parking' => 'nullable',
+            'store' => 'nullable',
+            'floor_number' => 'required|numeric',
+            'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 
@@ -131,9 +132,9 @@ class CustomerController extends BaseController
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
             'elevator' => $request->elevator,
             'parking' => $request->parking,
             'store' => $request->store,
@@ -161,22 +162,22 @@ class CustomerController extends BaseController
 
         $request->validate([
             'name' => 'required',
-            'number' => 'required',
+            'number' => 'required|numeric',
             'city' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required',
-            'number_of_rooms' => 'required',
+            'scale' => 'required|numeric',
+            'number_of_rooms' => 'required|numeric',
             'description' => 'required',
-            'rahn_amount' => 'nullable',
-            'rent_amount' => 'nullable',
-            'selling_price' => 'nullable',
-            'elevator' => 'required',
-            'parking' => 'required',
-            'store' => 'required',
-            'floor_number' => 'required',
-            'is_star' => 'required',
+            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
+            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
+            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
+            'elevator' => 'nullable',
+            'parking' => 'nullable',
+            'store' => 'nullable',
+            'floor_number' => 'required|numeric',
+            'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 
@@ -190,9 +191,9 @@ class CustomerController extends BaseController
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
+            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
+            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
+            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
             'elevator' => $request->elevator,
             'parking' => $request->parking,
             'store' => $request->store,
@@ -202,7 +203,6 @@ class CustomerController extends BaseController
 //            'user_id' => $user->id,
             'is_star' => $request->is_star,
             'expire_date' => $request->expire_date
-
         ]);
 
         return $this->sendResponse(new CustomerResource($customer), 'Customer updated successfully.');
@@ -236,8 +236,13 @@ class CustomerController extends BaseController
             return response()->json(['message' => 'you dont have a business']);
         }
 
-        $customer->is_star = !$customer->is_star;
-        $customer->save();
+        if ($customer->getRawOriginal('is_star') == 0) {
+            $customer->is_star = 1;
+            $customer->save();
+        } else {
+            $customer->is_star = 0;
+            $customer->save();
+        }
 
         return $this->sendResponse(new CustomerResource($customer), 'Customer star status updated successfully.');
     }

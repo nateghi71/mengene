@@ -40,8 +40,8 @@ class CustomerController extends Controller
                 )->fragment('buy')->withQueryString();
 
             foreach ($buyCustomers as $customer) {
-                if ($customer->expire_date > Carbon::now()) {
-                    $daysLeft = Carbon::now()->diffInDays($customer->expire_date) + 1;
+                if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
+                    $daysLeft = Carbon::now()->diffInDays($customer->getRawOriginal('expire_date')) + 1;
                     $customer->daysLeft = $daysLeft;
                 }
             }
@@ -52,8 +52,8 @@ class CustomerController extends Controller
                 )->fragment('rahn')->withQueryString();
 
             foreach ($rahnCustomers as $customer) {
-                if ($customer->expire_date > Carbon::now()) {
-                    $daysLeft = Carbon::now()->diffInDays($customer->expire_date) + 1;
+                if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
+                    $daysLeft = Carbon::now()->diffInDays($customer->getRawOriginal('expire_date')) + 1;
                     $customer->daysLeft = $daysLeft;
                 }
             }
@@ -78,10 +78,6 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        $request['selling_price'] = str_replace( ',', '', $request->selling_price );
-        $request['rahn_amount'] = str_replace( ',', '', $request->rahn_amount );
-        $request['rent_amount'] = str_replace( ',', '', $request->rent_amount );
-
         $this->authorize('create' , Customer::class);
         $request->validate([
             'name' => 'required',
@@ -90,12 +86,12 @@ class CustomerController extends Controller
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required|numeric',
+            'scale' => 'required',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
-            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
+            'rahn_amount' => 'exclude_if:type_sale,buy',
+            'rent_amount' => 'exclude_if:type_sale,buy',
+            'selling_price' => 'exclude_if:type_sale,rahn',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -115,9 +111,9 @@ class CustomerController extends Controller
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
+            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : 0,
+            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : 0,
+            'selling_price' => $request->filled('selling_price') ? $request->selling_price : 0,
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
@@ -126,24 +122,19 @@ class CustomerController extends Controller
             'business_id' => $user->business()->id,
             'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
-            'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')
+            'expire_date' => $request->expire_date
         ]);
         return redirect()->route('customer.index',['status' => 'active']);
     }
 
     public function edit(Customer $customer)
     {
-        $customer->expire_date = verta($customer->expire_date)->format('Y-m-d');
         $this->authorize('update', $customer);
         return view('customer.edit', compact('customer'));
     }
 
     public function update(Request $request, Customer $customer)
     {
-        $request['selling_price'] = str_replace( ',', '', $request->selling_price );
-        $request['rahn_amount'] = str_replace( ',', '', $request->rahn_amount );
-        $request['rent_amount'] = str_replace( ',', '', $request->rent_amount );
-
         $this->authorize('update', $customer);
 
         $request->validate([
@@ -153,20 +144,19 @@ class CustomerController extends Controller
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required|numeric',
+            'scale' => 'required',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
-            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
-            'elevator' => 'nullable',
-            'parking' => 'nullable',
-            'store' => 'nullable',
+            'rahn_amount' => 'exclude_if:type_sale,buy',
+            'rent_amount' => 'exclude_if:type_sale,buy',
+            'selling_price' => 'exclude_if:type_sale,rahn',
+            'elevator' => 'sometimes|nullable',
+            'parking' => 'sometimes|nullable',
+            'store' => 'sometimes|nullable',
             'floor_number' => 'required|numeric',
-            'is_star' => 'nullable',
+            'is_star' => 'sometimes|nullable',
             'expire_date' => 'required'
         ]);
-
 //        $user = auth()->user();
         $customer->update([
             'name' => $request->name,
@@ -178,9 +168,9 @@ class CustomerController extends Controller
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
+            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : 0,
+            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : 0,
+            'selling_price' => $request->filled('selling_price') ? $request->selling_price : 0,
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
@@ -189,7 +179,7 @@ class CustomerController extends Controller
 //            'business_id' => $user->business()->id,
 //            'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
-            'expire_date' => Verta::parse($request->expire_date)->datetime()->format('Y-m-d')
+            'expire_date' => $request->expire_date
         ]);
         return redirect()->route('customer.index',['status' => 'active']);
     }
@@ -207,7 +197,7 @@ class CustomerController extends Controller
     {
         $this->authorize('update', $customer);
 
-        if ($customer->is_star == 0) {
+        if ($customer->getRawOriginal('is_star') == 0) {
             $customer->is_star = 1;
             $customer->save();
         } else {
