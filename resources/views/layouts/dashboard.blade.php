@@ -127,7 +127,6 @@
         <script>
             let preloader = $('#preloader');
             if (preloader) {
-                console.log(preloader.get(0))
                 window.addEventListener('load', () => {
                     preloader.remove()
                 });

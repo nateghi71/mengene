@@ -1,4 +1,10 @@
-c
+@extends('layouts.auth')
+
+@section('title' , 'ورود')
+
+@section('scripts')
+@endsection
+
 @section('content')
     <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
         <div class="card col-lg-4 mx-auto">

@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
-                          <a href="{{route('landowner.index',['status' => 'active'])}}" class="btn btn-outline-light btn-rounded get-started-btn">نمایش مالکان</a>
+                          <a href="{{route('landowner.index')}}" class="btn btn-outline-light btn-rounded get-started-btn">نمایش مالکان</a>
                         </span>
                         </div>
                     </div>

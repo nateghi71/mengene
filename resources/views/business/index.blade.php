@@ -105,64 +105,90 @@
     </div>
 
     <div class="row">
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
             <div class="card">
                 <a href="{{route('landowner.create')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <span class="mdi mdi-account-plus icon-item text-success"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-success">
-                                <h3 class="mb-0">ایجاد مالک</h3>
+                            <div class="d-flex align-items-center align-self-start text-success">
+                                <span class="mdi mdi-account-plus icon-item text-success"></span>
+                                <h3 class="pe-2 mb-0 fs-6">ایجاد مالک</h3>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
             <div class="card">
-                <a href="{{route('landowner.index',['status' => 'active'])}}" class="text-decoration-none text-white">
+                <a href="{{route('landowner.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-info"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
-                                <h3 class="mb-0">نمایش مالکان</h3>
+                            <div class="d-flex align-items-center align-self-start text-info">
+                                <span class="mdi mdi-account-search icon-item text-info"></span>
+                                <h3 class="pe-2 mb-0 fs-6">مالکان</h3>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
             <div class="card">
                 <a href="{{route('customer.create')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <span class="mdi mdi-account-plus icon-item text-success"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-success">
-                                <h3 class="mb-0">ایجاد متقاضی</h3>
+                            <div class="d-flex align-items-center align-self-start text-success">
+                                <span class="mdi mdi-account-plus icon-item text-success"></span>
+                                <h3 class="pe-2 mb-0 fs-6">ایجاد متقاضی</h3>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
             <div class="card">
-                <a href="{{route('customer.index',['status' => 'active'])}}" class="text-decoration-none text-white">
+                <a href="{{route('customer.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-info"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
-                                <h3 class="mb-0">نمایش متقاضیان</h3>
+                            <div class="d-flex align-items-center align-self-start text-info">
+                                <span class="mdi mdi-account-search icon-item text-info"></span>
+                                <h3 class="pe-2 mb-0 fs-6">متقاضیان</h3>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
-
-
+        <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
+            <div class="card">
+                <a href="#" class="text-decoration-none text-white">
+                    <div class="card-body">
+                        <div class="icon">
+                            <div class="d-flex align-items-center align-self-start text-success">
+                                <span class="mdi mdi-download icon-item"></span>
+                                <h3 class="pe-2 mb-0 fs-6">نرم افزار</h3>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
+            <div class="card bg-secondary">
+                <a href="#" class="text-decoration-none text-dark">
+                    <div class="card-body">
+                        <div class="icon">
+                            <div class="d-flex align-items-center align-self-start text-white">
+                                <span class="mdi mdi-lock icon-item text-dark"></span>
+                                <h3 class="pe-2 mb-0 text-dark fs-6">ایجاد مشاور</h3>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-8 grid-margin stretch-card">

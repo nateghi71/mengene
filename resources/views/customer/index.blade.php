@@ -29,37 +29,51 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div class="card">
-                <a href="{{route('customer.index',['status' => 'active'])}}" class="text-decoration-none text-white">
+                <a href="{{route('customer.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
                             <span class="mdi mdi-account-search icon-item text-info"></span>
                             <div class="pe-3 d-flex align-items-center align-self-start text-info">
-                                <h3 class="mb-0">متقاضیان فعال</h3>
+                                <h3 class="mb-0">همه متقاضیان</h3>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div class="card">
-                <a href="{{route('customer.index',['status' => 'unknown'])}}" class="text-decoration-none text-white">
+                <a href="{{route('customer.index',['type' => 'buy'])}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
                             <span class="mdi mdi-account-search icon-item text-info"></span>
                             <div class="pe-3 d-flex align-items-center align-self-start text-info">
-                                <h3 class="mb-0">متقاضیان نامعلوم</h3>
+                                <h3 class="mb-0">متقاضیان خرید</h3>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div class="card">
-                <a href="{{route('customer.index',['status' => 'deActive'])}}" class="text-decoration-none text-white">
+                <a href="{{route('customer.index',['type' => 'rahn'])}}" class="text-decoration-none text-white">
+                    <div class="card-body">
+                        <div class="icon">
+                            <span class="mdi mdi-account-search icon-item text-info"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
+                                <h3 class="mb-0">متقاضیان رهن</h3>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+            <div class="card">
+                <a href="{{route('customer.index',['type' => 'deActive'])}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
                             <span class="mdi mdi-account-search icon-item text-info"></span>
@@ -72,141 +86,96 @@
             </div>
         </div>
     </div>
-    <div class="row " id="buy">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">لیست درخواست های خرید</h4>
-                    <div class="table-responsive">
-                        <table class="table text-center">
-                            <thead>
-                            <tr>
-                                <th> # </th>
-                                <th> وضعیت </th>
-                                <th> ستاره </th>
-                                <th> نام </th>
-                                <th> شماره تماس </th>
-                                <th> نوع </th>
-                                <th> قیمت </th>
-                                <th> متراژ </th>
-                                <th>زمان باقیمانده </th>
-                                <th> پیشنهادات </th>
-                                <th> نمایش </th>
-                                <th> ویرایش </th>
-                                <th>حذف</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($buyCustomers as $key => $buyCustomer)
+    <div class="row">
+        @if($customers->isNotEmpty())
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            @if($customers->pluck('status')->contains('غیرفعال'))
+                                متقاضیان غیرفعال
+                            @elseif($customers->pluck('type_sale')->contains('خرید') && $customers->pluck('type_sale')->contains('رهن و اجاره'))
+                                همه متقاضیان
+                            @elseif($customers->pluck('type_sale')->contains('رهن و اجاره'))
+                                متقاضیان رهن و اجاره
+                            @else
+                                متقاضیان خرید
+                            @endif
+                        </h4>
+                        <div class="table-responsive">
+                            <table class="table text-center">
+                                <thead>
                                 <tr>
-                                    <td>{{$buyCustomers->firstItem() + $key}}</td>
-                                    <td>
-                                        @if($buyCustomer->getRawOriginal('status') == 'active')
-                                            <span class="mdi mdi-checkbox-blank-circle text-success"></span>
-                                        @elseif($buyCustomer->getRawOriginal('status') == 'unknown')
-                                            <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
+                                    <th> # </th>
+                                    <th> نام </th>
+                                    <th> شماره تماس </th>
+                                    <th> نوع </th>
+                                    <th>
+                                        @if($customers->pluck('status')->contains('غیرفعال') ||
+                                            $customers->pluck('type_sale')->contains('خرید') && $customers->pluck('type_sale')->contains('رهن و اجاره'))
+                                            قیمت / رهن
+                                        @elseif($customers->pluck('type_sale')->contains('رهن و اجاره'))
+                                            رهن
                                         @else
-                                            <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
+                                            قیمت
                                         @endif
-                                    </td>
-                                    <td>
-                                        <a class="text-decoration-none" href="{{route('customer.star',$buyCustomer->id)}}">{!!$buyCustomer->getRawOriginal('is_star') ?
-                                            '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
-                                    </td>
-                                    <td>{{$buyCustomer->name}}</td>
-                                    <td>{{$buyCustomer->number}}</td>
-                                    <td>{{$buyCustomer->type_sale}}</td>
-                                    <td>{{$buyCustomer->selling_price}}</td>
-                                    <td>{{$buyCustomer->scale}}</td>
-                                    <td>{{$buyCustomer->daysLeft ? $buyCustomer->daysLeft . ' روز' : 'منقضی'}} </td>
-                                    <td><a class="btn btn-outline-success text-decoration-none" href="{{route('customer.suggestions',$buyCustomer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
-                                    <td><a class="btn btn-outline-info  text-decoration-none" href="{{route('customer.show',$buyCustomer->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                    <td><a class="btn btn-outline-warning text-decoration-none" href="{{route('customer.edit',$buyCustomer->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
-                                    <td>
-                                        <form action="{{route('customer.destroy',$buyCustomer->id)}}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-outline-danger" type="submit"><i class="mdi mdi-delete"></i></button>
-                                        </form>
-                                    </td>
+
+                                    </th>
+                                    <th> متراژ </th>
+                                    <th>زمان باقیمانده </th>
+                                    <th> پیشنهادات </th>
+                                    <th> نمایش </th>
+                                    <th> ویرایش </th>
+                                    <th>حذف</th>
                                 </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @foreach($customers as $key => $customer)
+                                    <tr>
+                                        <td>
+                                            <a class="text-decoration-none" href="{{route('customer.star',$customer->id)}}">{!!$customer->getRawOriginal('is_star') ?
+                                                '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
+                                        </td>
+                                        <td>
+                                            {{$customer->name}}
+                                            @if($customer->getRawOriginal('status') == 'active')
+                                                <span class="mdi mdi-checkbox-blank-circle text-success"></span>
+                                            @elseif($customer->getRawOriginal('status') == 'unknown')
+                                                <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
+                                            @else
+                                                <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
+                                            @endif
+                                        </td>
+                                        <td>{{$customer->number}}</td>
+                                        <td>{{$customer->type_sale}}</td>
+                                        <td>{{$customer->getRawOriginal('selling_price') !== 0 ? $customer->selling_price : $customer->rahn_amount}}</td>
+                                        <td>{{$customer->scale}}</td>
+                                        <td>{{$customer->daysLeft ? $customer->daysLeft . ' روز' : 'منقضی'}} </td>
+                                        <td><a class="btn text-decoration-none" href="{{route('customer.suggestions',$customer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
+                                        <td><a class="btn text-decoration-none" href="{{route('customer.show',$customer->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td><a class="btn text-decoration-none" href="{{route('customer.edit',$customer->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
+                                        <td>
+                                            <form action="{{route('customer.destroy',$customer->id)}}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-outline-danger" type="submit"><i class="mdi mdi-delete"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    {{$buyCustomers->links()}}
-
-    <div class="row" id="rahn">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">لیست درخواست های رهن</h4>
-                    <div class="table-responsive">
-                        <table class="table text-center">
-                            <thead>
-                            <tr>
-                                <th> # </th>
-                                <th> وضعیت </th>
-                                <th> ستاره </th>
-                                <th> نام </th>
-                                <th> شماره تماس </th>
-                                <th> نوع </th>
-                                <th> رهن </th>
-                                <th> متراژ </th>
-                                <th>زمان باقیمانده </th>
-                                <th> پیشنهادات </th>
-                                <th> نمایش </th>
-                                <th> ویرایش </th>
-                                <th>حذف</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($rahnCustomers as $key => $rahnCustomer)
-                                <tr>
-                                    <td>{{$rahnCustomers->firstItem() + $key}}</td>
-                                    <td>
-                                        @if($buyCustomer->getRawOriginal('status') == 'active')
-                                            <span class="mdi mdi-checkbox-blank-circle text-success"></span>
-                                        @elseif($buyCustomer->getRawOriginal('status') == 'unknown')
-                                            <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
-                                        @else
-                                            <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a class="text-decoration-none" href="{{route('customer.star',$rahnCustomer->id)}}">{!!$rahnCustomer->getRawOriginal('is_star') ?
-                                            '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
-                                    </td>
-                                    <td>{{$rahnCustomer->name}}</td>
-                                    <td>{{$rahnCustomer->number}}</td>
-                                    <td>{{$rahnCustomer->type_sale}}</td>
-                                    <td>{{$rahnCustomer->rahn_amount}}</td>
-                                    <td>{{$rahnCustomer->scale}}</td>
-                                    <td>{{$rahnCustomer->daysLeft  ? $rahnCustomer->daysLeft . ' روز'  : 'منقضی'}} </td>
-                                    <td><a class="btn btn-outline-success text-decoration-none" href="{{route('customer.suggestions',$rahnCustomer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
-                                    <td><a class="btn btn-outline-info  text-decoration-none" href="{{route('customer.show',$rahnCustomer->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                    <td><a class="btn btn-outline-warning text-decoration-none" href="{{route('customer.edit',$rahnCustomer->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
-                                    <td>
-                                        <form action="{{route('customer.destroy',$rahnCustomer->id)}}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-outline-danger" type="submit"><i class="mdi mdi-delete"></i></button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        @else
+            <div class="d-flex justify-content-center">
+                <p>متقاضی وجود ندارد.</p>
             </div>
-        </div>
+        @endif
+
     </div>
 
-    {{$rahnCustomers->links()}}
+    {{$customers->links()}}
 @endsection

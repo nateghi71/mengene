@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Hekmatinasser\Verta\Facades\Verta;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,6 +22,29 @@ class Landowner extends Model
         'name','number','city','status','type_sale','type_work','type_build','scale','number_of_rooms',
         'description','rahn_amount','rent_amount','selling_price','elevator','parking','store','floor',
         'floor_number','business_id','user_id','is_star','expire_date'];
+
+    public function scopeLandownerType(Builder $query)
+    {
+        if(request()->has('type'))
+        {
+            switch (request()->type)
+            {
+                case 'buy':
+                    $query->where('type_sale' , 'buy')->whereNot('status' , 'deActive');
+                    break;
+                case 'rahn':
+                    $query->where('type_sale' , 'rahn')->whereNot('status' , 'deActive');
+                    break;
+                case 'deActive':
+                    $query->where('status' , 'deActive');
+                    break;
+            }
+            return $query;
+        }
+
+        return $query->whereNot('status' , 'deActive');
+    }
+
 
     protected function expireDate():Attribute
     {

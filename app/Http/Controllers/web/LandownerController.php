@@ -21,42 +21,23 @@ use Illuminate\Validation\Rule;
 
 class LandownerController extends Controller
 {
-    public function index($status)
+    public function index()
     {
-        if ($status == 'active' || $status == 'unknown' || $status == 'deActive')
-        {
-            $this->authorize('viewAny' , Landowner::class);
-            $user = auth()->user();
+        $this->authorize('viewAny' , Landowner::class);
+        $user = auth()->user();
 
-            $business = $user->business();
+        $business = $user->business();
 
-            $buyLandowners = $business->landowners()->where('status', $status)->where('type_sale' , 'buy')
-                ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->paginate(
-                    $perPage = 5, $columns = ['*'], $pageName = 'buy'
-                )->fragment('buy')->withQueryString();
+        $landowners = $business->landowners()->landownerType()
+            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
 
-            foreach ($buyLandowners as $landowner) {
-                if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
-                    $daysLeft = Carbon::now()->diffInDays($landowner->getRawOriginal('expire_date')) + 1;
-                    $landowner->daysLeft = $daysLeft;
-                }
+        foreach ($landowners as $landowner) {
+            if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($landowner->getRawOriginal('expire_date')) + 1;
+                $landowner->daysLeft = $daysLeft;
             }
-
-            $rahnLandowners = $business->landowners()->where('status', $status)->where('type_sale' , 'rahn')
-                ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->paginate(
-                    $perPage = 5, $columns = ['*'], $pageName = 'rahn'
-                )->fragment('rahn')->withQueryString();
-
-            foreach ($rahnLandowners as $landowner) {
-                if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
-                    $daysLeft = Carbon::now()->diffInDays($landowner->getRawOriginal('expire_date')) + 1;
-                    $landowner->daysLeft = $daysLeft;
-                }
-            }
-            return view('landowner.index', compact('buyLandowners' , 'rahnLandowners'));
         }
-
-        abort(404);
+        return view('landowner.index', compact('landowners' ));
     }
 
     public function show(Landowner $landowner)

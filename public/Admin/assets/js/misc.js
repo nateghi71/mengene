@@ -18,23 +18,91 @@
             }
         }
         else if(current === "customer"){
-            if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('customer') !== -1)
+            const urlParams = new URLSearchParams(window.location.search);
+            const myParam = urlParams.get('type');
+            if(myParam === null)
             {
-                element.parents('.nav-item').last().addClass('active');
-                if (element.parents('.sub-menu').length) {
-                    element.closest('.collapse').addClass('show');
-                    element.addClass('active');
+                if(element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?') === -1
+                    && element.attr('href').indexOf('customer') !== -1)
+                {
+                    element.parents('.nav-item').last().addClass('active');
+                    if (element.parents('.sub-menu').length) {
+                        element.closest('.collapse').addClass('show');
+                        element.addClass('active');
+                    }
                 }
+            }
+            else if(myParam === 'buy')
+            {
+                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type=buy') !== -1
+                    && element.attr('href').indexOf('customer') !== -1)
+                {
+                    console.log(element.attr('href'))
+
+                    element.parents('.nav-item').last().addClass('active');
+                    if (element.parents('.sub-menu').length) {
+                        element.closest('.collapse').addClass('show');
+                        element.addClass('active');
+                    }
+                }
+            }
+            else if(myParam === 'rahn')
+            {
+                if(element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type=rahn') !== -1
+                && element.attr('href').indexOf('customer') !== -1)
+                {
+                    element.parents('.nav-item').last().addClass('active');
+                    if (element.parents('.sub-menu').length) {
+                        element.closest('.collapse').addClass('show');
+                        element.addClass('active');
+                    }
+
+                }
+
             }
         }
         else if(current === "landowner"){
-            if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('landowner') !== -1)
+            const urlParams = new URLSearchParams(window.location.search);
+            const myParam = urlParams.get('type');
+            if(myParam === null)
             {
-                element.parents('.nav-item').last().addClass('active');
-                if (element.parents('.sub-menu').length) {
-                    element.closest('.collapse').addClass('show');
-                    element.addClass('active');
+                if(element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?') === -1
+                    && element.attr('href').indexOf('landowner') !== -1)
+                {
+                    element.parents('.nav-item').last().addClass('active');
+                    if (element.parents('.sub-menu').length) {
+                        element.closest('.collapse').addClass('show');
+                        element.addClass('active');
+                    }
                 }
+            }
+            else if(myParam === 'buy')
+            {
+                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type=buy') !== -1
+                    && element.attr('href').indexOf('landowner') !== -1)
+                {
+                    console.log(element.attr('href'))
+
+                    element.parents('.nav-item').last().addClass('active');
+                    if (element.parents('.sub-menu').length) {
+                        element.closest('.collapse').addClass('show');
+                        element.addClass('active');
+                    }
+                }
+            }
+            else if(myParam === 'rahn')
+            {
+                if(element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type=rahn') !== -1
+                && element.attr('href').indexOf('landowner') !== -1)
+                {
+                    element.parents('.nav-item').last().addClass('active');
+                    if (element.parents('.sub-menu').length) {
+                        element.closest('.collapse').addClass('show');
+                        element.addClass('active');
+                    }
+
+                }
+
             }
         }
         else if(current === "create"){

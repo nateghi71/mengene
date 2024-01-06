@@ -25,43 +25,24 @@ use Illuminate\Validation\Rule;
 
 class CustomerController extends Controller
 {
-    public function َََََindex($status)
+    public function َََََindex()
     {
-        if ($status == 'active' || $status == 'unknown' || $status == 'deActive')
-        {
-            $this->authorize('viewAny' , Customer::class);
-            $user = auth()->user();
+        $this->authorize('viewAny' , Customer::class);
+        $user = auth()->user();
 
-            $business = $user->business();
+        $business = $user->business();
 
-            $buyCustomers = $business->customers()->where('status', $status)->where('type_sale' , 'buy')
-                ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->paginate(
-                    $perPage = 5, $columns = ['*'], $pageName = 'buy'
-                )->fragment('buy')->withQueryString();
+        $customers = $business->customers()->CustomerType()->orderBy('is_star', 'desc')
+            ->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
 
-            foreach ($buyCustomers as $customer) {
-                if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
-                    $daysLeft = Carbon::now()->diffInDays($customer->getRawOriginal('expire_date')) + 1;
-                    $customer->daysLeft = $daysLeft;
-                }
+        foreach ($customers as $customer) {
+            if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($customer->getRawOriginal('expire_date')) + 1;
+                $customer->daysLeft = $daysLeft;
             }
-
-            $rahnCustomers = $business->customers()->where('status', $status)->where('type_sale' , 'rahn')
-                ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->paginate(
-                    $perPage = 5, $columns = ['*'], $pageName = 'rahn'
-                )->fragment('rahn')->withQueryString();
-
-            foreach ($rahnCustomers as $customer) {
-                if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
-                    $daysLeft = Carbon::now()->diffInDays($customer->getRawOriginal('expire_date')) + 1;
-                    $customer->daysLeft = $daysLeft;
-                }
-            }
-
-            return view('customer.index', compact('buyCustomers' , 'rahnCustomers'));
         }
 
-        abort(404);
+        return view('customer.index', compact('customers'));
     }
 
     public function show(Customer $customer)
