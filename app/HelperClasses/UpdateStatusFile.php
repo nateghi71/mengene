@@ -23,27 +23,26 @@ class UpdateStatusFile
                 ]);
 
                 $link = new LinkGenerator();
-                $link = $link->generateLinkForCustomer($customer , 'expired');
+                $link = $link->generateLinkForCustomer($customer  , 'expired' , 7);
                 $link = route('confirmation.confirmPage' ,
                     ['type' => $link->type , 'token' => $link->token]);
 
                 $smsApi = new SmsAPI();
-//                $smsApi->sendSmsLink($customer->number , $link);
+                $smsApi->sendSmsLink($customer->number ,$customer->name , $link);
             }
             elseif($customer->getRawOriginal('status') == 'unknown')
             {
-                $link = RandomLink::where('linkable_type' , Customer::class)->where('linkable_id', $customer->id)->
-                    where('expires_at' , '<' , Carbon::now())->first();
-                if ($link && $link->number_try <= 1)
+                $link = RandomLink::where('type', 'expired')->where('linkable_type' , Customer::class)->
+                where('linkable_id', $customer->id)->where('expires_at' , '<' , Carbon::now())->first();
+                if ($link && $link->number_try <= 3)
                 {
                     $updatedLink = new LinkGenerator();
-                    $updatedLink = $updatedLink->updateLink($link);
+                    $updatedLink = $updatedLink->updateLink($link , 7);
                     $updatedLink = route('confirmation.confirmPage' ,
                         ['type' => $updatedLink->type , 'token' => $updatedLink->token]);
 
                     $smsApi = new SmsAPI();
-//                $smsApi->sendSmsLink($customer->number , $updatedLink);
-
+                    $smsApi->sendSmsLink($customer->number ,$customer->name , $updatedLink);
                 }
                 else
                 {
@@ -51,7 +50,6 @@ class UpdateStatusFile
                         'status' => 'deActive'
                     ]);
                     $link->delete();
-                    $customer->delete();
                 }
             }
         }
@@ -70,27 +68,26 @@ class UpdateStatusFile
                 ]);
 
                 $link = new LinkGenerator();
-                $link = $link->generateLinkForLandowner($landowner , 'expired');
+                $link = $link->generateLinkForLandowner($landowner , 'expired', 7);
                 $link = route('confirmation.confirmPage' ,
                     ['type' => $link->type , 'token' => $link->token]);
 
                 $smsApi = new SmsAPI();
-//                $smsApi->sendSmsLink($landowner->number , $link);
+                $smsApi->sendSmsLink($landowner->number ,$landowner->name , $link);
             }
             elseif($landowner->getRawOriginal('status') == 'unknown')
             {
-                $link = RandomLink::where('linkable_type' , Landowner::class)->where('linkable_id', $landowner->id)->
-                where('expires_at' , '<' , Carbon::now())->first();
-                if ($link && $link->number_try <= 1)
+                $link = RandomLink::where('type', 'expired')->where('linkable_type' , Landowner::class)
+                    ->where('linkable_id', $landowner->id)->where('expires_at' , '<' , Carbon::now())->first();
+                if ($link && $link->number_try <= 3)
                 {
                     $updatedLink = new LinkGenerator();
-                    $updatedLink = $updatedLink->updateLink($link);
+                    $updatedLink = $updatedLink->updateLink($link, 7);
                     $updatedLink = route('confirmation.confirmPage' ,
                         ['type' => $updatedLink->type , 'token' => $updatedLink->token]);
 
                     $smsApi = new SmsAPI();
-//                $smsApi->sendSmsLink($customer->number , $updatedLink);
-
+                    $smsApi->sendSmsLink($landowner->number ,$landowner->name , $updatedLink);
                 }
                 else
                 {
@@ -98,7 +95,6 @@ class UpdateStatusFile
                         'status' => 'deActive'
                     ]);
                     $link->delete();
-                    $landowner->delete();
                 }
             }
 

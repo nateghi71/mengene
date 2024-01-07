@@ -17,6 +17,12 @@
                 element.parents('.nav-item').last().addClass('active');
             }
         }
+        else if(current === "consultants"){
+            if(element.attr('href').indexOf('consultants') !== -1)
+            {
+                element.parents('.nav-item').last().addClass('active');
+            }
+        }
         else if(current === "customer"){
             const urlParams = new URLSearchParams(window.location.search);
             const myParam = urlParams.get('type');

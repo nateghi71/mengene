@@ -10,12 +10,30 @@ class SmsAPI
     {
         $template = "authVerifyCode";
         $api = new GhasedakApi(env('API_KEY_SMS'));
-        $api->Verify($number, $template, $param);
+        $api->Verify($number,  $template, $param);
     }
-    public function sendSmsLink($number , $param): void
+    public function sendSmsLink($number , $name , $link): void
     {
-        $template = "authVerifyCode";
+        $template = "UserVerificationLink";
         $api = new GhasedakApi(env('API_KEY_SMS'));
-        $api->Verify($number, $template, $param);
+        $api->Verify($number, $template , $name , $link);
+    }
+    public function sendSmsConsultantRequest($number , $owner_name, $consultant_name): void
+    {
+        $template = "ConsultantRequest";
+        $api = new GhasedakApi(env('API_KEY_SMS'));
+        $api->Verify($number, $template, $owner_name, $consultant_name);
+    }
+    public function sendSmsRegisterFile($number , $file_name , $business_name , $business_number): void
+    {
+        $template = "ConfirmRegistration";
+        $api = new GhasedakApi(env('API_KEY_SMS'));
+        $api->Verify($number, $template, $file_name, $business_name , $business_number);
+    }
+    public function sendSmsShareFile($number , $file_name , $scale , $price , $business_name , $business_number): void
+    {
+        $template = "ShareFileInfoToCustomer";
+        $api = new GhasedakApi(env('API_KEY_SMS'));
+        $api->Verify($number, $template, $file_name, $scale , $price , $business_name , $business_number);
     }
 }

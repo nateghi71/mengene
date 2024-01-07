@@ -33,7 +33,7 @@ return [
     ],
     'boolean' => 'The :attribute field must be true or false.',
     'can' => 'The :attribute field contains an unauthorized value.',
-    'confirmed' => 'مقدار :attribute با پسورد مطابقت ندارد.',
+    'confirmed' => 'مقدار :attribute با تکرار پسورد مطابقت ندارد.',
     'current_password' => 'The password is incorrect.',
     'date' => 'فیلد :attribute باید یک فرمت تاریخ معتبر باشد',
     'date_equals' => 'The :attribute field must be a date equal to :date.',

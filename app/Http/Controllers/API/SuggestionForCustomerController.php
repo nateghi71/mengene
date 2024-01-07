@@ -15,7 +15,7 @@ class SuggestionForCustomerController extends BaseController
 {
     public function suggested_landowner(Customer $customer)
     {
-        $business = $customer->user->business();
+        $business = $customer->business()->first();
         $customerId = $customer->id;
 
         if ($customer->getRawOriginal('type_sale') == 'buy')
@@ -59,7 +59,7 @@ class SuggestionForCustomerController extends BaseController
         $customer = Customer::findOrFail($request->customer_id);
 
         $link = new LinkGenerator();
-        $link = $link->generateLinkForCustomer($customer , 'remove_from_suggestion' , $request->landowner_id);
+        $link = $link->generateLinkForCustomer($customer , 'remove_from_suggestion' , 30, $request->landowner_id);
         $link = route('confirmation.confirmPage' ,
             ['type' => $link->type , 'token' => $link->token]);
 

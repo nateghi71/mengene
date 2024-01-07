@@ -10,6 +10,7 @@
         <nav id="navbar" class="navbar px-4">
             <ul>
                 <li><a class="nav-link scrollto" href="{{route('welcome').'#home'}}">خانه</a></li>
+                <li><a class="nav-link scrollto" href="{{route('login')}}">ورود</a></li>
                 <a class="nav-link scrollto" href="{{route('dashboard')}}">مدیریت</a>
 
                 <li><a class="nav-link scrollto" href="{{route('welcome').'#pricing'}}">تعرفه ها</a></li>

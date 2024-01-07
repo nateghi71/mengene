@@ -15,7 +15,14 @@ class Premium extends Model
         'business_id',
         'level',
         'expire_date',
+        'counter_sms',
+        'counter_Consultants',
     ];
+    public function business()
+    {
+        return $this->belongsTo(Business::class);
+    }
+
 }
 
 

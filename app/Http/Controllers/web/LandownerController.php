@@ -102,6 +102,14 @@ class LandownerController extends Controller
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
+        if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
+        {
+            $user->incrementPremiumCountSms();
+            $smsApi = new SmsAPI();
+//                $smsApi->sendSmsRegisterFile($landowner->number , $landowner->name , $user->business()->name , $user->business()->number);
+        }
+
+
         return redirect()->route('landowner.index',['status' => 'active']);
     }
 

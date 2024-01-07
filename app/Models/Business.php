@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -48,7 +49,7 @@ class Business extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function premiumLevel()
+    public function premium()
     {
         return $this->hasOne(Premium::class, 'business_id');
     }

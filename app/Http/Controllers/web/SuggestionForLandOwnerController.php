@@ -14,7 +14,7 @@ class SuggestionForLandOwnerController extends Controller
 {
     public function suggested_customer(Landowner $landowner)
     {
-        $business = $landowner->user->business();
+        $business = $landowner->business()->first();
         $landownerId = $landowner->id;
         if ($landowner->getRawOriginal('type_sale') == 'buy')
         {
@@ -67,8 +67,31 @@ class SuggestionForLandOwnerController extends Controller
             ['type' => $link->type , 'token' => $link->token]);
 
         $smsApi = new SmsAPI();
-        $smsApi->sendSmsLink($landowner->number , $link);
+        $smsApi->sendSmsLink($landowner->number ,$landowner->name , $link);
 
         return redirect()->back();
     }
+
+    public function share_file_with_customer(Request $request)
+    {
+        $user = auth()->user();
+        if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
+        {
+            $user->incrementPremiumCountSms();
+            $landowner = Landowner::findOrFile($request->landowner_id);
+            $customer = Customer::findOrFile($request->customer_id);
+            if($customer->getRawOriginal('type_sale') == 'rahn')
+                $price = $customer->rahn_amount.'/'.$customer->rent_amount;
+            else
+                $price = $customer->selling_price;
+            $smsApi = new SmsAPI();
+            $smsApi->sendSmsShareFile($landowner->number ,$landowner->name , $customer->scale , $price , $landowner->business->name , $landowner->business->number);
+            return redirect()->back()->with('message' , 'پیام شما ارسال شد.');
+        }
+        else
+        {
+            return redirect()->back()->with('message' , 'شما قابلیت ارسال پیام ندارید.');
+        }
+    }
+
 }

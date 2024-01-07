@@ -44,8 +44,8 @@ Route::post('/confirmation/handleSuggestion', [RandomLinkController::class, 'han
 
 Route::prefix('/packages')->middleware('auth')->group(function () {
     Route::get('/', [PremiumController::class, 'index'])->name('packages.index');
-    Route::get('/show', [PremiumController::class, 'show'])->name('packages.show');
-    Route::get('/buy', [PremiumController::class, 'create'])->name('packages.buy');
+    Route::post('/store', [PremiumController::class, 'store'])->name('packages.store');
+    Route::post('/update', [PremiumController::class, 'update'])->name('packages.update');
 });
 
 Route::middleware('auth')->group(function () {
@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('business/{user}/accept', [BusinessController::class, 'toggleUserAcceptance'])->name('business.toggleUserAcceptance');
     Route::get('business/{user}/chooseOwner', [BusinessController::class, 'chooseOwner'])->name('business.chooseOwner');
     Route::get("business/{user}/remove", [BusinessController::class, 'removeMember'])->name('business.remove.member');
+    Route::get("business/consultants", [BusinessController::class, 'showConsultants'])->name('business.consultants');
 
     Route::post('consultant/join', [ConsultantController::class, 'join'])->name('consultant.join');
     Route::post('consultant/search', [ConsultantController::class, 'search'])->name('consultant.search');
@@ -65,12 +66,14 @@ Route::middleware('auth')->group(function () {
     Route::get('landowner/star/{landowner}', [LandownerController::class, 'star'])->name('landowner.star');
     Route::get('landowner/suggestion/{landowner}', [SuggestionForLandOwnerController::class, 'suggested_customer'])->name('landowner.suggestions');
     Route::post('landowner/suggestion/block', [SuggestionForLandOwnerController::class, 'send_block_message'])->name('landowner.send_block_message');
+    Route::post('landowner/suggestion/share', [SuggestionForLandOwnerController::class, 'share_file_with_customer'])->name('landowner.send_share_message');
 
     Route::resource('customer' , CustomerController::class)->except('index');
     Route::get('customer', [CustomerController::class, 'َََََindex'])->name('customer.index');
     Route::get('customer/star/{customer}', [CustomerController::class, 'star'])->name('customer.star');
     Route::get('customer/suggestion/{customer}', [SuggestionForCustomerController::class, 'suggested_landowner'])->name('customer.suggestions');
     Route::post('customer/suggestion/block', [SuggestionForCustomerController::class, 'send_block_message'])->name('customer.send_block_message');
+    Route::post('customer/suggestion/share', [SuggestionForCustomerController::class, 'share_file_with_customer'])->name('customer.send_share_message');
 });
 
 require __DIR__ . '/auth.php';

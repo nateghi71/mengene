@@ -33,6 +33,15 @@ class BusinessController extends Controller
         $user = auth()->user();
         $business = $user->ownedBusiness()->withCount('customers' , 'landowners')->first();
 
+        return view('business.index', compact('business'));
+    }
+    public function showConsultants()
+    {
+        $this->authorize('viewBusinessIndex' , Business::class);
+
+        $user = auth()->user();
+        $business = $user->ownedBusiness()->first();
+
         $acceptedMembers = $business->members()->wherePivot('is_accepted' , 1)->withCount('customers' , 'landowners')->paginate(
             $perPage = 5, $columns = ['*'], $pageName = 'accepted'
         )->fragment('accepted')->withQueryString();
@@ -41,7 +50,7 @@ class BusinessController extends Controller
             $perPage = 5, $columns = ['*'], $pageName = 'notAccepted'
         )->fragment('notAccepted')->withQueryString();
 
-        return view('business.index', compact('business', 'acceptedMembers' , 'notAcceptedMembers'));
+        return view('business.consultants', compact('acceptedMembers' , 'notAcceptedMembers'));
     }
 
     public function dashboard()
@@ -84,20 +93,30 @@ class BusinessController extends Controller
             $request->image->move(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')), $imageName);
         }
 
-        $business = Business::create([
-            'name' => $request->name,
-            'en_name' => $request->en_name,
-            'user_id' => $user->id,
-            'image' => $imageName,
-            'city' => $request->city,
-            'area' => $request->area,
-            'address' => $request->address
-        ]);
-//        $user->syncRoles('real_estate');
-//        $premiumInput['business_id'] = $business->id;
-//        $premiumInput['level'] = 'free';
-//        $premiumInput['expire_date'] = Carbon::now()->addYear();
-//        $premium = Premium::create($premiumInput);
+        try
+        {
+            DB::beginTransaction();
+            $business = Business::create([
+                'name' => $request->name,
+                'en_name' => $request->en_name,
+                'user_id' => $user->id,
+                'image' => $imageName,
+                'city' => $request->city,
+                'area' => $request->area,
+                'address' => $request->address
+            ]);
+
+            $premium = new PremiumController();
+            $premium->store($business);
+
+            DB::commit();
+        }
+        catch (\Exception $e)
+        {
+            dd($e->getMessage());
+            DB::rollBack();
+        }
+
         return redirect()->route('dashboard');
     }
 
@@ -158,11 +177,28 @@ class BusinessController extends Controller
         $business = $user->joinedBusinesses()->first();
         $this->authorize('toggleAcceptUser', $business);
 
+        $userAuth = auth()->user();
+
         $member = $user->businessUser()->first();
+        if ($member->is_accepted == 0) {
+            $userAuth = auth()->user();
+            if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
+                return redirect()->back()->with('message', 'شما نمی توانید مشاور اضافه کنید.');
+
+            $userAuth->incrementPremiumCountConsultants();
+
+            $member->is_accepted = 1;
+            $member->save();
+        } else {
+            $userAuth->decrementPremiumCountConsultants();
+            $member->is_accepted = 0;
+            $member->save();
+        }
+
         $member->is_accepted = !$member->is_accepted;
         $member->save();
 
-        return redirect()->route('dashboard')->with('success', 'User acceptance has been modified successfully.');
+        return redirect()->back()->with('message', 'تغییرات شما اعمال شد.');
     }
 
     public function chooseOwner(User $user)
@@ -172,6 +208,9 @@ class BusinessController extends Controller
         $this->authorize('chooseOwner', $business);
 
         $userAuth = auth()->user();
+        if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
+            return redirect()->back()->with('message', 'شما نمی توانید مشاور اضافه کنید.');
+
         $business->members()->attach($userAuth);
         $member = $userAuth->businessUser()->first();
         $member->is_accepted = 1;
@@ -180,7 +219,7 @@ class BusinessController extends Controller
         $business->user_id = $user->id;
         $business->update();
 
-        return redirect()->route('dashboard')->with('success', 'User acceptance has been modified successfully.');
+        return redirect()->route('dashboard')->with('message', 'User acceptance has been modified successfully.');
     }
 
     public function removeMember(User $user)
@@ -189,7 +228,7 @@ class BusinessController extends Controller
         $this->authorize('removeMember', $business);
 
         $business->members()->detach($user);
-        return redirect()->route('dashboard')->with('success', 'مشاور مورد نظر با موفقیت حذف شد');
+        return redirect()->route('business.consultants')->with('success', 'مشاور مورد نظر با موفقیت حذف شد');
     }
 
 }

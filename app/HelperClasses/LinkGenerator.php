@@ -10,10 +10,10 @@ use Illuminate\Support\Str;
 
 class LinkGenerator
 {
-    public function generateLinkForCustomer(Customer $customer , $type , $suggest_id = null)
+    public function generateLinkForCustomer(Customer $customer , $type, $expire , $suggest_id = null)
     {
         $randomString = Str::random(15);
-        $expirationTime = Carbon::now()->addDays(7);
+        $expirationTime = Carbon::now()->addDays($expire);
 
         $randomLink = $customer->links()->create([
             'guest_number' => $customer->number,
@@ -26,10 +26,10 @@ class LinkGenerator
 
         return $randomLink;
     }
-    public function updateLink(RandomLink $link)
+    public function updateLink(RandomLink $link, $expire)
     {
         $randomString = Str::random(15);
-        $expirationTime = Carbon::now()->addDays(7);
+        $expirationTime = Carbon::now()->addDays($expire);
         $link->increment('number_try');
 
         $link->update([
@@ -39,10 +39,10 @@ class LinkGenerator
 
         return $link;
     }
-    public function generateLinkForLandowner(Landowner $landowner , $type , $suggest_id = null)
+    public function generateLinkForLandowner(Landowner $landowner , $type, $expire , $suggest_id = null)
     {
         $randomString = Str::random(12);
-        $expirationTime = Carbon::now()->addDays(7);
+        $expirationTime = Carbon::now()->addDays($expire);
 
         $randomLink = $landowner->links()->create([
             'guest_number' => $landowner->number,

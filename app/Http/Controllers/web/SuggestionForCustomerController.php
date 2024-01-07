@@ -16,7 +16,7 @@ class SuggestionForCustomerController extends Controller
 
     public function suggested_landowner(Customer $customer)
     {
-        $business = $customer->user->business();
+        $business = $customer->business()->first();
         $customerId = $customer->id;
         if ($customer->getRawOriginal('type_sale') == 'buy')
         {
@@ -64,13 +64,36 @@ class SuggestionForCustomerController extends Controller
         $customer = Customer::findOrFail($request->customer_id);
 
         $link = new LinkGenerator();
-        $link = $link->generateLinkForCustomer($customer , 'remove_from_suggestion' , $request->landowner_id);
+        $link = $link->generateLinkForCustomer($customer , 'remove_from_suggestion' , 30, $request->landowner_id);
         $link = route('confirmation.confirmPage' ,
             ['type' => $link->type , 'token' => $link->token]);
 
         $smsApi = new SmsAPI();
-        $smsApi->sendSmsLink($customer->number , $link);
+        $smsApi->sendSmsLink($customer->number , $customer->name , $link);
 
         return redirect()->back();
+    }
+
+    public function share_file_with_customer(Request $request)
+    {
+        $user = auth()->user();
+        if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
+        {
+            $user->incrementPremiumCountSms();
+            $landowner = Landowner::findOrFile($request->landowner_id);
+            $customer = Customer::findOrFile($request->customer_id);
+            if($customer->getRawOriginal('type_sale') == 'rahn')
+                $price = $landowner->rahn_amount.'/'.$landowner->rent_amount;
+            else
+                $price = $landowner->selling_price;
+            $smsApi = new SmsAPI();
+            $smsApi->sendSmsShareFile($customer->number , $customer->name ,$landowner->scale , $price , $customer->business->name , $customer->business->number);
+            return redirect()->back()->with('message' , 'پیام شما ارسال شد.');
+        }
+        else
+        {
+            return redirect()->back()->with('message' , 'شما قابلیت ارسال پیام ندارید.');
+        }
+
     }
 }

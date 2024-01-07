@@ -17,6 +17,8 @@ class CreatePremiumTable extends Migration
             $table->id();
             $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
             $table->enum('level', ['free', 'midLevel', 'vip'])->default('free');
+            $table->unsignedBigInteger('counter_sms');
+            $table->unsignedBigInteger('counter_Consultant');
             $table->date('expire_date');
             $table->timestamps();
         });

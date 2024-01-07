@@ -65,6 +65,16 @@
                 <span class="menu-title pe-2">داشبورد</span>
             </a>
         </li>
+        @if(auth()->user()->ownedBusiness()->exists() && !auth()->user()->isFreeUser())
+            <li class="nav-item menu-items">
+                <a class="nav-link" href="{{route('business.consultants')}}">
+                  <span class="menu-icon">
+                    <i class="mdi mdi-speedometer"></i>
+                  </span>
+                    <span class="menu-title pe-2">مشاوران</span>
+                </a>
+            </li>
+        @endif
         <li class="nav-item menu-items">
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <span class="menu-icon">
@@ -114,5 +124,15 @@
                 </ul>
             </div>
         </li>
+        @if(auth()->user()->ownedBusiness()->exists())
+            <li class="mt-5 nav-item menu-items bg-warning">
+                <a class="nav-link text-success" href="{{route('packages.index')}}">
+                  <span class="menu-icon bg-success">
+                    <i class="mdi mdi-plus"></i>
+                  </span>
+                    <span class="menu-title pe-2">اپدیت حساب</span>
+                </a>
+            </li>
+        @endif
     </ul>
 </nav>

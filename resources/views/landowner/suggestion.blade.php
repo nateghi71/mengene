@@ -3,9 +3,20 @@
 @section('title' , 'پیشنهادات')
 
 @section('scripts')
+    <script>
+        $('.btn-close').on('click' , function (){
+            $('#message').remove()
+        })
+    </script>
 @endsection
 
 @section('content')
+    @if (session()->has('message'))
+        <div class="alert alert-danger d-flex justify-content-between" id="message">
+            {{session()->get('message')}}
+            <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+    @endif
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card">
@@ -36,7 +47,7 @@
                     <div class="card-body">
                         <h4 class="card-title">نمایش پیشنهادات برای : {{ $landowner->name }}</h4>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table text-center">
                                 <thead>
                                 <tr>
                                     <th>#</th>
@@ -52,6 +63,7 @@
                                     <th>متراژ</th>
                                     <th>مدت زمان باقیمانده</th>
                                     <th>نمایش</th>
+                                    <th>ارسال</th>
                                     <th>وضعیت</th>
                                 </tr>
                                 </thead>
@@ -72,10 +84,18 @@
                                         <td>{{$suggestion->daysLeft ?? 'منقضی'}}</td>
                                         <td><a class="btn btn-outline-info text-decoration-none" href="{{route('customer.show',$suggestion->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         <td>
+                                            <form action="{{route('landowner.send_share_message')}}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="landowner_id" value="{{$landowner->id}}">
+                                                <input type="hidden" name="customer_id" value="{{$suggestion->id}}">
+                                                <button class="btn btn-outline-success" type="submit">ارسال</button>
+                                            </form>
+                                        </td>
+                                        <td>
                                             <form action="{{route('landowner.send_block_message')}}" method="post">
                                                 @csrf
-                                                <input type="hidden" name="customer_id" value="{{$landowner->id}}">
-                                                <input type="hidden" name="landowner_id" value="{{$suggestion->id}}">
+                                                <input type="hidden" name="landowner_id" value="{{$landowner->id}}">
+                                                <input type="hidden" name="customer_id" value="{{$suggestion->id}}">
                                                 <button class="btn btn-outline-danger" type="submit">حذف</button>
                                             </form>
                                         </td>

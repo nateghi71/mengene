@@ -244,7 +244,7 @@
                     >
                         <div class="icon-box w-100">
                             <div class="icon"><i class="mdi mdi-account-plus"></i></div>
-                            <h4><a href="">ثبت اطلاعات متقاضی</a></h4>
+                            <h4>ثبت اطلاعات متقاضی</h4>
                             <p>برای پیدا کردن خانه(رهن و خرید)</p>
                         </div>
                     </div>
@@ -256,7 +256,7 @@
                     >
                         <div class="icon-box w-100">
                             <div class="icon"><i class="mdi mdi-home"></i></div>
-                            <h4><a href="">ثبت اطلاعات ملک</a></h4>
+                            <h4>ثبت اطلاعات ملک</h4>
                             <p>داشتن بانک اطلاعاتی از املاک</p>
                         </div>
                     </div>
@@ -268,7 +268,7 @@
                     >
                         <div class="icon-box w-100">
                             <div class="icon"><i class="mdi mdi-message"></i></div>
-                            <h4><a href="">سامانه پیامکی</a></h4>
+                            <h4>سامانه پیامکی</h4>
                             <p>با هر ثبت مشتری پیامکی برای تایید ارسال میشود</p>
                         </div>
                     </div>
@@ -280,7 +280,7 @@
                     >
                         <div class="icon-box w-100">
                             <div class="icon"><i class="mdi mdi-account-multiple"></i></div>
-                            <h4><a href="">مدیریت مشاورین</a></h4>
+                            <h4>مدیریت مشاورین</h4>
                             <p>مشاهده اطلاعات ثبتی از طرف مشاورین و ...</p>
                         </div>
                     </div>
@@ -525,7 +525,7 @@
                                     <i class="mdi mdi-check"></i> <span>مدیریت مشاورین</span>
                                 </li>
                             </ul>
-                            <a href="{{route('2fa.enter_number')}}" class="buy-btn">پلن فعلی</a>
+{{--                            <a href="{{route('2fa.enter_number')}}" class="buy-btn">پلن فعلی</a>--}}
                         </div>
                     </div>
 
@@ -543,7 +543,7 @@
                                 <li><i class="mdi mdi-check"></i> سامانه پیامکی(نامحدود)</li>
                                 <li><i class="mdi mdi-check"></i>مدیریت مشاورین(نامحدود)</li>
                             </ul>
-                            <a href="{{route('2fa.enter_number')}}" class="buy-btn">شروع کنید</a>
+{{--                            <a href="{{route('2fa.enter_number' , ['level' => 'vip'])}}" class="buy-btn">شروع کنید</a>--}}
                         </div>
                     </div>
 
@@ -566,7 +566,7 @@
                                     <i class="mdi mdi-check"></i>مدیریت مشاورین(تا 4 عدد مشاور)
                                 </li>
                             </ul>
-                            <a href="{{route('2fa.enter_number')}}" class="buy-btn">شروع کنید</a>
+{{--                            <a href="{{route('2fa.enter_number' , ['level' => 'midLevel'])}}" class="buy-btn">شروع کنید</a>--}}
                         </div>
                     </div>
                 </div>

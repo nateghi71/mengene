@@ -95,7 +95,7 @@
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
-                          <span class="btn btn-outline-light btn-rounded get-started-btn">داشبورد</span>
+                            <a href="{{route('packages.index')}}" class="btn btn-outline-light btn-rounded get-started-btn">اپدیت حساب</a>
                         </span>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
         </div>
         <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
             <div class="card">
-                <a href="#" class="text-decoration-none text-white">
+                <a href="https://98diha.ir//wp-content/themes/ringtone/api/mengene.apk" target="_blank" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
                             <div class="d-flex align-items-center align-self-start text-success">
@@ -175,20 +175,37 @@
                 </a>
             </div>
         </div>
+        @if(auth()->user()->isFreeUser())
         <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
             <div class="card bg-secondary">
-                <a href="#" class="text-decoration-none text-dark">
+                <a href="{{route('packages.index')}}" class="text-decoration-none text-dark">
                     <div class="card-body">
                         <div class="icon">
                             <div class="d-flex align-items-center align-self-start text-white">
                                 <span class="mdi mdi-lock icon-item text-dark"></span>
-                                <h3 class="pe-2 mb-0 text-dark fs-6">ایجاد مشاور</h3>
+                                <h3 class="pe-2 mb-0 text-dark fs-6">مشاوران</h3>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
+        @else
+            <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                    <a href="{{route('business.consultants')}}" class="text-decoration-none">
+                        <div class="card-body">
+                            <div class="icon">
+                                <div class="d-flex align-items-center align-self-start text-info">
+                                    <span class="mdi mdi-account-multiple icon-item"></span>
+                                    <h3 class="pe-2 mb-0 fs-6">مشاوران</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        @endif
     </div>
     <div class="row">
         <div class="col-md-8 grid-margin stretch-card">
@@ -348,91 +365,4 @@
             </div>
         </div>
     </div>
-    <div class="row " id="accepted">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">مشاورهای تایید شده</h4>
-                    <div class="table-responsive">
-                        <table class="table text-center">
-                            <thead>
-                            <tr>
-                                <th> # </th>
-                                <th> نام </th>
-                                <th> شماره تماس </th>
-                                <th> ایمیل </th>
-                                <th> شهر </th>
-                                <th> تعداد آگهی های ثبت کرده </th>
-                                <th> انتخاب مالک </th>
-                                <th> غیرفعال کردن </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($acceptedMembers as $key => $member)
-                                <tr>
-                                    <td>{{$acceptedMembers->firstItem() + $key}}</td>
-                                    <td>{{$member->name}}</td>
-                                    <td> {{$member->number}} </td>
-                                    <td> {{$member->email ?? '-'}}</td>
-                                    <td> {{$member->city}} </td>
-                                    <td> {{$member->customers_count + $member->landowners_count}} </td>
-                                    <td>
-                                        <a class="btn btn-outline-success text-decoration-none" href="{{ route('business.chooseOwner', ['user' => $member->id]) }}">انتخاب مالک</a>
-
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-outline-danger text-decoration-none" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}" >غیرفعال</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{$acceptedMembers->links()}}
-    <div class="row "  id="notAccepted">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">مشاورهای تایید نشده</h4>
-                    <div class="table-responsive">
-                        <table class="table text-center">
-                            <thead>
-                            <tr>
-                                <th> # </th>
-                                <th> نام </th>
-                                <th> شماره تماس </th>
-                                <th> ایمیل </th>
-                                <th> شهر </th>
-                                <th> قبول کردن </th>
-                                <th>حذف </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($notAcceptedMembers as $key => $member)
-                                <tr>
-                                    <td>{{$notAcceptedMembers->firstItem() + $key}}</td>
-                                    <td>{{$member->name}}</td>
-                                    <td> {{$member->number}} </td>
-                                    <td> {{$member->email ?? '-'}}</td>
-                                    <td> {{$member->city}} </td>
-                                    <td>
-                                        <a class="btn btn-outline-success text-decoration-none" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}">قبول</a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-outline-danger text-decoration-none" href="{{route('business.remove.member',['user'=>$member->id])}}" >حذف</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{$notAcceptedMembers->links()}}
 @endsection

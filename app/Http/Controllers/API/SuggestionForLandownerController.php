@@ -15,7 +15,7 @@ class SuggestionForLandownerController extends BaseController
 {
     public function suggested_customer(Landowner $landowner)
     {
-        $business = $landowner->user->business();
+        $business = $landowner->business()->first();
         $landownerId = $landowner->id;
         if ($landowner->getRawOriginal('type_sale') == 'buy')
         {

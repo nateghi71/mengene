@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
+use App\HelperClasses\SmsAPI;
 use App\Http\Controllers\Controller;
 use App\Models\Business;
 use App\Models\User;
@@ -50,7 +51,11 @@ class ConsultantController extends Controller
 
         $user = auth()->user();
         $business = Business::where('id', $request->business_id)->first();
+        $owner = $business->owner()->first();
         $business->members()->attach($user);
+
+        $smsApi = new SmsAPI();
+        $smsApi->sendSmsConsultantRequest($owner->number , $owner->name, $user->name);
 
         return redirect()->route('dashboard')
             ->with('success', 'You have successfully joined the business.');
@@ -64,5 +69,4 @@ class ConsultantController extends Controller
         $business->members()->detach($user->id);
         return redirect()->route('dashboard')->with('success', 'شما با موفقیت از بیزینس انصراف دادید');
     }
-
 }

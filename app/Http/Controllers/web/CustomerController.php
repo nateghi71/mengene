@@ -83,7 +83,7 @@ class CustomerController extends Controller
         ]);
 
         $user = auth()->user();
-        Customer::create([
+        $customer = Customer::create([
             'name' => $request->name,
             'number' => $request->number,
             'city' => $request->city,
@@ -107,6 +107,13 @@ class CustomerController extends Controller
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
+
+        if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
+        {
+            $user->incrementPremiumCountSms();
+            $smsApi = new SmsAPI();
+            $smsApi->sendSmsRegisterFile($customer->number , $customer->name , $user->business()->name , $user->business()->number);
+        }
         return redirect()->route('customer.index',['status' => 'active']);
     }
 

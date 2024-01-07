@@ -37,6 +37,7 @@
     <!-- End Hero -->
 
     <div class="w-100 row border-bottom">
+        @if($landowners->isNotEmpty())
         <div class="col-12 mx-auto">
             <div class="px-5 py-5">
                 <div class="table-responsive">
@@ -79,6 +80,11 @@
                 {{$landowners->links()}}
             </div>
         </div>
+        @else
+            <div class="my-5 d-flex justify-content-center">
+                <p>مالکی وجود ندارد.</p>
+            </div>
+        @endif
 
     </div>
 @endsection
