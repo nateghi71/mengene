@@ -173,6 +173,16 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
+                        <label for="access_level">سطح دسترسی:</label>
+                        <select class="form-control" name="access_level" id="access_level">
+                            <option value="private">خصوصی</option>
+                            <option value="public">عمومی</option>
+                        </select>
+                        @error('access_level')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
                         <label for="scale">متراژ:</label>
                         <input type="text" name="scale" class="form-control" value="{{old('scale')}}" id="scale" placeholder="متراژ"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">

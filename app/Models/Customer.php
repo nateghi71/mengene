@@ -20,7 +20,7 @@ class Customer extends Model
      */
     protected $fillable = [
         'name','number','city','status','type_sale','type_work','type_build','scale','number_of_rooms',
-        'description','rahn_amount','rent_amount','selling_price','elevator','parking','store','floor',
+        'description','rahn_amount','access_level','rent_amount','selling_price','elevator','parking','store','floor',
         'floor_number','business_id','user_id','is_star','expire_date'
     ];
 
@@ -132,6 +132,21 @@ class Customer extends Model
             get : fn ($value) => $value ? 'دارد' : 'ندارد',
         );
     }
+    protected function accessLevel():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'public':
+                        return 'عمومی';
+                    case 'private':
+                        return 'خصوصی';
+                }
+            },
+        );
+    }
+
     protected function status():Attribute
     {
         return Attribute::make(

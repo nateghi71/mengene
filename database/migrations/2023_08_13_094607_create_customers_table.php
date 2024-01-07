@@ -24,6 +24,7 @@ class CreateCustomersTable extends Migration
             $table->enum('type_sale', ['rahn', 'buy']);
             $table->enum('type_work', ['home', 'office']);
             $table->enum('type_build', ['house', 'apartment']);
+            $table->enum('access_level', ['private', 'public']);
             $table->integer('scale')->nullable();
             $table->integer('number_of_rooms')->nullable();
             $table->text('description');

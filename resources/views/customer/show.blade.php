@@ -30,18 +30,12 @@
     </div>
 
     <div class="row ">
-        <div class="col-12 grid-margin">
+        <div class="col-md-6 grid-margin mx-auto">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">نمایش اطلاعات : {{ $customer->name }}</h4>
                     <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>#</th>
-                            </tr>
-                            </thead>
+                        <table class="table table-bordered text-center">
                             <tbody>
                             <tr>
                                 <td>وضعیت</td>
@@ -62,6 +56,10 @@
                             <tr>
                                 <td>شهر</td>
                                 <td>{{$customer->city}}</td>
+                            </tr>
+                            <tr>
+                                <td>سطح دسترسی</td>
+                                <td>{{$customer->access_level}}</td>
                             </tr>
                             <tr>
                                 <td>نوع مسکن</td>

@@ -24,6 +24,7 @@ class CustomerFactory extends Factory
             'type_sale' => $type_sale,
             'type_work' => $this->faker->randomElement(['home' , 'office']),
             'type_build' => $this->faker->randomElement(['house' , 'apartment']),
+            'access_level' => $this->faker->randomElement(['private' , 'public']),
             'scale' => $this->faker->numberBetween(50,300),
             'number_of_rooms' => $this->faker->numberBetween(0,10),
             'description' => $this->faker->randomElement(['امام حسین' , 'عبادی', 'سعدی', 'کوهسنگی']),

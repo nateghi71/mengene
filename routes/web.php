@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\web\ConsultantController;
+use App\Http\Controllers\web\HomeController;
 use App\Http\Controllers\web\RandomLinkController;
 use App\Http\Controllers\web\SuggestionForCustomerController;
 use App\Http\Controllers\web\SuggestionForLandOwnerController;
@@ -21,9 +22,12 @@ use App\Http\Controllers\web\PremiumController;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-})->name('welcome');
+Route::get('/', [HomeController::class, 'index'])->name('welcome');
+Route::get('public_landowner', [HomeController::class, 'public_landowners'])->name('landowner.public.index');
+Route::get('public_landowner/{landowner}', [HomeController::class, 'show_public_landowners'])->name('landowner.public.show');
+Route::get('public_customer', [HomeController::class, 'public_customers'])->name('customer.public.index');
+Route::get('public_customer/{customer}', [HomeController::class, 'show_public_customers'])->name('customer.public.show');
+
 
 //Route::get('/dashboard', function () {
 //    return view('dashboard');
