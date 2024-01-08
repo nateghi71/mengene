@@ -30,10 +30,10 @@ class SmsAPI
         $api = new GhasedakApi(env('API_KEY_SMS'));
         $api->Verify($number, $template, $file_name, $business_name , $business_number);
     }
-    public function sendSmsShareFile($number , $file_name , $scale , $price , $business_name , $business_number): void
+    public function sendSmsShareFile($number , $file_name , $scale , $price  , $business_number): void
     {
         $template = "ShareFileInfoToCustomer";
         $api = new GhasedakApi(env('API_KEY_SMS'));
-        $api->Verify($number, $template, $file_name, $scale , $price , $business_name , $business_number);
+        $api->Verify($number, $template, $file_name, $scale , $price , $business_number);
     }
 }

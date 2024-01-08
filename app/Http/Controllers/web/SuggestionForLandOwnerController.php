@@ -85,7 +85,7 @@ class SuggestionForLandOwnerController extends Controller
             else
                 $price = $customer->selling_price;
             $smsApi = new SmsAPI();
-            $smsApi->sendSmsShareFile($landowner->number ,$landowner->name , $customer->scale , $price , $landowner->business->name , $landowner->business->number);
+            $smsApi->sendSmsShareFile($landowner->number ,$landowner->name , $customer->scale , $price  , $landowner->business->number);
             return redirect()->back()->with('message' , 'پیام شما ارسال شد.');
         }
         else

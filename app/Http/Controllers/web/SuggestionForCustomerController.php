@@ -87,7 +87,7 @@ class SuggestionForCustomerController extends Controller
             else
                 $price = $landowner->selling_price;
             $smsApi = new SmsAPI();
-            $smsApi->sendSmsShareFile($customer->number , $customer->name ,$landowner->scale , $price , $customer->business->name , $customer->business->number);
+            $smsApi->sendSmsShareFile($customer->number , $customer->name ,$landowner->scale , $price , $customer->business->number);
             return redirect()->back()->with('message' , 'پیام شما ارسال شد.');
         }
         else

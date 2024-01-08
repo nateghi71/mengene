@@ -64,7 +64,7 @@ class SuggestionForCustomerController extends BaseController
             ['type' => $link->type , 'token' => $link->token]);
 
         $smsApi = new SmsAPI();
-//        $smsApi->sendSms($customer->number , $randomLink);
+        $smsApi->sendSmsLink($customer->number , $customer->name , $link);
 
         return $this->sendResponse(['link' => $link], 'message send successfully.');
     }
