@@ -20,7 +20,7 @@ class Business extends Model
      * @var array
      */
     protected $fillable = [
-        'status', 'name', 'en_name', 'user_id', 'image', 'city', 'area', 'address',
+        'status', 'name', 'en_name', 'user_id', 'image', 'city_id', 'area', 'address',
     ];
 
     public function customers()
@@ -52,6 +52,10 @@ class Business extends Model
     public function premium()
     {
         return $this->hasOne(Premium::class, 'business_id');
+    }
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
     }
 }
 

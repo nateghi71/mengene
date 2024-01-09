@@ -19,7 +19,7 @@ class Customer extends Model
      * @var array
      */
     protected $fillable = [
-        'name','number','city','status','type_sale','type_work','type_build','scale','number_of_rooms',
+        'name','number','city_id','status','type_sale','type_work','type_build','scale','number_of_rooms',
         'description','rahn_amount','access_level','rent_amount','selling_price','elevator','parking','store','floor',
         'floor_number','business_id','user_id','is_star','expire_date'
     ];
@@ -56,7 +56,7 @@ class Customer extends Model
     protected function scale():Attribute
     {
         return Attribute::make(
-            get : fn ($value) => number_format($value , 0 , '/' , ','),
+            get : fn ($value) => number_format($value , 0 , '/' , ',') . 'متر',
             set : fn ($value) => str_replace( ',', '', $value),
         );
     }
@@ -229,6 +229,10 @@ class Customer extends Model
     public function links()
     {
         return $this->morphMany(RandomLink::class , 'linkable');
+    }
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
     }
 
 }

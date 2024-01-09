@@ -22,7 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'number',
-        'city',
+        'city_id',
         'password',
     ];
 
@@ -100,11 +100,11 @@ class User extends Authenticatable
     public function business()
     {
         if($this->ownedBusiness()->exists())
-            return $this->ownedBusiness()->select('businesses.id', 'businesses.name', 'businesses.en_name', 'businesses.user_id', 'businesses.image', 'businesses.city', 'businesses.area', 'businesses.address', 'businesses.created_at', 'businesses.updated_at')->first();
+            return $this->ownedBusiness()->select('businesses.id', 'businesses.name', 'businesses.en_name', 'businesses.user_id', 'businesses.image', 'businesses.city_id', 'businesses.area', 'businesses.address', 'businesses.created_at', 'businesses.updated_at')->first();
 
         elseif ($this->joinedBusinesses()->wherePivot('is_accepted', 1)->exists())
             return $this->joinedBusinesses()->wherePivot('is_accepted', 1)
-                ->select('businesses.id', 'businesses.name', 'businesses.en_name', 'businesses.user_id', 'businesses.image', 'businesses.city', 'businesses.area', 'businesses.address', 'businesses.created_at', 'businesses.updated_at')->first();
+                ->select('businesses.id', 'businesses.name', 'businesses.en_name', 'businesses.user_id', 'businesses.image', 'businesses.city_id', 'businesses.area', 'businesses.address', 'businesses.created_at', 'businesses.updated_at')->first();
 
         return null;
     }

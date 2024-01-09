@@ -5,6 +5,33 @@
 @section('scripts')
 
     <script>
+        function getCities(){
+            var provinceID = $('#province').val();
+            if (provinceID) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-province-cities-list') }}?province_id=" + provinceID,
+                    success: function(res) {
+                        if (res) {
+                            $("#city").empty();
+
+                            $.each(res, function(key, city) {
+                                console.log(city);
+                                $("#city").append('<option value="' + city.id + '">' +
+                                    city.name + '</option>');
+                            });
+                        } else {
+                            $("#city").empty();
+                        }
+                    }
+                });
+            } else {
+                $("#city").empty();
+            }
+        }
+        getCities()
+        $('#province').on('change' , getCities)
+
         buyFunction();
         function buyFunction() {
             var x = document.getElementById("myDIV");
@@ -168,9 +195,18 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
+                        <label for="province">استان:</label>
+                        <select class="form-control" id="province">
+                            @foreach($provinces as $province)
+                                <option value="{{$province->id}}">{{$province->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
                         <label for="city">شهر:</label>
-                        <input type="text" name="city" class="form-control" value="{{old('city')}}" id="city" placeholder="شهر">
-                        @error('city')
+                        <select name="city_id" class="form-control" id="city">
+                        </select>
+                        @error('city_id')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
@@ -236,7 +272,7 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="type_build">نوع ساختمان:</label>
+                        <label for="type_build">نوع خانه:</label>
                         <select class="form-control" name="type_build" id="type_build">
                             <option value="house">ویلایی</option>
                             <option value="apartment">ساختمان</option>

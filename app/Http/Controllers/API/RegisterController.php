@@ -157,6 +157,12 @@ class RegisterController extends BaseController
         if (Hash::check($request->password , $user->password)) {
             $data['token'] = $user->createToken('MyApp')->plainTextToken;
             $data['user'] = $user;
+            if($user->ownedBusiness()->exists())
+                $data['role'] = 'owner';
+            elseif ($user->joinedBusinesses()->exists())
+                $data['role'] = 'consultant';
+            else
+                $data['role'] = 'nothing';
 
             return $this->sendResponse($data, 'User login successfully.');
         } else {

@@ -277,7 +277,7 @@
                                             <p class="text-muted mb-0">منطقه</p>
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
-                                            <p class="text-white">{{$business->city}}</p>
+                                            <p class="text-white">{{$business->city->name}}</p>
                                             <p class="text-muted mb-0">{{$business->area}}</p>
                                         </div>
                                     </div>

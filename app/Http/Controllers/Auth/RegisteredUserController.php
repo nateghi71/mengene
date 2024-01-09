@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\HelperClasses\SmsAPI;
 use App\Http\Controllers\Controller;
+use App\Models\Province;
 use App\Models\User;
 use App\Models\UserCode;
 use App\Providers\RouteServiceProvider;
@@ -102,7 +103,8 @@ class RegisteredUserController extends Controller
 
     public function register()
     {
-        return view('auth.register');
+        $provinces = Province::all();
+        return view('auth.register' , compact('provinces'));
     }
 
     public function handle_register(Request $request)
@@ -111,7 +113,7 @@ class RegisteredUserController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'city' => ['required', 'string', 'max:255'],
+            'city_id' => ['required'],
             'email' => ['nullable' , 'max:255' , 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => 'required'
@@ -123,7 +125,7 @@ class RegisteredUserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'number' => $userCode->user_number,
-                'city' => $request->city,
+                'city_id' => $request->city_id,
                 'password' => Hash::make($request->password),
             ]);
 
@@ -136,6 +138,7 @@ class RegisteredUserController extends Controller
         }
         catch (\Exception $e){
             DB::rollBack();
+            dd($e->getMessage());
             return redirect()->back()->with('error' , 'در دیتابیس خطایی رخ داد.');
         }
 

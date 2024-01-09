@@ -20,7 +20,7 @@
                     <tbody>
                     <tr>
                         <td>شهر</td>
-                        <td>{{$business->city}}</td>
+                        <td>{{$business->city->name}}</td>
                     </tr>
                     <tr>
                         <td>ادرس</td>

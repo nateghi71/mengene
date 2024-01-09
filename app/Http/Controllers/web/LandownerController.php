@@ -6,6 +6,7 @@ use App\HelperClasses\LinkGenerator;
 use App\HelperClasses\SmsAPI;
 use App\HelperClasses\UpdateStatusFile;
 use App\Http\Controllers\Controller;
+use App\Models\Province;
 use App\Models\User;
 use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -48,8 +49,9 @@ class LandownerController extends Controller
 
     public function create()
     {
+        $provinces = Province::all();
         $this->authorize('create', Landowner::class);
-        return view('landowner.create');
+        return view('landowner.create' , compact('provinces'));
     }
 
     public function store(Request $request)
@@ -58,7 +60,7 @@ class LandownerController extends Controller
         $request->validate([
             'name' => 'required',
             'number' => 'required|numeric',
-            'city' => 'required',
+            'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
@@ -81,7 +83,7 @@ class LandownerController extends Controller
         $landowner = Landowner::create([
             'name' => $request->name,
             'number' => $request->number,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
@@ -115,8 +117,9 @@ class LandownerController extends Controller
 
     public function edit(Landowner $landowner)
     {
+        $provinces = Province::all();
         $this->authorize('update', $landowner);
-        return view('landowner.edit', compact('landowner'));
+        return view('landowner.edit', compact('landowner' , 'provinces'));
     }
 
     public function update(Request $request, Landowner $landowner)
@@ -125,7 +128,7 @@ class LandownerController extends Controller
         $request->validate([
             'name' => 'required',
             'number' => 'required|numeric',
-            'city' => 'required',
+            'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
@@ -148,7 +151,7 @@ class LandownerController extends Controller
         $landowner->update([
             'name' => $request->name,
             'number' => $request->number,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,

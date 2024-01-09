@@ -60,10 +60,9 @@
                                 <td>شماره تماس</td>
                                 <td>{{$landowner->number}}</td>
                             </tr>
-
                             <tr>
                                 <td>شهر</td>
-                                <td>{{$landowner->city}}</td>
+                                <td>{{$landowner->city->name}}</td>
                             </tr>
                             <tr>
                                 <td>سطح دسترسی</td>
@@ -74,7 +73,7 @@
                                 <td>{{$landowner->type_work}}</td>
                             </tr>
                             <tr>
-                                <td>نوع ساختمان</td>
+                                <td>نوع خانه</td>
                                 <td>{{$landowner->type_build}}</td>
                             </tr>
                             @if($landowner->getRawOriginal('type_sale') == 'buy')

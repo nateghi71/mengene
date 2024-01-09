@@ -60,7 +60,7 @@
                             </tr>
                             <tr>
                                 <td>شهر</td>
-                                <td>{{$customer->city}}</td>
+                                <td>{{$customer->city->name}}</td>
                             </tr>
                             <tr>
                                 <td>سطح دسترسی</td>
@@ -71,7 +71,7 @@
                                 <td>{{$customer->type_work}}</td>
                             </tr>
                             <tr>
-                                <td>نوع ساختمان</td>
+                                <td>نوع خانه</td>
                                 <td>{{$customer->type_build}}</td>
                             </tr>
                             @if($customer->getRawOriginal('type_sale') == 'buy')

@@ -19,7 +19,7 @@ class CreateBusinessesTable extends Migration
             $table->string('name');
             $table->string('en_name');
             $table->string('image')->nullable();
-            $table->string('city');
+            $table->integer('city_id');
             $table->string('area');
             $table->text('address');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');

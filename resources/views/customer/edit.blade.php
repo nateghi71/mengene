@@ -5,6 +5,41 @@
 @section('scripts')
 
     <script>
+        function getCities(){
+            var provinceID = $('#province').val();
+            if (provinceID) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-province-cities-list') }}?province_id=" + provinceID,
+                    success: function(res) {
+                        if (res) {
+                            $("#city").empty();
+
+                            $.each(res, function(key, city) {
+                                let selected = false;
+                                if(city.id == "{{$customer->city_id}}")
+                                {
+                                    selected = true;
+                                }
+                                let option = $('<option>' , {
+                                    value:city.id,
+                                    text:city.name,
+                                    selected:selected,
+                                })
+                                $("#city").append(option);
+                            });
+                        } else {
+                            $("#city").empty();
+                        }
+                    }
+                });
+            } else {
+                $("#city").empty();
+            }
+        }
+        getCities()
+        $('#province').on('change' , getCities)
+
         if("{{ $customer->getRawOriginal('type_sale') === "buy" }}")
         {
             buyFunction()
@@ -187,17 +222,26 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
+                        <label for="province">استان:</label>
+                        <select class="form-control" id="province">
+                            @foreach($provinces as $province)
+                                <option value="{{$province->id}}" @selected($customer->city->province_id === $province->id)>{{$province->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
                         <label for="city">شهر:</label>
-                        <input type="text" name="city" class="form-control" value="{{$customer->city}}" id="city" placeholder="شهر">
-                        @error('city')
+                        <select name="city_id" class="form-control" id="city">
+                        </select>
+                        @error('city_id')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
                         <label for="access_level">سطح دسترسی:</label>
                         <select class="form-control" name="access_level" id="access_level">
-                            <option value="private" {{$customer->getRawOriginal('access_level') === "private" ? 'select' : '' }}>خصوصی</option>
-                            <option value="public" {{$customer->getRawOriginal('access_level') === "public" ? 'select' : '' }}>عمومی</option>
+                            <option value="private" @selected($customer->getRawOriginal('access_level') === "private")>خصوصی</option>
+                            <option value="public" @selected($customer->getRawOriginal('access_level') === "public")>عمومی</option>
                         </select>
                         @error('access_level')
                         <div class="alert-danger">{{$message}}</div>
@@ -247,18 +291,18 @@
                     <div class="form-group col-md-3">
                         <label for="type_work">نوع مسکن:</label>
                         <select class="form-control" name="type_work" id="type_work">
-                            <option value="home" {{$customer->getRawOriginal('type_work') === "home" ? 'select' : '' }}>خانه</option>
-                            <option value="office" {{$customer->getRawOriginal('type_work') === "office" ? 'select' : '' }}>دفتر</option>
+                            <option value="home" @selected($customer->getRawOriginal('type_work') === "home")>خانه</option>
+                            <option value="office" @selected($customer->getRawOriginal('type_work') === "office")>دفتر</option>
                         </select>
                         @error('type_work')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="type_build">نوع ساختمان:</label>
+                        <label for="type_build">نوع خانه:</label>
                         <select class="form-control" name="type_build" id="type_build">
-                            <option value="house" {{$customer->getRawOriginal('type_build') === "house" ? 'select' : '' }}>ویلایی</option>
-                            <option value="apartment" {{$customer->getRawOriginal('type_build') === "apartment" ? 'select' : '' }}>ساختمان</option>
+                            <option value="house" @selected($customer->getRawOriginal('type_build') === "house")>ویلایی</option>
+                            <option value="apartment" @selected($customer->getRawOriginal('type_build') === "apartment")>ساختمان</option>
                         </select>
                         @error('type_work')
                         <div class="alert-danger">{{$message}}</div>
@@ -301,7 +345,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label id="is_star_label" class="form-check-label"><span class="mdi mdi-star-outline fs-4 text-warning"></span></label>
-                            <input type="checkbox" name="is_star" id="is_star" class="d-none" {{$customer->getRawOriginal('is_star') === 1 ? 'checked' : '' }}>
+                            <input type="checkbox" name="is_star" id="is_star" class="d-none" @checked($customer->getRawOriginal('is_star') === 1)>
                         </div>
                         @error('is_star')
                         <div class="alert-danger">{{$message}}</div>
@@ -311,7 +355,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="elevator" class="form-check-label">
-                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{$customer->getRawOriginal('elevator') === 1 ? 'checked' : '' }}>اسانسور
+                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" @checked($customer->getRawOriginal('elevator') === 1)>اسانسور
                             </label>
                         </div>
                         @error('elevator')
@@ -321,7 +365,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="parking" class="form-check-label">
-                                <input type="checkbox" name="parking" id="parking" class="form-check-input" {{$customer->getRawOriginal('parking') === 1 ? 'checked' : '' }}>پارکینگ
+                                <input type="checkbox" name="parking" id="parking" class="form-check-input" @checked($customer->getRawOriginal('parking') === 1)>پارکینگ
                             </label>
                         </div>
                         @error('parking')
@@ -331,7 +375,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="store" class="form-check-label">
-                                <input type="checkbox" name="store" id="store" class="form-check-input" {{$customer->getRawOriginal('store') === 1 ? 'checked' : '' }}>انبار
+                                <input type="checkbox" name="store" id="store" class="form-check-input" @checked($customer->getRawOriginal('store') === 1)>انبار
                             </label>
                         </div>
                         @error('store')

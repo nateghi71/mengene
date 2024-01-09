@@ -7,6 +7,7 @@ use App\HelperClasses\SmsAPI;
 use App\HelperClasses\UpdateStatusFile;
 use App\Http\Controllers\Controller;
 use App\Models\Landowner;
+use App\Models\Province;
 use App\Models\RandomLink;
 use App\Models\User;
 use Hekmatinasser\Verta\Facades\Verta;
@@ -53,8 +54,9 @@ class CustomerController extends Controller
 
     public function create()
     {
+        $provinces = Province::all();
         $this->authorize('create' , Customer::class);
-        return view('customer.create');
+        return view('customer.create', compact('provinces'));
     }
 
     public function store(Request $request)
@@ -63,7 +65,7 @@ class CustomerController extends Controller
         $request->validate([
             'name' => 'required',
             'number' => 'required|numeric',
-            'city' => 'required',
+            'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
@@ -86,7 +88,7 @@ class CustomerController extends Controller
         $customer = Customer::create([
             'name' => $request->name,
             'number' => $request->number,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
@@ -119,8 +121,9 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer)
     {
+        $provinces = Province::all();
         $this->authorize('update', $customer);
-        return view('customer.edit', compact('customer'));
+        return view('customer.edit', compact('customer' , 'provinces'));
     }
 
     public function update(Request $request, Customer $customer)
@@ -130,7 +133,7 @@ class CustomerController extends Controller
         $request->validate([
             'name' => 'required',
             'number' => 'required|numeric',
-            'city' => 'required',
+            'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
@@ -152,7 +155,7 @@ class CustomerController extends Controller
         $customer->update([
             'name' => $request->name,
             'number' => $request->number,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,

@@ -20,7 +20,7 @@ class LandownerFactory extends Factory
         return [
             'name' => $this->faker->name,
             'number' => '09356317466',
-            'city' => $this->faker->city,
+            'city_id' => rand(1,440),
             'type_sale' => $type_sale,
             'type_work' => $this->faker->randomElement(['home' , 'office']),
             'type_build' => $this->faker->randomElement(['house' , 'apartment']),

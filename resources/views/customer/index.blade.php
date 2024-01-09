@@ -18,11 +18,10 @@
         #deleteBox {
             position: fixed;
             padding: 20px;
-            top: calc(50% - 60px);
-            left: calc(50% - 140px);
-            width: 280px;
-            height: 120px;
+            top: 50%;
+            left: 50%;
             background: rgba(0,0,0,1);
+            transform: translate(-50%, -50%);
         }
     </style>
 @endsection

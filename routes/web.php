@@ -27,7 +27,7 @@ Route::get('public_landowner', [HomeController::class, 'public_landowners'])->na
 Route::get('public_landowner/{landowner}', [HomeController::class, 'show_public_landowners'])->name('landowner.public.show');
 Route::get('public_customer', [HomeController::class, 'public_customers'])->name('customer.public.index');
 Route::get('public_customer/{customer}', [HomeController::class, 'show_public_customers'])->name('customer.public.show');
-
+Route::get('/get-province-cities-list', [HomeController::class, 'getProvinceCitiesList']);
 
 //Route::get('/dashboard', function () {
 //    return view('dashboard');

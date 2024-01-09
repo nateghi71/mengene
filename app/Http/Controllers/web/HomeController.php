@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\City;
 use App\Models\Customer;
 use App\Models\Landowner;
 use Carbon\Carbon;
@@ -50,5 +51,11 @@ class HomeController extends Controller
     public function show_public_landowners(Landowner $landowner)
     {
         return view('home.show_public_landowner', compact('landowner'));
+    }
+
+    public function getProvinceCitiesList(Request $request)
+    {
+        $cities = City::where('province_id', $request->province_id)->get();
+        return $cities;
     }
 }

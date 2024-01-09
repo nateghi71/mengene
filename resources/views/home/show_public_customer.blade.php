@@ -65,15 +65,11 @@
                             <td>{{$customer->city}}</td>
                         </tr>
                         <tr>
-                            <td>سطح دسترسی</td>
-                            <td>{{$customer->access_level}}</td>
-                        </tr>
-                        <tr>
                             <td>نوع مسکن</td>
                             <td>{{$customer->type_work}}</td>
                         </tr>
                         <tr>
-                            <td>نوع ساختمان</td>
+                            <td>نوع خانه</td>
                             <td>{{$customer->type_build}}</td>
                         </tr>
                         @if($customer->getRawOriginal('type_sale') == 'buy')
@@ -118,10 +114,6 @@
                         <tr>
                             <td>انبار</td>
                             <td>{{$customer->store}}</td>
-                        </tr>
-                        <tr>
-                            <td>ستاره</td>
-                            <td>{{$customer->is_star}}</td>
                         </tr>
                         <tr>
                             <td>توضیحات و آدرس</td>

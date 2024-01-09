@@ -3,6 +3,35 @@
 @section('title' , 'ثبت نام')
 
 @section('scripts')
+    <script>
+        function getCities(){
+            var provinceID = $('#province').val();
+            if (provinceID) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-province-cities-list') }}?province_id=" + provinceID,
+                    success: function(res) {
+                        if (res) {
+                            $("#city").empty();
+
+                            $.each(res, function(key, city) {
+                                console.log(city);
+                                $("#city").append('<option value="' + city.id + '">' +
+                                    city.name + '</option>');
+                            });
+                        } else {
+                            $("#city").empty();
+                        }
+                    }
+                });
+            } else {
+                $("#city").empty();
+            }
+        }
+        getCities()
+        $('#province').on('change' , getCities)
+    </script>
+
 @endsection
 
 @section('content')
@@ -22,12 +51,22 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="city">شهر *</label>
-                        <input type="text" name="city" value="{{old('city')}}" class="form-control" id="city" placeholder="شهر">
-                        @error('city')
-                        <div class="alert alert-danger">
-                            {{$message}}
-                        </div>
+                        <label for="province">استان:</label>
+                        <select class="form-control" id="province">
+                            @foreach($provinces as $province)
+                                <option value="{{$province->id}}">{{$province->name}}</option>
+                            @endforeach
+                        </select>
+                        @error('province')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="city">شهر:</label>
+                        <select name="city_id" class="form-control" id="city">
+                        </select>
+                        @error('city_id')
+                        <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group">

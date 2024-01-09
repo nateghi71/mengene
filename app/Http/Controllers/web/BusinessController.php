@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Landowner;
 use App\Models\Premium;
+use App\Models\Province;
 use App\Models\User;
 use Carbon\Carbon;
 use Hekmatinasser\Verta\Facades\Verta;
@@ -68,8 +69,9 @@ class BusinessController extends Controller
 
     public function create(Request $request)
     {
+        $provinces = Province::all();
         $this->authorize('createOrJoin', Business::class);
-        return view('business.create');
+        return view('business.create' , compact('provinces'));
     }
 
     public
@@ -80,7 +82,7 @@ class BusinessController extends Controller
         $request->validate([
             'name' => 'required',
             'en_name' => 'required',
-            'city' => 'required',
+            'city_id' => 'required',
             'area' => 'required',
             'address' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -102,7 +104,7 @@ class BusinessController extends Controller
                 'en_name' => $request->en_name,
                 'user_id' => $user->id,
                 'image' => $imageName,
-                'city' => $request->city,
+                'city_id' => $request->city_id,
                 'area' => $request->area,
                 'address' => $request->address
             ]);
@@ -123,8 +125,9 @@ class BusinessController extends Controller
 
     public function edit(Business $business)
     {
+        $provinces = Province::all();
         $this->authorize('updateBusiness' , $business);
-        return view('business.edit', compact('business'));
+        return view('business.edit', compact('business' , 'provinces'));
     }
 
     public function update(Request $request, Business $business)
@@ -132,11 +135,8 @@ class BusinessController extends Controller
         $this->authorize('updateBusiness' , $business);
         $request->validate([
             'name' => 'required',
-            'en_name' => [
-                'required',
-                Rule::unique('businesses')->ignore($business->user_id, 'user_id'),
-            ],
-            'city' => 'required',
+            'en_name' => 'required',
+            'city_id' => 'required',
             'area' => 'required',
             'address' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -152,7 +152,7 @@ class BusinessController extends Controller
             'name' => $request->name,
             'en_name' => $request->en_name,
             'image' => $request->hasFile('image') ? $imageName : $business->image,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'area' => $request->area,
             'address' => $request->address
         ]);

@@ -199,7 +199,7 @@ return [
         'rahn_amount' => 'رهن' ,
         'rent_amount' => 'اجاره' ,
         'type_work' => 'نوع مسکن' ,
-        'type_build' => 'نوع ساختمان' ,
+        'type_build' => 'نوع خانه' ,
         'floor_number' => 'تعداد اتاق' ,
         'expire_date' => 'زمان باقیمانده' ,
         'description' => 'توضیحات و آدرس' ,

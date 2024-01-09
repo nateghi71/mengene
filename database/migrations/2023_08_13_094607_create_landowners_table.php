@@ -19,7 +19,7 @@ class CreateLandownersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('number');
-            $table->string('city');
+            $table->integer('city_id');
             $table->enum('status', ['active', 'unknown', 'deActive']);
             $table->enum('type_sale', ['rahn', 'buy']);
             $table->enum('type_work', ['home', 'office']);

@@ -3,6 +3,42 @@
 @section('title' , 'ویرایش بیزنس')
 
 @section('scripts')
+    <script>
+        function getCities(){
+            var provinceID = $('#province').val();
+            if (provinceID) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-province-cities-list') }}?province_id=" + provinceID,
+                    success: function(res) {
+                        if (res) {
+                            $("#city").empty();
+
+                            $.each(res, function(key, city) {
+                                let selected = false;
+                                if(city.id == "{{$business->city_id}}")
+                                {
+                                    selected = true;
+                                }
+                                let option = $('<option>' , {
+                                    value:city.id,
+                                    text:city.name,
+                                    selected:selected,
+                                })
+                                $("#city").append(option);
+                            });
+                        } else {
+                            $("#city").empty();
+                        }
+                    }
+                });
+            } else {
+                $("#city").empty();
+            }
+        }
+        getCities()
+        $('#province').on('change' , getCities)
+    </script>
 @endsection
 
 @section('content')
@@ -13,7 +49,6 @@
                 <div><a href="{{route('dashboard')}}" class="btn btn-primary p-2">داشبورد</a></div>
             </div>
             <hr>
-
             <form action="{{route('business.update',$business->id)}}" method="post" enctype="multipart/form-data" autocomplete="off">
                 @csrf
                 @method('PUT')
@@ -34,12 +69,20 @@
 
                 </div>
                 <div class="form-group">
-                    <label for="city">شهر:</label>
-                    <input type="text" name="city" class="form-control" value="{{$business->city}}" id="city" placeholder="شهر">
-                    @error('city')
+                    <label for="province">استان املاک:</label>
+                    <select class="form-control" id="province">
+                        @foreach($provinces as $province)
+                            <option value="{{$province->id}}" @selected($business->city->province_id === $province->id)>{{$province->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="city">شهر املاک:</label>
+                    <select name="city_id" class="form-control" id="city">
+                    </select>
+                    @error('city_id')
                     <div class="alert-danger">{{$message}}</div>
                     @enderror
-
                 </div>
                 <div class="form-group">
                     <label for="area">منطقه: *</label>

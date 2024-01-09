@@ -22,7 +22,7 @@ class ConsultantController extends Controller
 
     public function findBusiness()
     {
-        return view('Consultant.find_business');
+        return view('consultant.find_business');
     }
 
     public function search(Request $request)

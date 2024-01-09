@@ -18,11 +18,10 @@
         #deleteBox {
             position: fixed;
             padding: 20px;
-            top: calc(50% - 60px);
-            left: calc(50% - 140px);
-            width: 280px;
-            height: 120px;
+            top: 50%;
+            left: 50%;
             background: rgba(0,0,0,1);
+            transform: translate(-50%, -50%);
         }
     </style>
 @endsection
@@ -310,7 +309,7 @@
                                             <p class="text-muted mb-0">منطقه</p>
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
-                                            <p class="text-white">{{$business->city}}</p>
+                                            <p class="text-white">{{$business->city->name}}</p>
                                             <p class="text-muted mb-0">{{$business->area}}</p>
                                         </div>
                                     </div>
