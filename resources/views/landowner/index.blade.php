@@ -2,10 +2,72 @@
 
 @section('title' , 'مالکان')
 
+@section('head')
+    <style>
+        #deletePanel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            overflow: hidden;
+            background: rgba(0,0,0,0.5);
+        }
+
+        #deleteBox {
+            position: fixed;
+            padding: 20px;
+            top: calc(50% - 60px);
+            left: calc(50% - 140px);
+            width: 280px;
+            height: 120px;
+            background: rgba(0,0,0,1);
+        }
+    </style>
+@endsection
+
 @section('scripts')
+    <script>
+        $('.btn-close').on('click' , function (){
+            $('#message').remove()
+        })
+
+        $('#deletePanel').hide()
+
+        $('[id^=open_delete_panel_]').on('click' , function (e){
+            e.preventDefault()
+            $('#deletePanel').show()
+            $('#deleteBox').children().children().eq(0).attr('action' , $(this).attr('href'))
+        })
+        $('#not_delete_btn').on('click' , function (){
+            $('#deletePanel').hide()
+        })
+    </script>
 @endsection
 
 @section('content')
+    @if (session()->has('message'))
+        <div class="alert alert-success d-flex justify-content-between" id="message">
+            {{session()->get('message')}}
+            <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div id="deletePanel">
+        <div id="deleteBox">
+            <p class="text-end pb-3">ایا می خواهید فایل موردنظر را حذف کنید؟</p>
+            <div class="d-flex justify-content-between">
+                <form method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button id="delete_btn" class="btn btn-danger" type="submit">بله</button>
+                </form>
+                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card">
@@ -110,6 +172,7 @@
                                     <th> # </th>
                                     <th> نام </th>
                                     <th> شماره تماس </th>
+                                    <th> ثبت کننده </th>
                                     <th> نوع </th>
                                     <th>
                                         @if($landowners->pluck('status')->contains('غیرفعال') ||
@@ -146,6 +209,7 @@
                                             @endif
                                         </td>
                                         <td>{{$landowner->number}}</td>
+                                        <td>{{$landowner->user->name}}</td>
                                         <td>{{$landowner->type_sale}}</td>
                                         <td>{{$landowner->getRawOriginal('selling_price') !== 0 ? $landowner->selling_price : $landowner->rahn_amount}}</td>
                                         <td>{{$landowner->scale}}</td>
@@ -154,11 +218,7 @@
                                         <td><a class="btn text-decoration-none" href="{{route('landowner.show',$landowner->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         <td><a class="btn text-decoration-none" href="{{route('landowner.edit',$landowner->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
                                         <td>
-                                            <form action="{{route('landowner.destroy',$landowner->id)}}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-outline-danger" type="submit"><i class="mdi mdi-delete"></i></button>
-                                            </form>
+                                            <a href="{{route('landowner.destroy',$landowner->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

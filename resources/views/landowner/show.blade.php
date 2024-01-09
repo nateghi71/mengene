@@ -38,6 +38,11 @@
                     <div class="table-responsive">
                         <table class="table table-bordered text-center">
                             <tbody>
+                            <tr class="text-white">
+                                <td>ثبت کننده</td>
+                                <td>{{$landowner->user->name}}</td>
+                            </tr>
+
                             <tr>
                                 <td>وضعیت</td>
                                 <td>{{$landowner->status}}</td>
@@ -55,6 +60,7 @@
                                 <td>شماره تماس</td>
                                 <td>{{$landowner->number}}</td>
                             </tr>
+
                             <tr>
                                 <td>شهر</td>
                                 <td>{{$landowner->city}}</td>

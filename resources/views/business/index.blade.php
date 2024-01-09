@@ -2,6 +2,32 @@
 
 @section('title' , 'داشبورد')
 
+@section('head')
+    <style>
+        #deletePanel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            overflow: hidden;
+            background: rgba(0,0,0,0.5);
+        }
+
+        #deleteBox {
+            position: fixed;
+            padding: 20px;
+            top: calc(50% - 60px);
+            left: calc(50% - 140px);
+            width: 280px;
+            height: 120px;
+            background: rgba(0,0,0,1);
+        }
+    </style>
+@endsection
+
+
 @section('scripts')
     <script>
         if ($("#transaction-history").length) {
@@ -77,10 +103,43 @@
                 plugins: transactionhistoryChartPlugins
             });
         }
+        $('.btn-close').on('click' , function (){
+            $('#message').remove()
+        })
+
+        $('#deletePanel').hide()
+
+        $('#open_delete_panel').on('click' , function (){
+            $('#deletePanel').show()
+        })
+        $('#not_delete_btn').on('click' , function (){
+            $('#deletePanel').hide()
+        })
     </script>
 @endsection
 
 @section('content')
+    @if (session()->has('message'))
+        <div class="alert alert-success d-flex justify-content-between" id="message">
+            {{session()->get('message')}}
+            <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div id="deletePanel">
+        <div id="deleteBox">
+            <p class="text-end pb-3">ایا می خواهید املاکی را حذف کنید؟</p>
+            <div class="d-flex justify-content-between">
+                <form action="{{route('business.destroy',['business'=>$business->id])}}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button id="delete_btn" class="btn btn-danger" type="submit">بله</button>
+                </form>
+                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card">
@@ -95,7 +154,11 @@
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
-                            <a href="{{route('packages.index')}}" class="btn btn-outline-light btn-rounded get-started-btn">اپدیت حساب</a>
+                            @if(auth()->user()->isFreeUser())
+                            <a href="{{route('packages.index')}}" class="btn btn-light btn-rounded get-started-btn">خرید اکانت ویژه</a>
+                            @else
+                                <a href="{{route('packages.index')}}" class="btn btn-light btn-rounded get-started-btn">مشاهده اکانت </a>
+                            @endif
                         </span>
                         </div>
                     </div>
@@ -161,20 +224,6 @@
                 </a>
             </div>
         </div>
-        <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
-            <div class="card">
-                <a href="https://98diha.ir//wp-content/themes/ringtone/api/mengene.apk" target="_blank" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <div class="d-flex align-items-center align-self-start text-success">
-                                <span class="mdi mdi-download icon-item"></span>
-                                <h3 class="pe-2 mb-0 fs-6">نرم افزار</h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
         @if(auth()->user()->isFreeUser())
         <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
             <div class="card bg-secondary">
@@ -206,6 +255,20 @@
                 </div>
             </div>
         @endif
+        <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
+            <div class="card">
+                <a href="https://98diha.ir//wp-content/themes/ringtone/api/mengene.apk" target="_blank" class="text-decoration-none text-white">
+                    <div class="card-body">
+                        <div class="icon">
+                            <div class="d-flex align-items-center align-self-start text-white">
+                                <span class="mdi mdi-download icon-item"></span>
+                                <h3 class="pe-2 mb-0 fs-6">نرم افزار</h3>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-8 grid-margin stretch-card">
@@ -322,11 +385,7 @@
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
                                             <p class="text-white">
-                                            <form action="{{route('business.destroy',['business'=>$business->id])}}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-outline-danger" type="submit">حذف</button>
-                                            </form>
+                                                <button id="open_delete_panel" class="btn btn-outline-danger" type="button">حذف</button>
                                             </p>
                                             <p class="text-muted mb-0">حذف املاکی</p>
                                         </div>

@@ -12,7 +12,7 @@
 
 @section('content')
     @if (session()->has('message'))
-        <div class="alert alert-danger d-flex justify-content-between" id="message">
+        <div class="alert alert-success d-flex justify-content-between" id="message">
             {{session()->get('message')}}
             <button type="button" class="btn-close" aria-label="Close"></button>
         </div>

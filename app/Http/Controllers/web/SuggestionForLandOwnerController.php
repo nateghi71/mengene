@@ -69,7 +69,7 @@ class SuggestionForLandOwnerController extends Controller
         $smsApi = new SmsAPI();
         $smsApi->sendSmsLink($landowner->number ,$landowner->name , $link);
 
-        return redirect()->back();
+        return redirect()->back()->with('message' , 'پیامی برای تایید مشتری ارسال شد.');
     }
 
     public function share_file_with_customer(Request $request)
@@ -86,7 +86,7 @@ class SuggestionForLandOwnerController extends Controller
                 $price = $customer->selling_price;
             $smsApi = new SmsAPI();
             $smsApi->sendSmsShareFile($landowner->number ,$landowner->name , $customer->scale , $price  , $landowner->business->number);
-            return redirect()->back()->with('message' , 'پیام شما ارسال شد.');
+            return redirect()->back()->with('message' , 'پیام پیشنهاد شما برای مشتری ارسال شد.');
         }
         else
         {

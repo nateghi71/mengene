@@ -55,6 +55,7 @@ class BusinessController extends Controller
 
     public function dashboard()
     {
+        request()->session()->keep(['message']);
         $user = auth()->user();
         if($user->ownedBusiness()->exists())
             return redirect()->route('business.index');
@@ -117,7 +118,7 @@ class BusinessController extends Controller
             DB::rollBack();
         }
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with('message' , 'املاکی موردنظر ایجاد شد.');
     }
 
     public function edit(Business $business)
@@ -156,7 +157,7 @@ class BusinessController extends Controller
             'address' => $request->address
         ]);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with('message' , 'املاکی موردنظر اپدیت شد.');
     }
 
     public function destroy(Business $business)
@@ -219,7 +220,7 @@ class BusinessController extends Controller
         $business->user_id = $user->id;
         $business->update();
 
-        return redirect()->route('dashboard')->with('message', 'User acceptance has been modified successfully.');
+        return redirect()->route('dashboard')->with('message', 'تغییرات شما اعمال شد.');
     }
 
     public function removeMember(User $user)

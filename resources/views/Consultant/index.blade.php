@@ -2,6 +2,31 @@
 
 @section('title' , 'داشبورد')
 
+@section('head')
+    <style>
+        #deletePanel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            overflow: hidden;
+            background: rgba(0,0,0,0.5);
+        }
+
+        #deleteBox {
+            position: fixed;
+            padding: 20px;
+            top: calc(50% - 60px);
+            left: calc(50% - 140px);
+            width: 280px;
+            height: 120px;
+            background: rgba(0,0,0,1);
+        }
+    </style>
+@endsection
+
 @section('scripts')
     <script>
         if ($("#transaction-history").length) {
@@ -77,10 +102,41 @@
                 plugins: transactionhistoryChartPlugins
             });
         }
+        $('#deletePanel').hide()
+
+        $('#open_delete_panel').on('click' , function (){
+            $('#deletePanel').show()
+        })
+        $('#not_delete_btn').on('click' , function (){
+            $('#deletePanel').hide()
+        })
+        $('.btn-close').on('click' , function (){
+            $('#message').remove()
+        })
+
     </script>
 @endsection
 
 @section('content')
+    @if (session()->has('message'))
+        <div class="alert alert-success d-flex justify-content-between" id="message">
+            {{session()->get('message')}}
+            <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div id="deletePanel">
+        <div id="deleteBox">
+            <p class="text-end pb-3">ایا می خواهید لغو همکاری کنید؟</p>
+            <div class="d-flex justify-content-between">
+                <a href="{{route('consultant.leave.member',['user'=>auth()->id()])}}" class="btn btn-danger">
+                    بله
+                </a>
+                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card">
@@ -275,9 +331,7 @@
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
                                             <p class="text-white">
-                                                <a href="{{route('consultant.leave.member',['user'=>auth()->id()])}}" class="btn btn-outline-danger">
-                                                    لغو همکاری
-                                                </a>
+                                                <button id="open_delete_panel" class="btn btn-outline-danger" type="button">لغو همکاری</button>
                                             </p>
                                             <p class="text-muted mb-0">لغو همکاری</p>
                                         </div>

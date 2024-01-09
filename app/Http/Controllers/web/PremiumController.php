@@ -57,6 +57,6 @@ class PremiumController extends Controller
             'expire_date' => $expire_date,
         ]);
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with('message' , 'اکانت شما ارتقا یافت.');
     }
 }

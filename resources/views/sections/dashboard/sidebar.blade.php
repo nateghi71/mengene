@@ -5,8 +5,8 @@
         <a class="sidebar-brand brand-logo-mini text-decoration-none text-white" href="{{route('dashboard')}}">مِنگِنه</a>
     </div>
     <ul class="nav">
-        <li class="nav-item profile">
-            <div class="profile-desc">
+        <li  class="nav-item profile">
+            <div  class="profile-desc">
                 <div class="profile-pic">
                     <div class="count-indicator">
                         <img class="img-xs rounded-circle" src="{{asset('Admin/assets/images/faces-clipart/pic-4.png')}}" alt="">
@@ -120,19 +120,21 @@
             <div class="collapse" id="android">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link " target="_blank" href="https://98diha.ir//wp-content/themes/ringtone/api/mengene.apk"> دانلود مستقیم اپلیکیشن </a></li>
-                    <li class="nav-item"> <a class="nav-link " target="_blank" href="#"> دانلود اپلیکیشن از بازار </a></li>
+                    <li class="nav-item"> <a class="nav-link " target="_blank" href="https://cafebazaar.ir/app/com.vearad.mengene"> دانلود اپلیکیشن از بازار </a></li>
                 </ul>
             </div>
         </li>
-        @if(auth()->user()->ownedBusiness()->exists())
-            <li class="mt-5 nav-item menu-items bg-warning">
+
+
+        @if(auth()->user()->ownedBusiness()->exists() && auth()->user()->isFreeUser())
+            <li class="mt-5 nav-item menu-items ">
                 <a class="nav-link text-success" href="{{route('packages.index')}}">
-                  <span class="menu-icon bg-success">
-                    <i class="mdi mdi-plus"></i>
-                  </span>
-                    <span class="menu-title pe-2">اپدیت حساب</span>
+                    <button type="button" class="btn btn-danger btn-fw">خرید اکانت ویژه</button>
                 </a>
             </li>
         @endif
+
     </ul>
+
+
 </nav>

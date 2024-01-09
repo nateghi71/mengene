@@ -29,7 +29,7 @@ class LandownerController extends Controller
         $business = $user->business();
 
         $landowners = $business->landowners()->landownerType()
-            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
+            ->orderBy('is_star', 'desc')->orderBy('status', 'asc')->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
 
         foreach ($landowners as $landowner) {
             if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
@@ -106,11 +106,11 @@ class LandownerController extends Controller
         {
             $user->incrementPremiumCountSms();
             $smsApi = new SmsAPI();
-//                $smsApi->sendSmsRegisterFile($landowner->number , $landowner->name , $user->business()->name , $user->business()->number);
+            $smsApi->sendSmsRegisterFile($landowner->number , $landowner->name , $user->business()->name , $user->business()->number);
         }
 
 
-        return redirect()->route('landowner.index',['status' => 'active']);
+        return redirect()->route('landowner.index',['status' => 'active'])->with('message' , 'فایل موردنظر ایجاد شد.');
     }
 
     public function edit(Landowner $landowner)
@@ -170,7 +170,7 @@ class LandownerController extends Controller
             'expire_date' => $request->expire_date
         ]);
 
-        return redirect()->route('landowner.index',['status' => 'active']);
+        return redirect()->route('landowner.index',['status' => 'active'])->with('message' , 'فایل موردنظر اپدیت شد.');
     }
 
     public function destroy(Landowner $landowner)
@@ -179,7 +179,7 @@ class LandownerController extends Controller
 
         $landowner->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with('message' , 'فایل موردنظر حذف شد.');
     }
 
     public function star(Landowner $landowner)
@@ -193,6 +193,6 @@ class LandownerController extends Controller
             $landowner->is_star = 0;
             $landowner->save();
         }
-        return redirect()->back();
+        return redirect()->back()->with('message' , 'جایگاه فایل موردنظر تغییر کرد.');
     }
 }

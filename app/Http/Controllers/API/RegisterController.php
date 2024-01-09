@@ -37,8 +37,8 @@ class RegisterController extends BaseController
             'random_string' => $randomString,
         ]);
 
-//        $smsApi = new SmsAPI();
-//        $smsApi->sendSms($userNumber , $code);
+        $smsApi = new SmsAPI();
+        $smsApi->sendSms($userNumber , $code);
 
         $data['random_string'] = $randomString;
         return $this->sendResponse($data, 'User register successfully.');

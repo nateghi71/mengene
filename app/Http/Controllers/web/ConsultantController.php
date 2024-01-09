@@ -58,7 +58,7 @@ class ConsultantController extends Controller
         $smsApi->sendSmsConsultantRequest($owner->number , $owner->name, $user->name);
 
         return redirect()->route('dashboard')
-            ->with('success', 'You have successfully joined the business.');
+            ->with('message', 'شما با موفقیت به املاکی مورد نظر پیوستید.');
     }
 
     public function leaveMember(User $user)

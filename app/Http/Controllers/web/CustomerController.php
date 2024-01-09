@@ -32,7 +32,7 @@ class CustomerController extends Controller
 
         $business = $user->business();
 
-        $customers = $business->customers()->CustomerType()->orderBy('is_star', 'desc')
+        $customers = $business->customers()->CustomerType()->orderBy('is_star', 'desc')->orderBy('status', 'asc')
             ->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
 
         foreach ($customers as $customer) {
@@ -114,7 +114,7 @@ class CustomerController extends Controller
             $smsApi = new SmsAPI();
             $smsApi->sendSmsRegisterFile($customer->number , $customer->name , $user->business()->name , $user->business()->number);
         }
-        return redirect()->route('customer.index',['status' => 'active']);
+        return redirect()->route('customer.index',['status' => 'active'])->with('message' , 'فایل موردنظر ایجاد شد.');
     }
 
     public function edit(Customer $customer)
@@ -173,7 +173,7 @@ class CustomerController extends Controller
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
-        return redirect()->route('customer.index',['status' => 'active']);
+        return redirect()->route('customer.index',['status' => 'active'])->with('message' , 'فایل موردنظر اپدیت شد.');
     }
 
     public function destroy(Customer $customer)
@@ -182,7 +182,7 @@ class CustomerController extends Controller
 
         $customer->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with('message' , 'فایل موردنظر حذف شد.');;
     }
 
     public function star(Customer $customer)
@@ -196,7 +196,7 @@ class CustomerController extends Controller
             $customer->is_star = 0;
             $customer->save();
         }
-        return redirect()->back();
+        return redirect()->back()->with('message' , 'جایگاه فایل موردنظر تغییر کرد.');
     }
 
 }

@@ -71,7 +71,7 @@ class SuggestionForCustomerController extends Controller
         $smsApi = new SmsAPI();
         $smsApi->sendSmsLink($customer->number , $customer->name , $link);
 
-        return redirect()->back();
+        return redirect()->back()->with('message' , 'پیامی برای تایید مشتری ارسال شد.');
     }
 
     public function share_file_with_customer(Request $request)
@@ -88,7 +88,7 @@ class SuggestionForCustomerController extends Controller
                 $price = $landowner->selling_price;
             $smsApi = new SmsAPI();
             $smsApi->sendSmsShareFile($customer->number , $customer->name ,$landowner->scale , $price , $customer->business->number);
-            return redirect()->back()->with('message' , 'پیام شما ارسال شد.');
+            return redirect()->back()->with('message' , 'پیام پیشنهاد شما برای مشتری ارسال شد.');
         }
         else
         {

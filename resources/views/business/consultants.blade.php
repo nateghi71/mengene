@@ -2,17 +2,65 @@
 
 @section('title' , 'مشاوران')
 
+@section('head')
+    <style>
+        #deletePanel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            overflow: hidden;
+            background: rgba(0,0,0,0.5);
+        }
+
+        #deleteBox {
+            position: fixed;
+            padding: 20px;
+            top: calc(50% - 60px);
+            left: calc(50% - 140px);
+            width: 280px;
+            height: 120px;
+            background: rgba(0,0,0,1);
+        }
+    </style>
+@endsection
+
 @section('scripts')
     <script>
         $('.btn-close').on('click' , function (){
             $('#message').remove()
         })
+
+        $('#deletePanel').hide()
+
+        $('[id^=open_delete_panel_]').on('click' , function (e){
+            e.preventDefault()
+            $('#deletePanel').show()
+            $('#deleteBox').children().children().eq(0).attr('href' , $(this).attr('href'))
+        })
+        $('#not_delete_btn').on('click' , function (){
+            $('#deletePanel').hide()
+        })
     </script>
 @endsection
 
 @section('content')
+    <div id="deletePanel">
+        <div id="deleteBox">
+            <p class="text-end pb-3">ایا می خواهید فایل موردنظر را حذف کنید؟</p>
+            <div class="d-flex justify-content-between">
+                <a class="btn btn-danger">
+                    بله
+                </a>
+                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
+            </div>
+        </div>
+    </div>
+
     @if (session()->has('message'))
-        <div class="alert alert-danger d-flex justify-content-between" id="message">
+        <div class="alert alert-success d-flex justify-content-between" id="message">
             {{session()->get('message')}}
             <button type="button" class="btn-close" aria-label="Close"></button>
         </div>
@@ -114,7 +162,7 @@
                                         <a class="btn btn-outline-success text-decoration-none" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}">قبول</a>
                                     </td>
                                     <td>
-                                        <a class="btn btn-outline-danger text-decoration-none" href="{{route('business.remove.member',['user'=>$member->id])}}" >حذف</a>
+                                        <a href="{{route('business.remove.member',['user'=>$member->id])}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button">حذف</a>
                                     </td>
                                 </tr>
                             @endforeach
