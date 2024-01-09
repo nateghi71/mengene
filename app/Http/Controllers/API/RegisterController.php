@@ -38,7 +38,7 @@ class RegisterController extends BaseController
         ]);
 
         $smsApi = new SmsAPI();
-        $smsApi->sendSms($userNumber , $code);
+        $smsApi->sendSmsCode($userNumber , $code);
 
         $data['random_string'] = $randomString;
         return $this->sendResponse($data, 'User register successfully.');
@@ -88,11 +88,10 @@ class RegisterController extends BaseController
             ]);
 
             $smsApi = new SmsAPI();
-            $smsApi->sendSms($userNumber , $code);
+            $smsApi->sendSmsCode($userNumber , $code);
 
             $data['random_string'] = $userCode->random_string ;
             return $this->sendResponse($data, 'code resend again.');
-
         }
         else
         {
