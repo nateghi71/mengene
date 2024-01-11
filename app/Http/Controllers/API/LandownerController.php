@@ -34,33 +34,49 @@ class LandownerController extends BaseController
         $user = auth()->user();
         $business = $user->business();
 
-        $landowners = $business->landowners()->where('status', 'active')
-            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
-        $ilandowners = $business->landowners()->where('status', 'unknown')
-            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+        $landowners = $business->landowners()->landownerType()
+            ->orderBy('is_star', 'desc')->orderBy('status', 'asc')->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
 
-        $indexedLandowners = $landowners->groupBy('type_sale');
-        $rentLandowners = $indexedLandowners->get('rahn');
-        $buyLandowners = $indexedLandowners->get('buy');
         foreach ($landowners as $landowner) {
-            if ($landowner->expire_date > Carbon::now()) {
-                $daysLeft = Carbon::now()->diffInDays($landowner->expire_date) + 1;
+            if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($landowner->getRawOriginal('expire_date')) + 1;
                 $landowner->daysLeft = $daysLeft;
             }
         }
-
-        $indexediLandowners = $ilandowners->groupBy('type_sale');
-        $rentiLandowners = $indexediLandowners->get('rahn');
-        $buyiLandowners = $indexediLandowners->get('buy');
-
         return $this->sendResponse([
-            'landowners' => LandownerResource::collection($landowners),
-            'ilandowners' => LandownerResource::collection($ilandowners),
-            'rentLandowners' => $rentLandowners ? LandownerResource::collection($rentLandowners) : [],
-            'rentiLandowners' => $rentiLandowners ? LandownerResource::collection($rentiLandowners) : [],
-            'buyLandowners' => $buyLandowners ? LandownerResource::collection($buyLandowners) : [],
-            'buyiLandowners' => $buyiLandowners ? LandownerResource::collection($buyiLandowners) : [],
+            'customers' => $landowners ? LandownerResource::collection($landowners) : [],
+            'links' => $landowners ? LandownerResource::collection($landowners)->response()->getData()->links : [],
+            'meta' => $landowners ? LandownerResource::collection($landowners)->response()->getData()->meta : [],
+
         ], 'Landowners retrieved successfully.');
+
+//        $landowners = $business->landowners()->where('status', 'active')
+//            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+//        $ilandowners = $business->landowners()->where('status', 'unknown')
+//            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+//
+//        $indexedLandowners = $landowners->groupBy('type_sale');
+//        $rentLandowners = $indexedLandowners->get('rahn');
+//        $buyLandowners = $indexedLandowners->get('buy');
+//        foreach ($landowners as $landowner) {
+//            if ($landowner->expire_date > Carbon::now()) {
+//                $daysLeft = Carbon::now()->diffInDays($landowner->expire_date) + 1;
+//                $landowner->daysLeft = $daysLeft;
+//            }
+//        }
+//
+//        $indexediLandowners = $ilandowners->groupBy('type_sale');
+//        $rentiLandowners = $indexediLandowners->get('rahn');
+//        $buyiLandowners = $indexediLandowners->get('buy');
+//
+//        return $this->sendResponse([
+//            'landowners' => LandownerResource::collection($landowners),
+//            'ilandowners' => LandownerResource::collection($ilandowners),
+//            'rentLandowners' => $rentLandowners ? LandownerResource::collection($rentLandowners) : [],
+//            'rentiLandowners' => $rentiLandowners ? LandownerResource::collection($rentiLandowners) : [],
+//            'buyLandowners' => $buyLandowners ? LandownerResource::collection($buyLandowners) : [],
+//            'buyiLandowners' => $buyiLandowners ? LandownerResource::collection($buyiLandowners) : [],
+//        ], 'Landowners retrieved successfully.');
     }
 
 
@@ -92,7 +108,7 @@ class LandownerController extends BaseController
         $request->validate([
             'name' => 'required',
             'number' => 'required|numeric',
-            'city' => 'required',
+            'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
@@ -115,7 +131,7 @@ class LandownerController extends BaseController
         $landowner = Landowner::create([
             'name' => $request->name,
             'number' => $request->number,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'status' => $request->status,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
@@ -154,7 +170,7 @@ class LandownerController extends BaseController
         $request->validate([
             'name' => 'required',
             'number' => 'required',
-            'city' => 'required',
+            'city_id' => 'required',
             'status' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
@@ -177,7 +193,7 @@ class LandownerController extends BaseController
         $landowner->update([
             'name' => $request->name,
             'number' => $request->number,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'status' => $request->status,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,

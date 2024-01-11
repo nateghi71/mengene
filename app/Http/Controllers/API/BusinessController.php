@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\API\MyBaseController as BaseController;
 use App\Http\Resources\BusinessResource;
+use App\Http\Resources\UserResource;
 use App\Models\Business;
 use App\Models\Customer;
 use App\Models\Landowner;
@@ -17,9 +19,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class BusinessController extends Controller
+class BusinessController extends BaseController
 {
-
     public function index()
     {
         try
@@ -31,31 +32,81 @@ class BusinessController extends Controller
             return response()->json(['message' => 'you dont have a business']);
         }
 
-        $acceptedMember = collect();
-        $notAcceptedMember = collect();
+//        $acceptedMember = collect();
+//        $notAcceptedMember = collect();
 
         $user = auth()->user();
         $business = $user->ownedBusiness()->first();
-        $members = $business->members;
+//        $members = $business->members;
+//
+//        foreach ($members as $member) {
+//            $customers = Customer::where('user_id', $member->id)->count();
+//            $landowners = Landowner::where('user_id', $member->id)->count();
+//            $member->added = $customers + $landowners;
+//
+//            if($member->pivot->is_accepted === 1)
+//                $acceptedMember->push($member);
+//            elseif ($member->pivot->is_accepted === 0)
+//                $notAcceptedMember->push($member);
+//        }
 
-        foreach ($members as $member) {
-            $customers = Customer::where('user_id', $member->id)->count();
-            $landowners = Landowner::where('user_id', $member->id)->count();
-            $member->added = $customers + $landowners;
+        return $this->sendResponse([
+            'user' => $user,
+//            'acceptedMember' => $acceptedMember,
+//            'notAcceptedMember' => $notAcceptedMember,
+            'business' => new BusinessResource($business),
+        ],'business retrieved successfully.');
+    }
 
-            if($member->pivot->is_accepted === 1)
-                $acceptedMember->push($member);
-            elseif ($member->pivot->is_accepted === 0)
-                $notAcceptedMember->push($member);
+    public function showAcceptedConsultants()
+    {
+        try
+        {
+            $this->authorize('viewBusinessIndex' , Business::class);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return response()->json(['message' => 'you dont have a business']);
         }
 
-        return response()->json([
-            'user' => $user,
-            'acceptedMember' => $acceptedMember,
-            'notAcceptedMember' => $notAcceptedMember,
-            'business' => new BusinessResource($business),
-        ]);
+        $user = auth()->user();
+        $business = $user->ownedBusiness()->first();
+
+        $acceptedMembers = $business->members()->wherePivot('is_accepted' , 1)->withCount('customers' , 'landowners')
+            ->paginate(10)->withQueryString();
+
+        return $this->sendResponse([
+            'acceptedMembers' => $acceptedMembers ? UserResource::collection($acceptedMembers) : [],
+            'links' => $acceptedMembers ? UserResource::collection($acceptedMembers)->response()->getData()->links : [],
+            'meta' => $acceptedMembers ? UserResource::collection($acceptedMembers)->response()->getData()->meta : [],
+
+        ], 'Members retrieved successfully.');
     }
+    public function showNotAcceptedConsultants()
+    {
+        try
+        {
+            $this->authorize('viewBusinessIndex' , Business::class);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return response()->json(['message' => 'you dont have a business']);
+        }
+
+        $user = auth()->user();
+        $business = $user->ownedBusiness()->first();
+
+        $notAcceptedMembers = $business->members()->wherePivot('is_accepted' , 0)->withCount('customers' , 'landowners')
+            ->paginate(10)->withQueryString();
+
+        return $this->sendResponse([
+            'notAcceptedMembers' => $notAcceptedMembers ? UserResource::collection($notAcceptedMembers) : [],
+            'links' => $notAcceptedMembers ? UserResource::collection($notAcceptedMembers)->response()->getData()->links : [],
+            'meta' => $notAcceptedMembers ? UserResource::collection($notAcceptedMembers)->response()->getData()->meta : [],
+
+        ], 'Members retrieved successfully.');
+    }
+
 
     public function store(Request $request)
     {
@@ -71,7 +122,7 @@ class BusinessController extends Controller
         $request->validate([
             'name' => 'required',
             'en_name' => 'required|unique:businesses',
-            'city' => 'required',
+            'city_id' => 'required',
             'area' => 'required',
             'address' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -90,7 +141,7 @@ class BusinessController extends Controller
             'en_name' => $request->en_name,
             'user_id' => $user->id,
             'image' => $imageName,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'area' => $request->area,
             'address' => $request->address
         ]);
@@ -119,7 +170,7 @@ class BusinessController extends Controller
                 'required',
                 Rule::unique('businesses')->ignore($business->user_id, 'user_id'),
             ],
-            'city' => 'required',
+            'city_id' => 'required',
             'area' => 'required',
             'address' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -135,7 +186,7 @@ class BusinessController extends Controller
             'name' => $request->name,
             'en_name' => $request->en_name,
             'image' => $request->hasFile('image') ? $imageName : $business->image,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'area' => $request->area,
             'address' => $request->address
         ]);

@@ -43,6 +43,7 @@
     <div class="content-wrapper full-page-wrapper d-flex align-items-center auth register-half-bg">
         <div class="card col-lg-4 mx-auto">
             <div class="card-body px-5 py-5">
+                <p class="sign-up">ایا می خواهید به یک بیزنس بپیوندید؟<a class="text-decoration-none" href="{{route('consultant.find')}}"> یافتن</a></p>
                 <h3 class="card-title text-center mb-3">ایجاد املاکی</h3>
                 <form action="{{ route('business.store') }}" method="post" enctype="multipart/form-data" autocomplete="off">
                     @csrf
@@ -104,7 +105,6 @@
                     <div class="text-center pt-3">
                         <button type="submit" class="btn btn-primary w-100 enter-btn">ایجاد</button>
                     </div>
-                    <p class="sign-up">ایا می خواهید به یک بیزنس بپیوندید؟<a class="text-decoration-none" href="{{route('consultant.find')}}"> یافتن</a></p>
                 </form>
             </div>
         </div>

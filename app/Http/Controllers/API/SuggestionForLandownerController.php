@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Models\Landowner;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SuggestionForLandownerController extends BaseController
@@ -22,7 +23,7 @@ class SuggestionForLandownerController extends BaseController
             $minPrice = $landowner->getRawOriginal('selling_price') * 0.8; // 80% of the customer's price
             $maxPrice = $landowner->getRawOriginal('selling_price') * 1.2; // 120% of the customer's price
 
-            $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)
+            $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)->where('type_sale', 'buy')
                 ->whereDoesntHave('suggestedLandowner', function ($query) use ($landownerId) {
                     $query->where('landowner_id', $landownerId)->where('suggest_business' , 1);
                 })->whereBetween('selling_price', [$minPrice, $maxPrice])->orderBy('selling_price' , 'asc')->limit(10)->get();
@@ -35,12 +36,19 @@ class SuggestionForLandownerController extends BaseController
             $minRent = $landowner->getRawOriginal('rent_amount') * 0.8;
             $maxRent = $landowner->getRawOriginal('rent_amount') * 1.2;
 
-            $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)
+            $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)->where('type_sale', 'rahn')
                 ->whereDoesntHave('suggestedLandowner', function ($query) use ($landownerId) {
                     $query->where('landowner_id', $landownerId)->where('suggest_business' , 1);
                 })->whereBetween('rahn_amount', [$minRahn, $maxRahn])
                 ->whereBetween('rent_amount', [$minRent, $maxRent])->orderBy('rahn_amount' , 'asc')
                 ->orderBy('rent_amount' , 'asc')->limit(10)->get();
+        }
+
+        foreach ($suggestions as $suggestion) {
+            if ($suggestion->getRawOriginal('expire_date') > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($suggestion->getRawOriginal('expire_date')) + 1;
+                $suggestion->daysLeft = $daysLeft;
+            }
         }
 
         return $this->sendResponse([

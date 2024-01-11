@@ -44,6 +44,9 @@ Route::middleware('auth:api')->group(function () {
     ]);
 
     // Additional routes
+    Route::get('business/member-acceptance', [BusinessController::class, 'showAcceptedConsultants'])->name('api.business.acceptance');
+    Route::get('business/member-notAcceptance', [BusinessController::class, 'showNotAcceptedConsultants'])->name('api.business.notAcceptance');
+
     Route::put('business/{user}/toggle-user-acceptance', [BusinessController::class, 'toggleUserAcceptance'])->name('api.business.toggleUserAcceptance');
     Route::put('business/{user}/choose-owner', [BusinessController::class, 'chooseOwner'])->name('api.business.chooseOwner');
     Route::get("business/{user}/remove", [BusinessController::class, 'removeMember'])->name('api.business.remove.member');

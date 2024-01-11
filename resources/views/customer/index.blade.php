@@ -192,7 +192,7 @@
                                 </thead>
                                 <tbody>
                                 @foreach($customers as $key => $customer)
-                                    <tr>
+                                    <tr @class(['text-success' => $customer->user_id === auth()->user()->id])>
                                         <td>
                                             <a class="text-decoration-none" href="{{route('customer.star',$customer->id)}}">{!!$customer->getRawOriginal('is_star') ?
                                                 '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>

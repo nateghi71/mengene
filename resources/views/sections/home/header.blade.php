@@ -10,14 +10,13 @@
         <nav id="navbar" class="navbar px-4">
             <ul>
                 <li><a class="nav-link scrollto" href="{{route('welcome').'#home'}}">خانه</a></li>
-                <li><a class="nav-link scrollto" href="{{route('login')}}">ورود</a></li>
+{{--                <li><a class="nav-link scrollto" href="{{route('login')}}">ورود</a></li>--}}
                 <a class="nav-link scrollto" href="{{route('dashboard')}}">مدیریت</a>
-
+                <li><a class="nav-link scrollto" href="{{route('landowner.public.index').'#tableLandowners'}}" target="_blank">مالکان</a></li>
+                <li><a class="nav-link scrollto" href="{{route('customer.public.index').'#tableCustomers'}}" target="_blank">متقاضیان</a></li>
                 <li><a class="nav-link scrollto" href="{{route('welcome').'#pricing'}}">تعرفه ها</a></li>
                 <li><a class="nav-link scrollto" href="{{route('welcome').'#contact'}}">ارتباط با ما</a></li>
                 {{--                <li><a class="nav-link scrollto" href="#footer">درباره ما</a></li>--}}
-                <li><a class="nav-link scrollto" href="{{route('landowner.public.index').'#tableLandowners'}}" target="_blank">مالکان عمومی</a></li>
-                <li><a class="nav-link scrollto" href="{{route('customer.public.index').'#tableCustomers'}}" target="_blank">متقاضیان عمومی</a></li>
                 <!-- <li><a class="nav-link scrollto" href="#team">Team</a></li> -->
                 <!-- <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
                 <ul>

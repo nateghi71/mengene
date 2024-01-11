@@ -35,14 +35,8 @@ class CustomerController extends BaseController
         $user = auth()->user();
         $business = $user->business();
 
-        $customers = $business->customers()->where('status', 'active')
-            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
-        $icustomers = $business->customers()->where('status', 'unknown')
-            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
-
-        $indexedCustomers = $customers->groupBy('type_sale');
-        $rentCustomers = $indexedCustomers->get('rahn');
-        $buyCustomers = $indexedCustomers->get('buy');
+        $customers = $business->customers()->CustomerType()->orderBy('is_star', 'desc')->orderBy('status', 'asc')
+            ->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
 
         foreach ($customers as $customer) {
             if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
@@ -50,19 +44,40 @@ class CustomerController extends BaseController
                 $customer->daysLeft = $daysLeft;
             }
         }
-
-        $indexediCustomers = $icustomers->groupBy('type_sale');
-        $rentiCustomers = $indexediCustomers->get('rahn');
-        $buyiCustomers = $indexediCustomers->get('buy');
-
         return $this->sendResponse([
-            'customers' => CustomerResource::collection($customers),
-            'icustomers' => CustomerResource::collection($icustomers),
-            'rentCustomers' => $rentCustomers ? CustomerResource::collection($rentCustomers) : [],
-            'rentiCustomers' => $rentiCustomers ? CustomerResource::collection($rentiCustomers) : [],
-            'buyCustomers' => $buyCustomers ? CustomerResource::collection($buyCustomers) : [],
-            'buyiCustomers' => $buyiCustomers ? CustomerResource::collection($buyiCustomers) : [],
+            'customers' => $customers ? CustomerResource::collection($customers) : [],
+            'links' => $customers ? CustomerResource::collection($customers)->response()->getData()->links : [],
+            'meta' => $customers ? CustomerResource::collection($customers)->response()->getData()->meta : [],
         ], 'Customers retrieved successfully.');
+
+//        $customers = $business->customers()->where('status', 'active')
+//            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+//        $icustomers = $business->customers()->where('status', 'unknown')
+//            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
+//
+//        $indexedCustomers = $customers->groupBy('type_sale');
+//        $rentCustomers = $indexedCustomers->get('rahn');
+//        $buyCustomers = $indexedCustomers->get('buy');
+//
+//        foreach ($customers as $customer) {
+//            if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
+//                $daysLeft = Carbon::now()->diffInDays($customer->getRawOriginal('expire_date')) + 1;
+//                $customer->daysLeft = $daysLeft;
+//            }
+//        }
+//
+//        $indexediCustomers = $icustomers->groupBy('type_sale');
+//        $rentiCustomers = $indexediCustomers->get('rahn');
+//        $buyiCustomers = $indexediCustomers->get('buy');
+
+//        return $this->sendResponse([
+//            'customers' => CustomerResource::collection($customers),
+//            'icustomers' => CustomerResource::collection($icustomers),
+//            'rentCustomers' => $rentCustomers ? CustomerResource::collection($rentCustomers) : [],
+//            'rentiCustomers' => $rentiCustomers ? CustomerResource::collection($rentiCustomers) : [],
+//            'buyCustomers' => $buyCustomers ? CustomerResource::collection($buyCustomers) : [],
+//            'buyiCustomers' => $buyiCustomers ? CustomerResource::collection($buyiCustomers) : [],
+//        ], 'Customers retrieved successfully.');
     }
 
     public function dashboard()
@@ -102,7 +117,7 @@ class CustomerController extends BaseController
         $request->validate([
             'name' => 'required',
             'number' => 'required|numeric',
-            'city' => 'required',
+            'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
@@ -126,7 +141,7 @@ class CustomerController extends BaseController
         $customer = Customer::create([
             'name' => $request->name,
             'number' => $request->number,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
@@ -164,7 +179,7 @@ class CustomerController extends BaseController
         $request->validate([
             'name' => 'required',
             'number' => 'required|numeric',
-            'city' => 'required',
+            'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
@@ -186,7 +201,7 @@ class CustomerController extends BaseController
         $customer->update([
             'name' => $request->name,
             'number' => $request->number,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,

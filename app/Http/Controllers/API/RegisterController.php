@@ -111,7 +111,7 @@ class RegisterController extends BaseController
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
+            'city_id' => 'required|string|max:255',
             'email' => 'nullable|max:255',
             'password' => 'required|min:8',
             'c_password' => 'required|same:password',
@@ -127,7 +127,7 @@ class RegisterController extends BaseController
                 'name' => $request->name,
                 'email' => $request->email,
                 'number' => $userCode->user_number,
-                'city' => $request->city,
+                'city_id' => $request->city_id,
                 'password' => Hash::make($request->password),
             ]);
 

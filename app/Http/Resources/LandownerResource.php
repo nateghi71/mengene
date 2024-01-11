@@ -31,20 +31,26 @@ class LandownerResource extends JsonResource
 //        }
 
         return [
-            'id' => $this->id,
             'name' => $this->name,
             'number' => $this->number,
-            'city' => $this->city,
-            'description' => $this->description,
-            'type_sale' => $this->type_sale,
-            'price' => $this->selling_price,
-            'rahn' => $this->rahn_amount,
-            'ejareh' => $this->rent_amount,
+            'city_id' => $this->city_id,
             'status' => $this->status,
-            'star' => $this->is_star,
-            'business_en_name' => $this->business_en_name,
-            'expiry_date' => $this->expiry_date,
-//            'updated_at' => $this->updated_at->format('d/m/Y'),
+            'type_sale' => $this->type_sale,
+            'type_work' => $this->type_work,
+            'type_build' => $this->type_build,
+            'scale' => $this->scale,
+            'number_of_rooms' => $this->number_of_rooms,
+            'description' => $this->description,
+            'rahn_amount' =>  $this->rahn_amount,
+            'rent_amount' =>  $this->rent_amount,
+            'selling_price' => $this->selling_price,
+            'elevator' => $this->elevator,
+            'parking' => $this->parking,
+            'store' => $this->store,
+            'floor' => $this->floor,
+            'floor_number' => $this->floor_number,
+            'is_star' => $this->is_star,
+            'expire_date' => $this->expire_date
         ];
 
     }
