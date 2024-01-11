@@ -158,11 +158,11 @@ class RegisterController extends BaseController
             $data['token'] = $user->createToken('MyApp')->plainTextToken;
             $data['user'] = $user;
             if($user->ownedBusiness()->exists())
-                $data['role'] = 'owner';
+                $data['roles'] = 'owner';
             elseif ($user->joinedBusinesses()->exists())
-                $data['role'] = 'consultant';
+                $data['roles'] = 'consultant';
             else
-                $data['role'] = 'nothing';
+                $data['roles'] = 'nothing';
 
             return $this->sendResponse($data, 'User login successfully.');
         } else {
