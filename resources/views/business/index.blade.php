@@ -168,12 +168,12 @@
 
     <div class="row">
         <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('landowner.create')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <div class="d-flex align-items-center align-self-start text-success">
-                                <span class="mdi mdi-account-plus icon-item text-success"></span>
+                            <div class="d-flex align-items-center align-self-start text-white">
+                                <span class="mdi mdi-account-plus icon-item text-white"></span>
                                 <h3 class="pe-2 mb-0 fs-6">ایجاد مالک</h3>
                             </div>
                         </div>
@@ -182,12 +182,12 @@
             </div>
         </div>
         <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('landowner.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <div class="d-flex align-items-center align-self-start text-info">
-                                <span class="mdi mdi-account-search icon-item text-info"></span>
+                            <div class="d-flex align-items-center align-self-start text-white">
+                                <span class="mdi mdi-account-search icon-item text-white"></span>
                                 <h3 class="pe-2 mb-0 fs-6">مالکان</h3>
                             </div>
                         </div>
@@ -196,12 +196,12 @@
             </div>
         </div>
         <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('customer.create')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <div class="d-flex align-items-center align-self-start text-success">
-                                <span class="mdi mdi-account-plus icon-item text-success"></span>
+                            <div class="d-flex align-items-center align-self-start text-white">
+                                <span class="mdi mdi-account-plus icon-item text-white"></span>
                                 <h3 class="pe-2 mb-0 fs-6">ایجاد متقاضی</h3>
                             </div>
                         </div>
@@ -210,12 +210,12 @@
             </div>
         </div>
         <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('customer.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <div class="d-flex align-items-center align-self-start text-info">
-                                <span class="mdi mdi-account-search icon-item text-info"></span>
+                            <div class="d-flex align-items-center align-self-start text-white">
+                                <span class="mdi mdi-account-search icon-item text-white"></span>
                                 <h3 class="pe-2 mb-0 fs-6">متقاضیان</h3>
                             </div>
                         </div>
@@ -240,12 +240,12 @@
         </div>
         @else
             <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
-                <div class="card">
+                <div class="card bg-primary bg-gradient bg-opacity-50">
                     <a href="{{route('business.consultants')}}" class="text-decoration-none">
                         <div class="card-body">
                             <div class="icon">
-                                <div class="d-flex align-items-center align-self-start text-info">
-                                    <span class="mdi mdi-account-multiple icon-item"></span>
+                                <div class="d-flex align-items-center align-self-start text-white">
+                                    <span class="mdi mdi-account-multiple icon-box-warning"></span>
                                     <h3 class="pe-2 mb-0 fs-6">مشاوران</h3>
                                 </div>
                             </div>
@@ -255,7 +255,7 @@
             </div>
         @endif
         <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="https://98diha.ir//wp-content/themes/ringtone/api/mengene.apk" target="_blank" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
@@ -363,8 +363,8 @@
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
                                             <p class="text-white">
-                                                <a href="{{route('business.edit',['business'=>$business->id])}}" class="btn btn-outline-success" href="">
-                                                    ویرایش
+                                                <a href="{{route('business.edit',['business'=>$business->id])}}" class="fs-4 text-success text-decoration-none" href="">
+                                                    <i class="mdi mdi-message-draw"></i>
                                                 </a>
                                             </p>
                                             <p class="text-muted mb-0">{{verta($business->updated_at)}} </p>
@@ -384,7 +384,9 @@
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
                                             <p class="text-white">
-                                                <button id="open_delete_panel" class="btn btn-outline-danger" type="button">حذف</button>
+                                                <button id="open_delete_panel" class="fs-4 btn btn-link text-decoration-none text-danger" type="button">
+                                                    <i class="mdi mdi-delete"></i>
+                                                </button>
                                             </p>
                                             <p class="text-muted mb-0">حذف املاکی</p>
                                         </div>

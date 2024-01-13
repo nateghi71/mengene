@@ -23,6 +23,10 @@
             background: rgba(0,0,0,1);
             transform: translate(-50%, -50%);
         }
+
+        .self_file {
+            background: #000;
+        }
     </style>
 @endsection
 
@@ -91,12 +95,12 @@
     </div>
     <div class="row">
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('customer.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-info"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
+                            <span class="mdi mdi-account-search icon-item text-white"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
                                 <h3 class="mb-0">همه متقاضیان</h3>
                             </div>
                         </div>
@@ -105,12 +109,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('customer.index',['type' => 'buy'])}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-info"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
+                            <span class="mdi mdi-account-search icon-item text-white"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
                                 <h3 class="mb-0">متقاضیان خرید</h3>
                             </div>
                         </div>
@@ -119,12 +123,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('customer.index',['type' => 'rahn'])}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-info"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
+                            <span class="mdi mdi-account-search icon-item text-white"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
                                 <h3 class="mb-0">متقاضیان رهن</h3>
                             </div>
                         </div>
@@ -133,12 +137,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('customer.index',['type' => 'deActive'])}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-info"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-info">
+                            <span class="mdi mdi-account-search icon-item text-white"></span>
+                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
                                 <h3 class="mb-0">متقاضیان غیرفعال</h3>
                             </div>
                         </div>
@@ -190,9 +194,9 @@
                                     <th>حذف</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="text-white">
                                 @foreach($customers as $key => $customer)
-                                    <tr @class(['text-success' => $customer->user_id === auth()->user()->id])>
+                                    <tr @class(['self_file' => auth()->user()->id === $customer->user->id])>
                                         <td>
                                             <a class="text-decoration-none" href="{{route('customer.star',$customer->id)}}">{!!$customer->getRawOriginal('is_star') ?
                                                 '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
@@ -213,11 +217,11 @@
                                         <td>{{$customer->getRawOriginal('selling_price') !== 0 ? $customer->selling_price : $customer->rahn_amount}}</td>
                                         <td>{{$customer->scale}}</td>
                                         <td>{{$customer->daysLeft ? $customer->daysLeft . ' روز' : 'منقضی'}} </td>
-                                        <td><a class="btn text-decoration-none" href="{{route('customer.suggestions',$customer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
-                                        <td><a class="btn text-decoration-none" href="{{route('customer.show',$customer->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="btn text-decoration-none" href="{{route('customer.edit',$customer->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
+                                        <td><a class="text-white text-decoration-none" href="{{route('customer.suggestions',$customer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
+                                        <td><a class="text-white text-decoration-none" href="{{route('customer.show',$customer->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td><a class="text-white text-decoration-none" href="{{route('customer.edit',$customer->id)}}"><i class="mdi mdi-message-draw"></i></a></td>
                                         <td>
-                                            <a href="{{route('customer.destroy',$customer->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a>
+                                            <a href="{{route('customer.destroy',$customer->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger" type="button"><i class="mdi mdi-delete"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

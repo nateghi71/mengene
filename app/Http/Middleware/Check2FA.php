@@ -23,7 +23,7 @@ class Check2FA
             $userCode = UserCode::where('random_string', $randomString)->first();
 //            dd($userCode);
             if (!$userCode || !$userCode->number_verified) {
-                return redirect()->route('2fa.index')->with('error', 'مراحل ثبت نام را از اول اغاز کنید.');
+                return redirect()->route('2fa.enter_number')->with('error', 'مراحل ثبت نام را از اول اغاز کنید.');
             }
         }
         else

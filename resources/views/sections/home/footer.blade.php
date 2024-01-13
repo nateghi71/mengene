@@ -77,12 +77,10 @@
                       derita valies
                     </p> -->
                     <div class="social-links mt-3">
-                        <a href="#" class="twitter"><i class="mdi mdi-twitter"></i></a>
-                        <a href="#" class="facebook"><i class="mdi mdi-facebook"></i></a>
-                        <a href="#" class="instagram"
+                        <a href="https://t.me/mengene_ir" class="telegram" target="_blank"><i class="mdi mdi-telegram"></i></a>
+                        <a href="https://www.instagram.com/mengene.ir" target="_blank" class="instagram"
                         ><i class="mdi mdi-instagram"></i
                             ></a>
-                        <a href="#" class="google-plus"><i class="mdi mdi-google-plus"></i></a>
                         <a href="#" class="linkedin"><i class="mdi mdi-linkedin"></i></a>
                     </div>
                 </div>

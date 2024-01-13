@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div class="preview-item-content">
-                            <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                            <p class="preview-subject ellipsis mb-1 text-small">تنظیمات حساب</p>
                         </div>
                     </a>
                     <div class="dropdown-divider"></div>
@@ -37,18 +37,7 @@
                             </div>
                         </div>
                         <div class="preview-item-content">
-                            <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
-                        </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-dark rounded-circle">
-                                <i class="mdi mdi-calendar-today text-success"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <p class="preview-subject ellipsis mb-1 text-small">To-do list</p>
+                            <p class="preview-subject ellipsis mb-1 text-small">تغییر رمز</p>
                         </div>
                     </a>
                 </div>
@@ -60,19 +49,26 @@
         <li class="nav-item menu-items">
             <a class="nav-link" href="{{route('dashboard')}}">
               <span class="menu-icon">
-                <i class="mdi mdi-speedometer"></i>
+                <i class="mdi mdi-view-dashboard"></i>
               </span>
                 <span class="menu-title pe-2">داشبورد</span>
             </a>
         </li>
         @if(auth()->user()->ownedBusiness()->exists() && !auth()->user()->isFreeUser())
             <li class="nav-item menu-items">
-                <a class="nav-link" href="{{route('business.consultants')}}">
-                  <span class="menu-icon">
-                    <i class="mdi mdi-speedometer"></i>
-                  </span>
+                <a class="nav-link" data-bs-toggle="collapse" href="#consultants" aria-expanded="false" aria-controls="consultants">
+              <span class="menu-icon">
+                <i class="mdi mdi-account-multiple"></i>
+              </span>
                     <span class="menu-title pe-2">مشاوران</span>
+                    <i class="menu-arrow"></i>
                 </a>
+                <div class="collapse" id="consultants">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" href="{{route('business.consultants')}}">مشاوران تایید شده</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="{{route('business.consultants' , ['type' => 'notAccepted'])}}">مشاوران تایید نشده</a></li>
+                    </ul>
+                </div>
             </li>
         @endif
         <li class="nav-item menu-items">

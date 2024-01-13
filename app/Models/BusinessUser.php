@@ -12,6 +12,6 @@ class BusinessUser extends Model
     public $table = "business_user";
 
     protected $fillable = [
-        'is_accepted',
+        'is_accepted', 'joined_date'
     ];
 }

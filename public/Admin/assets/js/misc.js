@@ -18,9 +18,32 @@
             }
         }
         else if(current === "consultants"){
-            if(element.attr('href').indexOf('consultants') !== -1)
+            const urlQuery = new URLSearchParams(window.location.search);
+            const myQuery = urlQuery.get('type');
+
+            if(myQuery === null)
             {
-                element.parents('.nav-item').last().addClass('active');
+                if(element.attr('href').indexOf('?') === -1 && element.attr('href').indexOf('consultants') !== -1)
+                {
+                    element.parents('.nav-item').last().addClass('active');
+                    if (element.parents('.sub-menu').length) {
+                        element.closest('.collapse').addClass('show');
+                        element.addClass('active');
+                    }
+                }
+            }
+            else if(myQuery === 'notAccepted')
+            {
+                if (element.attr('href').indexOf('?type=notAccepted') !== -1 && element.attr('href').indexOf('consultants') !== -1)
+                {
+                    console.log(element.attr('href'))
+
+                    element.parents('.nav-item').last().addClass('active');
+                    if (element.parents('.sub-menu').length) {
+                        element.closest('.collapse').addClass('show');
+                        element.addClass('active');
+                    }
+                }
             }
         }
         else if(current === "customer"){

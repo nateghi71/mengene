@@ -27,8 +27,6 @@ class BusinessController extends Controller
 {
     public function index()
     {
-//        dd(Carbon::now()->toJalali());
-
         $this->authorize('viewBusinessIndex' , Business::class);
 
         $user = auth()->user();
@@ -43,15 +41,25 @@ class BusinessController extends Controller
         $user = auth()->user();
         $business = $user->ownedBusiness()->first();
 
-        $acceptedMembers = $business->members()->wherePivot('is_accepted' , 1)->withCount('customers' , 'landowners')->paginate(
-            $perPage = 5, $columns = ['*'], $pageName = 'accepted'
-        )->fragment('accepted')->withQueryString();
+        if(request()->type === 'notAccepted')
+        {
+            $is_accepted = false;
+            $members = $business->members()->wherePivot('is_accepted' , 0)->withCount('customers' , 'landowners')
+                ->paginate(10)->withQueryString();
+        }
+        else
+        {
+            $is_accepted = true;
+            $members = $business->members()->wherePivot('is_accepted' , 1)->withCount('customers' , 'landowners')
+                ->paginate(10)->withQueryString();
 
-        $notAcceptedMembers = $business->members()->wherePivot('is_accepted' , 0)->withCount('customers' , 'landowners')->paginate(
-            $perPage = 5, $columns = ['*'], $pageName = 'notAccepted'
-        )->fragment('notAccepted')->withQueryString();
+            foreach ($members as $member) {
+                $daysGone = Carbon::now()->diffInDays($member->getRawOriginal('joined_date')) + 1;
+                $member->daysGone = $daysGone;
+            }
+        }
 
-        return view('business.consultants', compact('acceptedMembers' , 'notAcceptedMembers'));
+        return view('business.consultants', compact('members' , 'is_accepted'));
     }
 
     public function dashboard()
@@ -90,7 +98,7 @@ class BusinessController extends Controller
 
         $user = auth()->user();
 
-        $imageName = null;
+        $imageName = '';
         if ($request->hasFile('image')) {
             $imageName = time() . $request->image->getClientOriginalName();
             $request->image->move(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')), $imageName);
@@ -182,11 +190,12 @@ class BusinessController extends Controller
 
         $member = $user->businessUser()->first();
         if ($member->is_accepted == 0) {
+
             $userAuth = auth()->user();
             if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
                 return redirect()->back()->with('message', 'شما نمی توانید مشاور اضافه کنید.');
-
             $userAuth->incrementPremiumCountConsultants();
+            $member->joined_date = Carbon::now()->format('Y-m-d');
 
             $member->is_accepted = 1;
             $member->save();
@@ -195,9 +204,6 @@ class BusinessController extends Controller
             $member->is_accepted = 0;
             $member->save();
         }
-
-        $member->is_accepted = !$member->is_accepted;
-        $member->save();
 
         return redirect()->back()->with('message', 'تغییرات شما اعمال شد.');
     }

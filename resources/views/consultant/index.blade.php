@@ -162,12 +162,12 @@
 
     <div class="row">
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('landowner.create')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <div class="d-flex align-items-center align-self-start text-success">
-                                <span class="mdi mdi-account-plus icon-item text-success"></span>
+                            <div class="d-flex align-items-center align-self-start text-white">
+                                <span class="mdi mdi-account-plus icon-item text-white"></span>
                                 <h3 class="pe-2 mb-0 fs-6">ایجاد مالک</h3>
                             </div>
                         </div>
@@ -176,12 +176,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('landowner.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <div class="d-flex align-items-center align-self-start text-info">
-                                <span class="mdi mdi-account-search icon-item text-info"></span>
+                            <div class="d-flex align-items-center align-self-start text-white">
+                                <span class="mdi mdi-account-search icon-item text-white"></span>
                                 <h3 class="pe-2 mb-0 fs-6">مالکان</h3>
                             </div>
                         </div>
@@ -190,12 +190,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('customer.create')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <div class="d-flex align-items-center align-self-start text-success">
-                                <span class="mdi mdi-account-plus icon-item text-success"></span>
+                            <div class="d-flex align-items-center align-self-start text-white">
+                                <span class="mdi mdi-account-plus icon-item text-white"></span>
                                 <h3 class="pe-2 mb-0 fs-6">ایجاد متقاضی</h3>
                             </div>
                         </div>
@@ -204,12 +204,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('customer.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
-                            <div class="d-flex align-items-center align-self-start text-info">
-                                <span class="mdi mdi-account-search icon-item text-info"></span>
+                            <div class="d-flex align-items-center align-self-start text-white">
+                                <span class="mdi mdi-account-search icon-item text-white"></span>
                                 <h3 class="pe-2 mb-0 fs-6">متقاضیان</h3>
                             </div>
                         </div>
@@ -242,7 +242,8 @@
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
                                             <p class="text-white">
-                                                {{$user->businessUser()->first()->is_accepted ? 'تایید شده' : 'در انتظار تایید'}}
+                                                {{$user->businessUser()->first()->is_accepted ?
+                                                    '<span class="text-success">تایید شده</span>' : '<span class="text-danger">در انتظار تایید</span>'}}
                                             </p>
                                             <p class="text-muted mb-0">مورد تایید قرار گرفتید یا خیر</p>
                                         </div>

@@ -385,7 +385,7 @@
             <div class="content-wrapper">
                 <div class="row">
                     <div class="col-12 grid-margin stretch-card">
-                        <div class="card corona-gradient-card">
+                        <div class="card bg-primary bg-gradient bg-opacity-50">
                             <div class="card-body py-0 px-0 px-sm-3">
                                 <div class="row align-items-center">
                                     <div class="col-4 col-sm-3 col-xl-2">

@@ -67,7 +67,7 @@
                                     <th>وضعیت</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="text-white">
                                 @foreach($suggestions as $key => $suggestion)
                                     <tr>
                                         <td>{{$key + 1}}</td>
@@ -82,13 +82,13 @@
                                         @endif
                                         <td>{{$suggestion->scale}}</td>
                                         <td>{{$suggestion->daysLeft ?? 'منقضی'}}</td>
-                                        <td><a class="btn btn-outline-info text-decoration-none" href="{{route('customer.show',$suggestion->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td><a class="text-white text-decoration-none" href="{{route('customer.show',$suggestion->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         <td>
                                             <form action="{{route('landowner.send_share_message')}}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="landowner_id" value="{{$landowner->id}}">
                                                 <input type="hidden" name="customer_id" value="{{$suggestion->id}}">
-                                                <button class="btn btn-outline-success" type="submit">ارسال</button>
+                                                <button class="btn btn-link text-decoration-none text-white" type="submit"><i class="mdi mdi-email"></i></button>
                                             </form>
                                         </td>
                                         <td>
@@ -96,7 +96,7 @@
                                                 @csrf
                                                 <input type="hidden" name="landowner_id" value="{{$landowner->id}}">
                                                 <input type="hidden" name="customer_id" value="{{$suggestion->id}}">
-                                                <button class="btn btn-outline-danger" type="submit">حذف</button>
+                                                <button class="btn btn-link text-decoration-none text-danger" type="submit"><i class="mdi mdi-delete"></i></button>
                                             </form>
                                         </td>
                                     </tr>

@@ -80,11 +80,11 @@ class User extends Authenticatable
     }
     public function incrementPremiumCountConsultants()
     {
-        return $this->ownedBusiness()->first()->premium()->increment('counter_Consultants');
+        return $this->ownedBusiness()->first()->premium()->increment('counter_Consultant');
     }
     public function decrementPremiumCountConsultants()
     {
-        return $this->ownedBusiness()->first()->premium()->decrement('counter_Consultants');
+        return $this->ownedBusiness()->first()->premium()->decrement('counter_Consultant');
     }
 
     public function businessUser()

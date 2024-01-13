@@ -36,8 +36,8 @@
                     <h4 class="card-title">نمایش اطلاعات : {{ $customer->name }}</h4>
                     <div class="table-responsive">
                         <table class="table table-bordered text-center">
-                            <tbody>
-                            <tr class="text-white">
+                            <tbody class="text-white">
+                            <tr class="text-primary">
                                 <td>ثبت کننده</td>
                                 <td>{{$customer->user->name}}</td>
                             </tr>

@@ -42,8 +42,8 @@
 @section('content')
     <div class="content-wrapper full-page-wrapper d-flex align-items-center auth register-half-bg">
         <div class="card col-lg-4 mx-auto">
-            <div class="card-body px-5 py-5">
-                <p class="sign-up">ایا می خواهید به یک بیزنس بپیوندید؟<a class="text-decoration-none" href="{{route('consultant.find')}}"> یافتن</a></p>
+            <div class="card-body px-5 pb-5 pt-2">
+                <p class="sign-up mb-4">ایا می خواهید به یک بیزنس بپیوندید؟<a class="text-decoration-none" href="{{route('consultant.find')}}"> یافتن</a></p>
                 <h3 class="card-title text-center mb-3">ایجاد املاکی</h3>
                 <form action="{{ route('business.store') }}" method="post" enctype="multipart/form-data" autocomplete="off">
                     @csrf
@@ -53,7 +53,6 @@
                         @error('name')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
-
                     </div>
                     <div class="form-group">
                         <label for="en_name">نام انگلیسی: *</label>
@@ -61,7 +60,6 @@
                         @error('en_name')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
-
                     </div>
                     <div class="form-group">
                         <label for="province">استان املاک:</label>
@@ -85,7 +83,6 @@
                         @error('area')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
-
                     </div>
                     <div class="form-group">
                         <label for="address">آدرس: *</label>
@@ -93,7 +90,6 @@
                         @error('address')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
-
                     </div>
                     <div class="form-group">
                         <label for="image">عکس مجوز کسب: *</label>

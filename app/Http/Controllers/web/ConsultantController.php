@@ -55,7 +55,7 @@ class ConsultantController extends Controller
         $business->members()->attach($user);
 
         $smsApi = new SmsAPI();
-        $smsApi->sendSmsConsultantRequest($owner->number , $owner->name, $user->name);
+//        $smsApi->sendSmsConsultantRequest($owner->number , $owner->name, $user->name);
 
         return redirect()->route('dashboard')
             ->with('message', 'شما با موفقیت به املاکی مورد نظر پیوستید.');

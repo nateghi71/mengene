@@ -17,7 +17,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/2fa_store', [RegisteredUserController::class, 'twoFAStore'])->name('2fa.store');
     Route::post('/2fa_confirm', [RegisteredUserController::class, 'twoFAConfirm'])->name('2fa.confirm');
     Route::get('/2fa_reset', [RegisteredUserController::class, 'twoFAResend'])->name('2fa.resend');
-
     Route::get('register', [RegisteredUserController::class, 'register'])->middleware('2fa')
         ->name('register');
     Route::post('register', [RegisteredUserController::class, 'handle_register'])->middleware('2fa')

@@ -56,7 +56,7 @@ class Customer extends Model
     protected function scale():Attribute
     {
         return Attribute::make(
-            get : fn ($value) => number_format($value , 0 , '/' , ',') . 'متر',
+            get : fn ($value) => number_format($value , 0 , '/' , ',') . ' متر',
             set : fn ($value) => str_replace( ',', '', $value),
         );
     }

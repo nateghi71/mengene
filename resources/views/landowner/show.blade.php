@@ -37,8 +37,8 @@
 
                     <div class="table-responsive">
                         <table class="table table-bordered text-center">
-                            <tbody>
-                            <tr class="text-white">
+                            <tbody class="text-white">
+                            <tr class="text-primary">
                                 <td>ثبت کننده</td>
                                 <td>{{$landowner->user->name}}</td>
                             </tr>
