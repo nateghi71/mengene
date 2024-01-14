@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $smsApi = new SmsAPI();
-//        $smsApi->sendSmsCode($userNumber , $code);
+        $smsApi->sendSmsCode($userNumber , $code);
 
         session()->put('randomString' , $randomString);
         return redirect()->route('2fa.enter_code');
