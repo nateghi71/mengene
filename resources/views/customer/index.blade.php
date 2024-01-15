@@ -23,15 +23,49 @@
             background: rgba(0,0,0,1);
             transform: translate(-50%, -50%);
         }
-
         .self_file {
             background: #000;
+        }
+        .minute-input, .second-input, .hour-input {
+            color: black !important;
         }
     </style>
 @endsection
 
 @section('scripts')
     <script>
+        // $("[id^=remainder_input_]").hide()
+        $(document).ready(function() {
+            $("[id^=remainder_input_]").persianDatepicker({
+                timePicker: {
+                    enabled: true,
+                },
+                toolbox:{
+                    submitButton: {
+                        enabled: true,
+                        text: {
+                            fa: 'تایید'
+                        }
+                    },
+                    calendarSwitch:{
+                        enabled: false,
+                    },
+                    todayButton:{
+                        enabled: false,
+                    },
+                },
+                format:,
+                initialValue: false,
+            });
+        });
+
+        $("[id^=remainder]").on('click' , function (e){
+            e.preventDefault()
+            $(this).prev('[id^=remainder_input_]').trigger('click')
+            $(this).prev('[id^=remainder_input_]').position($(this).top , $(this).left)
+            console.log($("[id^=remainder_input_]").val())
+        })
+
         $('.btn-close').on('click' , function (){
             $('#message').remove()
         })
@@ -186,8 +220,8 @@
                                             قیمت
                                         @endif
                                     </th>
-                                    <th> متراژ </th>
                                     <th>زمان باقیمانده </th>
+                                    <th>تنظیم هشدار</th>
                                     <th> پیشنهادات </th>
                                     <th> نمایش </th>
                                     <th> ویرایش </th>
@@ -215,8 +249,13 @@
                                         <td>{{$customer->user->name}}</td>
                                         <td>{{$customer->type_sale}}</td>
                                         <td>{{$customer->getRawOriginal('selling_price') !== 0 ? $customer->selling_price : $customer->rahn_amount}}</td>
-                                        <td>{{$customer->scale}}</td>
                                         <td>{{$customer->daysLeft ? $customer->daysLeft . ' روز' : 'منقضی'}} </td>
+                                        <td>
+                                            <form method="post">
+                                                <input type="text" name="remainder" id="remainder_input_{{$key}}">
+                                                <button id="remainder_{{$key}}" class="btn btn-link text-white text-decoration-none" type="submit"><i class="mdi mdi-bell"></i></button>
+                                            </form>
+                                        </td>
                                         <td><a class="text-white text-decoration-none" href="{{route('customer.suggestions',$customer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
                                         <td><a class="text-white text-decoration-none" href="{{route('customer.show',$customer->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         <td><a class="text-white text-decoration-none" href="{{route('customer.edit',$customer->id)}}"><i class="mdi mdi-message-draw"></i></a></td>

@@ -26,11 +26,29 @@
         .self_file {
             background: #000;
         }
+        .minute-input, .second-input, .hour-input {
+            color: black !important;
+        }
+
     </style>
 @endsection
 
 @section('scripts')
     <script>
+        $(document).ready(function() {
+            $("[id^=remainder]").persianDatepicker({
+                timePicker: {
+                    enabled: true,
+                },
+                initialValue: false,
+                autoClose: true
+            });
+        });
+
+        $("[id^=remainder]").on('click' , function (){
+            console.log()
+        })
+
         $('.btn-close').on('click' , function (){
             $('#message').remove()
         })
@@ -186,8 +204,8 @@
                                             قیمت
                                         @endif
                                     </th>
-                                    <th> متراژ </th>
                                     <th>زمان باقیمانده </th>
+                                    <th>تنظیم هشدار</th>
                                     <th> پیشنهادات </th>
                                     <th> نمایش </th>
                                     <th> ویرایش </th>
@@ -214,8 +232,8 @@
                                         <td>{{$landowner->user->name}}</td>
                                         <td>{{$landowner->type_sale}}</td>
                                         <td>{{$landowner->getRawOriginal('selling_price') !== 0 ? $landowner->selling_price : $landowner->rahn_amount}}</td>
-                                        <td>{{$landowner->scale}}</td>
                                         <td>{{$landowner->daysLeft ? $landowner->daysLeft . ' روز' : 'منقضی'}}</td>
+                                        <td><a id="remainder_{{$key}}" class="text-white text-decoration-none" href="#"><i class="mdi mdi-bell"></i></a></td>
                                         <td><a class="text-white text-decoration-none" href="{{route('landowner.suggestions',$landowner->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
                                         <td><a class="text-white text-decoration-none" href="{{route('landowner.show',$landowner->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         <td><a class="text-white text-decoration-none" href="{{route('landowner.edit',$landowner->id)}}"><i class="mdi mdi-message-draw"></i></a></td>
