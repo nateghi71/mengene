@@ -48,91 +48,67 @@
                 </a>
             </li>
             <li class="nav-item dropdown border-left">
+                @php
+                    $notifications = auth()->user()->notifications()->where('type' , \App\Notifications\ConsultantRequestNotification::class)->get();
+                @endphp
+
                 <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="mdi mdi-email"></i>
-                    <span class="count bg-success"></span>
+                    @if($notifications->count() > 0)
+                        <span class="count bg-success"></span>
+                    @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
                     <h6 class="p-3 mb-0">پیام ها</h6>
                     <div class="dropdown-divider"></div>
-{{--                    <a class="dropdown-item preview-item">--}}
-{{--                        <div class="preview-thumbnail">--}}
-{{--                            <img src="{{asset('Admin/assets/images/faces/face4.jpg')}}" alt="image" class="rounded-circle profile-pic">--}}
-{{--                        </div>--}}
-{{--                        <div class="preview-item-content">--}}
-{{--                            <p class="preview-subject ellipsis mb-1">Mark send you a message</p>--}}
-{{--                            <p class="text-muted mb-0"> 1 Minutes ago </p>--}}
-{{--                        </div>--}}
-{{--                    </a>--}}
-{{--                    <div class="dropdown-divider"></div>--}}
-{{--                    <a class="dropdown-item preview-item">--}}
-{{--                        <div class="preview-thumbnail">--}}
-{{--                            <img src="{{asset('Admin/assets/images/faces/face2.jpg')}}" alt="image" class="rounded-circle profile-pic">--}}
-{{--                        </div>--}}
-{{--                        <div class="preview-item-content">--}}
-{{--                            <p class="preview-subject ellipsis mb-1">Cregh send you a message</p>--}}
-{{--                            <p class="text-muted mb-0"> 15 Minutes ago </p>--}}
-{{--                        </div>--}}
-{{--                    </a>--}}
-{{--                    <div class="dropdown-divider"></div>--}}
-{{--                    <a class="dropdown-item preview-item">--}}
-{{--                        <div class="preview-thumbnail">--}}
-{{--                            <img src="{{asset('Admin/assets/images/faces/face3.jpg')}}" alt="image" class="rounded-circle profile-pic">--}}
-{{--                        </div>--}}
-{{--                        <div class="preview-item-content">--}}
-{{--                            <p class="preview-subject ellipsis mb-1">Profile picture updated</p>--}}
-{{--                            <p class="text-muted mb-0"> 18 Minutes ago </p>--}}
-{{--                        </div>--}}
-{{--                    </a>--}}
-{{--                    <div class="dropdown-divider"></div>--}}
-{{--                    <p class="p-3 mb-0 text-center">4 new messages</p>--}}
+
+                    @foreach($notifications as $notification)
+                        <a class="dropdown-item preview-item">
+                            <div class="preview-thumbnail">
+                                <i class="mdi mdi-account-multiple"></i>
+                            </div>
+                            <div class="preview-item-content">
+                                <p class="preview-subject  mb-1">{{$notification->data['message']}}</p>
+                                <p class="text-muted mb-0"> {{verta($notification->created_at)}} </p>
+                            </div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                    @endforeach
+                    @if($notifications->count() > 0)
+                        <p class="p-3 mb-0 text-center">{{$notifications->count()}} درخواست جدید</p>
+                    @endif
                 </div>
             </li>
             <li class="nav-item dropdown border-left">
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+                    @php
+                        $notifications = auth()->user()->notifications()->where('type' , \App\Notifications\RemainderSessionNotification::class)->get();
+                    @endphp
+
                     <i class="mdi mdi-bell"></i>
-                    <span class="count bg-danger"></span>
+                    @if($notifications->count() > 0)
+                        <span class="count bg-danger"></span>
+                    @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
                     <h6 class="p-3 mb-0">اطلاع ها</h6>
-{{--                    <div class="dropdown-divider"></div>--}}
-{{--                    <a class="dropdown-item preview-item">--}}
-{{--                        <div class="preview-thumbnail">--}}
-{{--                            <div class="preview-icon bg-dark rounded-circle">--}}
-{{--                                <i class="mdi mdi-calendar text-success"></i>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="preview-item-content">--}}
-{{--                            <p class="preview-subject mb-1">Event today</p>--}}
-{{--                            <p class="text-muted ellipsis mb-0"> Just a reminder that you have an event today </p>--}}
-{{--                        </div>--}}
-{{--                    </a>--}}
-{{--                    <div class="dropdown-divider"></div>--}}
-{{--                    <a class="dropdown-item preview-item">--}}
-{{--                        <div class="preview-thumbnail">--}}
-{{--                            <div class="preview-icon bg-dark rounded-circle">--}}
-{{--                                <i class="mdi mdi-settings text-danger"></i>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="preview-item-content">--}}
-{{--                            <p class="preview-subject mb-1">Settings</p>--}}
-{{--                            <p class="text-muted ellipsis mb-0"> Update dashboard </p>--}}
-{{--                        </div>--}}
-{{--                    </a>--}}
-{{--                    <div class="dropdown-divider"></div>--}}
-{{--                    <a class="dropdown-item preview-item">--}}
-{{--                        <div class="preview-thumbnail">--}}
-{{--                            <div class="preview-icon bg-dark rounded-circle">--}}
-{{--                                <i class="mdi mdi-link-variant text-warning"></i>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="preview-item-content">--}}
-{{--                            <p class="preview-subject mb-1">Launch Admin</p>--}}
-{{--                            <p class="text-muted ellipsis mb-0"> New admin wow! </p>--}}
-{{--                        </div>--}}
-{{--                    </a>--}}
-{{--                    <div class="dropdown-divider"></div>--}}
-{{--                    <p class="p-3 mb-0 text-center">See all notifications</p>--}}
+                    <div class="dropdown-divider"></div>
+
+                         @foreach($notifications as $notification)
+                            <a class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <i class="mdi mdi-account-multiple"></i>
+                                </div>
+                                <div class="preview-item-content">
+                                    <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
+                                    <p class="text-muted mb-0"> {{$notification->created_at}} </p>
+                                </div>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                        @endforeach
+                    @if($notifications->count() > 0)
+                        <p class="p-3 mb-0 text-center">{{$notifications->count()}} درخواست جدید</p>
+                    @endif
                 </div>
             </li>
             <li class="nav-item dropdown">

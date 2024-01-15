@@ -98,8 +98,12 @@
                                 <td>{{$customer->number_of_rooms}}</td>
                             </tr>
                             <tr>
-                                <td>شماره طبقه</td>
+                                <td>تعداد طبقات کل ساختمان</td>
                                 <td>{{$customer->floor_number}}</td>
+                            </tr>
+                            <tr>
+                                <td>شماره طبقه</td>
+                                <td>{{$customer->floor}}</td>
                             </tr>
                             <tr>
                                 <td>زمان باقیمانده</td>

@@ -6,6 +6,7 @@ use App\HelperClasses\SmsAPI;
 use App\Http\Controllers\Controller;
 use App\Models\Business;
 use App\Models\User;
+use App\Notifications\ConsultantRequestNotification;
 use Illuminate\Http\Request;
 
 class ConsultantController extends Controller
@@ -54,8 +55,7 @@ class ConsultantController extends Controller
         $owner = $business->owner()->first();
         $business->members()->attach($user);
 
-        $smsApi = new SmsAPI();
-//        $smsApi->sendSmsConsultantRequest($owner->number , $owner->name, $user->name);
+        $owner->notify(new ConsultantRequestNotification($user));
 
         return redirect()->route('dashboard')
             ->with('message', 'شما با موفقیت به املاکی مورد نظر پیوستید.');

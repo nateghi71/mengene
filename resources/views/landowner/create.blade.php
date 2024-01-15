@@ -209,13 +209,6 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="city">شهر:</label>
-                        <input type="text" name="city" class="form-control" value="{{old('city')}}" id="city" placeholder="شهر">
-                        @error('city')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
                         <label for="access_level">سطح دسترسی:</label>
                         <select class="form-control" name="access_level" id="access_level">
                             <option value="private">خصوصی</option>
@@ -295,14 +288,21 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="floor_number">شماره طبقه:</label>
-                        <input type="text" name="floor_number" class="form-control" value="{{old('floor_number')}}" id="floor_number" placeholder="شماره طبقه"
+                        <label for="floor_number">تعداد طبقات کل ساختمان:</label>
+                        <input type="text" name="floor_number" class="form-control" value="{{old('floor_number')}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('floor_number')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-
+                    <div class="form-group col-md-3">
+                        <label for="floor">شماره طبقه:</label>
+                        <input type="text" name="floor" class="form-control" value="{{old('floor')}}" id="floor" placeholder="شماره طبقه"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('floor')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <div class="form-group col-md-3">
                         <label for="expire_date">زمان باقیمانده:</label>
                         <input type="text" name="expire_date" class="form-control" value="{{old('expire_date')}}" id="expire_date" placeholder="زمان باقیمانده"

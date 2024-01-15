@@ -242,8 +242,8 @@
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
                                             <p class="text-white">
-                                                {{$user->businessUser()->first()->is_accepted ?
-                                                    '<span class="text-success">تایید شده</span>' : '<span class="text-danger">در انتظار تایید</span>'}}
+                                                {!!  $user->businessUser()->first()->is_accepted ?
+                                                    '<span class="text-success">تایید شده</span>' : '<span class="text-danger">در انتظار تایید</span>'!!}
                                             </p>
                                             <p class="text-muted mb-0">مورد تایید قرار گرفتید یا خیر</p>
                                         </div>

@@ -122,6 +122,7 @@ class LandownerController extends BaseController
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
+            'floor' => 'required|numeric',
             'floor_number' => 'required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required'
@@ -185,6 +186,7 @@ class LandownerController extends BaseController
             'elevator' => 'required',
             'parking' => 'required',
             'store' => 'required',
+            'floor' => 'required|numeric',
             'floor_number' => 'required',
             'is_star' => 'required',
             'expire_date' => 'required'

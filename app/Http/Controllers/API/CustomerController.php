@@ -131,6 +131,7 @@ class CustomerController extends BaseController
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
+            'floor' => 'required|numeric',
             'floor_number' => 'required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required'
@@ -193,6 +194,7 @@ class CustomerController extends BaseController
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
+            'floor' => 'required|numeric',
             'floor_number' => 'required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required'

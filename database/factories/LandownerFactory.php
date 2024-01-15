@@ -34,6 +34,7 @@ class LandownerFactory extends Factory
             'elevator' => $this->faker->boolean,
             'parking' => $this->faker->boolean,
             'store' => $this->faker->boolean,
+            'floor' => $this->faker->numberBetween(0,10),
             'floor_number' => $this->faker->numberBetween(0,10),
             'business_id' => 1,
             'user_id' => rand(1,2),

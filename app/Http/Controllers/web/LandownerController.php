@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Events\CreateLandownerFile;
 use App\HelperClasses\LinkGenerator;
 use App\HelperClasses\SmsAPI;
 use App\HelperClasses\UpdateStatusFile;
@@ -74,6 +75,7 @@ class LandownerController extends Controller
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
+            'floor' => 'required|numeric',
             'floor_number' => 'required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required'
@@ -104,13 +106,8 @@ class LandownerController extends Controller
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
-        if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
-        {
-            $user->incrementPremiumCountSms();
-            $smsApi = new SmsAPI();
-            $smsApi->sendSmsRegisterFile($landowner->number , $landowner->name , $user->business()->name , $user->business()->number);
-        }
 
+        event(new CreateLandownerFile($landowner , $user));
 
         return redirect()->route('landowner.index',['status' => 'active'])->with('message' , 'فایل موردنظر ایجاد شد.');
     }
@@ -142,6 +139,7 @@ class LandownerController extends Controller
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
+            'floor' => 'required|numeric',
             'floor_number' => 'required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required'

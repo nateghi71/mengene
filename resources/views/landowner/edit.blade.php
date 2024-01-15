@@ -318,14 +318,21 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="floor_number">شماره طبقه:</label>
-                        <input type="text" name="floor_number" class="form-control" value="{{$landowner->floor_number}}" id="floor_number" placeholder="شماره طبقه"
+                        <label for="floor_number">تعداد طبقات کل ساختمان:</label>
+                        <input type="text" name="floor_number" class="form-control" value="{{$landowner->floor_number}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('floor_number')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-
+                    <div class="form-group col-md-3">
+                        <label for="floor">شماره طبقه:</label>
+                        <input type="text" name="floor" class="form-control" value="{{$landowner->floor}}" id="floor" placeholder="شماره طبقه"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('floor')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <div class="form-group col-md-3">
                         <label for="expire_date">زمان باقیمانده:</label>
                         <input type="text" name="expire_date" class="form-control" value="{{$landowner->expire_date}}" id="expire_date" placeholder="زمان باقیمانده"

@@ -14,43 +14,27 @@ class CustomerResource extends JsonResource
      */
     public function toArray($request)
     {
-//        if ($this->type_sale == 'buy') {
-//            $type_sale = 'فروشی';
-//        } else {
-//            $type_sale = 'رهن و اجاره';
-//        }
-//        if ($this->is_star == 0) {
-//            $is_star = '';
-//        } else {
-//            $is_star = '*';
-//        }
-//        if ($this->status == 'unknow') {
-//            $status = 'غیر فعال';
-//        } else {
-//            $status = 'فعال';
-//        }
-
         return [
             'name' => $this->name,
             'number' => $this->number,
             'city_id' => $this->city_id,
-            'status' => $this->status,
-            'type_sale' => $this->type_sale,
-            'type_work' => $this->type_work,
-            'type_build' => $this->type_build,
-            'scale' => $this->scale,
-            'number_of_rooms' => $this->number_of_rooms,
+            'status' => $this->getRawOriginal('status'),
+            'type_sale' => $this->getRawOriginal('type_sale'),
+            'type_work' => $this->getRawOriginal('type_work'),
+            'type_build' => $this->getRawOriginal('type_build'),
+            'meterage' => $this->getRawOriginal('scale'),
+            'rooms' => $this->number_of_rooms,
             'description' => $this->description,
-            'rahn_amount' =>  $this->rahn_amount,
-            'rent_amount' =>  $this->rent_amount,
-            'selling_price' => $this->selling_price,
-            'elevator' => $this->elevator,
-            'parking' => $this->parking,
-            'store' => $this->store,
+            'rahn' =>  $this->getRawOriginal('rahn_amount'),
+            'ejareh' =>  $this->getRawOriginal('rent_amount'),
+            'price' => $this->getRawOriginal('selling_price'),
+            'elevator' => $this->getRawOriginal('elevator'),
+            'parking' => $this->getRawOriginal('parking'),
+            'store' => $this->getRawOriginal('store'),
             'floor' => $this->floor,
-            'floor_number' => $this->floor_number,
-            'is_star' => $this->is_star,
-            'expire_date' => $this->expire_date
+            'num_floor' => $this->floor_number,
+            'is_star' => $this->getRawOriginal('is_star'),
+            'expiry_date' => $this->getRawOriginal('expire_date')
         ];
 
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\web;
 
+use App\Events\CreateCustomerFile;
 use App\HelperClasses\LinkGenerator;
 use App\HelperClasses\SmsAPI;
 use App\HelperClasses\UpdateStatusFile;
@@ -79,6 +80,7 @@ class CustomerController extends Controller
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
+            'floor' => 'required|numeric',
             'floor_number' => 'required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required'
@@ -110,12 +112,8 @@ class CustomerController extends Controller
             'expire_date' => $request->expire_date
         ]);
 
-        if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
-        {
-            $user->incrementPremiumCountSms();
-            $smsApi = new SmsAPI();
-            $smsApi->sendSmsRegisterFile($customer->number , $customer->name , $user->business()->name , $user->business()->number);
-        }
+        event(new CreateCustomerFile($customer , $user));
+
         return redirect()->route('customer.index',['status' => 'active'])->with('message' , 'فایل موردنظر ایجاد شد.');
     }
 
@@ -147,6 +145,7 @@ class CustomerController extends Controller
             'elevator' => 'sometimes|nullable',
             'parking' => 'sometimes|nullable',
             'store' => 'sometimes|nullable',
+            'floor' => 'required|numeric',
             'floor_number' => 'required|numeric',
             'is_star' => 'sometimes|nullable',
             'expire_date' => 'required'

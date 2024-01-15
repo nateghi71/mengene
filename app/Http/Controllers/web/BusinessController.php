@@ -54,7 +54,8 @@ class BusinessController extends Controller
                 ->paginate(10)->withQueryString();
 
             foreach ($members as $member) {
-                $daysGone = Carbon::now()->diffInDays($member->getRawOriginal('joined_date')) + 1;
+                $aMember = $member->businessUser()->first();
+                $daysGone = Carbon::now()->diffInDays($aMember->joined_date) + 1;
                 $member->daysGone = $daysGone;
             }
         }
@@ -190,7 +191,6 @@ class BusinessController extends Controller
 
         $member = $user->businessUser()->first();
         if ($member->is_accepted == 0) {
-
             $userAuth = auth()->user();
             if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
                 return redirect()->back()->with('message', 'شما نمی توانید مشاور اضافه کنید.');
@@ -237,5 +237,4 @@ class BusinessController extends Controller
         $business->members()->detach($user);
         return redirect()->route('business.consultants')->with('success', 'مشاور مورد نظر با موفقیت حذف شد');
     }
-
 }
