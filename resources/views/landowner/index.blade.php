@@ -236,7 +236,7 @@
                                         <td><a id="remainder_{{$key}}" class="text-white text-decoration-none" href="#"><i class="mdi mdi-bell"></i></a></td>
                                         <td><a class="text-white text-decoration-none" href="{{route('landowner.suggestions',$landowner->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
                                         <td><a class="text-white text-decoration-none" href="{{route('landowner.show',$landowner->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.edit',$landowner->id)}}"><i class="mdi mdi-message-draw"></i></a></td>
+                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.edit',$landowner->id)}}"><i class="mdi mdi-lead-pencil"></i></a></td>
                                         <td>
                                             <a href="{{route('landowner.destroy',$landowner->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger" type="button"><i class="mdi mdi-delete"></i></a>
                                         </td>

@@ -3,6 +3,7 @@
 @section('title' , 'متقاضیان')
 
 @section('head')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         #deletePanel {
             position: fixed;
@@ -34,38 +35,6 @@
 
 @section('scripts')
     <script>
-        // $("[id^=remainder_input_]").hide()
-        $(document).ready(function() {
-            $("[id^=remainder_input_]").persianDatepicker({
-                timePicker: {
-                    enabled: true,
-                },
-                toolbox:{
-                    submitButton: {
-                        enabled: true,
-                        text: {
-                            fa: 'تایید'
-                        }
-                    },
-                    calendarSwitch:{
-                        enabled: false,
-                    },
-                    todayButton:{
-                        enabled: false,
-                    },
-                },
-                format:,
-                initialValue: false,
-            });
-        });
-
-        $("[id^=remainder]").on('click' , function (e){
-            e.preventDefault()
-            $(this).prev('[id^=remainder_input_]').trigger('click')
-            $(this).prev('[id^=remainder_input_]').position($(this).top , $(this).left)
-            console.log($("[id^=remainder_input_]").val())
-        })
-
         $('.btn-close').on('click' , function (){
             $('#message').remove()
         })
@@ -80,6 +49,55 @@
         $('#not_delete_btn').on('click' , function (){
             $('#deletePanel').hide()
         })
+
+        // $("[id^=remainder_input_]").hide()
+        let datePicker = $("[id^=remainder_]").persianDatepicker({
+            timePicker: {
+                enabled: true,
+            },
+            toolbox:{
+                submitButton: {
+                    enabled: true,
+                    text: {
+                        fa: 'تایید'
+                    },
+                    onSubmit:function (element){
+                        let id = element.inputElement.id.slice(10)
+                        let input = $('[id^=remainder_input_'+ id +']')
+                        let myDate = new persianDate(element.api.getState().selected.unixDate).format("YYYY-MM-DD HH:mm:ss")
+                        input.val(myDate)
+                        input.parents('form').submit()
+                        // let input = $('[id^=remainder_input_'+ id +']').get(0)
+                        // console.log($('[id^=remainder_input_'+ id +']').parents('form').get(0))
+                        // let formData = new FormData(input.form)
+                        // $.ajax({
+                        //     method:"post",
+                        //     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        //     url:input.form.action,
+                        //     data: formData,
+                        //     dataType: 'json',
+                        //     processData: false,
+                        //     contentType: false,
+                        //     cache:false,
+                        //     success:function (response){
+                        //         console.log(response.myDate)
+                        //     },
+                        //     error:function (xhr, ajaxOptions, thrownError){
+                        //         console.log("error: " + xhr.status)
+                        //     },
+                        // })
+                    }
+                },
+                calendarSwitch:{
+                    enabled: false,
+                },
+                todayButton:{
+                    enabled: false,
+                },
+            },
+            initialValue: false,
+        });
+
     </script>
 @endsection
 
@@ -221,8 +239,8 @@
                                         @endif
                                     </th>
                                     <th>زمان باقیمانده </th>
-                                    <th>تنظیم هشدار</th>
                                     <th> پیشنهادات </th>
+                                    <th>تنظیم هشدار</th>
                                     <th> نمایش </th>
                                     <th> ویرایش </th>
                                     <th>حذف</th>
@@ -250,15 +268,17 @@
                                         <td>{{$customer->type_sale}}</td>
                                         <td>{{$customer->getRawOriginal('selling_price') !== 0 ? $customer->selling_price : $customer->rahn_amount}}</td>
                                         <td>{{$customer->daysLeft ? $customer->daysLeft . ' روز' : 'منقضی'}} </td>
+                                        <td><a class="text-white text-decoration-none" href="{{route('customer.suggestions',$customer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
                                         <td>
-                                            <form method="post">
-                                                <input type="text" name="remainder" id="remainder_input_{{$key}}">
-                                                <button id="remainder_{{$key}}" class="btn btn-link text-white text-decoration-none" type="submit"><i class="mdi mdi-bell"></i></button>
+                                            <form action="{{route('business.remainder')}}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="remainder" id="remainder_input_{{$key}}">
+                                                <input type="hidden" name="customer_id" value="{{$customer->id}}">
+                                                <button id="remainder_{{$key}}" class="btn btn-link text-white text-decoration-none" type="button"><i class="mdi mdi-bell"></i></button>
                                             </form>
                                         </td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('customer.suggestions',$customer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
                                         <td><a class="text-white text-decoration-none" href="{{route('customer.show',$customer->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('customer.edit',$customer->id)}}"><i class="mdi mdi-message-draw"></i></a></td>
+                                        <td><a class="text-white text-decoration-none" href="{{route('customer.edit',$customer->id)}}"><i class="mdi mdi-lead-pencil"></i></a></td>
                                         <td>
                                             <a href="{{route('customer.destroy',$customer->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger" type="button"><i class="mdi mdi-delete"></i></a>
                                         </td>

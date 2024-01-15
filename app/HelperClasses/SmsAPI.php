@@ -36,4 +36,16 @@ class SmsAPI
         $api = new GhasedakApi(env('API_KEY_SMS'));
         $api->Verify($number, $template, $file_name, $scale , $price , $business_number);
     }
+    public function sendSmsReminderForBusiness($number , $business_name , $date): void
+    {
+        $template = "reminderSmsForBusiness";
+        $api = new GhasedakApi(env('API_KEY_SMS'));
+        $api->Verify($number, $template, $business_name , $date);
+    }
+    public function sendSmsReminderForCustomer($number , $business_name , $message , $date): void
+    {
+        $template = "reminderSmsForCustomer";
+        $api = new GhasedakApi(env('API_KEY_SMS'));
+        $api->Verify($number, $template, $business_name, $message , $date);
+    }
 }

@@ -44,7 +44,7 @@ class LandownerController extends BaseController
             }
         }
         return $this->sendResponse([
-            'customers' => $landowners ? LandownerResource::collection($landowners) : [],
+            'landowners' => $landowners ? LandownerResource::collection($landowners) : [],
             'links' => $landowners ? LandownerResource::collection($landowners)->response()->getData()->links : [],
             'meta' => $landowners ? LandownerResource::collection($landowners)->response()->getData()->meta : [],
 

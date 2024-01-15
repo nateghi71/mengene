@@ -11,8 +11,8 @@ use App\Models\Landowner;
 use App\Models\Province;
 use App\Models\RandomLink;
 use App\Models\User;
+use App\Notifications\ReminderForCustomerNotification;
 use Hekmatinasser\Verta\Facades\Verta;
-use http\Url;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use App\Models\Customer;
@@ -199,6 +199,14 @@ class CustomerController extends Controller
             $customer->save();
         }
         return redirect()->back()->with('message' , 'جایگاه فایل موردنظر تغییر کرد.');
+    }
+
+    public function setRemainderTime(Request $request){
+        $customer = Customer::find($request->customer_id);
+        $date = Verta::parse($request->remainder)->datetime()->format('Y-m-d H:i:s');
+        auth()->user()->notifyAt(new ReminderForCustomerNotification($customer , $date), Carbon::parse($date));
+
+        return back()->with('message' , 'یک هشدار برای شما اعمال شد.');
     }
 
 }

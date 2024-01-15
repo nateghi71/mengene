@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::get('landowner/suggestion/{landowner}', [SuggestionForLandOwnerController::class, 'suggested_customer'])->name('landowner.suggestions');
     Route::post('landowner/suggestion/block', [SuggestionForLandOwnerController::class, 'send_block_message'])->name('landowner.send_block_message');
     Route::post('landowner/suggestion/share', [SuggestionForLandOwnerController::class, 'share_file_with_customer'])->name('landowner.send_share_message');
+    Route::post('landowner/remainder_time', [LandownerController::class, 'setRemainderTime'])->name('landowner.remainder');
 
     Route::resource('customer' , CustomerController::class)->except('index');
     Route::get('customer', [CustomerController::class, 'َََََindex'])->name('customer.index');
@@ -74,6 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::get('customer/suggestion/{customer}', [SuggestionForCustomerController::class, 'suggested_landowner'])->name('customer.suggestions');
     Route::post('customer/suggestion/block', [SuggestionForCustomerController::class, 'send_block_message'])->name('customer.send_block_message');
     Route::post('customer/suggestion/share', [SuggestionForCustomerController::class, 'share_file_with_customer'])->name('customer.send_share_message');
+    Route::post('customer/remainder_time', [CustomerController::class, 'setRemainderTime'])->name('customer.remainder');
 });
 
 require __DIR__ . '/auth.php';

@@ -9,6 +9,7 @@ use App\HelperClasses\UpdateStatusFile;
 use App\Http\Controllers\Controller;
 use App\Models\Province;
 use App\Models\User;
+use App\Notifications\ReminderForLandowerNotification;
 use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -196,4 +197,13 @@ class LandownerController extends Controller
         }
         return redirect()->back()->with('message' , 'جایگاه فایل موردنظر تغییر کرد.');
     }
+
+    public function setRemainderTime(Request $request){
+        $landowner = Landowner::find($request->customer_id);
+        $date = Verta::parse($request->remainder)->datetime()->format('Y-m-d H:i:s');
+        auth()->user()->notifyAt(new ReminderForLandowerNotification($landowner , $date), Carbon::parse($date));
+
+        return back()->with('message' , 'یک هشدار برای شما اعمال شد.');
+    }
+
 }
