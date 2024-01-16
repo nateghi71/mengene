@@ -91,7 +91,7 @@
         <li class="nav-item menu-items">
             <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <span class="menu-icon">
-                <i class="mdi mdi-bullhorn"></i>
+                <i class="mdi mdi-city"></i>
               </span>
                 <span class="menu-title pe-2">صاحبان ملک</span>
                 <i class="menu-arrow"></i>

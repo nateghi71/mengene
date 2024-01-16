@@ -15,13 +15,14 @@ class CustomerResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'number' => $this->number,
             'city_id' => $this->city_id,
             'status' => $this->getRawOriginal('status'),
             'type_sale' => $this->getRawOriginal('type_sale'),
-            'type_work' => $this->getRawOriginal('type_work'),
-            'type_build' => $this->getRawOriginal('type_build'),
+            'type_work' => $this->type_work,
+            'type_build' => $this->type_build,
             'meterage' => $this->getRawOriginal('scale'),
             'rooms' => $this->number_of_rooms,
             'description' => $this->description,
@@ -34,7 +35,7 @@ class CustomerResource extends JsonResource
             'floor' => $this->floor,
             'num_floor' => $this->floor_number,
             'is_star' => $this->getRawOriginal('is_star'),
-            'expiry_date' => $this->getRawOriginal('expire_date')
+            'expire_date' => $this->getRawOriginal('expire_date')
         ];
 
     }
