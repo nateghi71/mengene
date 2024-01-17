@@ -12,9 +12,9 @@ class SmsForReminder
     {
         $info_cus = $notification->smsReminder($notifiable);
         $smsApi = new SmsAPI();
-        $smsApi->sendSmsReminderForBusiness($notifiable->number , $info_cus->name, $info_cus->date);
+        $smsApi->sendSmsReminderForBusiness($notifiable->number , $info_cus->name_cus, $info_cus->date);
 
         $smsApi = new SmsAPI();
-        $smsApi->sendSmsReminderForCustomer($info_cus->number , $notifiable->name, $info_cus->message, $info_cus->date);
+        $smsApi->sendSmsReminderForCustomer($info_cus->number_cus , $notifiable->name, $info_cus->message, $info_cus->date);
     }
 }
