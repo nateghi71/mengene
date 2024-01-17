@@ -82,7 +82,8 @@
             <li class="nav-item dropdown border-left">
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
                     @php
-                        $notifications = auth()->user()->notifications()->where('type' , \App\Notifications\RemainderSessionNotification::class)->get();
+                        $notifications = auth()->user()->notifications()->where('type' , \App\Notifications\ReminderForCustomerNotification::class)
+                        ->orWhere('type' , \App\Notifications\ReminderForLandowerNotification::class)->get();
                     @endphp
 
                     <i class="mdi mdi-bell"></i>
@@ -97,11 +98,11 @@
                          @foreach($notifications as $notification)
                             <a class="dropdown-item preview-item">
                                 <div class="preview-thumbnail">
-                                    <i class="mdi mdi-account-multiple"></i>
+                                    <i class="mdi mdi-bell"></i>
                                 </div>
                                 <div class="preview-item-content">
-                                    <p class="preview-subject ellipsis mb-1">Mark send you a message</p>
-                                    <p class="text-muted mb-0"> {{$notification->created_at}} </p>
+                                    <p class="preview-subject mb-1">{{$notification->data['message']}}</p>
+                                    <p class="text-muted mb-0"> {{verta($notification->created_at)}} </p>
                                 </div>
                             </a>
                             <div class="dropdown-divider"></div>

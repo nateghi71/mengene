@@ -26,11 +26,19 @@
         .self_file {
             background: #000;
         }
+        .minute-input, .second-input, .hour-input {
+            color: black !important;
+        }
+
     </style>
 @endsection
 
 @section('scripts')
     <script>
+        $("[id^=remainder]").on('click' , function (){
+            console.log()
+        })
+
         $('.btn-close').on('click' , function (){
             $('#message').remove()
         })
@@ -45,6 +53,35 @@
         $('#not_delete_btn').on('click' , function (){
             $('#deletePanel').hide()
         })
+
+        let datePicker = $("[id^=remainder_]").persianDatepicker({
+            timePicker: {
+                enabled: true,
+            },
+            toolbox:{
+                submitButton: {
+                    enabled: true,
+                    text: {
+                        fa: 'تایید'
+                    },
+                    onSubmit:function (element){
+                        let id = element.inputElement.id.slice(10)
+                        let input = $('[id^=remainder_input_'+ id +']')
+                        let myDate = new persianDate(element.api.getState().selected.unixDate).format("YYYY-MM-DD HH:mm:ss")
+                        input.val(myDate)
+                        input.parents('form').submit()
+                    }
+                },
+                calendarSwitch:{
+                    enabled: false,
+                },
+                todayButton:{
+                    enabled: false,
+                },
+            },
+            initialValue: false,
+        });
+
     </script>
 @endsection
 
@@ -186,9 +223,9 @@
                                             قیمت
                                         @endif
                                     </th>
-                                    <th> متراژ </th>
                                     <th>زمان باقیمانده </th>
                                     <th> پیشنهادات </th>
+                                    <th>تنظیم هشدار</th>
                                     <th> نمایش </th>
                                     <th> ویرایش </th>
                                     <th>حذف</th>
@@ -214,11 +251,18 @@
                                         <td>{{$landowner->user->name}}</td>
                                         <td>{{$landowner->type_sale}}</td>
                                         <td>{{$landowner->getRawOriginal('selling_price') !== 0 ? $landowner->selling_price : $landowner->rahn_amount}}</td>
-                                        <td>{{$landowner->scale}}</td>
                                         <td>{{$landowner->daysLeft ? $landowner->daysLeft . ' روز' : 'منقضی'}}</td>
                                         <td><a class="text-white text-decoration-none" href="{{route('landowner.suggestions',$landowner->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
+                                        <td>
+                                            <form action="{{route('landowner.remainder')}}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="remainder" id="remainder_input_{{$key}}">
+                                                <input type="hidden" name="landowner_id" value="{{$landowner->id}}">
+                                                <button id="remainder_{{$key}}" class="btn btn-link text-white text-decoration-none" type="button"><i class="mdi mdi-bell"></i></button>
+                                            </form>
+                                        </td>
                                         <td><a class="text-white text-decoration-none" href="{{route('landowner.show',$landowner->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.edit',$landowner->id)}}"><i class="mdi mdi-message-draw"></i></a></td>
+                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.edit',$landowner->id)}}"><i class="mdi mdi-lead-pencil"></i></a></td>
                                         <td>
                                             <a href="{{route('landowner.destroy',$landowner->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger" type="button"><i class="mdi mdi-delete"></i></a>
                                         </td>
