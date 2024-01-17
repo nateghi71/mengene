@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\web\admin\RoleController;
+use App\Http\Controllers\web\admin\UserController;
+use App\Http\Controllers\web\admin\BusinessController as AdminBusinessController;
 use App\Http\Controllers\web\ConsultantController;
 use App\Http\Controllers\web\HomeController;
 use App\Http\Controllers\web\RandomLinkController;
@@ -77,6 +80,13 @@ Route::middleware('auth')->group(function () {
     Route::post('customer/suggestion/share', [SuggestionForCustomerController::class, 'share_file_with_customer'])->name('customer.send_share_message');
     Route::post('customer/remainder_time', [CustomerController::class, 'setRemainderTime'])->name('customer.remainder');
 });
+
+Route::prefix('admin-panel')->name('admin.')->group(function () {
+    Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('business' , AdminBusinessController::class)->except(['create' , 'store']);
+});
+
 
 require __DIR__ . '/auth.php';
 

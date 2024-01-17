@@ -97,7 +97,7 @@
                             <option value="1">املاکی</option>
                             <option value="0">مشاور</option>
                         </select>
-                        @error('role')
+                        @error('roles')
                         <div class="alert alert-danger">
                             {{$message}}
                         </div>

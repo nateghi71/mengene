@@ -117,7 +117,7 @@ class RegisteredUserController extends Controller
             'city_id' => ['required'],
             'email' => ['nullable' , 'max:255' , 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => 'required'
+            'roles' => 'required'
         ]);
 
         try {
@@ -131,7 +131,7 @@ class RegisteredUserController extends Controller
             ]);
 
             Auth::login($user);
-
+            $user->assignRole('user');
             $userCode->delete();
             session()->forget('randomString');
 
