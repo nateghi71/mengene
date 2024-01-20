@@ -148,8 +148,8 @@
                             <img src="{{asset('Admin/assets/images/dashboard/Group126@2x.png')}}" class="gradient-corona-img img-fluid" alt="">
                         </div>
                         <div class="col-5 col-sm-7 col-xl-8 p-0">
-                            <h4 class="mb-1 mb-sm-0">شما هم اکنون در داشبورد هستید!</h4>
-                            <p class="mb-0 font-weight-normal d-none d-sm-block">خوش امدید</p>
+                            <h4 class="mb-1 mb-sm-0">برای توسعه کسب و کارتان اکانت خود را اپدیت کنید!</h4>
+                            <p class="mb-0 font-weight-normal d-none d-sm-block">فرصت را از دست ندهید</p>
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>

@@ -3,14 +3,23 @@
         <a class="navbar-brand brand-logo-mini text-decoration-none text-info" href="{{route('dashboard')}}">مِنگِنه</a>
     </div>
     <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
-        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-          <span class="mdi mdi-menu"></span>
-        </button>
+{{--        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">--}}
+{{--          <span class="mdi mdi-menu"></span>--}}
+{{--        </button>--}}
+{{--        <ul class="navbar-nav w-100">--}}
+{{--            <li class="nav-item w-100">--}}
+{{--                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">--}}
+{{--                    <input type="text" class="form-control" placeholder="جست و جو">--}}
+{{--                </form>--}}
+{{--            </li>--}}
+{{--        </ul>--}}
         <ul class="navbar-nav w-100">
-            <li class="nav-item w-100">
-                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                    <input type="text" class="form-control" placeholder="جست و جو">
-                </form>
+            <li class="nav-item w-75">
+                <div class="card">
+                    <div class="border text-center text-muted card-body py-2 mt-2 mt-md-0 d-none d-xl-block">
+                     به {{$sectionName}} خوش امدید.
+                    </div>
+                </div>
             </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">

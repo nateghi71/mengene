@@ -82,6 +82,61 @@
             initialValue: false,
             minDate: new persianDate(),
         });
+        function filter() {
+            let typeSale = $('#type_sale').val();
+            if (typeSale == "default") {
+                $('#filter-type-sale').prop('disabled', true);
+            } else {
+                $('#filter-type-sale').val(typeSale);
+            }
+            let accessLevel = $('#access_level').val();
+            if (accessLevel == "default") {
+                $('#filter-access-level').prop('disabled', true);
+            } else {
+                $('#filter-access-level').val(accessLevel);
+            }
+            let typeWork = $('#type_work').val();
+            if (typeWork == "default") {
+                $('#filter-type-work').prop('disabled', true);
+            } else {
+                $('#filter-type-work').val(typeWork);
+            }
+            let typeBuild = $('#type_build').val();
+            if (typeBuild == "default") {
+                $('#filter-type-build').prop('disabled', true);
+            } else {
+                $('#filter-type-build').val(typeBuild);
+            }
+            let status = $('#status').val();
+            if (status == "default") {
+                $('#filter-status').prop('disabled', true);
+            } else {
+                $('#filter-status').val(status);
+            }
+
+            let sortBy = $('#sort-by').val();
+            if (sortBy == "default") {
+                $('#filter-sort-by').prop('disabled', true);
+            } else {
+                $('#filter-sort-by').val(sortBy);
+            }
+
+            let search = $('#search-input').val();
+            if (search == "") {
+                $('#filter-search').prop('disabled', true);
+            } else {
+                $('#filter-search').val(search);
+            }
+
+            $('#filter-form').submit();
+        }
+
+        $('#filter-form').on('submit', function(event) {
+            event.preventDefault();
+            let currentUrl = '{{ url()->current() }}';
+            let url = currentUrl + '?' + decodeURIComponent($(this).serialize())
+            $(location).attr('href', url);
+        });
 
     </script>
 @endsection
@@ -116,9 +171,14 @@
                         <div class="col-4 col-sm-3 col-xl-2">
                             <img src="{{asset('Admin/assets/images/dashboard/Group126@2x.png')}}" class="gradient-corona-img img-fluid" alt="">
                         </div>
-                        <div class="col-5 col-sm-7 col-xl-8 p-0">
-                            <h4 class="mb-1 mb-sm-0">شما هم اکنون در بخش مالکان هستید!</h4>
-                            <p class="mb-0 font-weight-normal d-none d-sm-block">خوش امدید</p>
+                        <div class="lh-lg col-5 col-sm-7 col-xl-8 py-2">
+                            <h4 class="mb-3 mb-sm-0">توجه کنید!</h4>
+                            <p class="mb-0 d-none d-sm-block">
+                                در بخش مالکان می توانید کسانی که درخواست رهن و اجاره یا فروش ملکشان را دارند برایشان فایلی ایجاد کنید و
+                                تمام فایل هایی که برای مالکانتان ایجاد کردید را در این قسمت ببینید. پیشنهاداتی که برایشان وجود دارد را بیابید.
+                                هشدار پیامکی برای جلساتتان تنظیم کنید فایلهایتان را و ویرایش و حذف کنید. همچنین می توانید از قسمت فایل های ویژه
+                                فایل های اختصاصی بخرید. یا اگر اشتراک دارید به یکسری فایل اختصاصی دسترسی داشته باشید.
+                            </p>
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
@@ -131,61 +191,97 @@
         </div>
     </div>
 
+{{--    <div class="row">--}}
+{{--        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">--}}
+{{--            <div class="card bg-primary bg-gradient bg-opacity-50">--}}
+{{--                <a href="{{route('landowner.index')}}" class="text-decoration-none text-white">--}}
+{{--                    <div class="card-body">--}}
+{{--                        <div class="icon">--}}
+{{--                            <span class="mdi mdi-account-search icon-item text-white"></span>--}}
+{{--                            <div class="pe-3 d-flex align-items-center align-self-start text-white">--}}
+{{--                                <h3 class="mb-0">فایل های من</h3>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">--}}
+{{--            <div class="card bg-success bg-gradient bg-opacity-50">--}}
+{{--                <a href="{{route('landowner.sub_files')}}" class="text-decoration-none text-white">--}}
+{{--                    <div class="card-body">--}}
+{{--                        <div class="icon">--}}
+{{--                            <span class="mdi mdi-account-search icon-item text-white"></span>--}}
+{{--                            <div class="pe-3 d-flex align-items-center align-self-start text-white">--}}
+{{--                                <h3 class="mb-0">فایل های ویژه</h3>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
     <div class="row">
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="col-12 grid-margin">
             <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.index')}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">همه مالکان</h3>
-                            </div>
+                <div class="card-body py-2 row">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" onchange="filter()" value="{{ request()->has('search') ? request()->search : '' }}" id="search-input" placeholder="جستوجو بر اساس نام">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <select class="form-control" onchange="filter()" id="sort-by">
+                                <option value="default">مرتب سازی</option>
+                                <option value="max_days" @selected(request()->has('sortBy') && request()->sortBy == 'max_days')>بیشترین روزهای باقی مانده</option>
+                                <option value="min_days" @selected(request()->has('sortBy') && request()->sortBy == 'min_days')>کمترین روزهای باقی مانده</option>
+                                <option value="max_price" @selected(request()->has('sortBy') && request()->sortBy == 'max_price')>بیشترین قیمت / رهن</option>
+                                <option value="min_price" @selected(request()->has('sortBy') && request()->sortBy == 'min_price')>کمترین قیمت / رهن</option>
+                                <option value="max_scale" @selected(request()->has('sortBy') && request()->sortBy == 'max_scale')>بیشترین متراژ</option>
+                                <option value="min_scale" @selected(request()->has('sortBy') && request()->sortBy == 'min_scale')>کمترین متراژ</option>
+                                <option value="max_rooms" @selected(request()->has('sortBy') && request()->sortBy == 'max_rooms')>بیشترین تعداد اتاق</option>
+                                <option value="min_rooms" @selected(request()->has('sortBy') && request()->sortBy == 'min_rooms')>کمترین تعداد اتاق</option>
+                            </select>
                         </div>
                     </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.index',['type' => 'buy'])}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">مالکان فروشنده</h3>
-                            </div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <select class="form-control" onchange="filter()" id="type_sale">
+                                <option value="default">نوع</option>
+                                <option value="buy" @selected(request()->has('type_sale') && request()->type_sale == 'buy')>فروش</option>
+                                <option value="rahn" @selected(request()->has('type_sale') && request()->type_sale == 'rahn')>رهن و اجاره</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control" onchange="filter()" id="access_level">
+                                <option value="default">سطح دسترسی</option>
+                                <option value="private" @selected(request()->has('access_level') && request()->access_level == 'private')>خصوصی</option>
+                                <option value="public" @selected(request()->has('access_level') && request()->access_level == 'public')>عمومی</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control" onchange="filter()" id="type_work">
+                                <option value="default">نوع مسکن</option>
+                                <option value="home" @selected(request()->has('type_work') && request()->type_work == 'home')>خانه</option>
+                                <option value="office" @selected(request()->has('type_work') && request()->type_work == 'office')>دفتر</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control" onchange="filter()" id="type_build">
+                                <option value="default">نوع خانه</option>
+                                <option value="house" @selected(request()->has('type_build') && request()->type_build == 'house')>ویلایی</option>
+                                <option value="apartment" @selected(request()->has('type_build') && request()->type_build == 'apartment')>ساختمان</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control" onchange="filter()" id="status">
+                                <option value="default">وضعیت</option>
+                                <option value="active" @selected(request()->has('status') && request()->status == 'active')>فعال</option>
+                                <option value="unknown" @selected(request()->has('status') && request()->status == 'unknown')>نامعلوم</option>
+                                <option value="deActive" @selected(request()->has('status') && request()->status == 'deActive')>عیرفعال</option>
+                            </select>
                         </div>
                     </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.index',['type' => 'rahn'])}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">مالکان رهن دهنده</h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.index',['type' => 'deActive'])}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">مالکان غیرفعال</h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+                </div>
             </div>
         </div>
     </div>
@@ -194,32 +290,21 @@
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        @if($landowners->pluck('status')->contains('غیرفعال'))
-                            @php
-                                $title = 'مالکان غیرفعال';
-                            @endphp
-                        @elseif($landowners->pluck('type_sale')->contains('فروش') && $landowners->pluck('type_sale')->contains('رهن و اجاره'))
-                            @php
-                                $title = 'همه مالکان';
-                            @endphp
-                        @elseif($landowners->pluck('type_sale')->contains('رهن و اجاره'))
-                            @php
-                                $title = 'مالکان رهن دهنده';
-                            @endphp
-                        @else
-                            @php
-                            $title = 'مالکان فروشنده';
-                            @endphp
-                        @endif
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title">{{$title}}</h4>
-                            <div class="mb-0">
-                                <a href="{{route('landowner.index')}}" class="btn btn-success">فایل های من</a>
-                                <a href="{{route('landowner.sub_files')}}" class="btn btn-success">فایل های ویژه</a>
-                            </div>
-                        </div>
+                        <h4 class="card-title">
+                            @if($landowners->pluck('status')->contains('غیرفعال'))
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="card-title">مالکان غیرفعال</h4>
+                                    <a class="btn btn-success" href="{{route('landowner.sub_files')}}">فایل های ویژه</a>
+                                </div>
+                            @else
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="card-title">همه مالکان</h4>
+                                    <div><a class="btn btn-success" href="{{route('landowner.sub_files')}}">فایل های ویژه</a></div>
 
-                        <div class="table-responsive">
+                                </div>
+                            @endif
+                        </h4>
+                            <div class="table-responsive">
                             <table class="table text-center">
                                 <thead>
                                 <tr class="text-white">
@@ -297,4 +382,14 @@
 
     </div>
     {{$landowners->links()}}
+    <form id="filter-form">
+        <input id="filter-type-sale" type="hidden" name="type_sale">
+        <input id="filter-access-level" type="hidden" name="access_level">
+        <input id="filter-type-work" type="hidden" name="type_work">
+        <input id="filter-type-build" type="hidden" name="type_build">
+        <input id="filter-status" type="hidden" name="status">
+        <input id="filter-sort-by" type="hidden" name="sortBy">
+        <input id="filter-search" type="hidden" name="search">
+    </form>
+
 @endsection

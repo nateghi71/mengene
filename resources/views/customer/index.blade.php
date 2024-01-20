@@ -132,9 +132,13 @@
                         <div class="col-4 col-sm-3 col-xl-2">
                             <img src="{{asset('Admin/assets/images/dashboard/Group126@2x.png')}}" class="gradient-corona-img img-fluid" alt="">
                         </div>
-                        <div class="col-5 col-sm-7 col-xl-8 p-0">
-                            <h4 class="mb-1 mb-sm-0">شما هم اکنون در بخش متقاضیان هستید!</h4>
-                            <p class="mb-0 font-weight-normal d-none d-sm-block">خوش امدید</p>
+                        <div class="lh-lg col-5 col-sm-7 col-xl-8 py-2">
+                            <h4 class="mb-3 mb-sm-0">توجه کنید!</h4>
+                            <p class="mb-0 d-none d-sm-block">
+                                 در بخش متقاضیان می توانید کسانی که درخواست رهن و اجاره یا خرید ملکی را دارند برایشان فایلی را ایجاد کنید و
+                                تمام فایل هایی که برای متقاضیانتان ایجاد کردید را در این قسمت ببینید. پیشنهاداتی که برایشان وجود دارد را بیابید.
+                                هشدار پیامکی برای جلساتتان تنظیم کنید فایلهایتان را و ویرایش و حذف کنید.
+                            </p>
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
@@ -147,7 +151,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
             <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('customer.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
@@ -161,35 +165,7 @@
                 </a>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('customer.index',['type' => 'buy'])}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">متقاضیان خرید</h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('customer.index',['type' => 'rahn'])}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">متقاضیان رهن</h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
             <div class="card bg-primary bg-gradient bg-opacity-50">
                 <a href="{{route('customer.index',['type' => 'deActive'])}}" class="text-decoration-none text-white">
                     <div class="card-body">
@@ -205,6 +181,93 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body py-2 row">
+                    <form action="{{route('landowner.store')}}" method="post" autocomplete="off">
+                        @csrf
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <input type="text" name="search" class="form-control col-md-9" value="{{old('search')}}" id="number" placeholder="جستوجو بر اساس نام">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <select class="form-control" name="access_level" id="access_level">
+                                    <option value="home">مرتب سازی</option>
+                                    <option value="office">بیشترین روزهای باقی مانده</option>
+                                    <option value="office">کمترین روزهای باقی مانده</option>
+                                    <option value="office">بیشترین قیمت / رهن</option>
+                                    <option value="office">کمترین قیمت / رهن</option>
+                                    <option value="office">بیشترین متراژ</option>
+                                    <option value="office">کمترین متراژ</option>
+                                    <option value="office">بیشترین تعداد اتاق</option>
+                                    <option value="office">کمترین تعداد اتاق</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="elevator" class="form-check-label">
+                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>فروش
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="elevator" class="form-check-label">
+                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>رهن و اجاره
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="parking" class="form-check-label">
+                                        <input type="checkbox" name="parking" id="parking" class="form-check-input" {{ old('parking') == 'on' ? 'checked' : '' }}>خصوصی
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="store" class="form-check-label">
+                                        <input type="checkbox" name="store" id="store" class="form-check-input" {{ old('store') == 'on' ? 'checked' : '' }}>عمومی
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="elevator" class="form-check-label">
+                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>خانه
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="elevator" class="form-check-label">
+                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>دفتر
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="parking" class="form-check-label">
+                                        <input type="checkbox" name="parking" id="parking" class="form-check-input" {{ old('parking') == 'on' ? 'checked' : '' }}>ویلایی
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="store" class="form-check-label">
+                                        <input type="checkbox" name="store" id="store" class="form-check-input" {{ old('store') == 'on' ? 'checked' : '' }}>ساختمان
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         @if($customers->isNotEmpty())
             <div class="col-12 grid-margin">
                 <div class="card">
@@ -212,12 +275,8 @@
                         <h4 class="card-title">
                             @if($customers->pluck('status')->contains('غیرفعال'))
                                 متقاضیان غیرفعال
-                            @elseif($customers->pluck('type_sale')->contains('خرید') && $customers->pluck('type_sale')->contains('رهن و اجاره'))
-                                همه متقاضیان
-                            @elseif($customers->pluck('type_sale')->contains('رهن و اجاره'))
-                                متقاضیان رهن و اجاره
                             @else
-                                متقاضیان خرید
+                                همه متقاضیان
                             @endif
                         </h4>
                         <div class="table-responsive">

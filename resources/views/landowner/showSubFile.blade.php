@@ -122,7 +122,7 @@
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
-                          <a href="{{route('landowner.create')}}" class="btn btn-outline-light btn-rounded get-started-btn">ایجاد مالک</a>
+                          <a href="{{route('landowner.index')}}" class="btn btn-outline-light btn-rounded get-started-btn">فایل های من</a>
                         </span>
                         </div>
                     </div>
@@ -132,46 +132,86 @@
     </div>
 
     <div class="row">
-        <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.sub_files')}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">همه مالکان</h3>
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body py-2 row">
+                    <form action="{{route('landowner.store')}}" method="post" autocomplete="off">
+                        @csrf
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <select class="form-control" name="access_level" id="access_level">
+                                    <option value="home">مرتب سازی</option>
+                                    <option value="office">بیشترین روزهای باقی مانده</option>
+                                    <option value="office">کمترین روزهای باقی مانده</option>
+                                    <option value="office">بیشترین قیمت / رهن</option>
+                                    <option value="office">کمترین قیمت / رهن</option>
+                                    <option value="office">بیشترین متراژ</option>
+                                    <option value="office">کمترین متراژ</option>
+                                    <option value="office">بیشترین تعداد اتاق</option>
+                                    <option value="office">کمترین تعداد اتاق</option>
+                                </select>
                             </div>
                         </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.sub_files',['type' => 'buy'])}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">مالکان فروشنده</h3>
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="elevator" class="form-check-label">
+                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>فروش
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="elevator" class="form-check-label">
+                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>رهن و اجاره
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="parking" class="form-check-label">
+                                        <input type="checkbox" name="parking" id="parking" class="form-check-input" {{ old('parking') == 'on' ? 'checked' : '' }}>پولی
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="store" class="form-check-label">
+                                        <input type="checkbox" name="store" id="store" class="form-check-input" {{ old('store') == 'on' ? 'checked' : '' }}>ویژه
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="elevator" class="form-check-label">
+                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>خانه
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="elevator" class="form-check-label">
+                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>دفتر
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="parking" class="form-check-label">
+                                        <input type="checkbox" name="parking" id="parking" class="form-check-input" {{ old('parking') == 'on' ? 'checked' : '' }}>ویلایی
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <div class="form-check">
+                                    <label for="store" class="form-check-label">
+                                        <input type="checkbox" name="store" id="store" class="form-check-input" {{ old('store') == 'on' ? 'checked' : '' }}>ساختمان
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.sub_files',['type' => 'rahn'])}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">مالکان رهن دهنده</h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -180,30 +220,11 @@
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        @if($files->pluck('status')->contains('غیرفعال'))
-                            @php
-                                $title = 'مالکان غیرفعال';
-                            @endphp
-                        @elseif($files->pluck('type_sale')->contains('فروش') && $files->pluck('type_sale')->contains('رهن و اجاره'))
-                            @php
-                                $title = 'همه مالکان';
-                            @endphp
-                        @elseif($files->pluck('type_sale')->contains('رهن و اجاره'))
-                            @php
-                                $title = 'مالکان رهن دهنده';
-                            @endphp
-                        @else
-                            @php
-                            $title = 'مالکان فروشنده';
-                            @endphp
-                        @endif
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title">{{$title}}</h4>
-                            <div class="mb-0">
-                                <a href="{{route('landowner.index')}}" class="btn btn-success">فایل های من</a>
-                                <a href="{{route('landowner.sub_files')}}" class="btn btn-success">فایل های ویژه</a>
-                            </div>
-                        </div>
+                        <h4 class="card-title">
+                            <span class="badge fs-5 badge-success">
+                                فایل های ویژه
+                            </span>
+                        </h4>
 
                         <div class="table-responsive">
                             <table class="table text-center">

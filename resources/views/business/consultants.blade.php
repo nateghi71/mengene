@@ -72,9 +72,14 @@
                         <div class="col-4 col-sm-3 col-xl-2">
                             <img src="{{asset('Admin/assets/images/dashboard/Group126@2x.png')}}" class="gradient-corona-img img-fluid" alt="">
                         </div>
-                        <div class="col-5 col-sm-7 col-xl-8 p-0">
-                            <h4 class="mb-1 mb-sm-0">شما هم اکنون در مشاوران هستید!</h4>
-                            <p class="mb-0 font-weight-normal d-none d-sm-block">خوش امدید</p>
+                        <div class="lh-lg col-5 col-sm-7 col-xl-8 py-2">
+                            <h4 class="mb-3 mb-sm-0">توجه!</h4>
+                            <p class="mb-0 d-none d-sm-block">
+                                از مشاوران خود بخواهید ثبت نام کنند و در قسمت بعدی یافتن املاک را انتخاب کنند و در کادر مربوطه شماره شما را وارد کنند و
+                                بعد پیوستن را انتخاب کنند
+                                بعد از ثبت درخواست مشاور
+                                شما میتوانید در قسمت مشاوران آنها را مدیریت کنید(فعال یا غیر فعال سازی)
+                            </p>
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
@@ -86,23 +91,23 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 grid-margin stretch-card">
-            <div class="card bg-success bg-gradient bg-opacity-50">
-                <div class="card-body py-3 px-0 px-sm-3">
-                    <div class="row align-items-center">
-                        <p class="fs-6 lh-lg">
-                            از مشاوران خود بخواهید ثبت نام کنند و در قسمت بعدی یافتن املاک را انتخاب کنند و در کادر مربوطه شماره شما را وارد کنند و
-                            بعد پیوستن را انتخاب کنند
-                            بعد از ثبت درخواست مشاور
-                            شما میتوانید در قسمت مشاوران آنها را مدیریت کنید(فعال یا غیر فعال سازی)
-                        </p>
+{{--    <div class="row">--}}
+{{--        <div class="col-12 grid-margin stretch-card">--}}
+{{--            <div class="card bg-success bg-gradient bg-opacity-50">--}}
+{{--                <div class="card-body py-3 px-0 px-sm-3">--}}
+{{--                    <div class="row align-items-center">--}}
+{{--                        <p class="fs-6 lh-lg">--}}
+{{--                            از مشاوران خود بخواهید ثبت نام کنند و در قسمت بعدی یافتن املاک را انتخاب کنند و در کادر مربوطه شماره شما را وارد کنند و--}}
+{{--                            بعد پیوستن را انتخاب کنند--}}
+{{--                            بعد از ثبت درخواست مشاور--}}
+{{--                            شما میتوانید در قسمت مشاوران آنها را مدیریت کنید(فعال یا غیر فعال سازی)--}}
+{{--                        </p>--}}
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
     <div class="row">
         <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
             <div class="card bg-primary bg-gradient bg-opacity-50">
@@ -130,6 +135,23 @@
                         </div>
                     </div>
                 </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body py-2 row">
+                    <div class="col-md-6">
+                        <input type="text" name="number" class="form-control col-md-9" value="{{old('number')}}" id="number" placeholder="جستوجو">
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-control" name="type_work" id="type_work">
+                            <option value="home">مرتب سازی</option>
+                            <option value="office">دفتر</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

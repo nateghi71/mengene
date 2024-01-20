@@ -48,7 +48,7 @@
         }
         else if(current === "customer"){
             const urlParams = new URLSearchParams(window.location.search);
-            const myParam = urlParams.get('type');
+            const myParam = urlParams.get('status');
             if(myParam === null)
             {
                 if(element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?') === -1
@@ -61,9 +61,9 @@
                     }
                 }
             }
-            else if(myParam === 'buy')
+            else if(myParam === 'deActive')
             {
-                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type=buy') !== -1
+                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?status=deActive') !== -1
                     && element.attr('href').indexOf('customer') !== -1)
                 {
                     console.log(element.attr('href'))
@@ -74,25 +74,11 @@
                         element.addClass('active');
                     }
                 }
-            }
-            else if(myParam === 'rahn')
-            {
-                if(element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type=rahn') !== -1
-                && element.attr('href').indexOf('customer') !== -1)
-                {
-                    element.parents('.nav-item').last().addClass('active');
-                    if (element.parents('.sub-menu').length) {
-                        element.closest('.collapse').addClass('show');
-                        element.addClass('active');
-                    }
-
-                }
-
             }
         }
         else if(current === "landowner"){
             const urlParams = new URLSearchParams(window.location.search);
-            const myParam = urlParams.get('type');
+            const myParam = urlParams.get('status');
             if(myParam === null)
             {
                 if(element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?') === -1
@@ -105,9 +91,9 @@
                     }
                 }
             }
-            else if(myParam === 'buy')
+            else if(myParam === 'deActive')
             {
-                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type=buy') !== -1
+                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?status=deActive') !== -1
                     && element.attr('href').indexOf('landowner') !== -1)
                 {
                     console.log(element.attr('href'))
@@ -118,20 +104,6 @@
                         element.addClass('active');
                     }
                 }
-            }
-            else if(myParam === 'rahn')
-            {
-                if(element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type=rahn') !== -1
-                && element.attr('href').indexOf('landowner') !== -1)
-                {
-                    element.parents('.nav-item').last().addClass('active');
-                    if (element.parents('.sub-menu').length) {
-                        element.closest('.collapse').addClass('show');
-                        element.addClass('active');
-                    }
-
-                }
-
             }
         }
         else if(current === "create"){

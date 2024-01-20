@@ -32,8 +32,7 @@ class LandownerController extends Controller
 
         $business = $user->business();
 
-        $landowners = $business->landowners()->landownerType()
-            ->orderBy('is_star', 'desc')->orderBy('status', 'asc')->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
+        $landowners = $business->landowners()->filter()->search()->paginate(10)->withQueryString();
 
         foreach ($landowners as $landowner) {
             if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
