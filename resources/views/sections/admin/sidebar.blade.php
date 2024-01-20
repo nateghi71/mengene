@@ -17,14 +17,29 @@
             </a>
         </li>
         <li class="nav-item menu-items">
-            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link" data-bs-toggle="collapse" href="#users" aria-expanded="false" aria-controls="users">
+              <span class="menu-icon">
+                <i class="mdi mdi-account-search"></i>
+              </span>
+                <span class="menu-title pe-2">فایل گذار</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="users">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{{route('admin.files.index')}}">نمایش فایل ها</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{route('admin.files.create')}}">ایجاد فایل</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item menu-items">
+            <a class="nav-link" data-bs-toggle="collapse" href="#users" aria-expanded="false" aria-controls="users">
               <span class="menu-icon">
                 <i class="mdi mdi-account-search"></i>
               </span>
                 <span class="menu-title pe-2">کاربران</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="ui-basic">
+            <div class="collapse" id="users">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{route('admin.users.index')}}">نمایش کاربران</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{route('admin.users.create')}}">ایجاد کاربر</a></li>

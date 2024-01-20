@@ -1,9 +1,11 @@
-@extends('layouts.dashboard' , ['sectionName' => 'ویرایش متقاضی'])
+@extends('layouts.admin' , ['sectionName' => 'ایجاد نقش'])
 
-@section('title' , 'ویرایش متقاضی')
+@section('title' , 'ایجاد نقش')
+
+@section('head')
+@endsection
 
 @section('scripts')
-
     <script>
         function getCities(){
             var provinceID = $('#province').val();
@@ -16,17 +18,9 @@
                             $("#city").empty();
 
                             $.each(res, function(key, city) {
-                                let selected = false;
-                                if(city.id == "{{$customer->city_id}}")
-                                {
-                                    selected = true;
-                                }
-                                let option = $('<option>' , {
-                                    value:city.id,
-                                    text:city.name,
-                                    selected:selected,
-                                })
-                                $("#city").append(option);
+                                console.log(city);
+                                $("#city").append('<option value="' + city.id + '">' +
+                                    city.name + '</option>');
                             });
                         } else {
                             $("#city").empty();
@@ -40,15 +34,7 @@
         getCities()
         $('#province').on('change' , getCities)
 
-        if("{{ $customer->getRawOriginal('type_sale') === "buy" }}")
-        {
-            buyFunction()
-        }
-        else
-        {
-            rahnFunction()
-        }
-
+        buyFunction();
         function buyFunction() {
             var x = document.getElementById("myDIV");
             if (x.style.display === "none") {
@@ -78,11 +64,12 @@
                 z.style.display = "none";
             }
         }
+
         $(document).ready(function() {
             $("#expire_date").persianDatepicker({
-                format: 'YYYY/MM/DD',
+                initialValue: false,
                 minDate: new persianDate(),
-                initialValueType: 'persian',
+                format: 'YYYY/MM/DD',
                 autoClose: true
             });
         });
@@ -143,10 +130,9 @@
             separateNum(this , $('#show_rent_amount').get(0));
         });
 
-        let label = $('#is_star_label')
-        let star = $('#is_star')
-
-        label.on('click' , function (){
+        $('#is_star_label').on('click' , function (){
+            let label = $(this)
+            let star = $('#is_star')
             if(!label.is('.checked'))
             {
                 label.addClass('checked')
@@ -160,45 +146,34 @@
                 star.prop('checked' , false)
             }
         });
-
-        if(star.prop('checked') == true)
-        {
-            label.addClass('checked')
-            label.html('<span class="mdi mdi-star fs-4 text-warning"></span>')
-        }
-        else
-        {
-            label.removeClass('checked')
-            label.html('<span class="mdi mdi-star-outline fs-4 text-warning"></span>')
-        }
-
     </script>
+
 @endsection
 
 @section('content')
     <div class="card row">
         <div class="card-body px-5 py-4">
             <div class="d-flex justify-content-between">
-                <div><h3 class="card-title mb-3">ویرایش متقاضی</h3></div>
-                <div><a href="{{route('customer.index')}}" class="btn btn-primary p-2">نمایش متقاضیان</a></div>
+                <div><h3 class="card-title mb-3">ایجاد فایل</h3></div>
+                <div><a href="{{route('admin.files.index')}}" class="btn btn-primary p-2">نمایش فایل ها</a></div>
             </div>
             <hr>
-            <form action="{{route('customer.update' , $customer->id)}}" method="post" autocomplete="off">
+            <form action="{{route('admin.files.store')}}" method="post" autocomplete="off">
                 @csrf
-                @method('PUT')
+
                 <div class="row mb-4">
                     <div class="form-group d-flex align-items-center">
                         <label class="col-sm-3 ps-3">نوع:</label>
                         <div class="col-sm-3">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale1">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" {{$customer->getRawOriginal('type_sale') === "buy" ? 'checked' : '' }}> خرید </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" checked> خرید </label>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale2">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn" {{$customer->getRawOriginal('type_sale') === "rahn" ? 'checked' : '' }}> رهن و اجاره </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn"> رهن و اجاره </label>
                             </div>
                         </div>
                         @error('type_sale')
@@ -209,14 +184,14 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="name"> نام و نام خانوادگی:</label>
-                        <input type="text" name="name" class="form-control" id="name" value="{{$customer->name}}" placeholder="نام">
+                        <input type="text" name="name" class="form-control" id="name" value="{{old('name')}}" placeholder="نام">
                         @error('name')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
                         <label for="number">شماره تماس:</label>
-                        <input type="text" name="number" class="form-control" value="{{$customer->number}}" id="number" placeholder="شماره تماس"
+                        <input type="text" name="number" class="form-control" value="{{old('number')}}" id="number" placeholder="شماره تماس"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('number')
                         <div class="alert-danger">{{$message}}</div>
@@ -226,7 +201,7 @@
                         <label for="province">استان:</label>
                         <select class="form-control" id="province">
                             @foreach($provinces as $province)
-                                <option value="{{$province->id}}" @selected($customer->city->province_id === $province->id)>{{$province->name}}</option>
+                                <option value="{{$province->id}}">{{$province->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -239,18 +214,19 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="access_level">سطح دسترسی:</label>
-                        <select class="form-control" name="access_level" id="access_level">
-                            <option value="private" @selected($customer->getRawOriginal('access_level') === "private")>خصوصی</option>
-                            <option value="public" @selected($customer->getRawOriginal('access_level') === "public")>عمومی</option>
+                        <label for="type_file">نوع فایل:</label>
+                        <select class="form-control" name="type_file" id="type_file">
+                            <option value="public">عمومی</option>
+                            <option value="buy">فایل پولی</option>
+                            <option value="subscription">اشتراک ویژه</option>
                         </select>
-                        @error('access_level')
+                        @error('type_file')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
                         <label for="scale">متراژ:</label>
-                        <input type="text" name="scale" class="form-control" value="{{$customer->getRawOriginal('scale')}}" id="scale" placeholder="متراژ"
+                        <input type="text" name="scale" class="form-control" value="{{old('scale')}}" id="scale" placeholder="متراژ"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('scale')
                         <div class="alert-danger">{{$message}}</div>
@@ -261,7 +237,7 @@
                             <label for="selling_price">قیمت:</label>
                             <p id="show_selling_price"></p>
                         </div>
-                        <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{$customer->getRawOriginal('selling_price')}}" id="selling_price" placeholder="قیمت"
+                        <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{old('selling_price')}}" id="selling_price" placeholder="قیمت"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('selling_price')
                         <div class="alert-danger">{{$message}}</div>
@@ -272,7 +248,7 @@
                             <label for="rahn_amount">رهن:</label>
                             <p id="show_rahn_amount"></p>
                         </div>
-                        <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{$customer->getRawOriginal('rahn_amount')}}" id="rahn_amount" placeholder="رهن"
+                        <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{old('rahn_amount')}}" id="rahn_amount" placeholder="رهن"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rahn_amount')
                         <div class="alert-danger">{{$message}}</div>
@@ -283,7 +259,7 @@
                             <label for="rent_amount">اجاره:</label>
                             <p id="show_rent_amount"></p>
                         </div>
-                        <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{$customer->getRawOriginal('rent_amount')}}" id="rent_amount" placeholder="اجاره"
+                        <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{old('rent_amount')}}" id="rent_amount" placeholder="اجاره"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rent_amount')
                         <div class="alert-danger">{{$message}}</div>
@@ -292,8 +268,8 @@
                     <div class="form-group col-md-3">
                         <label for="type_work">نوع مسکن:</label>
                         <select class="form-control" name="type_work" id="type_work">
-                            <option value="home" @selected($customer->getRawOriginal('type_work') === "home")>خانه</option>
-                            <option value="office" @selected($customer->getRawOriginal('type_work') === "office")>دفتر</option>
+                            <option value="home">خانه</option>
+                            <option value="office">دفتر</option>
                         </select>
                         @error('type_work')
                         <div class="alert-danger">{{$message}}</div>
@@ -302,16 +278,16 @@
                     <div class="form-group col-md-3">
                         <label for="type_build">نوع خانه:</label>
                         <select class="form-control" name="type_build" id="type_build">
-                            <option value="house" @selected($customer->getRawOriginal('type_build') === "house")>ویلایی</option>
-                            <option value="apartment" @selected($customer->getRawOriginal('type_build') === "apartment")>ساختمان</option>
+                            <option value="house">ویلایی</option>
+                            <option value="apartment">ساختمان</option>
                         </select>
-                        @error('type_work')
+                        @error('type_build')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
                         <label for="number_of_rooms">تعداد اتاق:</label>
-                        <input type="text" name="number_of_rooms" class="form-control" value="{{$customer->number_of_rooms}}" id="number_of_rooms" placeholder="تعداد اتاق"
+                        <input type="text" name="number_of_rooms" class="form-control" value="{{old('number_of_rooms')}}" id="number_of_rooms" placeholder="تعداد اتاق"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('number_of_rooms')
                         <div class="alert-danger">{{$message}}</div>
@@ -319,7 +295,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="floor_number">تعداد طبقات کل ساختمان:</label>
-                        <input type="text" name="floor_number" class="form-control" value="{{$customer->floor_number}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
+                        <input type="text" name="floor_number" class="form-control" value="{{old('floor_number')}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('floor_number')
                         <div class="alert-danger">{{$message}}</div>
@@ -327,7 +303,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="floor">شماره طبقه:</label>
-                        <input type="text" name="floor" class="form-control" value="{{$customer->floor}}" id="floor" placeholder="شماره طبقه"
+                        <input type="text" name="floor" class="form-control" value="{{old('floor')}}" id="floor" placeholder="شماره طبقه"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('floor')
                         <div class="alert-danger">{{$message}}</div>
@@ -335,15 +311,15 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="expire_date">زمان باقیمانده:</label>
-                        <input type="text" name="expire_date" class="form-control" value="{{$customer->expire_date}}" id="expire_date" placeholder="زمان باقیمانده"
+                        <input type="text" name="expire_date" class="form-control" value="{{old('expire_date')}}" id="expire_date" placeholder="زمان باقیمانده"
                                onkeypress="return false">
                         @error('expire_date')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="description">آدرس:</label>
-                        <textarea name="description" class="form-control" id="description" placeholder="آدرس" rows="3">{{$customer->description}}</textarea>
+                        <label for="description">توضیحات و آدرس:</label>
+                        <textarea name="description" class="form-control" id="description" placeholder="آدرس" rows="3">{{old('description')}}</textarea>
                         @error('description')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
@@ -353,17 +329,16 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label id="is_star_label" class="form-check-label"><span class="mdi mdi-star-outline fs-4 text-warning"></span></label>
-                            <input type="checkbox" name="is_star" id="is_star" class="d-none" @checked($customer->getRawOriginal('is_star') === 1)>
+                            <input type="checkbox" name="is_star" id="is_star" class="d-none" {{ old('is_star') == 'on' ? 'checked' : '' }}>
                         </div>
                         @error('is_star')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="elevator" class="form-check-label">
-                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" @checked($customer->getRawOriginal('elevator') === 1)>اسانسور
+                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>اسانسور
                             </label>
                         </div>
                         @error('elevator')
@@ -373,7 +348,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="parking" class="form-check-label">
-                                <input type="checkbox" name="parking" id="parking" class="form-check-input" @checked($customer->getRawOriginal('parking') === 1)>پارکینگ
+                                <input type="checkbox" name="parking" id="parking" class="form-check-input" {{ old('parking') == 'on' ? 'checked' : '' }}>پارکینگ
                             </label>
                         </div>
                         @error('parking')
@@ -383,7 +358,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="store" class="form-check-label">
-                                <input type="checkbox" name="store" id="store" class="form-check-input" @checked($customer->getRawOriginal('store') === 1)>انبار
+                                <input type="checkbox" name="store" id="store" class="form-check-input" {{ old('store') == 'on' ? 'checked' : '' }}>انبار
                             </label>
                         </div>
                         @error('store')
@@ -392,7 +367,7 @@
                     </div>
                 </div>
                 <div class="text-center pt-3">
-                    <button type="submit" class="btn btn-primary w-100 enter-btn">ویرایش</button>
+                    <button type="submit" class="btn btn-primary w-100 enter-btn">ایجاد</button>
                 </div>
 
             </form>

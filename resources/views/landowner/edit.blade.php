@@ -80,6 +80,7 @@
         $(document).ready(function() {
             $("#expire_date").persianDatepicker({
                 format: 'YYYY/MM/DD',
+                minDate: new persianDate(),
                 initialValueType: 'persian',
                 autoClose: true
             });

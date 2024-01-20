@@ -83,7 +83,7 @@
                                         @endif
                                         <td>{{$suggestion->scale}}</td>
                                         <td>{{$suggestion->daysLeft ?? 'منقضی'}}</td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.show',$suggestion->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td><a class="text-white text-decoration-none" href="{{route('file.show',$suggestion->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         <td>
                                             <form action="{{route('customer.send_share_message')}}" method="post">
                                                 @csrf

@@ -14,7 +14,11 @@
         <div class="col-md-6 grid-margin mx-auto">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">نمایش اطلاعات : </h4>
+                    <div class="d-flex justify-content-between">
+                        <div><h3 class="card-title mb-3">نمایش اطلاعات : {{ $business->name }}</h3></div>
+                        <div><a href="{{route('admin.business.index')}}" class="btn btn-primary p-2">نمایش املاکی ها</a></div>
+                    </div>
+                    <hr>
                     <div class="table-responsive">
                         <table class="table table-bordered text-center">
                             <tbody>

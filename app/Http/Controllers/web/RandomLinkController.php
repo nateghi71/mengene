@@ -51,8 +51,9 @@ class RandomLinkController extends Controller
         if($request->response == 1)
         {
             $message = "زمان باقیمانده شما تمدید شد.";
+            $requestedPerson->ignoreMutator = true;
             $requestedPerson->update([
-                'expire_date' =>Carbon::now()->addDays(30)->toDate(),
+                'expire_date' => Carbon::now()->addDays(30)->toDate(),
                 'status' => 'active'
             ]);
         }

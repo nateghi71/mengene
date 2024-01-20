@@ -23,7 +23,7 @@
             background: rgba(0,0,0,1);
             transform: translate(-50%, -50%);
         }
-        .self_file {
+        .buy_file {
             background: #000;
         }
         .minute-input, .second-input, .hour-input {
@@ -132,9 +132,9 @@
     </div>
 
     <div class="row">
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
             <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.index')}}" class="text-decoration-none text-white">
+                <a href="{{route('landowner.sub_files')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
                             <span class="mdi mdi-account-search icon-item text-white"></span>
@@ -146,9 +146,9 @@
                 </a>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
             <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.index',['type' => 'buy'])}}" class="text-decoration-none text-white">
+                <a href="{{route('landowner.sub_files',['type' => 'buy'])}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
                             <span class="mdi mdi-account-search icon-item text-white"></span>
@@ -160,9 +160,9 @@
                 </a>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+        <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
             <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.index',['type' => 'rahn'])}}" class="text-decoration-none text-white">
+                <a href="{{route('landowner.sub_files',['type' => 'rahn'])}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
                             <span class="mdi mdi-account-search icon-item text-white"></span>
@@ -174,35 +174,21 @@
                 </a>
             </div>
         </div>
-        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.index',['type' => 'deActive'])}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">مالکان غیرفعال</h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
     </div>
     <div class="row">
-        @if($landowners->isNotEmpty())
+        @if($files->isNotEmpty())
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        @if($landowners->pluck('status')->contains('غیرفعال'))
+                        @if($files->pluck('status')->contains('غیرفعال'))
                             @php
                                 $title = 'مالکان غیرفعال';
                             @endphp
-                        @elseif($landowners->pluck('type_sale')->contains('فروش') && $landowners->pluck('type_sale')->contains('رهن و اجاره'))
+                        @elseif($files->pluck('type_sale')->contains('فروش') && $files->pluck('type_sale')->contains('رهن و اجاره'))
                             @php
                                 $title = 'همه مالکان';
                             @endphp
-                        @elseif($landowners->pluck('type_sale')->contains('رهن و اجاره'))
+                        @elseif($files->pluck('type_sale')->contains('رهن و اجاره'))
                             @php
                                 $title = 'مالکان رهن دهنده';
                             @endphp
@@ -226,13 +212,12 @@
                                     <th> # </th>
                                     <th> نام </th>
                                     <th> شماره تماس </th>
-                                    <th> ثبت کننده </th>
                                     <th> نوع </th>
                                     <th>
-                                        @if($landowners->pluck('status')->contains('غیرفعال') ||
-                                            $landowners->pluck('type_sale')->contains('فروش') && $landowners->pluck('type_sale')->contains('رهن و اجاره'))
+{{--                                        {{dd($files->pluck('type_sale'))}}--}}
+                                        @if($files->pluck('type_sale')->contains('فروش') && $files->pluck('type_sale')->contains('رهن و اجاره'))
                                             قیمت / رهن
-                                        @elseif($landowners->pluck('type_sale')->contains('رهن و اجاره'))
+                                        @elseif($files->pluck('type_sale')->contains('رهن و اجاره'))
                                             رهن
                                         @else
                                             قیمت
@@ -242,46 +227,68 @@
                                     <th> پیشنهادات </th>
                                     <th>تنظیم هشدار</th>
                                     <th> نمایش </th>
-                                    <th> ویرایش </th>
                                     <th>حذف</th>
                                 </tr>
                                 </thead>
                                 <tbody class="text-white">
-                                @foreach($landowners as $key => $landowner)
-                                    <tr @class(['self_file' => auth()->user()->id === $landowner->user->id])>
-                                        <td>
-                                            <a class="text-decoration-none" href="{{route('landowner.star',$landowner->id)}}">{!!$landowner->getRawOriginal('is_star') ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
-                                        </td>
-                                        <td>
-                                            {{$landowner->name}}
-                                            @if($landowner->getRawOriginal('status') == 'active')
-                                                <span class="mdi mdi-checkbox-blank-circle text-success"></span>
-                                            @elseif($landowner->getRawOriginal('status') == 'unknown')
-                                                <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
-                                            @else
-                                                <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
-                                            @endif
-                                        </td>
-                                        <td>{{$landowner->number}}</td>
-                                        <td>{{$landowner->user->name}}</td>
-                                        <td>{{$landowner->type_sale}}</td>
-                                        <td>{{$landowner->getRawOriginal('selling_price') !== 0 ? $landowner->selling_price : $landowner->rahn_amount}}</td>
-                                        <td>{{$landowner->daysLeft ? $landowner->daysLeft . ' روز' : 'منقضی'}}</td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.suggestions',$landowner->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
-                                        <td>
-                                            <form action="{{route('landowner.remainder')}}" method="post">
-                                                @csrf
-                                                <input type="hidden" name="remainder" id="remainder_input_{{$key}}">
-                                                <input type="hidden" name="landowner_id" value="{{$landowner->id}}">
-                                                <button id="remainder_{{$key}}" class="btn btn-link text-white text-decoration-none" type="button"><i class="mdi mdi-bell"></i></button>
-                                            </form>
-                                        </td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.show',$landowner->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.edit',$landowner->id)}}"><i class="mdi mdi-lead-pencil"></i></a></td>
-                                        <td>
-                                            <a href="{{route('landowner.destroy',$landowner->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger" type="button"><i class="mdi mdi-delete"></i></a>
-                                        </td>
-                                    </tr>
+                                @foreach($files as $key => $file)
+                                    @if($file->getRawOriginal('type_file') === 'buy' || ($file->getRawOriginal('type_file') === 'subscription' && !auth()->user()->isFreeUser()))
+                                        <tr @class(['buy_file' => $file->getRawOriginal('type_file') === 'buy'])>
+                                            <td>
+                                                <a class="text-decoration-none" href="{{route('landowner.star',$file->id)}}">{!!$file->getRawOriginal('is_star') ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
+                                            </td>
+                                            <td>
+                                                @if($file->getRawOriginal('type_file') === 'subscription')
+                                                    {{$file->name}}
+                                                    @if($file->getRawOriginal('status') == 'active')
+                                                        <span class="mdi mdi-checkbox-blank-circle text-success"></span>
+                                                    @elseif($file->getRawOriginal('status') == 'unknown')
+                                                        <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
+                                                    @else
+                                                        <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
+                                                    @endif
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($file->getRawOriginal('type_file') === 'subscription')
+                                                    {{$file->number}}
+                                                @else
+                                                    -
+                                                @endif
+
+                                            </td>
+                                            <td>{{$file->type_sale}}</td>
+                                            <td>{{$file->getRawOriginal('selling_price') !== 0 ? $file->selling_price : $file->rahn_amount}}</td>
+                                            <td>{{$file->daysLeft ? $file->daysLeft . ' روز' : 'منقضی'}}</td>
+                                            <td>
+                                                @if($file->getRawOriginal('type_file') === 'subscription')
+                                                    <a class="text-white text-decoration-none" href="{{route('landowner.suggestions',$file->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a>
+                                                @else
+                                                    -
+                                                @endif
+
+                                            </td>
+                                            <td>
+                                                @if($file->getRawOriginal('type_file') === 'subscription')
+                                                    <form action="{{route('landowner.remainder')}}" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="remainder" id="remainder_input_{{$key}}">
+                                                        <input type="hidden" name="landowner_id" value="{{$file->id}}">
+                                                        <button id="remainder_{{$key}}" class="btn btn-link text-white text-decoration-none" type="button"><i class="mdi mdi-bell"></i></button>
+                                                    </form>
+                                                @else
+                                                    -
+                                                @endif
+
+                                            </td>
+                                            <td><a class="text-white text-decoration-none" href="{{route('landowner.show',$file->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                            <td>
+                                                <a href="{{route('landowner.destroy',$file->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger" type="button"><i class="mdi mdi-delete"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                                 </tbody>
                             </table>
@@ -296,5 +303,5 @@
         @endif
 
     </div>
-    {{$landowners->links()}}
+    {{$files->links()}}
 @endsection

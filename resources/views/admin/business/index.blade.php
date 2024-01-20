@@ -37,7 +37,7 @@
         $('[id^=open_delete_panel_]').on('click' , function (e){
             e.preventDefault()
             $('#deletePanel').show()
-            $('#deleteBox').children().children().eq(0).attr('action' , $(this).attr('href'))
+            $('#deleteBox').children().children().eq(0).attr('href' , $(this).attr('href'))
         })
         $('#not_delete_btn').on('click' , function (){
             $('#deletePanel').hide()
@@ -56,13 +56,9 @@
 
     <div id="deletePanel">
         <div id="deleteBox">
-            <p class="text-end pb-3">ایا می خواهید فایل موردنظر را حذف کنید؟</p>
+            <p class="text-end pb-3">ایا می خواهید املاکی موردنظر را تغییر وضعیت دهید؟</p>
             <div class="d-flex justify-content-between">
-                <form method="post">
-                    @csrf
-                    @method('DELETE')
-                    <button id="delete_btn" class="btn btn-danger" type="submit">بله</button>
-                </form>
+                <a id="delete_btn" href="#" class="btn btn-danger">بله</a>
                 <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
             </div>
         </div>
@@ -83,7 +79,7 @@
                                     <th> شهر </th>
                                     <th> شماره تماس </th>
                                     <th> نمایش </th>
-                                    <th>حذف</th>
+                                    <th>تغییر وضعیت</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -94,7 +90,11 @@
                                         <td>{{$business->city->name}}</td>
                                         <td>{{$business->owner->number}}</td>
                                         <td><a class="btn text-decoration-none" href="{{route('admin.business.show',$business->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a href="{{route('admin.business.destroy',$business->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a></td>
+                                        <td>
+                                            <a href="{{route('admin.business.changeStatus',$business->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none" type="button">
+                                                {!! $business->status === 'active' ? '<span class="text-danger">غیرفعال کردن</span>' : '<span class="text-success">فعال کردن</span>' !!}
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

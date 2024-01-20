@@ -49,7 +49,7 @@ class SuggestionForLandOwnerController extends Controller
             }
         }
 
-        return view('landowner.suggestion' , compact('suggestions' ,'landowner'));
+        return view('file.suggestion' , compact('suggestions' ,'landowner'));
     }
 
     public function send_block_message(Request $request)

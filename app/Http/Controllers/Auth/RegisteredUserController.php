@@ -117,7 +117,7 @@ class RegisteredUserController extends Controller
             'city_id' => ['required'],
             'email' => ['nullable' , 'max:255' , 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'roles' => 'required'
+            'role' => 'required'
         ]);
 
         try {
@@ -139,7 +139,6 @@ class RegisteredUserController extends Controller
         }
         catch (\Exception $e){
             DB::rollBack();
-            dd($e->getMessage());
             return redirect()->back()->with('error' , 'در دیتابیس خطایی رخ داد.');
         }
 

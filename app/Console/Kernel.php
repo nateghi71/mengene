@@ -18,8 +18,9 @@ class Kernel extends ConsoleKernel
             UpdateStatusFile::updateStatusCustomers();
             UpdateStatusFile::updateStatusLandowner();
             CheckPremiumExpireDate::checkExpireDate();
-        })->everyMinute();
-//            ->timezone('Asia/Tehran')->dailyAt('7:00');
+        })->dailyAt('7:00');
+
+        $schedule->command('queue:work --stop-when-empty --tries=3')->everyMinute();
     }
 
     /**

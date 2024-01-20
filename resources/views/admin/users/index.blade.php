@@ -69,7 +69,7 @@
     </div>
 
     <div class="row">
-        @if($roles->isNotEmpty())
+        @if($users->isNotEmpty())
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
@@ -80,19 +80,23 @@
                                 <tr>
                                     <th> # </th>
                                     <th> نام </th>
+                                    <th> شماره </th>
+                                    <th> شهر </th>
+                                    <th> نقش </th>
                                     <th> نمایش </th>
                                     <th> ویرایش </th>
-                                    <th>حذف</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($roles as $key => $role)
+                                @foreach($users as $key => $user)
                                     <tr>
-                                        <td>{{$roles->firstItem() + $key}}</td>
-                                        <td>{{$role->name}}</td>
-                                        <td><a class="btn text-decoration-none" href="{{route('admin.roles.show',$role->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="btn text-decoration-none" href="{{route('admin.roles.edit',$role->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
-                                        <td><a href="{{route('admin.roles.destroy',$role->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a></td>
+                                        <td>{{$users->firstItem() + $key}}</td>
+                                        <td>{{$user->name}}</td>
+                                        <td>{{$user->number}}</td>
+                                        <td>{{$user->city->name}}</td>
+                                        <td>{{$user->getRoleNames()->first()}}</td>
+                                        <td><a class="btn text-decoration-none" href="{{route('admin.users.show',$user->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td><a class="btn text-decoration-none" href="{{route('admin.users.edit',$user->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -107,6 +111,6 @@
             </div>
         @endif
     </div>
-    {{$roles->links()}}
+    {{$users->links()}}
 
 @endsection

@@ -20,5 +20,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'edit_user' , 'guard_name' => 'web']);
         Permission::create(['name' => 'delete_user' , 'guard_name' => 'web']);
         Permission::create(['name' => 'access_to_site' , 'guard_name' => 'web']);
+        Role::create(['name' => 'user' , 'guard_name' => 'web']);
+        Role::create(['name' => 'admin' , 'guard_name' => 'web']);
     }
 }

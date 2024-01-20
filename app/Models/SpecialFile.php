@@ -7,37 +7,29 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Landowner extends Model
+class SpecialFile extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory;
 
     public bool $ignoreMutator = false;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+
     protected $fillable = [
         'name','number','city_id','status','type_sale','type_work','type_build','scale','number_of_rooms',
-        'description','rahn_amount','access_level','rent_amount','selling_price','elevator','parking','store','floor',
-        'floor_number','business_id','user_id','is_star','expire_date'];
+        'description','rahn_amount','type_file','rent_amount','selling_price','elevator','parking','store','floor',
+        'floor_number','user_id','is_star','expire_date'];
 
-    public function scopeLandownerType(Builder $query)
+    public function scopeFilterByType(Builder $query)
     {
         if(request()->has('type'))
         {
             switch (request()->type)
             {
                 case 'buy':
-                    $query->where('type_sale' , 'buy')->whereNot('status' , 'deActive');
+                    $query->where('type_sale' , 'buy')->where('status' , 'active');
                     break;
                 case 'rahn':
-                    $query->where('type_sale' , 'rahn')->whereNot('status' , 'deActive');
-                    break;
-                case 'deActive':
-                    $query->where('status' , 'deActive');
+                    $query->where('type_sale' , 'rahn')->where('status' , 'active');
                     break;
             }
             return $query;
@@ -45,7 +37,6 @@ class Landowner extends Model
 
         return $query->whereNot('status' , 'deActive');
     }
-
 
     protected function expireDate():Attribute
     {
@@ -141,7 +132,7 @@ class Landowner extends Model
             get : fn ($value) => $value ? 'دارد' : 'ندارد',
         );
     }
-    protected function accessLevel():Attribute
+    protected function typeFile():Attribute
     {
         return Attribute::make(
             get : function ($value){
@@ -149,8 +140,10 @@ class Landowner extends Model
                 {
                     case 'public':
                         return 'عمومی';
-                    case 'private':
-                        return 'خصوصی';
+                    case 'buy':
+                        return 'فایل پولی';
+                    case 'subscription':
+                        return 'اشتراک ویژه';
                 }
             },
         );
@@ -214,31 +207,9 @@ class Landowner extends Model
             },
         );
     }
-
-
-    public function suggestedCustomer()
-    {
-        return $this->belongsToMany(Customer::class, 'suggestions', 'landowner_id', 'customer_id');
-    }
-
-    public function notSuggestedCustomer()
-    {
-        return !$this->suggestedCustomer()->exists();
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function business()
-    {
-        return $this->belongsTo(Business::class);
-    }
-
-    public function links()
-    {
-        return $this->morphMany(RandomLink::class , 'linkable');
     }
     public function city()
     {

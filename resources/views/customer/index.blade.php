@@ -96,6 +96,7 @@
                 },
             },
             initialValue: false,
+            minDate: new persianDate(),
         });
 
     </script>

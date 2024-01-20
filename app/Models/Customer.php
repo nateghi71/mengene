@@ -13,6 +13,7 @@ class Customer extends Model
 {
     use HasFactory , SoftDeletes ;
 
+    public bool $ignoreMutator = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -50,7 +51,15 @@ class Customer extends Model
     {
         return Attribute::make(
             get : fn ($value) => verta($value)->format('Y-m-d'),
-            set : fn ($value) => Verta::parse($value)->datetime()->format('Y-m-d'),
+            set : function ($value){
+                if($this->ignoreMutator){
+                    return $value;
+                }
+                else
+                {
+                    return Verta::parse($value)->datetime()->format('Y-m-d');
+                }
+            }
         );
     }
     protected function scale():Attribute

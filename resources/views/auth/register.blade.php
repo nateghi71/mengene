@@ -70,7 +70,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="email">ایمیل</label>
+                        <label for="email">ایمیل (اختیاری)</label>
                         <input type="text" name="email" value="{{old('email')}}" class="form-control" id="email" placeholder="ایمیل">
                         @error('email')
                         <div class="alert alert-danger">
@@ -97,7 +97,7 @@
                             <option value="1">املاکی</option>
                             <option value="0">مشاور</option>
                         </select>
-                        @error('roles')
+                        @error('role')
                         <div class="alert alert-danger">
                             {{$message}}
                         </div>

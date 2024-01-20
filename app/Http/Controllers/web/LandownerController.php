@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\web;
 
-use App\Events\CreateLandownerFile;
+use App\Events\CreateLandownerlandowner;
 use App\HelperClasses\LinkGenerator;
 use App\HelperClasses\SmsAPI;
-use App\HelperClasses\UpdateStatusFile;
+use App\HelperClasses\UpdateStatuslandowner;
 use App\Http\Controllers\Controller;
 use App\Models\Province;
+use App\Models\SpecialFile;
 use App\Models\User;
 use App\Notifications\ReminderForLandowerNotification;
 use Hekmatinasser\Verta\Facades\Verta;
@@ -41,6 +42,15 @@ class LandownerController extends Controller
             }
         }
         return view('landowner.index', compact('landowners' ));
+    }
+    public function showSubFile()
+    {
+//        $this->authorize('viewAny' , Landowner::class);
+        $user = auth()->user();
+        $city_id = $user->business()->city_id;
+        $files = SpecialFile::whereNot('type_file' , 'public')->filterByType()->orderBy('is_star', 'desc')
+            ->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
+        return view('landowner.showSubFile', compact('files'));
     }
 
     public function show(Landowner $landowner)
@@ -108,7 +118,7 @@ class LandownerController extends Controller
             'expire_date' => $request->expire_date
         ]);
 
-        event(new CreateLandownerFile($landowner , $user));
+        event(new CreateLandownerlandowner($landowner , $user));
 
         return redirect()->route('landowner.index',['status' => 'active'])->with('message' , 'فایل موردنظر ایجاد شد.');
     }

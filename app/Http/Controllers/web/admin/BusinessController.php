@@ -4,6 +4,7 @@ namespace App\Http\Controllers\web\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Business;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BusinessController extends Controller
@@ -19,9 +20,15 @@ class BusinessController extends Controller
         return view('admin.business.show' , compact('business'));
     }
 
-    public function destroy(Business $business)
+    public function changeStatus(Business $business)
     {
-        $business->delete();
+        if ($business->status == 'active') {
+            $business->status = 'deactive';
+            $business->save();
+        } else {
+            $business->status = 'active';
+            $business->save();
+        }
         return back();
     }
 }

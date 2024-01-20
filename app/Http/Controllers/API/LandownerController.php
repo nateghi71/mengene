@@ -58,10 +58,10 @@ class LandownerController extends BaseController
 //        $indexedLandowners = $landowners->groupBy('type_sale');
 //        $rentLandowners = $indexedLandowners->get('rahn');
 //        $buyLandowners = $indexedLandowners->get('buy');
-//        foreach ($landowners as $landowner) {
-//            if ($landowner->expire_date > Carbon::now()) {
-//                $daysLeft = Carbon::now()->diffInDays($landowner->expire_date) + 1;
-//                $landowner->daysLeft = $daysLeft;
+//        foreach ($landowners as $file) {
+//            if ($file->expire_date > Carbon::now()) {
+//                $daysLeft = Carbon::now()->diffInDays($file->expire_date) + 1;
+//                $file->daysLeft = $daysLeft;
 //            }
 //        }
 //

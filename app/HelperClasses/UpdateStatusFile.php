@@ -16,7 +16,7 @@ class UpdateStatusFile
         $customers = Customer::where('expire_date', '<', Carbon::now())->get();
 
         foreach ($customers as $customer) {
-            if($customer->getRawOriginal('status') == 'active')
+            if($customer->getRawOriginal('status') === 'active')
             {
                 $customer->update([
                     'status' =>'unknown'
@@ -30,7 +30,7 @@ class UpdateStatusFile
                 $smsApi = new SmsAPI();
                 $smsApi->sendSmsLink($customer->number ,$customer->name , $link);
             }
-            elseif($customer->getRawOriginal('status') == 'unknown')
+            elseif($customer->getRawOriginal('status') === 'unknown')
             {
                 $link = RandomLink::where('type', 'expired')->where('linkable_type' , Customer::class)->
                 where('linkable_id', $customer->id)->where('expires_at' , '<' , Carbon::now())->first();
@@ -44,7 +44,7 @@ class UpdateStatusFile
                     $smsApi = new SmsAPI();
                     $smsApi->sendSmsLink($customer->number ,$customer->name , $updatedLink);
                 }
-                else
+                else if($link)
                 {
                     $customer->update([
                         'status' => 'deActive'
@@ -89,7 +89,7 @@ class UpdateStatusFile
                     $smsApi = new SmsAPI();
                     $smsApi->sendSmsLink($landowner->number ,$landowner->name , $updatedLink);
                 }
-                else
+                else if($link)
                 {
                     $landowner->update([
                         'status' => 'deActive'
