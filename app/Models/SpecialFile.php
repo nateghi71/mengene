@@ -19,23 +19,79 @@ class SpecialFile extends Model
         'description','rahn_amount','type_file','rent_amount','selling_price','elevator','parking','store','floor',
         'floor_number','user_id','is_star','expire_date'];
 
-    public function scopeFilterByType(Builder $query)
+    public function scopeFilter(Builder $query)
     {
-        if(request()->has('type'))
+        if (request()->has('type_sale'))
         {
-            switch (request()->type)
-            {
-                case 'buy':
-                    $query->where('type_sale' , 'buy')->where('status' , 'active');
-                    break;
-                case 'rahn':
-                    $query->where('type_sale' , 'rahn')->where('status' , 'active');
-                    break;
-            }
-            return $query;
+            $query->where('type_sale' , request()->type_sale);
         }
 
-        return $query->whereNot('status' , 'deActive');
+        if (request()->has('access_level'))
+        {
+            $query->where('access_level' , request()->access_level);
+        }
+
+        if (request()->has('type_work'))
+        {
+            $query->where('type_work' , request()->type_work);
+        }
+
+        if (request()->has('type_build'))
+        {
+            $query->where('type_build' , request()->type_build);
+        }
+
+        if (request()->has('status'))
+        {
+            $query->where('status' , request()->status);
+        }
+        else
+        {
+            $query->whereNot('status' , 'deActive');
+        }
+
+        $query->orderByDesc('is_star')->orderBy('status');
+
+        if(request()->has('sortBy'))
+        {
+            $sortBy = request()->sortBy;
+
+            switch ($sortBy) {
+                case 'max_days':
+                    $query->orderByDesc('expire_date');
+                    break;
+                case 'min_days':
+                    $query->orderBy('expire_date');
+                    break;
+                case 'max_price':
+                    $query->orderByDesc('selling_price' )->orderByDesc('rahn_amount' );
+                    break;
+                case 'min_price':
+                    $query->orderBy('selling_price')->orderBy('rahn_amount');
+                    break;
+                case 'max_scale':
+                    $query->orderByDesc('scale');
+                    break;
+                case 'min_scale':
+                    $query->orderBy('scale');
+                    break;
+                case 'max_rooms':
+                    $query->orderByDesc('number_of_rooms');
+                    break;
+                case 'min_rooms':
+                    $query->orderBy('number_of_rooms');
+                    break;
+                default:
+                    $query;
+                    break;
+            }
+        }
+        else
+        {
+            $query->orderByDesc('expire_date');
+        }
+
+        return $query;
     }
 
     protected function expireDate():Attribute

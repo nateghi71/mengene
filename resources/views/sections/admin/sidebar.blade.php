@@ -17,14 +17,14 @@
             </a>
         </li>
         <li class="nav-item menu-items">
-            <a class="nav-link" data-bs-toggle="collapse" href="#users" aria-expanded="false" aria-controls="users">
+            <a class="nav-link" data-bs-toggle="collapse" href="#files" aria-expanded="false" aria-controls="files">
               <span class="menu-icon">
                 <i class="mdi mdi-account-search"></i>
               </span>
                 <span class="menu-title pe-2">فایل گذار</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="users">
+            <div class="collapse" id="files">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{route('admin.files.index')}}">نمایش فایل ها</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{route('admin.files.create')}}">ایجاد فایل</a></li>

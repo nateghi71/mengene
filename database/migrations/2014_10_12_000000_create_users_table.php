@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->string('number')->index()->unique();
             $table->string('password');
             $table->integer('city_id');
+            $table->enum('status', ['active', 'deActive']);
+            $table->string('role_id');
             $table->rememberToken();
             $table->timestamps();
         });

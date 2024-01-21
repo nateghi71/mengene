@@ -35,7 +35,7 @@
                             <div class="form-check">
                                 <label for="permission_{{ $permission->id }}" class="form-check-label">
                                     <input type="checkbox" name="permissions[]" id="permission_{{ $permission->id }}"
-                                           value="{{ $permission->name }}" class="form-check-input"
+                                           value="{{ $permission->id }}" class="form-check-input"
                                     @checked( in_array( $permission->id , $role->permissions->pluck('id')->toArray() ) )>{{ $permission->name }}
                                 </label>
                             </div>
@@ -46,9 +46,8 @@
                     @endforeach
                 </div>
                 <div class="text-center pt-3">
-                    <button type="submit" class="btn btn-primary w-100 enter-btn">ایجاد</button>
+                    <button type="submit" class="btn btn-primary w-100 enter-btn">ویرایش</button>
                 </div>
-
             </form>
         </div>
     </div>

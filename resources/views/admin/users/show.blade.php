@@ -32,7 +32,7 @@
                             </tr>
                             <tr class="text-white">
                                 <td>نقش</td>
-                                <td>{{$user->getRoleNames()->first()}}</td>
+                                <td>{{$user->role->name}}</td>
                             </tr>
                             <tr class="text-white">
                                 <td>ایمیل</td>

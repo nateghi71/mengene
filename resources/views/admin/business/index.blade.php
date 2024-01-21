@@ -105,7 +105,7 @@
             </div>
         @else
             <div class="d-flex justify-content-center">
-                <p>نقشی وجود ندارد.</p>
+                <p>املاکی وجود ندارد.</p>
             </div>
         @endif
     </div>

@@ -26,12 +26,19 @@
                                 <td>نام</td>
                                 <td>{{$role->name}}</td>
                             </tr>
+                            @if($role->permissions->count() > 0)
                             @foreach($role->permissions->pluck('name') as $key => $permission)
                                 <tr>
                                     <td>مجوز {{ $key + 1 }}</td>
                                     <td>{{$permission}}</td>
                                 </tr>
                             @endforeach
+                            @else
+                                <tr>
+                                    <td>مجوز </td>
+                                    <td>ندارد</td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>

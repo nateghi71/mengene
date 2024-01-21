@@ -47,8 +47,7 @@ class LandownerController extends Controller
 //        $this->authorize('viewAny' , Landowner::class);
         $user = auth()->user();
         $city_id = $user->business()->city_id;
-        $files = SpecialFile::whereNot('type_file' , 'public')->filterByType()->orderBy('is_star', 'desc')
-            ->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
+        $files = SpecialFile::whereNot('type_file' , 'public')->filter()->paginate(10)->withQueryString();
         return view('landowner.showSubFile', compact('files'));
     }
 

@@ -102,7 +102,7 @@
                     <label for="role">نقش *</label>
                     <select name="role" class="form-control" id="role">
                         @foreach($roles as $role)
-                            <option @selected($user->getRoleNames()->first() === $role->name)>{{$role->name}}</option>
+                            <option value="{{$role->id}}" @selected($user->role->name === $role->name)>{{$role->name}}</option>
                         @endforeach
                     </select>
                     @error('role')

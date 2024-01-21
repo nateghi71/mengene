@@ -99,6 +99,61 @@
             minDate: new persianDate(),
         });
 
+        function filter() {
+            let typeSale = $('#type_sale').val();
+            if (typeSale == "default") {
+                $('#filter-type-sale').prop('disabled', true);
+            } else {
+                $('#filter-type-sale').val(typeSale);
+            }
+            let accessLevel = $('#access_level').val();
+            if (accessLevel == "default") {
+                $('#filter-access-level').prop('disabled', true);
+            } else {
+                $('#filter-access-level').val(accessLevel);
+            }
+            let typeWork = $('#type_work').val();
+            if (typeWork == "default") {
+                $('#filter-type-work').prop('disabled', true);
+            } else {
+                $('#filter-type-work').val(typeWork);
+            }
+            let typeBuild = $('#type_build').val();
+            if (typeBuild == "default") {
+                $('#filter-type-build').prop('disabled', true);
+            } else {
+                $('#filter-type-build').val(typeBuild);
+            }
+            let status = $('#status').val();
+            if (status == "default") {
+                $('#filter-status').prop('disabled', true);
+            } else {
+                $('#filter-status').val(status);
+            }
+
+            let sortBy = $('#sort-by').val();
+            if (sortBy == "default") {
+                $('#filter-sort-by').prop('disabled', true);
+            } else {
+                $('#filter-sort-by').val(sortBy);
+            }
+
+            let search = $('#search-input').val();
+            if (search == "") {
+                $('#filter-search').prop('disabled', true);
+            } else {
+                $('#filter-search').val(search);
+            }
+
+            $('#filter-form').submit();
+        }
+
+        $('#filter-form').on('submit', function(event) {
+            event.preventDefault();
+            let currentUrl = '{{ url()->current() }}';
+            let url = currentUrl + '?' + decodeURIComponent($(this).serialize())
+            $(location).attr('href', url);
+        });
     </script>
 @endsection
 
@@ -150,119 +205,96 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('customer.index')}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">همه متقاضیان</h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('customer.index',['type' => 'deActive'])}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">متقاضیان غیرفعال</h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
+{{--    <div class="row">--}}
+{{--        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">--}}
+{{--            <div class="card bg-primary bg-gradient bg-opacity-50">--}}
+{{--                <a href="{{route('customer.index')}}" class="text-decoration-none text-white">--}}
+{{--                    <div class="card-body">--}}
+{{--                        <div class="icon">--}}
+{{--                            <span class="mdi mdi-account-search icon-item text-white"></span>--}}
+{{--                            <div class="pe-3 d-flex align-items-center align-self-start text-white">--}}
+{{--                                <h3 class="mb-0">همه متقاضیان</h3>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">--}}
+{{--            <div class="card bg-primary bg-gradient bg-opacity-50">--}}
+{{--                <a href="{{route('customer.index',['type' => 'deActive'])}}" class="text-decoration-none text-white">--}}
+{{--                    <div class="card-body">--}}
+{{--                        <div class="icon">--}}
+{{--                            <span class="mdi mdi-account-search icon-item text-white"></span>--}}
+{{--                            <div class="pe-3 d-flex align-items-center align-self-start text-white">--}}
+{{--                                <h3 class="mb-0">متقاضیان غیرفعال</h3>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
     <div class="row">
         <div class="col-12 grid-margin">
-            <div class="card">
+            <div class="card bg-primary bg-gradient bg-opacity-50">
                 <div class="card-body py-2 row">
-                    <form action="{{route('landowner.store')}}" method="post" autocomplete="off">
-                        @csrf
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <input type="text" name="search" class="form-control col-md-9" value="{{old('search')}}" id="number" placeholder="جستوجو بر اساس نام">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <select class="form-control" name="access_level" id="access_level">
-                                    <option value="home">مرتب سازی</option>
-                                    <option value="office">بیشترین روزهای باقی مانده</option>
-                                    <option value="office">کمترین روزهای باقی مانده</option>
-                                    <option value="office">بیشترین قیمت / رهن</option>
-                                    <option value="office">کمترین قیمت / رهن</option>
-                                    <option value="office">بیشترین متراژ</option>
-                                    <option value="office">کمترین متراژ</option>
-                                    <option value="office">بیشترین تعداد اتاق</option>
-                                    <option value="office">کمترین تعداد اتاق</option>
-                                </select>
-                            </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <input type="text" class="form-control" onchange="filter()" value="{{ request()->has('search') ? request()->search : '' }}" id="search-input" placeholder="جستوجو بر اساس نام">
                         </div>
-                        <div class="row">
-                            <div class="form-group col-md-3">
-                                <div class="form-check">
-                                    <label for="elevator" class="form-check-label">
-                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>فروش
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <div class="form-check">
-                                    <label for="elevator" class="form-check-label">
-                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>رهن و اجاره
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <div class="form-check">
-                                    <label for="parking" class="form-check-label">
-                                        <input type="checkbox" name="parking" id="parking" class="form-check-input" {{ old('parking') == 'on' ? 'checked' : '' }}>خصوصی
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <div class="form-check">
-                                    <label for="store" class="form-check-label">
-                                        <input type="checkbox" name="store" id="store" class="form-check-input" {{ old('store') == 'on' ? 'checked' : '' }}>عمومی
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <div class="form-check">
-                                    <label for="elevator" class="form-check-label">
-                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>خانه
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <div class="form-check">
-                                    <label for="elevator" class="form-check-label">
-                                        <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>دفتر
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <div class="form-check">
-                                    <label for="parking" class="form-check-label">
-                                        <input type="checkbox" name="parking" id="parking" class="form-check-input" {{ old('parking') == 'on' ? 'checked' : '' }}>ویلایی
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <div class="form-check">
-                                    <label for="store" class="form-check-label">
-                                        <input type="checkbox" name="store" id="store" class="form-check-input" {{ old('store') == 'on' ? 'checked' : '' }}>ساختمان
-                                    </label>
-                                </div>
-                            </div>
+                        <div class="form-group col-md-6">
+                            <select class="form-control" onchange="filter()" id="sort-by">
+                                <option value="default">مرتب سازی</option>
+                                <option value="max_days" @selected(request()->has('sortBy') && request()->sortBy == 'max_days')>بیشترین روزهای باقی مانده</option>
+                                <option value="min_days" @selected(request()->has('sortBy') && request()->sortBy == 'min_days')>کمترین روزهای باقی مانده</option>
+                                <option value="max_price" @selected(request()->has('sortBy') && request()->sortBy == 'max_price')>بیشترین قیمت / رهن</option>
+                                <option value="min_price" @selected(request()->has('sortBy') && request()->sortBy == 'min_price')>کمترین قیمت / رهن</option>
+                                <option value="max_scale" @selected(request()->has('sortBy') && request()->sortBy == 'max_scale')>بیشترین متراژ</option>
+                                <option value="min_scale" @selected(request()->has('sortBy') && request()->sortBy == 'min_scale')>کمترین متراژ</option>
+                                <option value="max_rooms" @selected(request()->has('sortBy') && request()->sortBy == 'max_rooms')>بیشترین تعداد اتاق</option>
+                                <option value="min_rooms" @selected(request()->has('sortBy') && request()->sortBy == 'min_rooms')>کمترین تعداد اتاق</option>
+                            </select>
                         </div>
-                    </form>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <select class="form-control" onchange="filter()" id="type_sale">
+                                <option value="default">نوع</option>
+                                <option value="buy" @selected(request()->has('type_sale') && request()->type_sale == 'buy')>فروش</option>
+                                <option value="rahn" @selected(request()->has('type_sale') && request()->type_sale == 'rahn')>رهن و اجاره</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control" onchange="filter()" id="access_level">
+                                <option value="default">سطح دسترسی</option>
+                                <option value="private" @selected(request()->has('access_level') && request()->access_level == 'private')>خصوصی</option>
+                                <option value="public" @selected(request()->has('access_level') && request()->access_level == 'public')>عمومی</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control" onchange="filter()" id="type_work">
+                                <option value="default">نوع مسکن</option>
+                                <option value="home" @selected(request()->has('type_work') && request()->type_work == 'home')>خانه</option>
+                                <option value="office" @selected(request()->has('type_work') && request()->type_work == 'office')>دفتر</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control" onchange="filter()" id="type_build">
+                                <option value="default">نوع خانه</option>
+                                <option value="house" @selected(request()->has('type_build') && request()->type_build == 'house')>ویلایی</option>
+                                <option value="apartment" @selected(request()->has('type_build') && request()->type_build == 'apartment')>ساختمان</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <select class="form-control" onchange="filter()" id="status">
+                                <option value="default">وضعیت</option>
+                                <option value="active" @selected(request()->has('status') && request()->status == 'active')>فعال</option>
+                                <option value="unknown" @selected(request()->has('status') && request()->status == 'unknown')>نامعلوم</option>
+                                <option value="deActive" @selected(request()->has('status') && request()->status == 'deActive')>عیرفعال</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -357,4 +389,13 @@
         @endif
     </div>
     {{$customers->links()}}
+    <form id="filter-form">
+        <input id="filter-type-sale" type="hidden" name="type_sale">
+        <input id="filter-access-level" type="hidden" name="access_level">
+        <input id="filter-type-work" type="hidden" name="type_work">
+        <input id="filter-type-build" type="hidden" name="type_build">
+        <input id="filter-status" type="hidden" name="status">
+        <input id="filter-sort-by" type="hidden" name="sortBy">
+        <input id="filter-search" type="hidden" name="search">
+    </form>
 @endsection

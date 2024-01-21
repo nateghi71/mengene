@@ -48,7 +48,7 @@
         }
         else if(current === "customer"){
             const urlParams = new URLSearchParams(window.location.search);
-            const myParam = urlParams.get('status');
+            const myParam = urlParams.get('type_sale');
             if(myParam === null)
             {
                 if(element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?') === -1
@@ -61,9 +61,23 @@
                     }
                 }
             }
-            else if(myParam === 'deActive')
+            else if(myParam === 'rahn')
             {
-                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?status=deActive') !== -1
+                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type_sale=rahn') !== -1
+                    && element.attr('href').indexOf('customer') !== -1)
+                {
+                    console.log(element.attr('href'))
+
+                    element.parents('.nav-item').last().addClass('active');
+                    if (element.parents('.sub-menu').length) {
+                        element.closest('.collapse').addClass('show');
+                        element.addClass('active');
+                    }
+                }
+            }
+            else if(myParam === 'buy')
+            {
+                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type_sale=buy') !== -1
                     && element.attr('href').indexOf('customer') !== -1)
                 {
                     console.log(element.attr('href'))
@@ -78,7 +92,7 @@
         }
         else if(current === "landowner"){
             const urlParams = new URLSearchParams(window.location.search);
-            const myParam = urlParams.get('status');
+            const myParam = urlParams.get('type_sale');
             if(myParam === null)
             {
                 if(element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?') === -1
@@ -91,9 +105,23 @@
                     }
                 }
             }
-            else if(myParam === 'deActive')
+            else if(myParam === 'rahn')
             {
-                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?status=deActive') !== -1
+                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type_sale=rahn') !== -1
+                    && element.attr('href').indexOf('landowner') !== -1)
+                {
+                    console.log(element.attr('href'))
+
+                    element.parents('.nav-item').last().addClass('active');
+                    if (element.parents('.sub-menu').length) {
+                        element.closest('.collapse').addClass('show');
+                        element.addClass('active');
+                    }
+                }
+            }
+            else if(myParam === 'buy')
+            {
+                if (element.attr('href').indexOf('create') === -1 && element.attr('href').indexOf('?type_sale=buy') !== -1
                     && element.attr('href').indexOf('landowner') !== -1)
                 {
                     console.log(element.attr('href'))
@@ -129,7 +157,8 @@
                 }
             }
         }
-      // if (current === "") {
+
+        // if (current === "") {
       //   //for root url
       //   if (element.attr('href').indexOf("dashboard.blade.php") !== -1) {
       //     element.parents('.nav-item').last().addClass('active');

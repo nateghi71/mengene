@@ -82,7 +82,8 @@
             <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{route('customer.index')}}">نمایش متقاضیان</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{route('customer.index' , ['status' => 'deActive'])}}">نمایش متقاضیان غیر فعال</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{route('customer.index' , ['type_sale' => 'buy'])}}">نمایش متقاضیان خریدار</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{route('customer.index' , ['type_sale' => 'rahn'])}}">نمایش متقاضیان رهن </a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{route('customer.create')}}">ایجاد متقاضی</a></li>
                 </ul>
             </div>
@@ -98,7 +99,8 @@
             <div class="collapse" id="auth">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{route('landowner.index')}}"> نمایش مالکان </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{route('landowner.index' , ['status' => 'deActive'])}}">نمایش مالکان غیر فعال</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{route('landowner.index' , ['type_sale' => 'buy'])}}">نمایش مالکان فروشنده</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{route('landowner.index' , ['type_sale' => 'rahn'])}}">نمایش مالکان رهن دهنده</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{route('landowner.create')}}"> ایجاد مالک</a></li>
                 </ul>
             </div>

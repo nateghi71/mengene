@@ -83,10 +83,11 @@ Route::middleware('auth')->group(function () {
     Route::post('customer/remainder_time', [CustomerController::class, 'setRemainderTime'])->name('customer.remainder');
 });
 
-Route::prefix('admin-panel')->name('admin.')->group(function () {
+Route::middleware('auth')->prefix('admin-panel')->name('admin.')->group(function () {
     Route::resource('users', UserController::class)->except(['destroy']);
     Route::resource('roles', RoleController::class);
     Route::resource('files', FileController::class);
+    Route::get('users/change_status/{user}' , [UserController::class , 'changeStatus'])->name('users.status');
     Route::get('business' , [AdminBusinessController::class , 'index'])->name('business.index');
     Route::get('business/{business}' , [AdminBusinessController::class , 'show'])->name('business.show');
     Route::get('business/change_status/{business}' , [AdminBusinessController::class , 'changeStatus'])->name('business.changeStatus');

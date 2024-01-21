@@ -16,12 +16,15 @@ class UserController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewIndex' , User::class);
         $users = User::latest()->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 
     public function create()
     {
+        $this->authorize('create' , User::class);
+
         $roles = Role::all();
         $provinces = Province::all();
         return view('admin.users.create' , compact('provinces' , 'roles'));
@@ -29,6 +32,8 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create' , User::class);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'number' => 'required|numeric|digits:11|unique:users,number',
@@ -61,11 +66,15 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $this->authorize('viewShow' , User::class);
+
         return view('admin.users.show' , compact('user'));
     }
 
     public function edit(User $user)
     {
+        $this->authorize('edit' , User::class);
+
         $roles = Role::all();
         $provinces = Province::all();
         return view('admin.users.edit' , compact('user' , 'provinces' , 'roles'));
@@ -73,6 +82,8 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $this->authorize('edit' , User::class);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'number' => 'required|numeric|digits:11|unique:users,number',
@@ -101,11 +112,21 @@ class UserController extends Controller
         }
 
         return redirect()->route('admin.users.index');
-
     }
 
-    public function destroy(User $user)
+    public function changeStatus(User $user)
     {
-        //
+        $this->authorize('changeStatus' , User::class);
+        if($user->status == 'active')
+        {
+            $user->status = 'deActive';
+            $user->save();
+        }
+        else if($user->status == 'deActive')
+        {
+            $user->status = 'active';
+            $user->save();
+        }
+        return redirect()->back()->with('message' , 'وضعیت کاربر موردنظر تغییر کرد.');;
     }
 }

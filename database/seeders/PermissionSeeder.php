@@ -14,13 +14,26 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'see_users' , 'guard_name' => 'web']);
-        Permission::create(['name' => 'see_businesses' , 'guard_name' => 'web']);
-        Permission::create(['name' => 'create_users' , 'guard_name' => 'web']);
-        Permission::create(['name' => 'edit_user' , 'guard_name' => 'web']);
-        Permission::create(['name' => 'delete_user' , 'guard_name' => 'web']);
-        Permission::create(['name' => 'access_to_site' , 'guard_name' => 'web']);
-        Role::create(['name' => 'user' , 'guard_name' => 'web']);
-        Role::create(['name' => 'admin' , 'guard_name' => 'web']);
+        Permission::create(['name' => 'see_users']);
+        Permission::create(['name' => 'see_roles']);
+        Permission::create(['name' => 'see_files']);
+        Permission::create(['name' => 'see_businesses']);
+        Permission::create(['name' => 'see_show_user']);
+        Permission::create(['name' => 'see_show_role']);
+        Permission::create(['name' => 'see_show_business']);
+        Permission::create(['name' => 'see_show_file']);
+        Permission::create(['name' => 'create_user']);
+        Permission::create(['name' => 'create_role']);
+        Permission::create(['name' => 'create_file']);
+        Permission::create(['name' => 'edit_user']);
+        Permission::create(['name' => 'edit_file']);
+        Permission::create(['name' => 'edit_role']);
+        Permission::create(['name' => 'change_status_business']);
+        Permission::create(['name' => 'delete_file']);
+        Permission::create(['name' => 'change_status_file']);
+        Permission::create(['name' => 'delete_role']);
+        Permission::create(['name' => 'change_status_user']);
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'user']);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\HelperClasses\SmsAPI;
 use App\Http\Controllers\Controller;
 use App\Models\Province;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\UserCode;
 use App\Providers\RouteServiceProvider;
@@ -49,7 +50,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $smsApi = new SmsAPI();
-        $smsApi->sendSmsCode($userNumber , $code);
+//        $smsApi->sendSmsCode($userNumber , $code);
 
         session()->put('randomString' , $randomString);
         return redirect()->route('2fa.enter_code');
@@ -122,7 +123,9 @@ class RegisteredUserController extends Controller
 
         try {
             DB::beginTransaction();
-            $user = User::create([
+            $myRole = Role::where('name' , 'user')->first();
+
+            $user = $myRole->users()->create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'number' => $userCode->user_number,
@@ -131,7 +134,6 @@ class RegisteredUserController extends Controller
             ]);
 
             Auth::login($user);
-            $user->assignRole('user');
             $userCode->delete();
             session()->forget('randomString');
 
@@ -139,6 +141,7 @@ class RegisteredUserController extends Controller
         }
         catch (\Exception $e){
             DB::rollBack();
+            dd($e->getMessage());
             return redirect()->back()->with('error' , 'در دیتابیس خطایی رخ داد.');
         }
 

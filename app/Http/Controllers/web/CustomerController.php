@@ -34,8 +34,7 @@ class CustomerController extends Controller
 
         $business = $user->business();
 
-        $customers = $business->customers()->CustomerType()->orderBy('is_star', 'desc')->orderBy('status', 'asc')
-            ->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
+        $customers = $business->customers()->filter()->search()->paginate(10)->withQueryString();
 
         foreach ($customers as $customer) {
             if ($customer->getRawOriginal('expire_date') > Carbon::now()) {

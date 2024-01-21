@@ -8,7 +8,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class BusinessPolicy
 {
-    use HandlesAuthorization;
+    use HandlesAuthorization , BusinessAdminPolicy;
 
     public function viewBusinessIndex(User $user)
     {

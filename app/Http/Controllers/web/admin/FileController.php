@@ -9,21 +9,26 @@ use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
-
     public function index()
     {
+        $this->authorize('viewIndex' , SpecialFile::class);
+
         $files = SpecialFile::latest()->paginate(10);
         return view('admin.file.index' , compact('files'));
     }
 
     public function create()
     {
+        $this->authorize('create' , SpecialFile::class);
+
         $provinces = Province::all();
         return view('admin.file.create' , compact('provinces'));
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create' , SpecialFile::class);
+
         $request->validate([
             'name' => 'required',
             'number' => 'required|numeric',
@@ -78,17 +83,23 @@ class FileController extends Controller
 
     public function show(SpecialFile $file)
     {
+        $this->authorize('viewShow' , SpecialFile::class);
+
         return view('admin.file.show' , compact('file'));
     }
 
     public function edit(SpecialFile $file)
     {
+        $this->authorize('edit' , SpecialFile::class);
+
         $provinces = Province::all();
         return view('admin.file.edit' , compact('provinces' , 'file'));
     }
 
     public function update(Request $request, SpecialFile $file)
     {
+        $this->authorize('edit' , SpecialFile::class);
+
         $request->validate([
             'name' => 'required',
             'number' => 'required|numeric',
@@ -137,14 +148,28 @@ class FileController extends Controller
             'expire_date' => $request->expire_date
         ]);
         return redirect()->route('admin.files.index')->with('message' , 'فایل موردنظر اپدیت شد.');
-
     }
 
     public function destroy(SpecialFile $file)
     {
+        $this->authorize('delete' , SpecialFile::class);
+
         $file->delete();
-
         return redirect()->back()->with('message' , 'فایل موردنظر حذف شد.');;
-
+    }
+    public function changeStatus(SpecialFile $file)
+    {
+        $this->authorize('changeStatus' , SpecialFile::class);
+        if($file->status == 'active')
+        {
+            $file->status = 'deActive';
+            $file->save();
+        }
+        else if($file->status == 'deActive')
+        {
+            $file->status = 'active';
+            $file->save();
+        }
+        return redirect()->back()->with('message' , 'وضعیت فایل موردنظر تغییر کرد.');;
     }
 }

@@ -85,6 +85,7 @@
                                     <th> نقش </th>
                                     <th> نمایش </th>
                                     <th> ویرایش </th>
+                                    <th> وضعیت </th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -94,9 +95,14 @@
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->number}}</td>
                                         <td>{{$user->city->name}}</td>
-                                        <td>{{$user->getRoleNames()->first()}}</td>
+                                        <td>{{$user->role->name}}</td>
                                         <td><a class="btn text-decoration-none" href="{{route('admin.users.show',$user->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="btn text-decoration-none" href="{{route('admin.users.edit',$user->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
+                                        <td><a class="btn text-decoration-none" href="{{route('admin.users.edit',$user->id)}}"><i class="mdi mdi-pencil"></i></a></td>
+                                        <td>
+                                            <a class="btn text-decoration-none" href="{{route('admin.users.status',$user->id)}}">
+                                                {!! $user->status === 'active' ? '<span class="text-danger">غیرفعال کردن</span>' : '<span class="text-success">فعال کردن</span>' !!}
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
