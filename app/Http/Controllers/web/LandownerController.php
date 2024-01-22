@@ -42,14 +42,6 @@ class LandownerController extends Controller
         }
         return view('landowner.index', compact('landowners' ));
     }
-    public function showSubFile()
-    {
-//        $this->authorize('viewAny' , Landowner::class);
-        $user = auth()->user();
-        $city_id = $user->business()->city_id;
-        $files = SpecialFile::whereNot('type_file' , 'public')->filter()->paginate(10)->withQueryString();
-        return view('landowner.showSubFile', compact('files'));
-    }
 
     public function show(Landowner $landowner)
     {
@@ -75,6 +67,7 @@ class LandownerController extends Controller
             'type_work' => 'required',
             'type_build' => 'required',
             'scale' => 'required',
+            'area' => 'required',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
             'access_level' => 'required',
@@ -99,6 +92,7 @@ class LandownerController extends Controller
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
             'scale' => $request->scale,
+            'area' => $request->area,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
             'access_level' => $request->access_level,
@@ -139,6 +133,7 @@ class LandownerController extends Controller
             'type_work' => 'required',
             'type_build' => 'required',
             'scale' => 'required',
+            'area' => 'required',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
             'access_level' => 'required',
@@ -163,6 +158,7 @@ class LandownerController extends Controller
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
             'scale' => $request->scale,
+            'area' => $request->area,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
             'access_level' => $request->access_level,

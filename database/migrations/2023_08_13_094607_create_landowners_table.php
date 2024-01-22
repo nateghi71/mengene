@@ -39,6 +39,7 @@ class CreateLandownersTable extends Migration
             $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->boolean('is_star')->default(false);
+            $table->string('area');
             $table->date('expire_date');
             $table->softDeletes();
             $table->timestamps();

@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\web\admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -25,6 +26,9 @@ Route::middleware('guest')->group(function () {
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login.handle');
+
+    Route::get('admin-panel/login', [UserController::class, 'loginToAdmin'])->name('admin.login');
+    Route::post('admin-panel/login', [UserController::class, 'handleLoginToAdmin'])->name('admin.login.handle');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'enter_number_view'])
         ->name('password.request');

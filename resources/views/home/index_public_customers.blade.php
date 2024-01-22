@@ -77,7 +77,7 @@
                             </tbody>
                         </table>
                     </div>
-                    {{$customers->links()}}
+                    {{$customers->links('bootstrap-5-home')}}
 
                 </div>
             </div>

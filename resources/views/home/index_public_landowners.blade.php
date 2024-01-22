@@ -77,7 +77,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{$landowners->links()}}
+                {{$landowners->links('bootstrap-5-home')}}
             </div>
         </div>
         @else

@@ -7,18 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
 
-class UserCode extends Model
+class Notification extends Model
 {
-    use HasFactory, MassPrunable;
-
-    public $table = "user_codes";
-
-    protected $fillable = [
-        'random_string','number_verified','user_number','code'
-    ];
+    use HasFactory , MassPrunable;
 
     public function prunable(): Builder
     {
-        return static::where('created_at', '<', now()->subDay());
+        return static::where('created_at', '<', now()->subDays(3));
     }
+
 }

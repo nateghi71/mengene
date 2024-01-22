@@ -44,6 +44,10 @@
                                 <td>{{$file->number}}</td>
                             </tr>
                             <tr>
+                                <td>منطقه شهرداری</td>
+                                <td>{{$file->area}}</td>
+                            </tr>
+                            <tr>
                                 <td>شهر</td>
                                 <td>{{$file->city->name}}</td>
                             </tr>

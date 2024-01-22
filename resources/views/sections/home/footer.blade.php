@@ -83,6 +83,13 @@
                             ></a>
                         <a href="#" class="linkedin"><i class="mdi mdi-linkedin"></i></a>
                     </div>
+                    <div class="mt-3">
+                        <a referrerpolicy='origin' target='_blank'
+                           href='https://trustseal.enamad.ir/?id=447443&Code=LHv5s5WTtkYcTeuJaMNnCGJP93eVMJvf'>
+                            <img width="100" referrerpolicy='origin' src='{{asset('upload/files/images/enamad-1star.png')}}' alt='' style='cursor:pointer' Code='LHv5s5WTtkYcTeuJaMNnCGJP93eVMJvf'>
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>

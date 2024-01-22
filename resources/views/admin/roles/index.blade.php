@@ -80,9 +80,15 @@
                                 <tr>
                                     <th> # </th>
                                     <th> نام </th>
+                                    @can('viewShow' , \App\Models\Role::class)
                                     <th> نمایش </th>
+                                    @endcan
+                                    @can('edit' , \App\Models\Role::class)
                                     <th> ویرایش </th>
+                                    @endcan
+                                    @can('delete' , \App\Models\Role::class)
                                     <th>حذف</th>
+                                    @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -90,9 +96,15 @@
                                     <tr>
                                         <td>{{$roles->firstItem() + $key}}</td>
                                         <td>{{$role->name}}</td>
+                                        @can('viewShow' , \App\Models\Role::class)
                                         <td><a class="btn text-decoration-none" href="{{route('admin.roles.show',$role->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        @endcan
+                                        @can('edit' , \App\Models\Role::class)
                                         <td><a class="btn text-decoration-none" href="{{route('admin.roles.edit',$role->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
+                                        @endcan
+                                        @can('delete' , \App\Models\Role::class)
                                         <td><a href="{{route('admin.roles.destroy',$role->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a></td>
+                                        @endcan
                                     </tr>
                                 @endforeach
                                 </tbody>

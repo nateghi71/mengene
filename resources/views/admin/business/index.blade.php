@@ -78,8 +78,12 @@
                                     <th> نام </th>
                                     <th> شهر </th>
                                     <th> شماره تماس </th>
+                                    @can('viewShow' , \App\Models\Business::class)
                                     <th> نمایش </th>
+                                    @endcan
+                                    @can('changeStatus' , \App\Models\Business::class)
                                     <th>تغییر وضعیت</th>
+                                    @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -89,12 +93,17 @@
                                         <td>{{$business->name}}</td>
                                         <td>{{$business->city->name}}</td>
                                         <td>{{$business->owner->number}}</td>
+                                        @can('viewShow' , \App\Models\Business::class)
                                         <td><a class="btn text-decoration-none" href="{{route('admin.business.show',$business->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        @endcan
+                                        @can('changeStatus' , \App\Models\Business::class)
+
                                         <td>
                                             <a href="{{route('admin.business.changeStatus',$business->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none" type="button">
                                                 {!! $business->status === 'active' ? '<span class="text-danger">غیرفعال کردن</span>' : '<span class="text-success">فعال کردن</span>' !!}
                                             </a>
                                         </td>
+                                        @endcan
                                     </tr>
                                 @endforeach
                                 </tbody>

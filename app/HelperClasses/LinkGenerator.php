@@ -5,6 +5,7 @@ namespace App\HelperClasses;
 use App\Models\Customer;
 use App\Models\Landowner;
 use App\Models\RandomLink;
+use App\Models\SpecialFile;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
@@ -46,6 +47,23 @@ class LinkGenerator
 
         $randomLink = $landowner->links()->create([
             'guest_number' => $landowner->number,
+            'expires_at' => $expirationTime,
+            'token' => $randomString,
+            'type' => $type,
+            'number_try' => 0,
+            'suggest_id' => $suggest_id
+        ]);
+
+        return $randomLink;
+    }
+
+    public function generateLinkForSpecialFile(SpecialFile $file , $type, $expire , $suggest_id = null)
+    {
+        $randomString = Str::random(12);
+        $expirationTime = Carbon::now()->addDays($expire);
+
+        $randomLink = $file->links()->create([
+            'guest_number' => $file->number,
             'expires_at' => $expirationTime,
             'token' => $randomString,
             'type' => $type,

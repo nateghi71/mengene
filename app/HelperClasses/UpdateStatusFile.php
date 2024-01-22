@@ -34,7 +34,7 @@ class UpdateStatusFile
             {
                 $link = RandomLink::where('type', 'expired')->where('linkable_type' , Customer::class)->
                 where('linkable_id', $customer->id)->where('expires_at' , '<' , Carbon::now())->first();
-                if ($link && $link->number_try <= 3)
+                if ($link && $link->number_try < 3)
                 {
                     $updatedLink = new LinkGenerator();
                     $updatedLink = $updatedLink->updateLink($link , 7);
@@ -79,7 +79,7 @@ class UpdateStatusFile
             {
                 $link = RandomLink::where('type', 'expired')->where('linkable_type' , Landowner::class)
                     ->where('linkable_id', $landowner->id)->where('expires_at' , '<' , Carbon::now())->first();
-                if ($link && $link->number_try <= 3)
+                if ($link && $link->number_try < 3)
                 {
                     $updatedLink = new LinkGenerator();
                     $updatedLink = $updatedLink->updateLink($link, 7);

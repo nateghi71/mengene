@@ -55,7 +55,7 @@ class ConsultantController extends Controller
         $owner = $business->owner()->first();
         $business->members()->attach($user);
 
-        $owner->notify(new ConsultantRequestNotification($user));
+//        $owner->notify(new ConsultantRequestNotification($user));
 
         return redirect()->route('dashboard')
             ->with('message', 'شما با موفقیت به املاکی مورد نظر پیوستید.');

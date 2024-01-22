@@ -15,7 +15,7 @@ class SpecialFile extends Model
     public bool $ignoreMutator = false;
 
     protected $fillable = [
-        'name','number','city_id','status','type_sale','type_work','type_build','scale','number_of_rooms',
+        'name','number','area','city_id','status','type_sale','type_work','type_build','scale','number_of_rooms',
         'description','rahn_amount','type_file','rent_amount','selling_price','elevator','parking','store','floor',
         'floor_number','user_id','is_star','expire_date'];
 
@@ -263,6 +263,16 @@ class SpecialFile extends Model
             },
         );
     }
+    public function dontSuggestionForCustomer()
+    {
+        return $this->belongsToMany(Customer::class, 'dont_suggestions_for_files', 'file_id', 'customer_id');
+    }
+
+    public function links()
+    {
+        return $this->morphMany(RandomLink::class , 'linkable');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -271,5 +281,4 @@ class SpecialFile extends Model
     {
         return $this->belongsTo(City::class, 'city_id');
     }
-
 }

@@ -23,13 +23,9 @@
             background: rgba(0,0,0,1);
             transform: translate(-50%, -50%);
         }
-        .self_file {
-            background: #000;
-        }
         .minute-input, .second-input, .hour-input {
             color: black !important;
         }
-
     </style>
 @endsection
 
@@ -37,17 +33,6 @@
     <script>
         $('.btn-close').on('click' , function (){
             $('#message').remove()
-        })
-
-        $('#deletePanel').hide()
-
-        $('[id^=open_delete_panel_]').on('click' , function (e){
-            e.preventDefault()
-            $('#deletePanel').show()
-            $('#deleteBox').children().children().eq(0).attr('action' , $(this).attr('href'))
-        })
-        $('#not_delete_btn').on('click' , function (){
-            $('#deletePanel').hide()
         })
 
         let datePicker = $("[id^=remainder_]").persianDatepicker({
@@ -117,13 +102,6 @@
                 $('#filter-sort-by').val(sortBy);
             }
 
-            let search = $('#search-input').val();
-            if (search == "") {
-                $('#filter-search').prop('disabled', true);
-            } else {
-                $('#filter-search').val(search);
-            }
-
             $('#filter-form').submit();
         }
 
@@ -145,20 +123,6 @@
         </div>
     @endif
 
-    <div id="deletePanel">
-        <div id="deleteBox">
-            <p class="text-end pb-3">ایا می خواهید فایل موردنظر را حذف کنید؟</p>
-            <div class="d-flex justify-content-between">
-                <form method="post">
-                    @csrf
-                    @method('DELETE')
-                    <button id="delete_btn" class="btn btn-danger" type="submit">بله</button>
-                </form>
-                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card">
@@ -167,18 +131,13 @@
                         <div class="col-4 col-sm-3 col-xl-2">
                             <img src="{{asset('Admin/assets/images/dashboard/Group126@2x.png')}}" class="gradient-corona-img img-fluid" alt="">
                         </div>
-                        <div class="lh-lg col-5 col-sm-7 col-xl-8 py-2">
-                            <h4 class="mb-3 mb-sm-0">توجه کنید!</h4>
-                            <p class="mb-0 d-none d-sm-block">
-                                در بخش مالکان می توانید کسانی که درخواست رهن و اجاره یا فروش ملکشان را دارند برایشان فایلی ایجاد کنید و
-                                تمام فایل هایی که برای مالکانتان ایجاد کردید را در این قسمت ببینید. پیشنهاداتی که برایشان وجود دارد را بیابید.
-                                هشدار پیامکی برای جلساتتان تنظیم کنید فایلهایتان را و ویرایش و حذف کنید. همچنین می توانید از قسمت فایل های ویژه
-                                فایل های اختصاصی بخرید. یا اگر اشتراک دارید به یکسری فایل اختصاصی دسترسی داشته باشید.
-                            </p>
+                        <div class="col-5 col-sm-7 col-xl-8 p-0">
+                            <h4 class="mb-1 mb-sm-0">شما هم اکنون در بخش مالکان هستید!</h4>
+                            <p class="mb-0 font-weight-normal d-none d-sm-block">خوش امدید</p>
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
-                          <a href="{{route('landowner.create')}}" class="btn btn-outline-light btn-rounded get-started-btn">ایجاد مالک</a>
+                          <a href="{{route('landowner.index')}}" class="btn btn-outline-light btn-rounded get-started-btn">فایل های من</a>
                         </span>
                         </div>
                     </div>
@@ -186,7 +145,6 @@
             </div>
         </div>
     </div>
-    @can('viewIndexSub' , \App\Models\SpecialFile::class)
     <div class="row">
         <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
             <div class="card bg-primary bg-gradient bg-opacity-50">
@@ -204,12 +162,12 @@
         </div>
         <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
             <div class="card bg-success bg-gradient bg-opacity-50">
-                <a href="{{route('special_files.subscription.index')}}" class="text-decoration-none text-white">
+                <a href="{{route('special_files.buy.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
                             <span class="mdi mdi-account-search icon-item text-white"></span>
                             <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">فایل های ویژه</h3>
+                                <h3 class="mb-0">فایل های پولی</h3>
                             </div>
                         </div>
                     </div>
@@ -217,16 +175,13 @@
             </div>
         </div>
     </div>
-    @endcan
+
     <div class="row">
         <div class="col-12 grid-margin">
             <div class="card bg-primary bg-gradient bg-opacity-50">
                 <div class="card-body py-2 row">
                     <div class="row">
-                        <div class="form-group col-md-6">
-                            <input type="text" class="form-control" onchange="filter()" value="{{ request()->has('search') ? request()->search : '' }}" id="search-input" placeholder="جستوجو بر اساس نام">
-                        </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-12">
                             <select class="form-control" onchange="filter()" id="sort-by">
                                 <option value="default">مرتب سازی</option>
                                 <option value="max_days" @selected(request()->has('sortBy') && request()->sortBy == 'max_days')>بیشترین روزهای باقی مانده</option>
@@ -283,83 +238,106 @@
         </div>
     </div>
     <div class="row">
-        @if($landowners->isNotEmpty())
+        @if($files->isNotEmpty())
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">
-                            @if($landowners->pluck('status')->contains('غیرفعال'))
-                                <h4 class="card-title">مالکان غیرفعال</h4>
-                            @else
-                                <h4 class="card-title">همه مالکان</h4>
-                            @endif
+                            <h4 class="card-title">فایل های ویژه</h4>
                         </h4>
-                            <div class="table-responsive">
+
+                        <div class="table-responsive">
                             <table class="table text-center">
                                 <thead>
                                 <tr class="text-white">
                                     <th> # </th>
                                     <th> نام </th>
                                     <th> شماره تماس </th>
-                                    <th> ثبت کننده </th>
                                     <th> نوع </th>
                                     <th>
-                                        @if($landowners->pluck('status')->contains('غیرفعال') ||
-                                            $landowners->pluck('type_sale')->contains('فروش') && $landowners->pluck('type_sale')->contains('رهن و اجاره'))
+                                        @if($files->pluck('type_sale')->contains('فروش') && $files->pluck('type_sale')->contains('رهن و اجاره'))
                                             قیمت / رهن
-                                        @elseif($landowners->pluck('type_sale')->contains('رهن و اجاره'))
+                                        @elseif($files->pluck('type_sale')->contains('رهن و اجاره'))
                                             رهن
                                         @else
                                             قیمت
                                         @endif
                                     </th>
                                     <th>زمان باقیمانده </th>
-                                    <th> پیشنهادات </th>
-                                    @if(auth()->user()->ownedBusiness()->exists() && !auth()->user()->isFreeUser())
+                                    <th>پیشنهادات </th>
                                     <th>تنظیم هشدار</th>
-                                    @endif
                                     <th> نمایش </th>
-                                    <th> ویرایش </th>
-                                    <th>حذف</th>
+                                    <th> انتقال به فایل های من </th>
+                                    @if(auth()->user()->isFreeUser())
+                                        <th>خرید</th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody class="text-white">
-                                @foreach($landowners as $key => $landowner)
-                                    <tr @class(['self_file' => auth()->user()->id === $landowner->user->id])>
+                                @foreach($files as $key => $file)
+                                    <tr>
                                         <td>
-                                            <a class="text-decoration-none" href="{{route('landowner.star',$landowner->id)}}">{!!$landowner->getRawOriginal('is_star') ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
+                                            <a class="text-decoration-none" href="{{route('special_files.star',$file->id)}}">{!!$file->getRawOriginal('is_star') ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
                                         </td>
                                         <td>
-                                            {{$landowner->name}}
-                                            @if($landowner->getRawOriginal('status') == 'active')
-                                                <span class="mdi mdi-checkbox-blank-circle text-success"></span>
-                                            @elseif($landowner->getRawOriginal('status') == 'unknown')
-                                                <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
+                                            @if(!auth()->user()->isFreeUser())
+                                                {{$file->name}}
+                                                @if($file->getRawOriginal('status') == 'active')
+                                                    <span class="mdi mdi-checkbox-blank-circle text-success"></span>
+                                                @elseif($file->getRawOriginal('status') == 'unknown')
+                                                    <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
+                                                @else
+                                                    <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
+                                                @endif
                                             @else
-                                                <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
+                                                <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
                                             @endif
                                         </td>
-                                        <td>{{$landowner->number}}</td>
-                                        <td>{{$landowner->user->name}}</td>
-                                        <td>{{$landowner->type_sale}}</td>
-                                        <td>{{$landowner->getRawOriginal('selling_price') !== 0 ? $landowner->selling_price : $landowner->rahn_amount}}</td>
-                                        <td>{{$landowner->daysLeft ? $landowner->daysLeft . ' روز' : 'منقضی'}}</td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.suggestions',$landowner->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
-                                        @if(auth()->user()->ownedBusiness()->exists() && !auth()->user()->isFreeUser())
                                         <td>
-                                            <form action="{{route('landowner.remainder')}}" method="post">
+                                            @if(!auth()->user()->isFreeUser())
+                                                {{$file->number}}
+                                            @else
+                                                <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                            @endif
+
+                                        </td>
+                                        <td>{{$file->type_sale}}</td>
+                                        <td>{{$file->getRawOriginal('selling_price') !== 0 ? $file->selling_price : $file->rahn_amount}}</td>
+                                        <td>{{$file->daysLeft ? $file->daysLeft . ' روز' : 'منقضی'}}</td>
+                                        <td>
+                                            @if(!auth()->user()->isFreeUser())
+                                            <a class="text-white text-decoration-none" href="{{route('special_files.Suggestions',$file->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a>
+                                            @else
+                                                <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(!auth()->user()->isFreeUser())
+                                            <form action="{{route('special_files.remainder')}}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="remainder" id="remainder_input_{{$key}}">
-                                                <input type="hidden" name="landowner_id" value="{{$landowner->id}}">
+                                                <input type="hidden" name="file_id" value="{{$file->id}}">
                                                 <button id="remainder_{{$key}}" class="btn btn-link text-white text-decoration-none" type="button"><i class="mdi mdi-bell"></i></button>
                                             </form>
+                                            @else
+                                                <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                            @endif
                                         </td>
-                                        @endif
-                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.show',$landowner->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.edit',$landowner->id)}}"><i class="mdi mdi-lead-pencil"></i></a></td>
                                         <td>
-                                            <a href="{{route('landowner.destroy',$landowner->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger" type="button"><i class="mdi mdi-delete"></i></a>
+                                            @if(!auth()->user()->isFreeUser())
+                                            <a class="text-white text-decoration-none" href="{{route('special_files.show',$file->id)}}"><i class="mdi mdi-eye"></i></a>
+                                            @else
+                                                <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                            @endif
                                         </td>
+                                        <td>
+                                            <a class="text-success text-decoration-none" href="{{route('special_files.buy',$file->id)}}"><i class="mdi mdi-cart"></i></a>
+                                        </td>
+                                    @if(auth()->user()->isFreeUser())
+                                            <td>
+                                                <a class="text-success text-decoration-none" href="{{route('packages.index')}}">خرید اشتراک</a>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -375,7 +353,7 @@
         @endif
 
     </div>
-    {{$landowners->links()}}
+    {{$files->links()}}
     <form id="filter-form">
         <input id="filter-type-sale" type="hidden" name="type_sale">
         <input id="filter-access-level" type="hidden" name="access_level">
@@ -383,7 +361,5 @@
         <input id="filter-type-build" type="hidden" name="type_build">
         <input id="filter-status" type="hidden" name="status">
         <input id="filter-sort-by" type="hidden" name="sortBy">
-        <input id="filter-search" type="hidden" name="search">
     </form>
-
 @endsection

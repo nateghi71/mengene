@@ -37,7 +37,8 @@ class SpecialFileFactory extends Factory
             'store' => $this->faker->boolean,
             'floor' => $this->faker->numberBetween(0,10),
             'floor_number' => $this->faker->numberBetween(0,10),
-            'user_id' => rand(1,2),
+            'area' => rand(1,12),
+            'user_id' => 1,
             'is_star' => 0,
             'expire_date' => $this->faker->dateTimeBetween(Carbon::parse('last day of november 2023'), Carbon::now()->addDays(90))
         ];

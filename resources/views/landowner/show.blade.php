@@ -61,6 +61,10 @@
                                 <td>{{$landowner->number}}</td>
                             </tr>
                             <tr>
+                                <td>منطقه شهرداری</td>
+                                <td>{{$landowner->area}}</td>
+                            </tr>
+                            <tr>
                                 <td>شهر</td>
                                 <td>{{$landowner->city->name}}</td>
                             </tr>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\City;
 use App\Models\Customer;
 use App\Models\Landowner;
+use App\Models\SpecialFile;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -37,6 +38,9 @@ class HomeController extends Controller
     public function public_landowners()
     {
         $landowners = Landowner::where('access_level' , 'public')->whereNot('status' , 'deActive')->orderBy('is_star', 'desc')
+            ->orderBy('expire_date', 'asc')->paginate(10)->fragment('tableLandowners')->withQueryString();
+
+        $files = SpecialFile::where('type_file' , 'public')->whereNot('status' , 'deActive')->orderBy('is_star', 'desc')
             ->orderBy('expire_date', 'asc')->paginate(10)->fragment('tableLandowners')->withQueryString();
 
         foreach ($landowners as $landowner) {

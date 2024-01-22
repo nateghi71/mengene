@@ -1,6 +1,6 @@
-@extends('layouts.dashboard' , ['sectionName' => 'یشنهادات'])
+@extends('layouts.dashboard' , ['sectionName' => 'پیشنهادات'])
 
-@section('title' , 'یشنهادات')
+@section('title' , 'پیشنهادات')
 
 @section('scripts')
     <script>
@@ -17,7 +17,6 @@
             <button type="button" class="btn-close" aria-label="Close"></button>
         </div>
     @endif
-
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card">
@@ -32,7 +31,7 @@
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
-                          <a href="{{route('customer.index')}}" class="btn btn-outline-light btn-rounded get-started-btn">نمایش متقاضیان</a>
+                          <a href="{{route('special_files.subscription.index')}}" class="btn btn-outline-light btn-rounded get-started-btn">نمایش فایل های ویژه</a>
                         </span>
                         </div>
                     </div>
@@ -46,7 +45,7 @@
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">نمایش پیشنهادات برای : {{ $customer->name }}</h4>
+                        <h4 class="card-title">نمایش پیشنهادات برای : {{ $specialFile->name }}</h4>
                         <div class="table-responsive">
                             <table class="table text-center">
                                 <thead>
@@ -83,21 +82,21 @@
                                         @endif
                                         <td>{{$suggestion->scale}}</td>
                                         <td>{{$suggestion->daysLeft ?? 'منقضی'}}</td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('landowner.show',$suggestion->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td><a class="text-white text-decoration-none" href="{{route('customer.show',$suggestion->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         <td>
-                                            <form action="{{route('customer.send_share_message')}}" method="post">
+                                            <form action="{{route('special_files.send_share_message')}}" method="post">
                                                 @csrf
-                                                <input type="hidden" name="customer_id" value="{{$customer->id}}">
-                                                <input type="hidden" name="landowner_id" value="{{$suggestion->id}}">
-                                                <button class="btn btn-outline-success" type="submit">ارسال</button>
+                                                <input type="hidden" name="file_id" value="{{$specialFile->id}}">
+                                                <input type="hidden" name="customer_id" value="{{$suggestion->id}}">
+                                                <button class="btn btn-link text-decoration-none text-white" type="submit"><i class="mdi mdi-email"></i></button>
                                             </form>
                                         </td>
                                         <td>
-                                            <form action="{{route('customer.send_block_message')}}" method="post">
+                                            <form action="{{route('special_files.send_block_message')}}" method="post">
                                                 @csrf
-                                                <input type="hidden" name="customer_id" value="{{$customer->id}}">
-                                                <input type="hidden" name="landowner_id" value="{{$suggestion->id}}">
-                                                <button class="btn btn-outline-danger" type="submit">حذف</button>
+                                                <input type="hidden" name="file_id" value="{{$specialFile->id}}">
+                                                <input type="hidden" name="customer_id" value="{{$suggestion->id}}">
+                                                <button class="btn btn-link text-decoration-none text-danger" type="submit"><i class="mdi mdi-delete"></i></button>
                                             </form>
                                         </td>
                                     </tr>

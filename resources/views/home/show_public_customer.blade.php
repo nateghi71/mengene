@@ -62,7 +62,7 @@
                         </tr>
                         <tr>
                             <td>شهر</td>
-                            <td>{{$customer->city}}</td>
+                            <td>{{$customer->city->name}}</td>
                         </tr>
                         <tr>
                             <td>نوع مسکن</td>

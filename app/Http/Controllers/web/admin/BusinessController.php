@@ -18,6 +18,11 @@ class BusinessController extends Controller
         $businesses = Business::latest()->paginate(10);
         return view('admin.business.index' , compact('businesses'));
     }
+    public function adminPanel()
+    {
+        $this->authorize('viewAdmin' , Business::class);
+        return view('admin.admin_panel');
+    }
 
     public function show(Business $business)
     {

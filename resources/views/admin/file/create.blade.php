@@ -214,6 +214,14 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
+                        <label for="area">منطقه شهرداری:</label>
+                        <input type="text" name="area" class="form-control" value="{{old('area')}}" id="area" placeholder="منطقه شهرداری"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('area')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
                         <label for="type_file">نوع فایل:</label>
                         <select class="form-control" name="type_file" id="type_file">
                             <option value="public">عمومی</option>
@@ -225,10 +233,12 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="scale">متراژ:</label>
-                        <input type="text" name="scale" class="form-control" value="{{old('scale')}}" id="scale" placeholder="متراژ"
-                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                        @error('scale')
+                        <label for="status">وضعیت:</label>
+                        <select class="form-control" name="status" id="status">
+                            <option value="active">فعال</option>
+                            <option value="deActive">غیرفعال</option>
+                        </select>
+                        @error('status')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
@@ -262,6 +272,14 @@
                         <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{old('rent_amount')}}" id="rent_amount" placeholder="اجاره"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rent_amount')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="scale">متراژ:</label>
+                        <input type="text" name="scale" class="form-control" value="{{old('scale')}}" id="scale" placeholder="متراژ"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('scale')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>

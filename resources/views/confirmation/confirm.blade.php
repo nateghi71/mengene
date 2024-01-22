@@ -36,7 +36,7 @@
                         <button class="btn w-100 btn-primary mt-4" type="submit"> ارسال </button>
                     </form>
                 @elseif($type === 'remove_from_suggestion')
-                    <p>{{$requestedPerson instanceof \App\Models\Landowner
+                    <p>{{($requestedPerson instanceof \App\Models\Landowner || $requestedPerson instanceof \App\Models\SpecialFile)
                              ? 'ایا به '. $suggestionPerson->name .' مشتری خانه می فروشید؟'
                              : 'ایا '.$suggestionPerson->name.' خانه را همچنان مدنظر دارید؟'}}
                     </p>

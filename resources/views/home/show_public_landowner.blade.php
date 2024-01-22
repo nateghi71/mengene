@@ -63,7 +63,7 @@
 
                         <tr>
                             <td>شهر</td>
-                            <td>{{$landowner->city}}</td>
+                            <td>{{$landowner->city->name}}</td>
                         </tr>
                         <tr>
                             <td>نوع مسکن</td>

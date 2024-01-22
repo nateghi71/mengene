@@ -35,6 +35,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->boolean('is_star')->default(false);
             $table->date('expire_date');
+            $table->string('area');
             $table->softDeletes();
             $table->timestamps();
         });

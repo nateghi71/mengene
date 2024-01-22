@@ -239,20 +239,20 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
+                        <label for="area">منطقه شهرداری:</label>
+                        <input type="text" name="area" class="form-control" value="{{$customer->area}}" id="area" placeholder="منطقه شهرداری"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('area')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
                         <label for="access_level">سطح دسترسی:</label>
                         <select class="form-control" name="access_level" id="access_level">
                             <option value="private" @selected($customer->getRawOriginal('access_level') === "private")>خصوصی</option>
                             <option value="public" @selected($customer->getRawOriginal('access_level') === "public")>عمومی</option>
                         </select>
                         @error('access_level')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="scale">متراژ:</label>
-                        <input type="text" name="scale" class="form-control" value="{{$customer->getRawOriginal('scale')}}" id="scale" placeholder="متراژ"
-                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                        @error('scale')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
@@ -286,6 +286,14 @@
                         <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{$customer->getRawOriginal('rent_amount')}}" id="rent_amount" placeholder="اجاره"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rent_amount')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="scale">متراژ:</label>
+                        <input type="text" name="scale" class="form-control" value="{{$customer->getRawOriginal('scale')}}" id="scale" placeholder="متراژ"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('scale')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>

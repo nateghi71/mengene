@@ -58,7 +58,7 @@
             </li>
             <li class="nav-item dropdown border-left">
                 @php
-                    $notifications = auth()->user()->notifications()->where('type' , \App\Notifications\ConsultantRequestNotification::class)->get();
+                    $notifications = auth()->user()->notifications()->where('type' , \App\Notifications\ConsultantRequestNotification::class)->take(6)->get();
                 @endphp
 
                 <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
@@ -92,7 +92,8 @@
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
                     @php
                         $notifications = auth()->user()->notifications()->where('type' , \App\Notifications\ReminderForCustomerNotification::class)
-                        ->orWhere('type' , \App\Notifications\ReminderForLandowerNotification::class)->get();
+                        ->orWhere('type' , \App\Notifications\ReminderForLandowerNotification::class)
+                        ->orWhere('type' , \App\Notifications\ReminderForSpecialFileNotification::class)->take(6)->get();
                     @endphp
 
                     <i class="mdi mdi-bell"></i>

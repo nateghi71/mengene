@@ -109,7 +109,7 @@
                     <label for="role">نقش *</label>
                     <select name="role" class="form-control" id="role">
                         @foreach($roles as $role)
-                            <option value="{{$role->id}}"> {{$role->name}}</option>
+                            <option> {{$role->name}}</option>
                         @endforeach
                     </select>
                     @error('role')

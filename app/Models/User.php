@@ -52,6 +52,10 @@ class User extends Authenticatable
         return $this->hasOne(Business::class);
     }
 
+    public function isBanned() :bool
+    {
+        return $this->status === 'deActive';
+    }
     public function isFreeUser() :bool
     {
         return $this->ownedBusiness()->first()->premium->level === 'free';
@@ -63,10 +67,6 @@ class User extends Authenticatable
     public function isMidLevelUser():bool
     {
         return $this->ownedBusiness()->first()->premium->level === 'midLevel';
-    }
-    public function premiumExpireDate()
-    {
-        return $this->ownedBusiness()->first()->premium->expire_date;
     }
     public function getPremiumCountSms()
     {

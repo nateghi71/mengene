@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 
 class SuggestionForCustomerController extends Controller
 {
-
     public function suggested_landowner(Customer $customer)
     {
         $business = $customer->business()->first();
@@ -37,7 +36,7 @@ class SuggestionForCustomerController extends Controller
             $maxRent = $customer->getRawOriginal('rent_amount') * 1.2;
 
             $suggestions = Landowner::where('status', 'active')->where('business_id', $business->id)->where('type_sale', 'rahn')
-                ->whereDoesntHave('suggestedCustomer', function ($query) use ($customerId) {
+                ->whereDoesntHave('dontSuggestionForCustomer', function ($query) use ($customerId) {
                     $query->where('customer_id', $customerId)->where('suggest_business' , 1);
                 })->whereBetween('rahn_amount', [$minRahn, $maxRahn])
                 ->whereBetween('rent_amount', [$minRent, $maxRent])->orderBy('rahn_amount' , 'asc')
@@ -94,6 +93,5 @@ class SuggestionForCustomerController extends Controller
         {
             return redirect()->back()->with('message' , 'شما قابلیت ارسال پیام ندارید.');
         }
-
     }
 }

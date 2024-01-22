@@ -163,7 +163,7 @@
     <div class="row">
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('file.create')}}" class="text-decoration-none text-white">
+                <a href="{{route('landowner.create')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
                             <div class="d-flex align-items-center align-self-start text-white">
@@ -177,7 +177,7 @@
         </div>
         <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('file.index')}}" class="text-decoration-none text-white">
+                <a href="{{route('landowner.index')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
                             <div class="d-flex align-items-center align-self-start text-white">

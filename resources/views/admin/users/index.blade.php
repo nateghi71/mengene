@@ -83,9 +83,15 @@
                                     <th> شماره </th>
                                     <th> شهر </th>
                                     <th> نقش </th>
+                                    @can('viewShow' , \App\Models\User::class)
                                     <th> نمایش </th>
+                                    @endcan
+                                    @can('edit' , \App\Models\User::class)
                                     <th> ویرایش </th>
-                                    <th> وضعیت </th>
+                                    @endcan
+                                    @can('changeStatus' , \App\Models\User::class)
+                                    <th> وضعیت
+                                    @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -96,13 +102,19 @@
                                         <td>{{$user->number}}</td>
                                         <td>{{$user->city->name}}</td>
                                         <td>{{$user->role->name}}</td>
+                                        @can('viewShow' , \App\Models\User::class)
                                         <td><a class="btn text-decoration-none" href="{{route('admin.users.show',$user->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        @endcan
+                                        @can('edit' , \App\Models\User::class)
                                         <td><a class="btn text-decoration-none" href="{{route('admin.users.edit',$user->id)}}"><i class="mdi mdi-pencil"></i></a></td>
+                                        @endcan
+                                        @can('changeStatus' , \App\Models\User::class)
                                         <td>
                                             <a class="btn text-decoration-none" href="{{route('admin.users.status',$user->id)}}">
                                                 {!! $user->status === 'active' ? '<span class="text-danger">غیرفعال کردن</span>' : '<span class="text-success">فعال کردن</span>' !!}
                                             </a>
                                         </td>
+                                        @endcan
                                     </tr>
                                 @endforeach
                                 </tbody>

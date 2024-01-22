@@ -17,10 +17,14 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             UpdateStatusFile::updateStatusCustomers();
             UpdateStatusFile::updateStatusLandowner();
-            CheckPremiumExpireDate::checkExpireDate();
         })->dailyAt('7:00');
 
+        $schedule->call(function () {
+            CheckPremiumExpireDate::checkExpireDate();
+        })->everyTenMinutes();
+
         $schedule->command('queue:work --stop-when-empty --tries=3')->everyMinute();
+        $schedule->command('model:prune')->daily();
     }
 
     /**

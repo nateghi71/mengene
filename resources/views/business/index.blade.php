@@ -364,7 +364,7 @@
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
                                             <p class="text-white">
                                                 <a href="{{route('business.edit',['business'=>$business->id])}}" class="fs-4 text-success text-decoration-none" href="">
-                                                    <i class="mdi mdi-message-draw"></i>
+                                                    <i class="mdi mdi-pencil"></i>
                                                 </a>
                                             </p>
                                             <p class="text-muted mb-0">{{verta($business->updated_at)}} </p>

@@ -37,12 +37,14 @@ class FileController extends Controller
             'type_work' => 'required',
             'type_build' => 'required',
             'scale' => 'required',
+            'area' => 'required',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
             'rahn_amount' => 'exclude_if:type_sale,buy',
             'rent_amount' => 'exclude_if:type_sale,buy',
             'selling_price' => 'exclude_if:type_sale,rahn',
             'type_file' => 'required',
+            'status' => 'required',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -64,6 +66,8 @@ class FileController extends Controller
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
             'type_file' => $request->type_file,
+            'status' => $request->status,
+            'area' => $request->area,
             'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : 0,
             'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : 0,
             'selling_price' => $request->filled('selling_price') ? $request->selling_price : 0,
@@ -108,9 +112,11 @@ class FileController extends Controller
             'type_work' => 'required',
             'type_build' => 'required',
             'scale' => 'required',
+            'area' => 'required',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
-            'access_level' => 'required',
+            'type_file' => 'required',
+            'status' => 'required',
             'rahn_amount' => 'exclude_if:type_sale,buy',
             'rent_amount' => 'exclude_if:type_sale,buy',
             'selling_price' => 'exclude_if:type_sale,rahn',
@@ -133,7 +139,9 @@ class FileController extends Controller
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'access_level' => $request->access_level,
+            'type_file' => $request->type_file,
+            'status' => $request->status,
+            'area' => $request->area,
             'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : 0,
             'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : 0,
             'selling_price' => $request->filled('selling_price') ? $request->selling_price : 0,
@@ -156,20 +164,5 @@ class FileController extends Controller
 
         $file->delete();
         return redirect()->back()->with('message' , 'فایل موردنظر حذف شد.');;
-    }
-    public function changeStatus(SpecialFile $file)
-    {
-        $this->authorize('changeStatus' , SpecialFile::class);
-        if($file->status == 'active')
-        {
-            $file->status = 'deActive';
-            $file->save();
-        }
-        else if($file->status == 'deActive')
-        {
-            $file->status = 'active';
-            $file->save();
-        }
-        return redirect()->back()->with('message' , 'وضعیت فایل موردنظر تغییر کرد.');;
     }
 }

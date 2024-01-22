@@ -45,7 +45,9 @@ class UserController extends Controller
 
         try {
             DB::beginTransaction();
-            $user = User::create([
+            $myRole = Role::where('name' , $request->role)->first();
+
+            $user = $myRole->users()->create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'number' => $request->number,
@@ -53,11 +55,11 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            $user->assignRole($request->role);
             DB::commit();
         }
         catch (\Exception $e){
             DB::rollBack();
+            dd($e->getMessage());
             return redirect()->back()->with('error' , 'در دیتابیس خطایی رخ داد.');
         }
 
@@ -128,5 +130,27 @@ class UserController extends Controller
             $user->save();
         }
         return redirect()->back()->with('message' , 'وضعیت کاربر موردنظر تغییر کرد.');;
+    }
+
+    public function loginToAdmin()
+    {
+        return view('auth.loginToAdmin');
+    }
+    public function handleLoginToAdmin(Request $request)
+    {
+        $credentials = $request->validate([
+            'number' => 'required|numeric',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials,$request->has('remember_me'))) {
+            $request->session()->regenerate();
+            return redirect()->route('admin.adminPanel');
+        }
+
+        return back()->with(
+            'message', 'The provided credentials do not match our records.',
+        )->withInput();
+
     }
 }

@@ -37,6 +37,7 @@ class LandownerFactory extends Factory
             'floor' => $this->faker->numberBetween(0,10),
             'floor_number' => $this->faker->numberBetween(0,10),
             'business_id' => 1,
+            'area' => rand(1,12),
             'user_id' => rand(1,2),
             'is_star' => 0,
             'expire_date' => $this->faker->dateTimeBetween(Carbon::parse('last day of november 2023'), Carbon::now()->addDays(90))

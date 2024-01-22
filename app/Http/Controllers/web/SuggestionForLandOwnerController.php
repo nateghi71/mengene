@@ -22,7 +22,7 @@ class SuggestionForLandOwnerController extends Controller
             $maxPrice = $landowner->getRawOriginal('selling_price') * 1.2; // 120% of the customer's price
 
             $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)->where('type_sale', 'buy')
-                ->whereDoesntHave('suggestedLandowner', function ($query) use ($landownerId) {
+                ->whereDoesntHave('dontSuggestionForLandowner', function ($query) use ($landownerId) {
                     $query->where('landowner_id', $landownerId)->where('suggest_business' , 1);
                 })->whereBetween('selling_price', [$minPrice, $maxPrice])->orderBy('selling_price' , 'asc')->limit(10)->get();
         }
@@ -49,7 +49,7 @@ class SuggestionForLandOwnerController extends Controller
             }
         }
 
-        return view('file.suggestion' , compact('suggestions' ,'landowner'));
+        return view('landowner.suggestion' , compact('suggestions' ,'landowner'));
     }
 
     public function send_block_message(Request $request)
@@ -62,7 +62,7 @@ class SuggestionForLandOwnerController extends Controller
         $landowner = Landowner::findOrFail($request->landowner_id);
 
         $link = new LinkGenerator();
-        $link = $link->generateLinkForLandowner($landowner , 'remove_from_suggestion' , $request->customer_id);
+        $link = $link->generateLinkForLandowner($landowner , 'remove_from_suggestion', 30 , $request->customer_id);
         $link = route('confirmation.confirmPage' ,
             ['type' => $link->type , 'token' => $link->token]);
 

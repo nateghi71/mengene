@@ -36,6 +36,7 @@ class CustomerFactory extends Factory
             'store' => $this->faker->boolean,
             'floor' => $this->faker->numberBetween(0,10),
             'floor_number' => $this->faker->numberBetween(0,10),
+            'area' => rand(1,12),
             'business_id' => 1,
             'user_id' => rand(1,2),
             'is_star' => 0,

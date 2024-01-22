@@ -94,9 +94,15 @@
                                         @endif
                                     </th>
                                     <th>زمان باقیمانده </th>
+                                    @can('viewShow' , \App\Models\SpecialFile::class)
                                     <th> نمایش </th>
+                                    @endcan
+                                    @can('edit' , \App\Models\SpecialFile::class)
                                     <th> ویرایش </th>
-                                    <th>حذف</th>
+                                    @endcan
+                                    @can('delete' , \App\Models\SpecialFile::class)
+                                    <th>حذف
+                                    @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -118,11 +124,17 @@
                                         <td>{{$file->type_sale}}</td>
                                         <td>{{$file->getRawOriginal('selling_price') !== 0 ? $file->selling_price : $file->rahn_amount}}</td>
                                         <td>{{$file->daysLeft ? $file->daysLeft . ' روز' : 'منقضی'}} </td>
+                                        @can('viewShow' , \App\Models\SpecialFile::class)
                                         <td><a class="text-white text-decoration-none" href="{{route('admin.files.show',$file->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        @endcan
+                                        @can('edit' , \App\Models\SpecialFile::class)
                                         <td><a class="text-white text-decoration-none" href="{{route('admin.files.edit',$file->id)}}"><i class="mdi mdi-lead-pencil"></i></a></td>
+                                        @endcan
+                                        @can('delete' , \App\Models\SpecialFile::class)
                                         <td>
                                             <a href="{{route('admin.files.destroy',$file->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger" type="button"><i class="mdi mdi-delete"></i></a>
                                         </td>
+                                        @endcan
                                     </tr>
                                 @endforeach
                                 </tbody>
