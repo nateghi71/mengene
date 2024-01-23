@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\HelperClasses\SmsAPI;
 use App\Http\Controllers\API\MyBaseController as BaseController;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\UserCode;
 use Illuminate\Http\Request;
@@ -123,7 +124,9 @@ class RegisterController extends BaseController
 
         try {
             DB::beginTransaction();
-            $user = User::create([
+            $myRole = Role::where('name' , 'user')->first();
+
+            $user = $myRole->users()->create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'number' => $userCode->user_number,
