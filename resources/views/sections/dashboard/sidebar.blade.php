@@ -57,9 +57,9 @@
         @if(auth()->user()->ownedBusiness()->exists() && !auth()->user()->isFreeUser())
             <li class="nav-item menu-items">
                 <a class="nav-link" data-bs-toggle="collapse" href="#consultants" aria-expanded="false" aria-controls="consultants">
-              <span class="menu-icon">
-                <i class="mdi mdi-account-multiple"></i>
-              </span>
+                    <span class="menu-icon">
+                        <i class="mdi mdi-account-multiple"></i>
+                    </span>
                     <span class="menu-title pe-2">مشاوران</span>
                     <i class="menu-arrow"></i>
                 </a>

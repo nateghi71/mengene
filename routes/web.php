@@ -5,6 +5,7 @@ use App\Http\Controllers\web\admin\UserController;
 use App\Http\Controllers\web\admin\BusinessController as AdminBusinessController;
 use App\Http\Controllers\web\ConsultantController;
 use App\Http\Controllers\web\HomeController;
+use App\Http\Controllers\web\LandownerImageController;
 use App\Http\Controllers\web\RandomLinkController;
 use App\Http\Controllers\web\SpecialLandownerController;
 use App\Http\Controllers\web\SuggestionForCustomerController;
@@ -73,9 +74,13 @@ Route::middleware('auth')->group(function () {
     Route::post('landowner/suggestion/block', [SuggestionForLandOwnerController::class, 'send_block_message'])->name('landowner.send_block_message');
     Route::post('landowner/suggestion/share', [SuggestionForLandOwnerController::class, 'share_landowner_with_customer'])->name('landowner.send_share_message');
     Route::post('landowner/remainder_time', [LandownerController::class, 'setRemainderTime'])->name('landowner.remainder');
-    Route::get('landowner/subscription/index', [SpecialLandownerController::class, 'index'])->name('landowner.subscription.index');
-    Route::get('landowner/show/{landowner}', [SpecialLandownerController::class, 'show'])->name('landowner.subscription.show');
-    Route::get('landowner/buy/{landowner}', [SpecialLandownerController::class, 'buyFile'])->name('landowner.buyFile');
+
+    Route::get('landowner/subscription/index', [LandownerController::class, 'indexSub'])->name('landowner.subscription.index');
+    Route::get('landowner/buy/{landowner}', [LandownerController::class, 'buyFile'])->name('landowner.buyFile');
+
+    Route::get('/landowner/images/{landowner}' , [LandownerImageController::class , 'edit'])->name('landowner.edit_images');
+    Route::post('/landowner/images/add_image' , [LandownerImageController::class , 'add'])->name('landowner.add_image');
+    Route::post('/landowner/images/delete_image' , [LandownerImageController::class , 'destroy'])->name('landowner.delete_image');
 
     Route::resource('customer' , CustomerController::class)->except('index');
     Route::get('customer', [CustomerController::class, 'َََََindex'])->name('customer.index');
@@ -89,7 +94,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->prefix('admin-panel')->name('admin.')->group(function () {
     Route::resource('users', UserController::class)->except(['destroy']);
     Route::resource('roles', RoleController::class);
-    Route::resource('files', FileController::class);
+    Route::resource('landowners', FileController::class);
+    Route::get('/landowners/images/{landowner}' , [FileController::class , 'editImage'])->name('landowner.edit_images');
     Route::get('users/change_status/{user}' , [UserController::class , 'changeStatus'])->name('users.status');
     Route::get('/' , [AdminBusinessController::class , 'adminPanel'])->name('adminPanel');
     Route::get('business' , [AdminBusinessController::class , 'index'])->name('business.index');

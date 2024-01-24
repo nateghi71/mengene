@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\web\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\web\LandownerImageController;
 use App\Models\Landowner;
 use App\Models\Province;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FileController extends Controller
 {
@@ -13,8 +16,8 @@ class FileController extends Controller
     {
         $this->authorize('adminViewIndex' , Landowner::class);
 
-        $specialLandowners = Landowner::whereNot('type_file' , 'business')->latest()->paginate(10);
-        return view('admin.file.index' , compact('specialLandowners'));
+        $landowners = Landowner::whereNot('type_file' , 'business')->latest()->paginate(10);
+        return view('admin.file.index' , compact('landowners'));
     }
 
     public function create()
@@ -51,56 +54,77 @@ class FileController extends Controller
             'floor' => 'exclude_if:type_build,house|required|numeric',
             'floor_number' => 'exclude_if:type_build,house|required|numeric',
             'is_star' => 'nullable',
-            'expire_date' => 'required'
+            'expire_date' => 'required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $user = auth()->user();
-        Landowner::create([
-            'name' => $request->name,
-            'number' => $request->number,
-            'city_id' => $request->city_id,
-            'type_sale' => $request->type_sale,
-            'type_work' => $request->type_work,
-            'type_build' => $request->type_build,
-            'type_file' => $request->type_file,
-            'access_level' => $request->type_file == 'public' ? 'public' : 'private',
-            'scale' => $request->scale,
-            'number_of_rooms' => $request->number_of_rooms,
-            'description' => $request->description,
-            'status' => $request->status,
-            'area' => $request->area,
-            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : 0,
-            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : 0,
-            'selling_price' => $request->filled('selling_price') ? $request->selling_price : 0,
-            'elevator' => $request->has('elevator') ? 1 : 0,
-            'parking' => $request->has('parking') ? 1 : 0,
-            'store' => $request->has('store') ? 1 : 0,
-            'floor' => $request->filled('floor') ? $request->floor : 0,
-            'floor_number' => $$request->filled('floor_number') ? $request->floor_number : 0,
-            'user_id' => $user->id,
-            'is_star' => $request->has('is_star') ? 1 : 0 ,
-            'expire_date' => $request->expire_date
-        ]);
+        try{
+            DB::beginTransaction();
 
-        return redirect()->route('admin.files.index')->with('message' , 'فایل موردنظر ایجاد شد.');
+            $user = auth()->user();
+            $landowner = Landowner::create([
+                'name' => $request->name,
+                'number' => $request->number,
+                'city_id' => $request->city_id,
+                'type_sale' => $request->type_sale,
+                'type_work' => $request->type_work,
+                'type_build' => $request->type_build,
+                'type_file' => $request->type_file,
+                'access_level' => $request->type_file == 'public' ? 'public' : 'private',
+                'scale' => $request->scale,
+                'number_of_rooms' => $request->number_of_rooms,
+                'description' => $request->description,
+                'status' => $request->status,
+                'area' => $request->area,
+                'rahn_amount' => $request->type_sale === 'rahn' ? $request->rahn_amount : 0,
+                'rent_amount' => $request->type_sale === 'rahn' ? $request->rent_amount : 0,
+                'selling_price' => $request->type_sale === 'buy' ? $request->selling_price : 0,
+                'elevator' => $request->has('elevator') ? 1 : 0,
+                'parking' => $request->has('parking') ? 1 : 0,
+                'store' => $request->has('store') ? 1 : 0,
+                'floor' => $request->type_build === 'apartment' ? $request->floor : 0,
+                'floor_number' => $request->type_build === 'apartment' ? $request->floor_number : 0,
+                'user_id' => $user->id,
+                'is_star' => $request->has('is_star') ? 1 : 0 ,
+                'expire_date' => $request->expire_date
+            ]);
+
+            $imageController = new LandownerImageController();
+            $imageController->store($request->images , $landowner);
+
+            DB::commit();
+        }
+        catch (\Exception $e)
+        {
+            DB::rollBack();
+            dd($e->getMessage());
+            return back()->with('message' , 'فابل ثبت نشد دویاره امتحان کنید.');
+        }
+
+        return redirect()->route('admin.landowners.index')->with('message' , 'فایل موردنظر ایجاد شد.');
     }
 
-    public function show(Landowner $specialLandowner)
+    public function show(Landowner $landowner)
     {
         $this->authorize('adminViewShow' , Landowner::class);
-
-        return view('admin.file.show' , compact('specialLandowner'));
+        return view('admin.file.show' , compact('landowner'));
     }
 
-    public function edit(Landowner $specialLandowner)
+    public function edit(Landowner $landowner)
     {
         $this->authorize('adminEdit' , Landowner::class);
 
         $provinces = Province::all();
-        return view('admin.file.edit' , compact('provinces' , 'specialLandowner'));
+        return view('admin.file.edit' , compact('provinces' , 'landowner'));
     }
 
-    public function update(Request $request, Landowner $specialLandowner)
+    public function editImage(Landowner $landowner)
+    {
+        return view('admin.file.edit_image' , compact('landowner'));
+    }
+
+
+    public function update(Request $request, Landowner $landowner)
     {
         $this->authorize('adminEdit' , Landowner::class);
 
@@ -129,7 +153,7 @@ class FileController extends Controller
             'expire_date' => 'required'
         ]);
 //        $user = auth()->user();
-        $specialLandowner->update([
+        $landowner->update([
             'name' => $request->name,
             'number' => $request->number,
             'city_id' => $request->city_id,
@@ -143,26 +167,26 @@ class FileController extends Controller
             'description' => $request->description,
             'status' => $request->status,
             'area' => $request->area,
-            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : 0,
-            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : 0,
-            'selling_price' => $request->filled('selling_price') ? $request->selling_price : 0,
+            'rahn_amount' => $request->type_sale === 'rahn' ? $request->rahn_amount : 0,
+            'rent_amount' => $request->type_sale === 'rahn' ? $request->rent_amount : 0,
+            'selling_price' => $request->type_sale === 'buy' ? $request->selling_price : 0,
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
-            'floor' => $request->filled('floor') ? $request->floor : 0,
-            'floor_number' => $$request->filled('floor_number') ? $request->floor_number : 0,
+            'floor' => $request->type_build === 'apartment' ? $request->floor : 0,
+            'floor_number' => $request->type_build === 'apartment' ? $request->floor_number : 0,
 //            'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
-        return redirect()->route('admin.files.index')->with('message' , 'فایل موردنظر اپدیت شد.');
+        return redirect()->route('admin.landowners.index')->with('message' , 'فایل موردنظر اپدیت شد.');
     }
 
-    public function destroy(Landowner $specialLandowner)
+    public function destroy(Landowner $landowner)
     {
         $this->authorize('adminDelete' , Landowner::class);
 
-        $specialLandowner->delete();
+        $landowner->delete();
         return redirect()->back()->with('message' , 'فایل موردنظر حذف شد.');;
     }
 }

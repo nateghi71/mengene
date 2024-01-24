@@ -60,7 +60,7 @@ class Landowner extends Model
             $query->whereNot('status' , 'deActive');
         }
 
-        $query->orderByDesc('is_star')->orderBy('status');
+        $query->orderByDesc('is_star')->orderBy('type_file')->orderBy('status');
 
         if(request()->has('sortBy'))
         {
@@ -284,7 +284,6 @@ class Landowner extends Model
         );
     }
 
-
     public function dontSuggestedCustomer()
     {
         return $this->belongsToMany(Customer::class, 'dont_suggestions', 'landowner_id', 'customer_id');
@@ -314,4 +313,8 @@ class Landowner extends Model
         return $this->belongsTo(City::class, 'city_id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(PictureLandowner::class , 'landowner_id');
+    }
 }

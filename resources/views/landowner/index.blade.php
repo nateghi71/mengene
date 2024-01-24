@@ -418,12 +418,18 @@
                                                 </form>
                                             </td>
                                         @endif
-                                        <td><a class="text-white text-decoration-none"
-                                               href="{{route('landowner.show',$landowner->id)}}"><i
-                                                    class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="text-white text-decoration-none"
-                                               href="{{route('landowner.edit',$landowner->id)}}"><i
-                                                    class="mdi mdi-lead-pencil"></i></a></td>
+                                        <td>
+                                            <a class="text-white text-decoration-none" href="{{route('landowner.show',$landowner->id)}}"><i class="mdi mdi-eye"></i></a>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-link text-decoration-none text-white" id="edit" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="mdi mdi-lead-pencil"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="edit">
+                                                <li><a class="dropdown-item" href="{{route('landowner.edit',$landowner->id)}}">ویرایش</a></li>
+                                                <li><a class="dropdown-item" href="{{route('landowner.edit_images',$landowner->id)}}">ویرایش عکس</a></li>
+                                            </ul>
+                                        </td>
                                         <td>
                                             <a href="{{route('landowner.destroy',$landowner->id)}}"
                                                id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger"
@@ -442,7 +448,6 @@
                 <p>مالکی وجود ندارد.</p>
             </div>
         @endif
-
     </div>
     {{$landowners->links()}}
     <form id="filter-form">

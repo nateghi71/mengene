@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PictureLandowner extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory;
 
     public $table = "pictures_landowner";
 
@@ -16,4 +16,10 @@ class PictureLandowner extends Model
         'landowner_id',
         'image',
     ];
+
+    public function landowner()
+    {
+        return $this->belongsTo(Landowner::class , 'landowner_id');
+    }
+
 }

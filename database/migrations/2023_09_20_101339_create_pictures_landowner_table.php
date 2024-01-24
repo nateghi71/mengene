@@ -15,9 +15,8 @@ class CreatePicturesLandownerTable extends Migration
     {
         Schema::create('pictures_landowner', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('landowner_id')->constrained('landowners');
+            $table->foreignId('landowner_id')->constrained('landowners')->onDelete('cascade');
             $table->string('image')->nullable();
-            $table->boolean('is_primary')->nullable();
             $table->timestamps();
         });
     }

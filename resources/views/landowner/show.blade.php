@@ -29,6 +29,29 @@
         </div>
     </div>
 
+    @if(count($landowner->images) > 0)
+        <div class="row">
+            <div class="col-12 grid-margin mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">عکس ها</h4>
+                        <div class="row mx-5 mt-4">
+                            @foreach ($landowner->images as $image)
+                                <div class="col-md-3">
+                                    <div class="card mb-3">
+                                        <img width="100" height="170" class="card-img-top" src="{{ url(env('LANDOWNER_IMAGES_UPLOAD_PATH') . $image->image) }}"
+                                             alt="{{ $landowner->name }}">
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="row ">
         <div class="col-md-6 grid-margin mx-auto">
             <div class="card">
@@ -153,5 +176,4 @@
             </div>
         </div>
     </div>
-
 @endsection

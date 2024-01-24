@@ -138,23 +138,6 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body py-2 row">
-                    <div class="col-md-6">
-                        <input type="text" name="number" class="form-control col-md-9" value="{{old('number')}}" id="number" placeholder="جستوجو">
-                    </div>
-                    <div class="col-md-6">
-                        <select class="form-control" name="type_work" id="type_work">
-                            <option value="home">مرتب سازی</option>
-                            <option value="office">دفتر</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="row " id="accepted">
         <div class="col-12 grid-margin">
             <div class="card">

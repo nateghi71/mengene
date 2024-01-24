@@ -69,7 +69,7 @@
     </div>
 
     <div class="row">
-        @if($specialLandowners->isNotEmpty())
+        @if($landowners->isNotEmpty())
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
@@ -84,60 +84,66 @@
                                     <th> ثبت کننده</th>
                                     <th> نوع</th>
                                     <th>
-                                        @if($specialLandowners->pluck('status')->contains('غیرفعال') ||
-                                            $specialLandowners->pluck('type_sale')->contains('خرید') && $specialLandowners->pluck('type_sale')->contains('رهن و اجاره'))
+                                        @if($landowners->pluck('status')->contains('غیرفعال') ||
+                                            $landowners->pluck('type_sale')->contains('خرید') && $landowners->pluck('type_sale')->contains('رهن و اجاره'))
                                             قیمت / رهن
-                                        @elseif($specialLandowners->pluck('type_sale')->contains('رهن و اجاره'))
+                                        @elseif($landowners->pluck('type_sale')->contains('رهن و اجاره'))
                                             رهن
                                         @else
                                             قیمت
                                         @endif
                                     </th>
                                     <th>زمان باقیمانده</th>
-                                    @can('viewShow' , \App\Models\SpecialLandowner::class)
+                                    @can('adminViewShow' , \App\Models\landowner::class)
                                         <th> نمایش</th>
                                     @endcan
-                                    @can('edit' , \App\Models\SpecialLandowner::class)
+                                    @can('adminEdit' , \App\Models\landowner::class)
                                         <th> ویرایش</th>
                                     @endcan
-                                    @can('delete' , \App\Models\SpecialLandowner::class)
+                                    @can('adminDelete' , \App\Models\landowner::class)
                                         <th>حذف
                                     @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($specialLandowners as $key => $specialLandowner)
+                                @foreach($landowners as $key => $landowner)
                                     <tr>
-                                        <td>{{$specialLandowners->firstItem() + $key}}</td>
+                                        <td>{{$landowners->firstItem() + $key}}</td>
                                         <td>
-                                            {{$specialLandowner->name}}
-                                            @if($specialLandowner->getRawOriginal('status') == 'active')
+                                            {{$landowner->name}}
+                                            @if($landowner->getRawOriginal('status') == 'active')
                                                 <span class="mdi mdi-checkbox-blank-circle text-success"></span>
-                                            @elseif($specialLandowner->getRawOriginal('status') == 'unknown')
+                                            @elseif($landowner->getRawOriginal('status') == 'unknown')
                                                 <span class="mdi mdi-checkbox-blank-circle"
                                                       style="color:#FFA500;"></span>
                                             @else
                                                 <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
                                             @endif
                                         </td>
-                                        <td>{{$specialLandowner->number}}</td>
-                                        <td>{{$specialLandowner->user->name}}</td>
-                                        <td>{{$specialLandowner->type_sale}}</td>
-                                        <td>{{$specialLandowner->getRawOriginal('selling_price') !== 0 ? $specialLandowner->selling_price : $specialLandowner->rahn_amount}}</td>
-                                        <td>{{$specialLandowner->daysLeft ? $specialLandowner->daysLeft . ' روز' : 'منقضی'}} </td>
-                                        @can('viewShow' , \App\Models\SpecialLandowner::class)
+                                        <td>{{$landowner->number}}</td>
+                                        <td>{{$landowner->user->name}}</td>
+                                        <td>{{$landowner->type_sale}}</td>
+                                        <td>{{$landowner->getRawOriginal('selling_price') !== 0 ? $landowner->selling_price : $landowner->rahn_amount}}</td>
+                                        <td>{{$landowner->daysLeft ? $landowner->daysLeft . ' روز' : 'منقضی'}} </td>
+                                        @can('adminViewShow' , \App\Models\landowner::class)
                                             <td><a class="text-white text-decoration-none"
-                                                   href="{{route('admin.files.show',$specialLandowner->id)}}"><i
+                                                   href="{{route('admin.landowners.show',$landowner->id)}}"><i
                                                             class="mdi mdi-eye"></i></a></td>
                                         @endcan
-                                        @can('edit' , \App\Models\SpecialLandowner::class)
-                                            <td><a class="text-white text-decoration-none"
-                                                   href="{{route('admin.files.edit',$specialLandowner->id)}}"><i
-                                                            class="mdi mdi-lead-pencil"></i></a></td>
-                                        @endcan
-                                        @can('delete' , \App\Models\SpecialLandowner::class)
+                                        @can('adminEdit' , \App\Models\landowner::class)
                                             <td>
-                                                <a href="{{route('admin.files.destroy',$specialLandowner->id)}}"
+                                                <button type="button" class="btn btn-link text-decoration-none text-white" id="edit" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="mdi mdi-lead-pencil"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="edit">
+                                                    <li><a class="dropdown-item" href="{{route('admin.landowners.edit',$landowner->id)}}">ویرایش</a></li>
+                                                    <li><a class="dropdown-item" href="{{route('admin.landowner.edit_images',$landowner->id)}}">ویرایش عکس</a></li>
+                                                </ul>
+                                            </td>
+                                        @endcan
+                                        @can('adminDelete' , \App\Models\landowner::class)
+                                            <td>
+                                                <a href="{{route('admin.landowners.destroy',$landowner->id)}}"
                                                    id="open_delete_panel_{{$key}}"
                                                    class="text-decoration-none text-danger" type="button"><i
                                                             class="mdi mdi-delete"></i></a>
@@ -157,6 +163,6 @@
             </div>
         @endif
     </div>
-    {{$specialLandowners->links()}}
+    {{$landowners->links()}}
 
 @endsection

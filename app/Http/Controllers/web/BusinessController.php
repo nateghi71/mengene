@@ -102,7 +102,7 @@ class BusinessController extends Controller
 
         $imageName = '';
         if ($request->hasFile('image')) {
-            $imageName = time() . $request->image->getClientOriginalName();
+            $imageName = generateFileName($request->image->getClientOriginalName());
             $request->image->move(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')), $imageName);
         }
 
@@ -126,8 +126,8 @@ class BusinessController extends Controller
         }
         catch (\Exception $e)
         {
-            dd($e->getMessage());
             DB::rollBack();
+            return back()->with('message' , 'املاکی ثبت نشد دویاره امتحان کنید.');
         }
 
         return redirect()->route('dashboard')->with('message' , 'املاکی موردنظر ایجاد شد.');

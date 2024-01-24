@@ -19,7 +19,7 @@
 
                             $.each(res, function(key, city) {
                                 let selected = false;
-                                if(city.id == "{{$specialLandowner->city_id}}")
+                                if(city.id == "{{$landowner->city_id}}")
                                 {
                                     selected = true;
                                 }
@@ -42,7 +42,7 @@
         getCities()
         $('#province').on('change' , getCities)
 
-        if("{{ $specialLandowner->getRawOriginal('type_sale') === "buy" }}")
+        if("{{ $landowner->getRawOriginal('type_sale') === "buy" }}")
         {
             buyFunction()
         }
@@ -180,10 +180,10 @@
         <div class="card-body px-5 py-4">
             <div class="d-flex justify-content-between">
                 <div><h3 class="card-title mb-3">ویرایش نقش</h3></div>
-                <div><a href="{{route('admin.files.index')}}" class="btn btn-primary p-2">نمایش نقشها</a></div>
+                <div><a href="{{route('admin.landowners.index')}}" class="btn btn-primary p-2">نمایش فایل ها</a></div>
             </div>
             <hr>
-            <form action="{{route('admin.files.update' , ['file' => $specialLandowner->id])}}" method="post" autocomplete="off">
+            <form action="{{route('admin.landowners.update' , ['landowner' => $landowner->id])}}" method="post" autocomplete="off">
                 @csrf
                 @method('PUT')
                 <div class="row mb-4">
@@ -192,13 +192,13 @@
                         <div class="col-sm-3">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale1">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" {{$specialLandowner->getRawOriginal('type_sale') === "buy" ? 'checked' : '' }}> خرید </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" {{$landowner->getRawOriginal('type_sale') === "buy" ? 'checked' : '' }}> خرید </label>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale2">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn" {{$specialLandowner->getRawOriginal('type_sale') === "rahn" ? 'checked' : '' }}> رهن و اجاره </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn" {{$landowner->getRawOriginal('type_sale') === "rahn" ? 'checked' : '' }}> رهن و اجاره </label>
                             </div>
                         </div>
                         @error('type_sale')
@@ -209,14 +209,14 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="name"> نام و نام خانوادگی:</label>
-                        <input type="text" name="name" class="form-control" id="name" value="{{$specialLandowner->name}}" placeholder="نام">
+                        <input type="text" name="name" class="form-control" id="name" value="{{$landowner->name}}" placeholder="نام">
                         @error('name')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
                         <label for="number">شماره تماس:</label>
-                        <input type="text" name="number" class="form-control" value="{{$specialLandowner->number}}" id="number" placeholder="شماره تماس"
+                        <input type="text" name="number" class="form-control" value="{{$landowner->number}}" id="number" placeholder="شماره تماس"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('number')
                         <div class="alert-danger">{{$message}}</div>
@@ -226,7 +226,7 @@
                         <label for="province">استان:</label>
                         <select class="form-control" id="province">
                             @foreach($provinces as $province)
-                                <option value="{{$province->id}}" @selected($specialLandowner->city->province_id === $province->id)>{{$province->name}}</option>
+                                <option value="{{$province->id}}" @selected($landowner->city->province_id === $province->id)>{{$province->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -240,28 +240,28 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="area">منطقه شهرداری:</label>
-                        <input type="text" name="area" class="form-control" value="{{$specialLandowner->area}}" id="area" placeholder="منطقه شهرداری"
+                        <input type="text" name="area" class="form-control" value="{{$landowner->area}}" id="area" placeholder="منطقه شهرداری"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('area')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="access_level">نوع فایل:</label>
-                        <select class="form-control" name="access_level" id="access_level">
-                            <option value="public" @selected($specialLandowner->getRawOriginal('type_file') === "public")>عمومی</option>
-                            <option value="buy" @selected($specialLandowner->getRawOriginal('type_file') === "buy")>فایل پولی</option>
-                            <option value="subscription" @selected($specialLandowner->getRawOriginal('type_file') === "subscription")>اشتراک ویژه</option>
+                        <label for="type_file">نوع فایل:</label>
+                        <select class="form-control" name="type_file" id="type_file">
+                            <option value="public" @selected($landowner->getRawOriginal('type_file') === "public")>عمومی</option>
+                            <option value="buy" @selected($landowner->getRawOriginal('type_file') === "buy")>فایل پولی</option>
+                            <option value="subscription" @selected($landowner->getRawOriginal('type_file') === "subscription")>اشتراک ویژه</option>
                         </select>
-                        @error('access_level')
+                        @error('type_file')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
                         <label for="status">وضعیت:</label>
                         <select class="form-control" name="status" id="status">
-                            <option value="active" @selected($specialLandowner->getRawOriginal('status') === "active")>فعال</option>
-                            <option value="deActive" @selected($specialLandowner->getRawOriginal('status') === "deActive")>غیرفعال</option>
+                            <option value="active" @selected($landowner->getRawOriginal('status') === "active")>فعال</option>
+                            <option value="deActive" @selected($landowner->getRawOriginal('status') === "deActive")>غیرفعال</option>
                         </select>
                         @error('status')
                         <div class="alert-danger">{{$message}}</div>
@@ -273,7 +273,7 @@
                             <label for="selling_price">قیمت:</label>
                             <p id="show_selling_price"></p>
                         </div>
-                        <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{$specialLandowner->getRawOriginal('selling_price')}}" id="selling_price" placeholder="قیمت"
+                        <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{$landowner->getRawOriginal('selling_price')}}" id="selling_price" placeholder="قیمت"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('selling_price')
                         <div class="alert-danger">{{$message}}</div>
@@ -284,7 +284,7 @@
                             <label for="rahn_amount">رهن:</label>
                             <p id="show_rahn_amount"></p>
                         </div>
-                        <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{$specialLandowner->getRawOriginal('rahn_amount')}}" id="rahn_amount" placeholder="رهن"
+                        <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{$landowner->getRawOriginal('rahn_amount')}}" id="rahn_amount" placeholder="رهن"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rahn_amount')
                         <div class="alert-danger">{{$message}}</div>
@@ -295,7 +295,7 @@
                             <label for="rent_amount">اجاره:</label>
                             <p id="show_rent_amount"></p>
                         </div>
-                        <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{$specialLandowner->getRawOriginal('rent_amount')}}" id="rent_amount" placeholder="اجاره"
+                        <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{$landowner->getRawOriginal('rent_amount')}}" id="rent_amount" placeholder="اجاره"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rent_amount')
                         <div class="alert-danger">{{$message}}</div>
@@ -303,7 +303,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="scale">متراژ:</label>
-                        <input type="text" name="scale" class="form-control" value="{{$specialLandowner->getRawOriginal('scale')}}" id="scale" placeholder="متراژ"
+                        <input type="text" name="scale" class="form-control" value="{{$landowner->getRawOriginal('scale')}}" id="scale" placeholder="متراژ"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('scale')
                         <div class="alert-danger">{{$message}}</div>
@@ -312,8 +312,8 @@
                     <div class="form-group col-md-3">
                         <label for="type_work">نوع مسکن:</label>
                         <select class="form-control" name="type_work" id="type_work">
-                            <option value="home" @selected($specialLandowner->getRawOriginal('type_work') === "home")>خانه</option>
-                            <option value="office" @selected($specialLandowner->getRawOriginal('type_work') === "office")>دفتر</option>
+                            <option value="home" @selected($landowner->getRawOriginal('type_work') === "home")>خانه</option>
+                            <option value="office" @selected($landowner->getRawOriginal('type_work') === "office")>دفتر</option>
                         </select>
                         @error('type_work')
                         <div class="alert-danger">{{$message}}</div>
@@ -322,8 +322,8 @@
                     <div class="form-group col-md-3">
                         <label for="type_build">نوع خانه:</label>
                         <select class="form-control" name="type_build" id="type_build" onchange="changeTypeBuild()">
-                            <option value="house" @selected($specialLandowner->getRawOriginal('type_build') === "house")>ویلایی</option>
-                            <option value="apartment" @selected($specialLandowner->getRawOriginal('type_build') === "apartment")>ساختمان</option>
+                            <option value="house" @selected($landowner->getRawOriginal('type_build') === "house")>ویلایی</option>
+                            <option value="apartment" @selected($landowner->getRawOriginal('type_build') === "apartment")>ساختمان</option>
                         </select>
                         @error('type_work')
                         <div class="alert-danger">{{$message}}</div>
@@ -331,7 +331,7 @@
                     </div>
                     <div class="form-group col-md-3 floor">
                         <label for="floor_number">تعداد طبقات کل ساختمان:</label>
-                        <input type="text" name="floor_number" class="form-control" value="{{$specialLandowner->floor_number}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
+                        <input type="text" name="floor_number" class="form-control" value="{{$landowner->floor_number}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('floor_number')
                         <div class="alert-danger">{{$message}}</div>
@@ -339,7 +339,7 @@
                     </div>
                     <div class="form-group col-md-3 floor">
                         <label for="floor">شماره طبقه:</label>
-                        <input type="text" name="floor" class="form-control" value="{{$specialLandowner->floor}}" id="floor" placeholder="شماره طبقه"
+                        <input type="text" name="floor" class="form-control" value="{{$landowner->floor}}" id="floor" placeholder="شماره طبقه"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('floor')
                         <div class="alert-danger">{{$message}}</div>
@@ -347,7 +347,7 @@
                     </div>
                     <div class="form-group col-md-3 ">
                         <label for="number_of_rooms">تعداد اتاق:</label>
-                        <input type="text" name="number_of_rooms" class="form-control" value="{{$specialLandowner->number_of_rooms}}" id="number_of_rooms" placeholder="تعداد اتاق"
+                        <input type="text" name="number_of_rooms" class="form-control" value="{{$landowner->number_of_rooms}}" id="number_of_rooms" placeholder="تعداد اتاق"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('number_of_rooms')
                         <div class="alert-danger">{{$message}}</div>
@@ -355,7 +355,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="expire_date">زمان باقیمانده:</label>
-                        <input type="text" name="expire_date" class="form-control" value="{{$specialLandowner->expire_date}}" id="expire_date" placeholder="زمان باقیمانده"
+                        <input type="text" name="expire_date" class="form-control" value="{{$landowner->expire_date}}" id="expire_date" placeholder="زمان باقیمانده"
                                onkeypress="return false">
                         @error('expire_date')
                         <div class="alert-danger">{{$message}}</div>
@@ -363,7 +363,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="description">آدرس:</label>
-                        <textarea name="description" class="form-control" id="description" placeholder="آدرس" rows="3">{{$specialLandowner->description}}</textarea>
+                        <textarea name="description" class="form-control" id="description" placeholder="آدرس" rows="3">{{$landowner->description}}</textarea>
                         @error('description')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
@@ -373,7 +373,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label id="is_star_label" class="form-check-label"><span class="mdi mdi-star-outline fs-4 text-warning"></span></label>
-                            <input type="checkbox" name="is_star" id="is_star" class="d-none" @checked($specialLandowner->getRawOriginal('is_star') === 1)>
+                            <input type="checkbox" name="is_star" id="is_star" class="d-none" @checked($landowner->getRawOriginal('is_star') === 1)>
                         </div>
                         @error('is_star')
                         <div class="alert-danger">{{$message}}</div>
@@ -383,7 +383,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="elevator" class="form-check-label">
-                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" @checked($specialLandowner->getRawOriginal('elevator') === 1)>اسانسور
+                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" @checked($landowner->getRawOriginal('elevator') === 1)>اسانسور
                             </label>
                         </div>
                         @error('elevator')
@@ -393,7 +393,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="parking" class="form-check-label">
-                                <input type="checkbox" name="parking" id="parking" class="form-check-input" @checked($specialLandowner->getRawOriginal('parking') === 1)>پارکینگ
+                                <input type="checkbox" name="parking" id="parking" class="form-check-input" @checked($landowner->getRawOriginal('parking') === 1)>پارکینگ
                             </label>
                         </div>
                         @error('parking')
@@ -403,7 +403,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="store" class="form-check-label">
-                                <input type="checkbox" name="store" id="store" class="form-check-input" @checked($specialLandowner->getRawOriginal('store') === 1)>انبار
+                                <input type="checkbox" name="store" id="store" class="form-check-input" @checked($landowner->getRawOriginal('store') === 1)>انبار
                             </label>
                         </div>
                         @error('store')

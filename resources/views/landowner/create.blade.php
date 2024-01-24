@@ -316,21 +316,12 @@
                         @enderror
                     </div>
                     <div class="col-md-3 form-group">
-                        <label class="form-label" for="primary_image"> انتخاب تصویر اصلی </label>
-                        <input type="file" name="primary_image" id="primary_image" value="{{old('primary_image')}}" class="form-control">
-                        @error('primary_image')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-3 form-group">
                         <label class="form-label" for="images"> انتخاب تصاویر </label>
                         <input type="file" id="images" name="images[]" value="{{old('images[]')}}" class="form-control" multiple>
                         @error('images[]')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
-
                     <div class="form-group col-md-6">
                         <label for="description">توضیحات و آدرس:</label>
                         <textarea name="description" class="form-control" id="description" placeholder="آدرس" rows="3">{{old('description')}}</textarea>

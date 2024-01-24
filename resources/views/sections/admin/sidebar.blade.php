@@ -19,7 +19,7 @@
                 </a>
             </li>
         @endcan
-        @can('viewIndex' , \App\Models\SpecialLandowner::class)
+        @can('adminViewIndex' , \App\Models\Landowner::class)
             <li class="nav-item menu-items">
                 <a class="nav-link" data-bs-toggle="collapse" href="#files" aria-expanded="false" aria-controls="files">
               <span class="menu-icon">
@@ -30,10 +30,10 @@
                 </a>
                 <div class="collapse" id="files">
                     <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="{{route('admin.files.index')}}">نمایش فایل ها</a>
+                        <li class="nav-item"><a class="nav-link" href="{{route('admin.landowners.index')}}">نمایش فایل ها</a>
                         </li>
-                        @can('create' , \App\Models\SpecialLandowner::class)
-                            <li class="nav-item"><a class="nav-link" href="{{route('admin.files.create')}}">ایجاد
+                        @can('adminCreate' , \App\Models\Landowner::class)
+                            <li class="nav-item"><a class="nav-link" href="{{route('admin.landowners.create')}}">ایجاد
                                     فایل</a></li>
                         @endcan
                     </ul>

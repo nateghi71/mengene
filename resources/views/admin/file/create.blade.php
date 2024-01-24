@@ -151,10 +151,10 @@
         <div class="card-body px-5 py-4">
             <div class="d-flex justify-content-between">
                 <div><h3 class="card-title mb-3">ایجاد فایل</h3></div>
-                <div><a href="{{route('admin.files.index')}}" class="btn btn-primary p-2">نمایش فایل ها</a></div>
+                <div><a href="{{route('admin.landowners.index')}}" class="btn btn-primary p-2">نمایش فایل ها</a></div>
             </div>
             <hr>
-            <form action="{{route('admin.files.store')}}" method="post" autocomplete="off">
+            <form action="{{route('admin.landowners.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
                 @csrf
 
                 <div class="row mb-4">
@@ -329,6 +329,13 @@
                                onkeypress="return false">
                         @error('expire_date')
                         <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label class="form-label" for="images"> انتخاب تصاویر </label>
+                        <input type="file" id="images" name="images[]" value="{{old('images[]')}}" class="form-control" multiple>
+                        @error('images[]')
+                        <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-6">
