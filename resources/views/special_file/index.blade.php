@@ -70,11 +70,11 @@
             } else {
                 $('#filter-type-sale').val(typeSale);
             }
-            let accessLevel = $('#access_level').val();
-            if (accessLevel == "default") {
-                $('#filter-access-level').prop('disabled', true);
+            let typeFile = $('#type_file').val();
+            if (typeFile == "default") {
+                $('#filter-type-file').prop('disabled', true);
             } else {
-                $('#filter-access-level').val(accessLevel);
+                $('#filter-type-file').val(typeFile);
             }
             let typeWork = $('#type_work').val();
             if (typeWork == "default") {
@@ -137,7 +137,7 @@
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>
-                          <a href="{{route('landowner.index')}}" class="btn btn-outline-light btn-rounded get-started-btn">فایل های من</a>
+                          <a href="{{route('landowner.create')}}" class="btn btn-outline-light btn-rounded get-started-btn">ایجاد مالک</a>
                         </span>
                         </div>
                     </div>
@@ -145,36 +145,24 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
-                <a href="{{route('landowner.index')}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">فایل های من</h3>
+    @if($files->isEmpty())
+        <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card bg-success bg-gradient bg-opacity-50">
+                    <a href="{{route('landowner.index')}}" class="text-decoration-none text-white">
+                        <div class="card-body">
+                            <div class="icon">
+                                <span class="mdi mdi-account-search icon-item text-white"></span>
+                                <div class="pe-3 d-flex align-items-center align-self-start text-white">
+                                    <h3 class="mb-0">فایل های من</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
         </div>
-        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-success bg-gradient bg-opacity-50">
-                <a href="{{route('special_files.subscription.index')}}" class="text-decoration-none text-white">
-                    <div class="card-body">
-                        <div class="icon">
-                            <span class="mdi mdi-account-search icon-item text-white"></span>
-                            <div class="pe-3 d-flex align-items-center align-self-start text-white">
-                                <h3 class="mb-0">فایل های ویژه</h3>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
+    @endif
 
     <div class="row">
         <div class="col-12 grid-margin">
@@ -204,10 +192,10 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="access_level">
-                                <option value="default">سطح دسترسی</option>
-                                <option value="private" @selected(request()->has('access_level') && request()->access_level == 'private')>خصوصی</option>
-                                <option value="public" @selected(request()->has('access_level') && request()->access_level == 'public')>عمومی</option>
+                            <select class="form-control" onchange="filter()" id="type_file">
+                                <option value="default">نوع فایل</option>
+                                <option value="subscription" @selected(request()->has('type_file') && request()->type_file == 'subscription')>اشتراکی</option>
+                                <option value="buy" @selected(request()->has('type_file') && request()->type_file == 'buy')>پولی</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
@@ -242,15 +230,20 @@
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">
-                            <h4 class="card-title">فایل های پولی</h4>
-                        </h4>
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title">فایل های ویژه</h4>
+                            <div>
+                                <a href="{{route('landowner.index')}}" class="btn btn-success">فایل های من</a>
+                            </div>
+                        </div>
 
                         <div class="table-responsive">
                             <table class="table text-center">
                                 <thead>
                                 <tr class="text-white">
                                     <th> # </th>
+                                    <th> نام </th>
+                                    <th> شماره تماس </th>
                                     <th> نوع </th>
                                     <th>
                                         @if($files->pluck('type_sale')->contains('فروش') && $files->pluck('type_sale')->contains('رهن و اجاره'))
@@ -262,6 +255,10 @@
                                         @endif
                                     </th>
                                     <th>زمان باقیمانده </th>
+                                    <th>پیشنهادات </th>
+                                    <th>تنظیم هشدار</th>
+                                    <th> نمایش </th>
+                                    <th> انتقال به فایل های من </th>
                                     <th>خرید</th>
                                 </tr>
                                 </thead>
@@ -269,13 +266,100 @@
                                 @foreach($files as $key => $file)
                                     <tr>
                                         <td>
-                                            <a class="text-decoration-none" href="{{route('special_files.star',$file->id)}}">{!!$file->getRawOriginal('is_star') ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
+                                            <a class="text-decoration-none" href="{{route('landowner.star',$file->id)}}">{!!$file->getRawOriginal('is_star') ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
+                                        </td>
+                                        <td>
+                                            @if($file->getRawOriginal('type_file') == 'subscription' && !auth()->user()->isFreeUser())
+                                                {{$file->name}}
+                                                @if($file->getRawOriginal('status') == 'active')
+                                                    <span class="mdi mdi-checkbox-blank-circle text-success"></span>
+                                                @elseif($file->getRawOriginal('status') == 'unknown')
+                                                    <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
+                                                @else
+                                                    <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
+                                                @endif
+                                            @else
+                                                @if($file->getRawOriginal('type_file') == 'subscription')
+                                                    <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @elseif($file->getRawOriginal('type_file') == 'buy')
+                                                    <a class="text-success text-decoration-none" href="{{route('landowner.buyFile',$file->id)}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($file->getRawOriginal('type_file') == 'subscription' && !auth()->user()->isFreeUser())
+                                                {{$file->number}}
+                                            @else
+                                                @if($file->getRawOriginal('type_file') == 'subscription')
+                                                    <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @elseif($file->getRawOriginal('type_file') == 'buy')
+                                                    <a class="text-success text-decoration-none" href="{{route('landowner.buyFile',$file->id)}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @endif
+                                            @endif
+
                                         </td>
                                         <td>{{$file->type_sale}}</td>
                                         <td>{{$file->getRawOriginal('selling_price') !== 0 ? $file->selling_price : $file->rahn_amount}}</td>
                                         <td>{{$file->daysLeft ? $file->daysLeft . ' روز' : 'منقضی'}}</td>
                                         <td>
-                                            <a class="text-success text-decoration-none" href="{{route('special_files.buy',$file->id)}}"><i class="mdi mdi-cart"></i></a>
+                                            @if($file->getRawOriginal('type_file') == 'subscription' && !auth()->user()->isFreeUser())
+                                            <a class="text-white text-decoration-none" href="{{route('landowner.suggestions',$file->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a>
+                                            @else
+                                                @if($file->getRawOriginal('type_file') == 'subscription')
+                                                    <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @elseif($file->getRawOriginal('type_file') == 'buy')
+                                                    <a class="text-success text-decoration-none" href="{{route('landowner.buyFile',$file->id)}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($file->getRawOriginal('type_file') == 'subscription' && !auth()->user()->isFreeUser())
+                                            <form action="{{route('landowner.remainder')}}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="remainder" id="remainder_input_{{$key}}">
+                                                <input type="hidden" name="file_id" value="{{$file->id}}">
+                                                <button id="remainder_{{$key}}" class="btn btn-link text-white text-decoration-none" type="button"><i class="mdi mdi-bell"></i></button>
+                                            </form>
+                                            @else
+                                                @if($file->getRawOriginal('type_file') == 'subscription')
+                                                    <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @elseif($file->getRawOriginal('type_file') == 'buy')
+                                                    <a class="text-success text-decoration-none" href="{{route('landowner.buyFile',$file->id)}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($file->getRawOriginal('type_file') == 'subscription' && !auth()->user()->isFreeUser())
+                                            <a class="text-white text-decoration-none" href="{{route('landowner.show',$file->id)}}"><i class="mdi mdi-eye"></i></a>
+                                            @else
+                                                @if($file->getRawOriginal('type_file') == 'subscription')
+                                                    <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @elseif($file->getRawOriginal('type_file') == 'buy')
+                                                    <a class="text-success text-decoration-none" href="{{route('landowner.buyFile',$file->id)}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($file->getRawOriginal('type_file') == 'subscription' && !auth()->user()->isFreeUser())
+                                                <a class="text-success text-decoration-none" href="{{route('landowner.buyFile',$file->id)}}"><i class="mdi mdi-format-vertical-align-top"></i></a>
+                                            @else
+                                                @if($file->getRawOriginal('type_file') == 'subscription')
+                                                    <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @elseif($file->getRawOriginal('type_file') == 'buy')
+                                                    <a class="text-success text-decoration-none" href="{{route('landowner.buyFile',$file->id)}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($file->getRawOriginal('type_file') == 'subscription' && !auth()->user()->isFreeUser())
+                                                <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
+                                            @else
+                                                @if($file->getRawOriginal('type_file') == 'subscription')
+                                                    <a class="text-success text-decoration-none" href="{{route('packages.index')}}">خرید اشتراک</a>
+                                                @elseif($file->getRawOriginal('type_file') == 'buy')
+                                                    <a class="text-success text-decoration-none" href="{{route('landowner.buyFile',$file->id)}}">خرید فایل</a>
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -295,7 +379,7 @@
     {{$files->links()}}
     <form id="filter-form">
         <input id="filter-type-sale" type="hidden" name="type_sale">
-        <input id="filter-access-level" type="hidden" name="access_level">
+        <input id="filter-type-file" type="hidden" name="type_file">
         <input id="filter-type-work" type="hidden" name="type_work">
         <input id="filter-type-build" type="hidden" name="type_build">
         <input id="filter-status" type="hidden" name="status">

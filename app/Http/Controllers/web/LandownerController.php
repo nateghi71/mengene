@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\web;
 
-use App\Events\CreateLandownerlandowner;
+use App\Events\CreateLandownerFile;
 use App\HelperClasses\LinkGenerator;
 use App\HelperClasses\SmsAPI;
-use App\HelperClasses\UpdateStatuslandowner;
 use App\Http\Controllers\Controller;
 use App\Models\Province;
-use App\Models\SpecialFile;
 use App\Models\User;
 use App\Notifications\ReminderForLandowerNotification;
 use Hekmatinasser\Verta\Facades\Verta;
@@ -61,24 +59,24 @@ class LandownerController extends Controller
         $this->authorize('create', Landowner::class);
         $request->validate([
             'name' => 'required',
-            'number' => 'required|numeric',
+            'number' => 'required|iran_mobile',
             'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
             'scale' => 'required',
-            'area' => 'required',
+            'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
             'access_level' => 'required',
-            'rahn_amount' => 'exclude_if:type_sale,buy',
-            'rent_amount' => 'exclude_if:type_sale,buy',
-            'selling_price' => 'exclude_if:type_sale,rahn',
+            'rahn_amount' => 'exclude_if:type_sale,buy|required',
+            'rent_amount' => 'exclude_if:type_sale,buy|required',
+            'selling_price' => 'exclude_if:type_sale,rahn|required',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
-            'floor' => 'required|numeric',
-            'floor_number' => 'required|numeric',
+            'floor' => 'exclude_if:type_build,house|required|numeric',
+            'floor_number' => 'exclude_if:type_build,house|required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
@@ -91,6 +89,7 @@ class LandownerController extends Controller
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
+            'type_file' => 'business',
             'scale' => $request->scale,
             'area' => $request->area,
             'number_of_rooms' => $request->number_of_rooms,
@@ -102,15 +101,15 @@ class LandownerController extends Controller
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
-            'floor' => $request->floor,
-            'floor_number' => $request->floor_number,
+            'floor' => $request->filled('floor') ? $request->floor : 0,
+            'floor_number' => $$request->filled('floor_number') ? $request->floor_number : 0,
             'business_id' => $user->business()->id,
             'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
 
-        event(new CreateLandownerlandowner($landowner , $user));
+        event(new CreateLandownerFile($landowner , $user));
 
         return redirect()->route('landowner.index',['status' => 'active'])->with('message' , 'فایل موردنظر ایجاد شد.');
     }
@@ -127,24 +126,24 @@ class LandownerController extends Controller
         $this->authorize('update', $landowner);
         $request->validate([
             'name' => 'required',
-            'number' => 'required|numeric',
+            'number' => 'required|iran_mobile',
             'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
             'scale' => 'required',
-            'area' => 'required',
+            'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
             'access_level' => 'required',
-            'rahn_amount' => 'exclude_if:type_sale,buy',
-            'rent_amount' => 'exclude_if:type_sale,buy',
-            'selling_price' => 'exclude_if:type_sale,rahn',
+            'rahn_amount' => 'exclude_if:type_sale,buy|required',
+            'rent_amount' => 'exclude_if:type_sale,buy|required',
+            'selling_price' => 'exclude_if:type_sale,rahn|required',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
-            'floor' => 'required|numeric',
-            'floor_number' => 'required|numeric',
+            'floor' => 'exclude_if:type_build,house|required|numeric',
+            'floor_number' => 'exclude_if:type_build,house|required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
@@ -168,8 +167,8 @@ class LandownerController extends Controller
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
-            'floor' => $request->floor,
-            'floor_number' => $request->floor_number,
+            'floor' => $request->filled('floor') ? $request->floor : 0,
+            'floor_number' => $$request->filled('floor_number') ? $request->floor_number : 0,
 //            'business_id' => $user->business()->id,
 //            'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,

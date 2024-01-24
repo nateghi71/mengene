@@ -40,7 +40,11 @@
                             <tbody class="text-white">
                             <tr class="text-primary">
                                 <td>ثبت کننده</td>
+                                @if($landowner->business_id !== null)
                                 <td>{{$landowner->user->name}}</td>
+                                @else
+                                    <td>منگنه</td>
+                                @endif
                             </tr>
 
                             <tr>
@@ -68,10 +72,17 @@
                                 <td>شهر</td>
                                 <td>{{$landowner->city->name}}</td>
                             </tr>
-                            <tr>
-                                <td>سطح دسترسی</td>
-                                <td>{{$landowner->access_level}}</td>
-                            </tr>
+                            @if($landowner->business_id !== null)
+                                <tr>
+                                    <td>سطح دسترسی</td>
+                                    <td>{{$landowner->access_level}}</td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <td>نوع فایل</td>
+                                    <td>{{$landowner->type_file}}</td>
+                                </tr>
+                            @endif
                             <tr>
                                 <td>نوع مسکن</td>
                                 <td>{{$landowner->type_work}}</td>

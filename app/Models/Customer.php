@@ -20,7 +20,7 @@ class Customer extends Model
      * @var array
      */
     protected $fillable = [
-        'name','number','area','city_id','status','type_sale','type_work','type_build','scale','number_of_rooms',
+        'name','number','area','city_id','status','type_sale','type_work','type_build','type_file','scale','number_of_rooms',
         'description','rahn_amount','access_level','rent_amount','selling_price','elevator','parking','store','floor',
         'floor_number','business_id','user_id','is_star','expire_date'
     ];
@@ -280,19 +280,9 @@ class Customer extends Model
         );
     }
 
-    public function dontSuggestionForLandowner()
+    public function dontSuggestedLandowner()
     {
         return $this->belongsToMany(Landowner::class, 'dont_suggestions', 'customer_id', 'landowner_id');
-    }
-
-    public function dontSuggestionForFile()
-    {
-        return $this->belongsToMany(SpecialFile::class, 'dont_suggestions_for_files', 'customer_id', 'file_id');
-    }
-
-    public function notSuggestedLandowner()
-    {
-        return !$this->suggestedLandowner()->exists();
     }
 
     public function user()

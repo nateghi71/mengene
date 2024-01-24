@@ -4,29 +4,29 @@ namespace App\Policies;
 
 use App\Models\User;
 
-trait FilePolicy
+trait LandownerAdminPolicy
 {
-    public function viewIndex(User $user): bool
+    public function adminViewIndex(User $user): bool
     {
         return in_array('see_files',$user->role->permissions->pluck('name')->toArray()) && !$user->isBanned();
     }
 
-    public function viewShow(User $user): bool
+    public function adminViewShow(User $user): bool
     {
         return in_array('see_show_file',$user->role->permissions->pluck('name')->toArray()) && !$user->isBanned();
     }
 
-    public function create(User $user): bool
+    public function adminCreate(User $user): bool
     {
         return in_array('create_file',$user->role->permissions->pluck('name')->toArray()) && !$user->isBanned();
     }
 
-    public function edit(User $user): bool
+    public function adminEdit(User $user): bool
     {
         return in_array('edit_file',$user->role->permissions->pluck('name')->toArray()) && !$user->isBanned();
     }
 
-    public function delete(User $user): bool
+    public function adminDelete(User $user): bool
     {
         return in_array('delete_file',$user->role->permissions->pluck('name')->toArray()) && !$user->isBanned();
     }

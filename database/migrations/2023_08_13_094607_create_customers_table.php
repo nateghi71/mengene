@@ -25,6 +25,7 @@ class CreateCustomersTable extends Migration
             $table->enum('type_work', ['home', 'office']);
             $table->enum('type_build', ['house', 'apartment']);
             $table->enum('access_level', ['private', 'public']);
+            $table->enum('type_file', ['business', 'buy', 'subscription' , 'people']);
             $table->integer('scale')->nullable();
             $table->integer('number_of_rooms')->nullable();
             $table->text('description');
@@ -36,10 +37,10 @@ class CreateCustomersTable extends Migration
             $table->boolean('store')->nullable();
             $table->integer('floor')->nullable();
             $table->integer('floor_number')->nullable();
-            $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('business_id')->nullable()->constrained('businesses')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->boolean('is_star')->default(false);
-            $table->string('area');
+            $table->unsignedInteger('area');
             $table->date('expire_date');
             $table->softDeletes();
             $table->timestamps();

@@ -8,7 +8,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class LandownerPolicy
 {
-    use HandlesAuthorization;
+    use HandlesAuthorization , LandownerAdminPolicy;
 
     public function viewAny(User $user)
     {
@@ -36,4 +36,10 @@ class LandownerPolicy
         return $user->ownedBusiness()->exists() ||
             ($user->joinedBusinesses()->wherePivot('is_accepted', 1)->exists() && $landowner->user_id === $user->id);
     }
+
+    public function subscription(User $user)
+    {
+        return $user->ownedBusiness()->exists();
+    }
+
 }

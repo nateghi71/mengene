@@ -7,15 +7,13 @@ use App\Models\Business;
 use App\Models\Customer;
 use App\Models\Landowner;
 use App\Models\Role;
-use App\Models\SpecialFile;
 use App\Models\User;
 use App\Policies\BusinessAdminPolicy;
 use App\Policies\BusinessPolicy;
 use App\Policies\CustomerPolicy;
-use App\Policies\FilePolicy;
+use App\Policies\LandownerAdminPolicy;
 use App\Policies\LandownerPolicy;
 use App\Policies\RolePolicy;
-use App\Policies\SpecialFilePolicy;
 use App\Policies\UserManagementPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -31,7 +29,6 @@ class AuthServiceProvider extends ServiceProvider
         Customer::class => CustomerPolicy::class,
         Landowner::class => LandownerPolicy::class,
         Business::class => BusinessPolicy::class,
-        SpecialFile::class => SpecialFilePolicy::class,
         Role::class => RolePolicy::class,
         User::class => UserManagementPolicy::class,
     ];

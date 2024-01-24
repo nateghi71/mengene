@@ -6,7 +6,7 @@ use App\Http\Controllers\web\admin\BusinessController as AdminBusinessController
 use App\Http\Controllers\web\ConsultantController;
 use App\Http\Controllers\web\HomeController;
 use App\Http\Controllers\web\RandomLinkController;
-use App\Http\Controllers\web\SpecialFileController;
+use App\Http\Controllers\web\SpecialLandownerController;
 use App\Http\Controllers\web\SuggestionForCustomerController;
 use App\Http\Controllers\web\SuggestionForLandOwnerController;
 use Illuminate\Support\Facades\Route;
@@ -73,16 +73,9 @@ Route::middleware('auth')->group(function () {
     Route::post('landowner/suggestion/block', [SuggestionForLandOwnerController::class, 'send_block_message'])->name('landowner.send_block_message');
     Route::post('landowner/suggestion/share', [SuggestionForLandOwnerController::class, 'share_landowner_with_customer'])->name('landowner.send_share_message');
     Route::post('landowner/remainder_time', [LandownerController::class, 'setRemainderTime'])->name('landowner.remainder');
-
-    Route::get('special_files_buy', [SpecialFileController::class, 'indexBuy'])->name('special_files.buy.index');
-    Route::get('special_files_subscription', [SpecialFileController::class, 'indexSubscription'])->name('special_files.subscription.index');
-    Route::get('special_files/{specialFile}', [SpecialFileController::class, 'show'])->name('special_files.show');
-    Route::get('special_files/suggestion/{specialFile}', [SpecialFileController::class, 'Suggestion'])->name('special_files.Suggestions');
-    Route::post('special_files/suggestion/block', [SpecialFileController::class, 'send_block_message'])->name('special_files.send_block_message');
-    Route::post('special_files/suggestion/share', [SpecialFileController::class, 'share_landowner_with_customer'])->name('special_files.send_share_message');
-    Route::get('special_files/buy/{specialFile}', [SpecialFileController::class, 'buyFile'])->name('special_files.buy');
-    Route::get('special_files/star/{landowner}', [SpecialFileController::class, 'star'])->name('special_files.star');
-    Route::post('special_files/remainder_time', [SpecialFileController::class, 'setRemainderTime'])->name('special_files.remainder');
+    Route::get('landowner/subscription/index', [SpecialLandownerController::class, 'index'])->name('landowner.subscription.index');
+    Route::get('landowner/show/{landowner}', [SpecialLandownerController::class, 'show'])->name('landowner.subscription.show');
+    Route::get('landowner/buy/{landowner}', [SpecialLandownerController::class, 'buyFile'])->name('landowner.buyFile');
 
     Route::resource('customer' , CustomerController::class)->except('index');
     Route::get('customer', [CustomerController::class, 'َََََindex'])->name('customer.index');

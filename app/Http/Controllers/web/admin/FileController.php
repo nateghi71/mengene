@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\web\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Landowner;
 use App\Models\Province;
-use App\Models\SpecialFile;
 use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
     public function index()
     {
-        $this->authorize('viewIndex' , SpecialFile::class);
+        $this->authorize('adminViewIndex' , Landowner::class);
 
-        $files = SpecialFile::latest()->paginate(10);
-        return view('admin.file.index' , compact('files'));
+        $specialLandowners = Landowner::whereNot('type_file' , 'business')->latest()->paginate(10);
+        return view('admin.file.index' , compact('specialLandowners'));
     }
 
     public function create()
     {
-        $this->authorize('create' , SpecialFile::class);
+        $this->authorize('adminCreate' , Landowner::class);
 
         $provinces = Province::all();
         return view('admin.file.create' , compact('provinces'));
@@ -27,45 +27,46 @@ class FileController extends Controller
 
     public function store(Request $request)
     {
-        $this->authorize('create' , SpecialFile::class);
+        $this->authorize('adminCreate' , Landowner::class);
 
         $request->validate([
             'name' => 'required',
-            'number' => 'required|numeric',
+            'number' => 'required|iran_mobile',
             'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
+            'type_file' => 'required',
             'scale' => 'required',
-            'area' => 'required',
+            'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
-            'rahn_amount' => 'exclude_if:type_sale,buy',
-            'rent_amount' => 'exclude_if:type_sale,buy',
-            'selling_price' => 'exclude_if:type_sale,rahn',
-            'type_file' => 'required',
+            'rahn_amount' => 'exclude_if:type_sale,buy|required',
+            'rent_amount' => 'exclude_if:type_sale,buy|required',
+            'selling_price' => 'exclude_if:type_sale,rahn|required',
             'status' => 'required',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
-            'floor' => 'required|numeric',
-            'floor_number' => 'required|numeric',
+            'floor' => 'exclude_if:type_build,house|required|numeric',
+            'floor_number' => 'exclude_if:type_build,house|required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 
-//        $user = auth()->user();
-        SpecialFile::create([
+        $user = auth()->user();
+        Landowner::create([
             'name' => $request->name,
             'number' => $request->number,
             'city_id' => $request->city_id,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
+            'type_file' => $request->type_file,
+            'access_level' => $request->type_file == 'public' ? 'public' : 'private',
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'type_file' => $request->type_file,
             'status' => $request->status,
             'area' => $request->area,
             'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : 0,
@@ -74,72 +75,72 @@ class FileController extends Controller
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
-            'floor' => $request->floor,
-            'floor_number' => $request->floor_number,
-//            'user_id' => $user->id,
+            'floor' => $request->filled('floor') ? $request->floor : 0,
+            'floor_number' => $$request->filled('floor_number') ? $request->floor_number : 0,
+            'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
 
         return redirect()->route('admin.files.index')->with('message' , 'فایل موردنظر ایجاد شد.');
-
     }
 
-    public function show(SpecialFile $file)
+    public function show(Landowner $specialLandowner)
     {
-        $this->authorize('viewShow' , SpecialFile::class);
+        $this->authorize('adminViewShow' , Landowner::class);
 
-        return view('admin.file.show' , compact('file'));
+        return view('admin.file.show' , compact('specialLandowner'));
     }
 
-    public function edit(SpecialFile $file)
+    public function edit(Landowner $specialLandowner)
     {
-        $this->authorize('edit' , SpecialFile::class);
+        $this->authorize('adminEdit' , Landowner::class);
 
         $provinces = Province::all();
-        return view('admin.file.edit' , compact('provinces' , 'file'));
+        return view('admin.file.edit' , compact('provinces' , 'specialLandowner'));
     }
 
-    public function update(Request $request, SpecialFile $file)
+    public function update(Request $request, Landowner $specialLandowner)
     {
-        $this->authorize('edit' , SpecialFile::class);
+        $this->authorize('adminEdit' , Landowner::class);
 
         $request->validate([
             'name' => 'required',
-            'number' => 'required|numeric',
+            'number' => 'required|iran_mobile',
             'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
+            'type_file' => 'required',
             'scale' => 'required',
-            'area' => 'required',
+            'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
-            'type_file' => 'required',
+            'rahn_amount' => 'exclude_if:type_sale,buy|required',
+            'rent_amount' => 'exclude_if:type_sale,buy|required',
+            'selling_price' => 'exclude_if:type_sale,rahn|required',
             'status' => 'required',
-            'rahn_amount' => 'exclude_if:type_sale,buy',
-            'rent_amount' => 'exclude_if:type_sale,buy',
-            'selling_price' => 'exclude_if:type_sale,rahn',
-            'elevator' => 'sometimes|nullable',
-            'parking' => 'sometimes|nullable',
-            'store' => 'sometimes|nullable',
-            'floor' => 'required|numeric',
-            'floor_number' => 'required|numeric',
-            'is_star' => 'sometimes|nullable',
+            'elevator' => 'nullable',
+            'parking' => 'nullable',
+            'store' => 'nullable',
+            'floor' => 'exclude_if:type_build,house|required|numeric',
+            'floor_number' => 'exclude_if:type_build,house|required|numeric',
+            'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 //        $user = auth()->user();
-        $file->update([
+        $specialLandowner->update([
             'name' => $request->name,
             'number' => $request->number,
             'city_id' => $request->city_id,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
+            'type_file' => $request->type_file,
+            'access_level' => $request->type_file == 'public' ? 'public' : 'private',
             'scale' => $request->scale,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'type_file' => $request->type_file,
             'status' => $request->status,
             'area' => $request->area,
             'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : 0,
@@ -148,9 +149,8 @@ class FileController extends Controller
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
-            'floor' => $request->floor,
-            'floor_number' => $request->floor_number,
-//            'business_id' => $user->business()->id,
+            'floor' => $request->filled('floor') ? $request->floor : 0,
+            'floor_number' => $$request->filled('floor_number') ? $request->floor_number : 0,
 //            'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
@@ -158,11 +158,11 @@ class FileController extends Controller
         return redirect()->route('admin.files.index')->with('message' , 'فایل موردنظر اپدیت شد.');
     }
 
-    public function destroy(SpecialFile $file)
+    public function destroy(Landowner $specialLandowner)
     {
-        $this->authorize('delete' , SpecialFile::class);
+        $this->authorize('adminDelete' , Landowner::class);
 
-        $file->delete();
+        $specialLandowner->delete();
         return redirect()->back()->with('message' , 'فایل موردنظر حذف شد.');;
     }
 }

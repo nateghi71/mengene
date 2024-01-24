@@ -20,7 +20,7 @@ class Landowner extends Model
      * @var array
      */
     protected $fillable = [
-        'name','number','area','city_id','status','type_sale','type_work','type_build','scale','number_of_rooms',
+        'name','number','area','city_id','status','type_sale','type_work','type_build','type_file','scale','number_of_rooms',
         'description','rahn_amount','access_level','rent_amount','selling_price','elevator','parking','store','floor',
         'floor_number','business_id','user_id','is_star','expire_date'];
 
@@ -39,6 +39,11 @@ class Landowner extends Model
         if (request()->has('type_work'))
         {
             $query->where('type_work' , request()->type_work);
+        }
+
+        if (request()->has('type_file'))
+        {
+            $query->where('type_file' , request()->type_file);
         }
 
         if (request()->has('type_build'))
@@ -280,7 +285,7 @@ class Landowner extends Model
     }
 
 
-    public function dontSuggestionForCustomer()
+    public function dontSuggestedCustomer()
     {
         return $this->belongsToMany(Customer::class, 'dont_suggestions', 'landowner_id', 'customer_id');
     }

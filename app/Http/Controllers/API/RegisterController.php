@@ -135,7 +135,7 @@ class RegisterController extends BaseController
             ]);
 
             $data['token'] = $user->createToken('MyApp')->plainTextToken;
-            $data['user'] = $user;
+//            $data['user'] = $user;
 
             $userCode->delete();
             DB::commit();
@@ -159,7 +159,7 @@ class RegisterController extends BaseController
 
         if (Hash::check($request->password , $user->password)) {
             $data['token'] = $user->createToken('MyApp')->plainTextToken;
-            $data['user'] = $user;
+//            $data['user'] = $user;
             if($user->ownedBusiness()->exists())
                 $data['role'] = 'business';
             elseif ($user->joinedBusinesses()->exists())

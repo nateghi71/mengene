@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\web;
 
-use App\HelperClasses\BlockSuggestion;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Landowner;
 use App\Models\RandomLink;
-use App\Models\SpecialFile;
 use App\Models\Suggestion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -30,10 +28,6 @@ class RandomLinkController extends Controller
             elseif ($randomLink->linkable instanceof Customer)
             {
                 $suggestionPerson = Landowner::findOrFail($randomLink->suggest_id);
-            }
-            elseif ($randomLink->linkable instanceof SpecialFile)
-            {
-                $suggestionPerson = SpecialFile::findOrFail($randomLink->suggest_id);
             }
         }
 
@@ -95,7 +89,7 @@ class RandomLinkController extends Controller
 
                 $landowner = $randomLink->linkable;
                 $customer = Customer::findOrFail($randomLink->suggest_id);
-                $landowner->dontSuggestionForCustomer()->attach($customer->id ,
+                $landowner->dontSuggestedCustomer()->attach($customer->id ,
                     ['business_id' => $landowner->business_id , 'suggest_business' => 1 , 'suggest_all' => 0]);
             }
             elseif ($randomLink->linkable instanceof Customer)
@@ -104,16 +98,7 @@ class RandomLinkController extends Controller
 
                 $customer = $randomLink->linkable;
                 $landowner = Landowner::findOrFail($randomLink->suggest_id);
-                $customer->dontSuggestionForLandowner()->attach($landowner->id ,
-                    ['business_id' => $customer->business_id , 'suggest_business' => 1 , 'suggest_all' => 0]);
-            }
-            elseif ($randomLink->linkable instanceof SpecialFile)
-            {
-                $message = "خانه موردنظر از لیست پیشنهادات حذف شد.";
-
-                $file = $randomLink->linkable;
-                $customer = Customer::findOrFail($randomLink->suggest_id);
-                $file->dontSuggestionForCustomer()->attach($customer->id ,
+                $customer->dontSuggestedLandowner()->attach($landowner->id ,
                     ['business_id' => $customer->business_id , 'suggest_business' => 1 , 'suggest_all' => 0]);
             }
         }

@@ -12,7 +12,7 @@
             bottom: 0;
             z-index: 9999;
             overflow: hidden;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
         }
 
         #deleteBox {
@@ -20,7 +20,7 @@
             padding: 20px;
             top: 50%;
             left: 50%;
-            background: rgba(0,0,0,1);
+            background: rgba(0, 0, 0, 1);
             transform: translate(-50%, -50%);
         }
     </style>
@@ -28,18 +28,18 @@
 
 @section('scripts')
     <script>
-        $('.btn-close').on('click' , function (){
+        $('.btn-close').on('click', function () {
             $('#message').remove()
         })
 
         $('#deletePanel').hide()
 
-        $('[id^=open_delete_panel_]').on('click' , function (e){
+        $('[id^=open_delete_panel_]').on('click', function (e) {
             e.preventDefault()
             $('#deletePanel').show()
-            $('#deleteBox').children().children().eq(0).attr('action' , $(this).attr('href'))
+            $('#deleteBox').children().children().eq(0).attr('action', $(this).attr('href'))
         })
-        $('#not_delete_btn').on('click' , function (){
+        $('#not_delete_btn').on('click', function () {
             $('#deletePanel').hide()
         })
     </script>
@@ -69,7 +69,7 @@
     </div>
 
     <div class="row">
-        @if($files->isNotEmpty())
+        @if($specialLandowners->isNotEmpty())
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
@@ -78,62 +78,70 @@
                             <table class="table text-center">
                                 <thead>
                                 <tr>
-                                    <th> # </th>
-                                    <th> نام </th>
-                                    <th> شماره تماس </th>
-                                    <th> ثبت کننده </th>
-                                    <th> نوع </th>
+                                    <th> #</th>
+                                    <th> نام</th>
+                                    <th> شماره تماس</th>
+                                    <th> ثبت کننده</th>
+                                    <th> نوع</th>
                                     <th>
-                                        @if($files->pluck('status')->contains('غیرفعال') ||
-                                            $files->pluck('type_sale')->contains('خرید') && $files->pluck('type_sale')->contains('رهن و اجاره'))
+                                        @if($specialLandowners->pluck('status')->contains('غیرفعال') ||
+                                            $specialLandowners->pluck('type_sale')->contains('خرید') && $specialLandowners->pluck('type_sale')->contains('رهن و اجاره'))
                                             قیمت / رهن
-                                        @elseif($files->pluck('type_sale')->contains('رهن و اجاره'))
+                                        @elseif($specialLandowners->pluck('type_sale')->contains('رهن و اجاره'))
                                             رهن
                                         @else
                                             قیمت
                                         @endif
                                     </th>
-                                    <th>زمان باقیمانده </th>
-                                    @can('viewShow' , \App\Models\SpecialFile::class)
-                                    <th> نمایش </th>
+                                    <th>زمان باقیمانده</th>
+                                    @can('viewShow' , \App\Models\SpecialLandowner::class)
+                                        <th> نمایش</th>
                                     @endcan
-                                    @can('edit' , \App\Models\SpecialFile::class)
-                                    <th> ویرایش </th>
+                                    @can('edit' , \App\Models\SpecialLandowner::class)
+                                        <th> ویرایش</th>
                                     @endcan
-                                    @can('delete' , \App\Models\SpecialFile::class)
-                                    <th>حذف
+                                    @can('delete' , \App\Models\SpecialLandowner::class)
+                                        <th>حذف
                                     @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($files as $key => $file)
+                                @foreach($specialLandowners as $key => $specialLandowner)
                                     <tr>
-                                        <td>{{$files->firstItem() + $key}}</td>
+                                        <td>{{$specialLandowners->firstItem() + $key}}</td>
                                         <td>
-                                            {{$file->name}}
-                                            @if($file->getRawOriginal('status') == 'active')
+                                            {{$specialLandowner->name}}
+                                            @if($specialLandowner->getRawOriginal('status') == 'active')
                                                 <span class="mdi mdi-checkbox-blank-circle text-success"></span>
-                                            @elseif($file->getRawOriginal('status') == 'unknown')
-                                                <span class="mdi mdi-checkbox-blank-circle" style="color:#FFA500;"></span>
+                                            @elseif($specialLandowner->getRawOriginal('status') == 'unknown')
+                                                <span class="mdi mdi-checkbox-blank-circle"
+                                                      style="color:#FFA500;"></span>
                                             @else
                                                 <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
                                             @endif
                                         </td>
-                                        <td>{{$file->number}}</td>
-                                        <td>{{$file->user->name}}</td>
-                                        <td>{{$file->type_sale}}</td>
-                                        <td>{{$file->getRawOriginal('selling_price') !== 0 ? $file->selling_price : $file->rahn_amount}}</td>
-                                        <td>{{$file->daysLeft ? $file->daysLeft . ' روز' : 'منقضی'}} </td>
-                                        @can('viewShow' , \App\Models\SpecialFile::class)
-                                        <td><a class="text-white text-decoration-none" href="{{route('admin.files.show',$file->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td>{{$specialLandowner->number}}</td>
+                                        <td>{{$specialLandowner->user->name}}</td>
+                                        <td>{{$specialLandowner->type_sale}}</td>
+                                        <td>{{$specialLandowner->getRawOriginal('selling_price') !== 0 ? $specialLandowner->selling_price : $specialLandowner->rahn_amount}}</td>
+                                        <td>{{$specialLandowner->daysLeft ? $specialLandowner->daysLeft . ' روز' : 'منقضی'}} </td>
+                                        @can('viewShow' , \App\Models\SpecialLandowner::class)
+                                            <td><a class="text-white text-decoration-none"
+                                                   href="{{route('admin.files.show',$specialLandowner->id)}}"><i
+                                                            class="mdi mdi-eye"></i></a></td>
                                         @endcan
-                                        @can('edit' , \App\Models\SpecialFile::class)
-                                        <td><a class="text-white text-decoration-none" href="{{route('admin.files.edit',$file->id)}}"><i class="mdi mdi-lead-pencil"></i></a></td>
+                                        @can('edit' , \App\Models\SpecialLandowner::class)
+                                            <td><a class="text-white text-decoration-none"
+                                                   href="{{route('admin.files.edit',$specialLandowner->id)}}"><i
+                                                            class="mdi mdi-lead-pencil"></i></a></td>
                                         @endcan
-                                        @can('delete' , \App\Models\SpecialFile::class)
-                                        <td>
-                                            <a href="{{route('admin.files.destroy',$file->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger" type="button"><i class="mdi mdi-delete"></i></a>
-                                        </td>
+                                        @can('delete' , \App\Models\SpecialLandowner::class)
+                                            <td>
+                                                <a href="{{route('admin.files.destroy',$specialLandowner->id)}}"
+                                                   id="open_delete_panel_{{$key}}"
+                                                   class="text-decoration-none text-danger" type="button"><i
+                                                            class="mdi mdi-delete"></i></a>
+                                            </td>
                                         @endcan
                                     </tr>
                                 @endforeach
@@ -149,6 +157,6 @@
             </div>
         @endif
     </div>
-    {{$files->links()}}
+    {{$specialLandowners->links()}}
 
 @endsection

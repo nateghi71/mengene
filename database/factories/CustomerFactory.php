@@ -25,6 +25,7 @@ class CustomerFactory extends Factory
             'type_work' => $this->faker->randomElement(['home' , 'office']),
             'type_build' => $this->faker->randomElement(['house' , 'apartment']),
             'access_level' => $this->faker->randomElement(['private' , 'public']),
+            'type_file' => 'business',
             'scale' => $this->faker->numberBetween(50,300),
             'number_of_rooms' => $this->faker->numberBetween(0,10),
             'description' => $this->faker->randomElement(['امام حسین' , 'عبادی', 'سعدی', 'کوهسنگی']),
@@ -38,7 +39,7 @@ class CustomerFactory extends Factory
             'floor_number' => $this->faker->numberBetween(0,10),
             'area' => rand(1,12),
             'business_id' => 1,
-            'user_id' => rand(1,2),
+            'user_id' => rand(6,7),
             'is_star' => 0,
             'expire_date' => $this->faker->dateTimeBetween(Carbon::parse('last day of november 2023'), Carbon::now()->addDays(90))
         ];

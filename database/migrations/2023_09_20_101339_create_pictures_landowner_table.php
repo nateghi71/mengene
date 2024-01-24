@@ -17,7 +17,7 @@ class CreatePicturesLandownerTable extends Migration
             $table->id();
             $table->foreignId('landowner_id')->constrained('landowners');
             $table->string('image')->nullable();
-            $table->softDeletes();
+            $table->boolean('is_primary')->nullable();
             $table->timestamps();
         });
     }

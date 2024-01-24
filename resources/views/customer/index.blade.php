@@ -261,7 +261,7 @@
                         <div class="form-group col-md-3">
                             <select class="form-control" onchange="filter()" id="type_sale">
                                 <option value="default">نوع</option>
-                                <option value="buy" @selected(request()->has('type_sale') && request()->type_sale == 'buy')>فروش</option>
+                                <option value="buy" @selected(request()->has('type_sale') && request()->type_sale == 'buy')>خرید</option>
                                 <option value="rahn" @selected(request()->has('type_sale') && request()->type_sale == 'rahn')>رهن و اجاره</option>
                             </select>
                         </div>

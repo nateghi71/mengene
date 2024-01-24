@@ -33,33 +33,30 @@
         $('#province').on('change' , getCities)
 
         buyFunction();
+        buyFunction();
         function buyFunction() {
-            var x = document.getElementById("myDIV");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            }
-            var y = document.getElementById("meDIV1");
-            if (y.style.display === "block") {
-                y.style.display = "none";
-            }
-            var z = document.getElementById("meDIV2");
-            if (z.style.display === "block") {
-                z.style.display = "none";
-            }
+            $('#priceDiv').show();
+            $('#rahnDiv').hide();
+            $('#rentDiv').hide();
         }
 
         function rahnFunction() {
-            var x = document.getElementById("meDIV1");
-            if (x.style.display === "none") {
-                x.style.display = "block";
+            $('#priceDiv').hide();
+            $('#rahnDiv').show();
+            $('#rentDiv').show();
+        }
+
+        changeTypeBuild()
+        function changeTypeBuild()
+        {
+            let selectOptin = $('#type_build').children(':selected').val()
+            if(selectOptin === 'house')
+            {
+                $('.floor').hide();
             }
-            var y = document.getElementById("meDIV2");
-            if (y.style.display === "none") {
-                y.style.display = "block";
-            }
-            var z = document.getElementById("myDIV");
-            if (z.style.display === "block") {
-                z.style.display = "none";
+            else if(selectOptin === 'apartment')
+            {
+                $('.floor').show();
             }
         }
 
@@ -229,7 +226,7 @@
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div id="myDIV" class="form-group col-md-3" style="display: block">
+                    <div id="priceDiv" class="form-group col-md-3" style="display: block">
                         <div class="d-flex justify-content-between">
                             <label for="selling_price">قیمت:</label>
                             <p id="show_selling_price"></p>
@@ -240,7 +237,7 @@
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div id="meDIV1" class="form-group col-md-3" style="display: none">
+                    <div id="rahnDiv" class="form-group col-md-3" style="display: none">
                         <div class="d-flex justify-content-between">
                             <label for="rahn_amount">رهن:</label>
                             <p id="show_rahn_amount"></p>
@@ -251,7 +248,7 @@
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div id="meDIV2" class="form-group col-md-3" style="display: none">
+                    <div id="rentDiv" class="form-group col-md-3" style="display: none">
                         <div class="d-flex justify-content-between">
                             <label for="rent_amount">اجاره:</label>
                             <p id="show_rent_amount"></p>
@@ -282,11 +279,27 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="type_build">نوع خانه:</label>
-                        <select class="form-control" name="type_build" id="type_build">
+                        <select class="form-control" name="type_build" id="type_build" onchange="changeTypeBuild()">
                             <option value="house">ویلایی</option>
                             <option value="apartment">ساختمان</option>
                         </select>
                         @error('type_build')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3 floor">
+                        <label for="floor_number">تعداد طبقات کل ساختمان:</label>
+                        <input type="text" name="floor_number" class="form-control" value="{{old('floor_number')}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('floor_number')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3 floor">
+                        <label for="floor">شماره طبقه:</label>
+                        <input type="text" name="floor" class="form-control" value="{{old('floor')}}" id="floor" placeholder="شماره طبقه"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('floor')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
@@ -295,22 +308,6 @@
                         <input type="text" name="number_of_rooms" class="form-control" value="{{old('number_of_rooms')}}" id="number_of_rooms" placeholder="تعداد اتاق"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('number_of_rooms')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="floor_number">تعداد طبقات کل ساختمان:</label>
-                        <input type="text" name="floor_number" class="form-control" value="{{old('floor_number')}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
-                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                        @error('floor_number')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="floor">شماره طبقه:</label>
-                        <input type="text" name="floor" class="form-control" value="{{old('floor')}}" id="floor" placeholder="شماره طبقه"
-                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                        @error('floor')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>

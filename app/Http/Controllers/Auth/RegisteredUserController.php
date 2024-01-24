@@ -35,7 +35,7 @@ class RegisteredUserController extends Controller
     public function twoFAStore(Request $request)
     {
         $request->validate([
-            'number' => 'required|numeric|digits:11|unique:users,number'
+            'number' => 'required|iran_mobile|digits:11|unique:users,number'
         ]);
 
         $userNumber = $request->number;
@@ -141,7 +141,6 @@ class RegisteredUserController extends Controller
         }
         catch (\Exception $e){
             DB::rollBack();
-            dd($e->getMessage());
             return redirect()->back()->with('error' , 'در دیتابیس خطایی رخ داد.');
         }
 

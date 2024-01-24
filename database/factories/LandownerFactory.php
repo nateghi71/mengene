@@ -24,6 +24,7 @@ class LandownerFactory extends Factory
             'type_sale' => $type_sale,
             'type_work' => $this->faker->randomElement(['home' , 'office']),
             'type_build' => $this->faker->randomElement(['house' , 'apartment']),
+            'type_file' => $this->faker->randomElement(['buy' , 'subscription']),
             'access_level' => $this->faker->randomElement(['private' , 'public']),
             'scale' => $this->faker->numberBetween(50,300),
             'number_of_rooms' => $this->faker->numberBetween(0,10),
@@ -36,9 +37,9 @@ class LandownerFactory extends Factory
             'store' => $this->faker->boolean,
             'floor' => $this->faker->numberBetween(0,10),
             'floor_number' => $this->faker->numberBetween(0,10),
-            'business_id' => 1,
+//            'business_id' => 1,
             'area' => rand(1,12),
-            'user_id' => rand(1,2),
+            'user_id' => rand(6,7),
             'is_star' => 0,
             'expire_date' => $this->faker->dateTimeBetween(Carbon::parse('last day of november 2023'), Carbon::now()->addDays(90))
         ];

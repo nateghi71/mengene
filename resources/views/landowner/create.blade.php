@@ -15,7 +15,6 @@
                             $("#city").empty();
 
                             $.each(res, function(key, city) {
-                                console.log(city);
                                 $("#city").append('<option value="' + city.id + '">' +
                                     city.name + '</option>');
                             });
@@ -33,34 +32,30 @@
 
         buyFunction();
         function buyFunction() {
-            var x = document.getElementById("myDIV");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            }
-            var y = document.getElementById("meDIV1");
-            if (y.style.display === "block") {
-                y.style.display = "none";
-            }
-            var z = document.getElementById("meDIV2");
-            if (z.style.display === "block") {
-                z.style.display = "none";
-            }
+            $('#priceDiv').show();
+            $('#rahnDiv').hide();
+            $('#rentDiv').hide();
         }
 
         function rahnFunction() {
-            var x = document.getElementById("meDIV1");
-            if (x.style.display === "none") {
-                x.style.display = "block";
+            $('#priceDiv').hide();
+            $('#rahnDiv').show();
+            $('#rentDiv').show();
+        }
+        changeTypeBuild()
+        function changeTypeBuild()
+        {
+            let selectOptin = $('#type_build').children(':selected').val()
+            if(selectOptin === 'house')
+            {
+                $('.floor').hide();
             }
-            var y = document.getElementById("meDIV2");
-            if (y.style.display === "none") {
-                y.style.display = "block";
-            }
-            var z = document.getElementById("myDIV");
-            if (z.style.display === "block") {
-                z.style.display = "none";
+            else if(selectOptin === 'apartment')
+            {
+                $('.floor').show();
             }
         }
+
         $(document).ready(function() {
             $("#expire_date").persianDatepicker({
                 initialValue: false,
@@ -155,7 +150,7 @@
             </div>
             <hr>
 
-            <form action="{{route('landowner.store')}}" method="post" autocomplete="off">
+            <form action="{{route('landowner.store')}}" method="post" enctype="multipart/form-data" autocomplete="off">
                 @csrf
                 <div class="row mb-4">
                     <div class="form-group d-flex align-items-center">
@@ -227,7 +222,7 @@
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div id="myDIV" class="form-group col-md-3" style="display: block">
+                    <div id="priceDiv" class="form-group col-md-3" style="display: block">
                         <div class="d-flex justify-content-between">
                             <label for="selling_price">قیمت:</label>
                             <p id="show_selling_price"></p>
@@ -238,7 +233,7 @@
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div id="meDIV1" class="form-group col-md-3" style="display: none">
+                    <div id="rahnDiv" class="form-group col-md-3" style="display: none">
                         <div class="d-flex justify-content-between">
                             <label for="rahn_amount">رهن:</label>
                             <p id="show_rahn_amount"></p>
@@ -249,7 +244,7 @@
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div id="meDIV2" class="form-group col-md-3" style="display: none">
+                    <div id="rentDiv" class="form-group col-md-3" style="display: none">
                         <div class="d-flex justify-content-between">
                             <label for="rent_amount">اجاره:</label>
                             <p id="show_rent_amount"></p>
@@ -280,11 +275,27 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="type_build">نوع خانه:</label>
-                        <select class="form-control" name="type_build" id="type_build">
+                        <select class="form-control" name="type_build" id="type_build" onchange="changeTypeBuild()">
                             <option value="house">ویلایی</option>
                             <option value="apartment">ساختمان</option>
                         </select>
                         @error('type_work')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3 floor">
+                        <label for="floor_number">تعداد طبقات کل ساختمان:</label>
+                        <input type="text" name="floor_number" class="form-control" value="{{old('floor_number')}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('floor_number')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3 floor">
+                        <label for="floor">شماره طبقه:</label>
+                        <input type="text" name="floor" class="form-control" value="{{old('floor')}}" id="floor" placeholder="شماره طبقه"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('floor')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
@@ -297,22 +308,6 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="floor_number">تعداد طبقات کل ساختمان:</label>
-                        <input type="text" name="floor_number" class="form-control" value="{{old('floor_number')}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
-                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                        @error('floor_number')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="floor">شماره طبقه:</label>
-                        <input type="text" name="floor" class="form-control" value="{{old('floor')}}" id="floor" placeholder="شماره طبقه"
-                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                        @error('floor')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
                         <label for="expire_date">زمان باقیمانده:</label>
                         <input type="text" name="expire_date" class="form-control" value="{{old('expire_date')}}" id="expire_date" placeholder="زمان باقیمانده"
                                onkeypress="return false">
@@ -320,6 +315,22 @@
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <div class="col-md-3 form-group">
+                        <label class="form-label" for="primary_image"> انتخاب تصویر اصلی </label>
+                        <input type="file" name="primary_image" id="primary_image" value="{{old('primary_image')}}" class="form-control">
+                        @error('primary_image')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-3 form-group">
+                        <label class="form-label" for="images"> انتخاب تصاویر </label>
+                        <input type="file" id="images" name="images[]" value="{{old('images[]')}}" class="form-control" multiple>
+                        @error('images[]')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="form-group col-md-6">
                         <label for="description">توضیحات و آدرس:</label>
                         <textarea name="description" class="form-control" id="description" placeholder="آدرس" rows="3">{{old('description')}}</textarea>
