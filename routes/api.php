@@ -4,6 +4,7 @@ use App\Http\Controllers\API\BusinessController;
 use App\Http\Controllers\Api\ConsultantController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\LandownerController;
+use App\Http\Controllers\Api\LandownerImageController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\SuggestionForCustomerController;
 use App\Http\Controllers\API\SuggestionForLandownerController;
@@ -76,8 +77,9 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/customers/{customer}/star', [CustomerController::class, 'star'])->name('api.customer.star');
     Route::get('customers/suggestion/{customer}', [SuggestionForCustomerController::class, 'suggested_landowner'])->name('api.customer.suggestions');
-    Route::post('customers/suggestion/block', [SuggestionForCustomerController::class, 'send_block_message'])->name('customer.send_block_message');
-
+    Route::post('customers/suggestion/block', [SuggestionForCustomerController::class, 'send_block_message'])->name('api.customer.send_block_message');
+    Route::post('customer/suggestion/share', [SuggestionForCustomerController::class, 'share_file_with_customer'])->name('api.customer.send_share_message');
+    Route::post('customer/remainder_time', [CustomerController::class, 'setRemainderTime'])->name('api.customer.remainder');
 });
 
 Route::middleware('auth:api')->group(function () {
@@ -92,5 +94,15 @@ Route::middleware('auth:api')->group(function () {
 
     Route::put('/landowners/{landowner}/star', [LandownerController::class, 'star'])->name('api.landowner.star');
     Route::get('landowners/suggestion/{landowner}', [SuggestionForLandOwnerController::class, 'suggested_customer'])->name('api.landowner.suggestions');
-    Route::post('landowners/suggestion/block', [SuggestionForLandOwnerController::class, 'send_block_message'])->name('customer.send_block_message');
+    Route::post('landowners/suggestion/block', [SuggestionForLandOwnerController::class, 'send_block_message'])->name('api.customer.send_block_message');
+    Route::post('landowner/suggestion/share', [SuggestionForLandOwnerController::class, 'share_file_with_customer'])->name('api.landowner.send_share_message');
+    Route::post('landowner/remainder_time', [LandownerController::class, 'setRemainderTime'])->name('api.landowner.remainder');
+
+    Route::get('landowner/subscription/index', [LandownerController::class, 'indexSub'])->name('api.landowner.subscription.index');
+    Route::get('landowner/buy/{landowner}', [LandownerController::class, 'buyFile'])->name('api.landowner.buyFile');
+
+    Route::get('/landowner/images/{landowner}' , [LandownerImageController::class , 'edit'])->name('api.landowner.edit_images');
+    Route::post('/landowner/images/add_image' , [LandownerImageController::class , 'add'])->name('api.landowner.add_image');
+    Route::post('/landowner/images/delete_image' , [LandownerImageController::class , 'destroy'])->name('api.landowner.delete_image');
+
 });

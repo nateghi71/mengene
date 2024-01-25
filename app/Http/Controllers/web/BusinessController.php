@@ -164,7 +164,8 @@ class BusinessController extends Controller
             'image' => $request->hasFile('image') ? $imageName : $business->image,
             'city_id' => $request->city_id,
             'area' => $request->area,
-            'address' => $request->address
+            'address' => $request->address,
+            'wallet' => 0,
         ]);
 
         return redirect()->route('dashboard')->with('message' , 'املاکی موردنظر اپدیت شد.');

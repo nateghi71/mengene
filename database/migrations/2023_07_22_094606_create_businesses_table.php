@@ -23,6 +23,7 @@ class CreateBusinessesTable extends Migration
             $table->unsignedInteger('area');
             $table->text('address');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->unsignedBigInteger('wallet')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

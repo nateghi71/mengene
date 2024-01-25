@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\MyBaseController as BaseController;
-use App\Http\Controllers\web\PremiumController;
 use App\Http\Resources\BusinessResource;
 use App\Http\Resources\UserResource;
 use App\Models\Business;
@@ -131,7 +130,8 @@ class BusinessController extends BaseController
                 'image' => $imageName,
                 'city_id' => $request->city_id,
                 'area' => $request->area,
-                'address' => $request->address
+                'address' => $request->address,
+                'wallet' => 0,
             ]);
 
             $premium = new PremiumController();
