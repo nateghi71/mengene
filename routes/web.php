@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::get('landowner/star/{landowner}', [LandownerController::class, 'star'])->name('landowner.star');
     Route::get('landowner/suggestion/{landowner}', [SuggestionForLandOwnerController::class, 'suggested_customer'])->name('landowner.suggestions');
     Route::post('landowner/suggestion/block', [SuggestionForLandOwnerController::class, 'send_block_message'])->name('landowner.send_block_message');
-    Route::post('landowner/suggestion/share', [SuggestionForLandOwnerController::class, 'share_landowner_with_customer'])->name('landowner.send_share_message');
+    Route::post('landowner/suggestion/share', [SuggestionForLandOwnerController::class, 'share_file_with_customer'])->name('landowner.send_share_message');
     Route::post('landowner/remainder_time', [LandownerController::class, 'setRemainderTime'])->name('landowner.remainder');
 
     Route::get('landowner/subscription/index', [LandownerController::class, 'indexSub'])->name('landowner.subscription.index');
