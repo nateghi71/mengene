@@ -35,10 +35,6 @@
 
 @section('scripts')
     <script>
-        $('.btn-close').on('click' , function (){
-            $('#message').remove()
-        })
-
         $('#deletePanel').hide()
 
         $('[id^=open_delete_panel_]').on('click' , function (e){
@@ -158,13 +154,6 @@
 @endsection
 
 @section('content')
-    @if (session()->has('message'))
-        <div class="alert alert-success d-flex justify-content-between" id="message">
-            {{session()->get('message')}}
-            <button type="button" class="btn-close" aria-label="Close"></button>
-        </div>
-    @endif
-
     <div id="deletePanel">
         <div id="deleteBox">
             <p class="text-end pb-3">ایا می خواهید فایل موردنظر را حذف کنید؟</p>
@@ -188,7 +177,7 @@
                             <img src="{{asset('Admin/assets/images/dashboard/Group126@2x.png')}}" class="gradient-corona-img img-fluid" alt="">
                         </div>
                         <div class="lh-lg col-5 col-sm-7 col-xl-8 py-2">
-                            <h4 class="mb-3 mb-sm-0">توجه کنید!</h4>
+                            <h4 class="mb-3 mb-sm-0">به بخش متقاضیان خوش آمدید.</h4>
                             <p class="mb-0 d-none d-sm-block">
                                  در بخش متقاضیان می توانید کسانی که درخواست رهن و اجاره یا خرید ملکی را دارند برایشان فایلی را ایجاد کنید و
                                 تمام فایل هایی که برای متقاضیانتان ایجاد کردید را در این قسمت ببینید. پیشنهاداتی که برایشان وجود دارد را بیابید.

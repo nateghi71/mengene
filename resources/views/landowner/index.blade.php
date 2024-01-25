@@ -37,10 +37,6 @@
 
 @section('scripts')
     <script>
-        $('.btn-close').on('click', function () {
-            $('#message').remove()
-        })
-
         $('#deletePanel').hide()
 
         $('[id^=open_delete_panel_]').on('click', function (e) {
@@ -141,13 +137,6 @@
 @endsection
 
 @section('content')
-    @if (session()->has('message'))
-        <div class="alert alert-success d-flex justify-content-between" id="message">
-            {{session()->get('message')}}
-            <button type="button" class="btn-close" aria-label="Close"></button>
-        </div>
-    @endif
-
     <div id="deletePanel">
         <div id="deleteBox">
             <p class="text-end pb-3">ایا می خواهید فایل موردنظر را حذف کنید؟</p>
@@ -172,7 +161,7 @@
                                  class="gradient-corona-img img-fluid" alt="">
                         </div>
                         <div class="lh-lg col-5 col-sm-7 col-xl-8 py-2">
-                            <h4 class="mb-3 mb-sm-0">توجه کنید!</h4>
+                            <h4 class="mb-3 mb-sm-0">به بخش مالکان خوش آمدید.</h4>
                             <p class="mb-0 d-none d-sm-block">
                                 در بخش مالکان می توانید کسانی که درخواست رهن و اجاره یا فروش ملکشان را دارند برایشان
                                 فایلی ایجاد کنید و

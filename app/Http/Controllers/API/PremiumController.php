@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Business;
 use App\Models\Premium;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class PremiumController extends BaseController
@@ -21,7 +22,15 @@ class PremiumController extends BaseController
 
     public function update(Request $request)
     {
-        $this->authorize('viewBusinessIndex' , Business::class);
+        try
+        {
+            $this->authorize('viewPremiumIndex' , Business::class);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
+        }
+
         $business = auth()->user()->ownedBusiness()->first();
         $premium = Premium::where('business_id' , $business->id)->first();
 
@@ -40,8 +49,7 @@ class PremiumController extends BaseController
             'expire_date' => $expire_date,
         ]);
 
-        $data['premium'] = $premium;
-        return $this->sendResponse($data, 'User register successfully.');
+        return $this->sendResponse(['level' => $premium->level], 'premium buy successfully.');
     }
 
 

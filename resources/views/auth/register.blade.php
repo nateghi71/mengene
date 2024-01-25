@@ -39,7 +39,7 @@
         <div class="card col-lg-4 mx-auto">
             <div class="card-body px-5 py-5">
                 <h3 class="card-title text-center mb-3">ثبت نام</h3>
-                <form action="{{ route('register.handle') }}" method="post" autocomplete="off">
+                <form action="{{ route('register.handle') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="name"> نام و نام خانوادگی *</label>

@@ -9,7 +9,7 @@
     <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
         <div class="card col-lg-4 mx-auto">
             <div class="card-body px-5 py-5">
-                <form action="{{ route('2fa.confirm') }}" method="post" autocomplete="off">
+                <form action="{{ route('2fa.confirm') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="code">ورود کد</label>

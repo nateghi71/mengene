@@ -58,7 +58,13 @@
                         </tr>
                         <tr>
                             <td>نام املاکی</td>
-                            <td>{{$customer->business->name}}</td>
+                            <td>
+                                @if($customer->business_id !== null)
+                                    {{$customer->business->name}}
+                                @else
+                                    منگنه
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>شهر</td>

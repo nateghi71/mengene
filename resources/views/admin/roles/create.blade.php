@@ -17,7 +17,7 @@
                 <div><a href="{{route('admin.roles.index')}}" class="btn btn-primary p-2">نمایش نقشها</a></div>
             </div>
             <hr>
-            <form action="{{route('admin.roles.store')}}" method="post" autocomplete="off">
+            <form action="{{route('admin.roles.store')}}" method="post">
                 @csrf
 
                 <div class="row">

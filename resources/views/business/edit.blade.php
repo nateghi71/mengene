@@ -49,7 +49,7 @@
                 <div><a href="{{route('dashboard')}}" class="btn btn-primary p-2">داشبورد</a></div>
             </div>
             <hr>
-            <form action="{{route('business.update',$business->id)}}" method="post" enctype="multipart/form-data" autocomplete="off">
+            <form action="{{route('business.update',$business->id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 

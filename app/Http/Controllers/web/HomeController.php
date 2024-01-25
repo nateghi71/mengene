@@ -19,7 +19,7 @@ class HomeController extends Controller
     public function public_customers()
     {
         $customers = Customer::where('access_level' , 'public')->whereNot('status' , 'deActive')->orderBy('is_star', 'desc')
-            ->orderBy('expire_date', 'asc')->paginate(10)->fragment('tableCustomers')->withQueryString();
+            ->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
 
         foreach ($customers as $customer) {
             if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
@@ -37,7 +37,7 @@ class HomeController extends Controller
     public function public_landowners()
     {
         $landowners = Landowner::where('access_level' , 'public')->whereNot('status' , 'deActive')->orderBy('is_star', 'desc')
-            ->orderBy('expire_date', 'asc')->paginate(10)->fragment('tableLandowners')->withQueryString();
+            ->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
 
         foreach ($landowners as $landowner) {
             if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {

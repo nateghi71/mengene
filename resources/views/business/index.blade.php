@@ -102,10 +102,6 @@
                 plugins: transactionhistoryChartPlugins
             });
         }
-        $('.btn-close').on('click' , function (){
-            $('#message').remove()
-        })
-
         $('#deletePanel').hide()
 
         $('#open_delete_panel').on('click' , function (){
@@ -118,13 +114,6 @@
 @endsection
 
 @section('content')
-    @if (session()->has('message'))
-        <div class="alert alert-success d-flex justify-content-between" id="message">
-            {{session()->get('message')}}
-            <button type="button" class="btn-close" aria-label="Close"></button>
-        </div>
-    @endif
-
     <div id="deletePanel">
         <div id="deleteBox">
             <p class="text-end pb-3">ایا می خواهید املاکی را حذف کنید؟</p>

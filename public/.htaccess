@@ -5,6 +5,17 @@
 
     RewriteEngine On
 
+#    # Redirect www to non-www
+#    RewriteCond %{HTTP_HOST} ^www.mengene.ir [NC]
+#    RewriteRule ^(.*)$ http://mengene.ir/$1 [L,R=301]
+#
+#    #Accessible index page
+#    RewriteRule ^index\.(html|php)$ / [R=301,L]
+#
+#    #redirect all HTTP traffic to HTTPS
+#    RewriteCond %{HTTPS} off
+#    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -19,3 +30,7 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# This domain inherits the “PHP” package.
+# php -- END cPanel-generated handler, do not edit

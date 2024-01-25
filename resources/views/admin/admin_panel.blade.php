@@ -7,21 +7,10 @@
 @endsection
 
 @section('scripts')
-    <script>
-        $('.btn-close').on('click' , function (){
-            $('#message').remove()
-        })
-    </script>
+
 @endsection
 
 @section('content')
-    @if (session()->has('message'))
-        <div class="alert alert-success d-flex justify-content-between" id="message">
-            {{session()->get('message')}}
-            <button type="button" class="btn-close" aria-label="Close"></button>
-        </div>
-    @endif
-
     <div class="row">
         <div class="col-12 grid-margin">
             <div class="card">

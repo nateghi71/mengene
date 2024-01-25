@@ -53,44 +53,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(Business::class);
     }
-
-    public function isBanned() :bool
-    {
-        return $this->status === 'deActive';
-    }
-    public function isFreeUser() :bool
-    {
-        return $this->ownedBusiness()->first()->premium->level === 'free';
-    }
-    public function isVipUser():bool
-    {
-        return $this->ownedBusiness()->first()->premium->level === 'vip';
-    }
-    public function isMidLevelUser():bool
-    {
-        return $this->ownedBusiness()->first()->premium()->level === 'midLevel';
-    }
-    public function getPremiumCountSms()
-    {
-        return $this->ownedBusiness()->first()->premium->counter_sms;
-    }
-    public function getPremiumCountConsultants()
-    {
-        return $this->ownedBusiness()->first()->premium->counter_Consultants;
-    }
-    public function incrementPremiumCountSms()
-    {
-        return $this->ownedBusiness()->first()->premium()->increment('counter_sms');
-    }
-    public function incrementPremiumCountConsultants()
-    {
-        return $this->ownedBusiness()->first()->premium()->increment('counter_Consultant');
-    }
-    public function decrementPremiumCountConsultants()
-    {
-        return $this->ownedBusiness()->first()->premium()->decrement('counter_Consultant');
-    }
-
     public function businessUser()
     {
         return $this->hasMany(BusinessUser::class, 'user_id');
@@ -101,14 +63,48 @@ class User extends Authenticatable
         return $this->belongsToMany(Business::class, 'business_user', 'user_id', 'business_id')->withPivot('is_accepted');
     }
 
+    public function isBanned() :bool
+    {
+        return $this->status === 'deActive';
+    }
+    public function isFreeUser() :bool
+    {
+        return $this->business()->premium->level === 'free';
+    }
+    public function isVipUser():bool
+    {
+        return $this->business()->premium->level === 'vip';
+    }
+    public function isMidLevelUser():bool
+    {
+        return $this->business()->premium->level === 'midLevel';
+    }
+    public function getPremiumCountSms()
+    {
+        return $this->business()->premium->counter_sms;
+    }
+    public function getPremiumCountConsultants()
+    {
+        return $this->business()->premium->counter_Consultants;
+    }
+    public function incrementPremiumCountSms()
+    {
+        return $this->business()->premium()->increment('counter_sms');
+    }
+    public function incrementPremiumCountConsultants()
+    {
+        return $this->business()->premium()->increment('counter_Consultant');
+    }
+    public function decrementPremiumCountConsultants()
+    {
+        return $this->business()->premium()->decrement('counter_Consultant');
+    }
     public function business()
     {
         if($this->ownedBusiness()->exists())
-            return $this->ownedBusiness()->select('businesses.id', 'businesses.name', 'businesses.en_name', 'businesses.user_id', 'businesses.image', 'businesses.city_id', 'businesses.area', 'businesses.address', 'businesses.created_at', 'businesses.updated_at')->first();
-
+            return $this->ownedBusiness()->first();
         elseif ($this->joinedBusinesses()->wherePivot('is_accepted', 1)->exists())
-            return $this->joinedBusinesses()->wherePivot('is_accepted', 1)
-                ->select('businesses.id', 'businesses.name', 'businesses.en_name', 'businesses.user_id', 'businesses.image', 'businesses.city_id', 'businesses.area', 'businesses.address', 'businesses.created_at', 'businesses.updated_at')->first();
+            return $this->joinedBusinesses()->wherePivot('is_accepted', 1)->first();
 
         return null;
     }

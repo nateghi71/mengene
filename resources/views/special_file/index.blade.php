@@ -31,10 +31,6 @@
 
 @section('scripts')
     <script>
-        $('.btn-close').on('click' , function (){
-            $('#message').remove()
-        })
-
         let datePicker = $("[id^=remainder_]").persianDatepicker({
             timePicker: {
                 enabled: true,
@@ -116,13 +112,6 @@
 @endsection
 
 @section('content')
-    @if (session()->has('message'))
-        <div class="alert alert-success d-flex justify-content-between" id="message">
-            {{session()->get('message')}}
-            <button type="button" class="btn-close" aria-label="Close"></button>
-        </div>
-    @endif
-
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card">
@@ -132,8 +121,13 @@
                             <img src="{{asset('Admin/assets/images/dashboard/Group126@2x.png')}}" class="gradient-corona-img img-fluid" alt="">
                         </div>
                         <div class="col-5 col-sm-7 col-xl-8 p-0">
-                            <h4 class="mb-1 mb-sm-0">شما هم اکنون در بخش مالکان هستید!</h4>
-                            <p class="mb-0 font-weight-normal d-none d-sm-block">خوش امدید</p>
+                            <h4 class="mb-1 mb-sm-0">به بخش فایل های ویژه خوش آمدید.</h4>
+                            <p class="mb-0 font-weight-normal d-none d-sm-block">
+                                در این بخش می توانید از فایل های اختصاصی سایت منگنه
+                                استفاده کنید. دو نوع فایل وجود دارد. یک نوع فایل که برای ظاهر شدن تمام اطلاعاتش
+                                باید خریده شود که پس از خرید به فایل های شما اضافه می شود. یک نوع دیگر فایل های اشتراکی هستند که
+                                با خریدن اشتراک قابل دیدن هستند.
+                            </p>
                         </div>
                         <div class="col-3 col-sm-2 col-xl-2 ps-0 text-center">
                         <span>

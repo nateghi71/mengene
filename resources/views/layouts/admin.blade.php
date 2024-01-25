@@ -111,6 +111,13 @@
         <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper">
+                @if (session()->has('message'))
+                    <div class="alert alert-success d-flex justify-content-between" id="message">
+                        {{session()->get('message')}}
+                        <button type="button" class="btn-close" aria-label="Close"></button>
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
             <!-- content-wrapper ends -->
@@ -157,26 +164,9 @@
             preloader.remove()
         });
     }
-
-    // $('.downloadApp').on('click' , function (e)
-    // {
-    //     let box = $('<div>' , {
-    //         class : 'darkBox'
-    //     })
-    //     let closeBtn = $('<button>' , {
-    //         class : 'closeDarkBox btn btn-danger',
-    //         type : 'button',
-    //         text: 'x'
-    //     })
-    //
-    //      box.append(closeBtn)
-    //     $('body').append(box)
-    // })
-    // $('.closeDarkBox').on('click' , function (e)
-    // {
-    //     console.log($('.closeDarkBox').get(0))
-    //     $(this).parent().remove()
-    // })
+    $('.btn-close').on('click' , function (){
+        $('#message').remove()
+    })
 </script>
 <!-- End custom js for this page -->
 @yield('scripts')

@@ -16,6 +16,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -31,7 +32,7 @@ class BusinessController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         $user = auth()->user();
@@ -51,7 +52,7 @@ class BusinessController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         $user = auth()->user();
@@ -65,7 +66,7 @@ class BusinessController extends BaseController
             'links' => $acceptedMembers ? UserResource::collection($acceptedMembers)->response()->getData()->links : [],
             'meta' => $acceptedMembers ? UserResource::collection($acceptedMembers)->response()->getData()->meta : [],
 
-        ], 'Members retrieved successfully.');
+        ], 'Members Accepted retrieved successfully.');
     }
     public function showNotAcceptedConsultants()
     {
@@ -75,7 +76,7 @@ class BusinessController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         $user = auth()->user();
@@ -89,7 +90,7 @@ class BusinessController extends BaseController
             'links' => $notAcceptedMembers ? UserResource::collection($notAcceptedMembers)->response()->getData()->links : [],
             'meta' => $notAcceptedMembers ? UserResource::collection($notAcceptedMembers)->response()->getData()->meta : [],
 
-        ], 'Members retrieved successfully.');
+        ], 'Members NotAccepted retrieved successfully.');
     }
 
 
@@ -101,10 +102,10 @@ class BusinessController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont are access create business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'en_name' => 'required|unique:businesses',
             'city_id' => 'required',
@@ -112,6 +113,11 @@ class BusinessController extends BaseController
             'address' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        if($validator->fails())
+        {
+            return $this->sendError('Validation Error', $validator->errors() , 400);
+        }
 
         try{
             DB::beginTransaction();
@@ -141,11 +147,12 @@ class BusinessController extends BaseController
         catch (\Exception $e)
         {
             DB::rollBack();
-            return response()->json(['message' => 'you data not store in database']);
+            return $this->sendError('Database Error', $e->getMessage() , 500);
         }
 
-
-        return new BusinessResource($business);
+        return $this->sendResponse([
+            'business' => $business ? new BusinessResource($business) : [],
+        ], 'business created successfully.');
     }
 
     public function update(Request $request, Business $business)
@@ -156,22 +163,29 @@ class BusinessController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont own this business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
-        $request->validate([
+        $validator = Validator::make($request->all() , [
             'name' => 'required',
-            'en_name' => [
-                'required',
-            ],
+            'en_name' => 'required',
             'city_id' => 'required',
             'area' => 'required',
             'address' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
+        if($validator->fails())
+        {
+            return $this->sendError('Validation Error', $validator->errors() , 400);
+        }
+
         $imageName = null;
         if ($request->hasFile('image')) {
+            if(File::exists(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')).$business->image)){
+                File::delete(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')).$business->image);
+            }
+
             $imageName = time() . $request->image->getClientOriginalName();
             $request->image->move(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')), $imageName);
         }
@@ -184,7 +198,10 @@ class BusinessController extends BaseController
             'area' => $request->area,
             'address' => $request->address
         ]);
-        return new BusinessResource($business);
+
+        return $this->sendResponse([
+            'business' => $business ? new BusinessResource($business) : [],
+        ], 'business updated successfully.');
     }
 
     public function destroy(Business $business)
@@ -195,14 +212,14 @@ class BusinessController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont own this business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         if ($business->members()->exists()) {
-            return response()->json(['message' => 'قبل از لغو همکاری فرد دیگری را به عنوان مالک تعیین کنید']);
+            return $this->sendError('Logic Error', ['message' => 'قبل از لغو همکاری فرد دیگری را به عنوان مالک تعیین کنید'] , 500);
         } else {
             $business->delete();
-            return response()->json(['message' => 'بیزینس شما با موفقیت حذف شد']);
+            return $this->sendResponse([], 'business destroy successfully.');
         }
     }
 
@@ -215,19 +232,20 @@ class BusinessController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont own this business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         $userAuth = auth()->user();
 
         $member = $user->businessUser()->first();
         if ($member->is_accepted == 0) {
+
             $userAuth = auth()->user();
             if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
-                return redirect()->back()->with('message', 'شما نمی توانید مشاور اضافه کنید.');
+                return $this->sendError('Logic Error', ['message' => 'شما نمی توانید مشاور اضافه کنید.'] , 500);
+
             $userAuth->incrementPremiumCountConsultants();
             $member->joined_date = Carbon::now()->format('Y-m-d');
-
             $member->is_accepted = 1;
             $member->save();
         } else {
@@ -236,7 +254,7 @@ class BusinessController extends BaseController
             $member->save();
         }
 
-        return response()->json(['message' => ' مشاور مورد نظر با موفقیت افزوده شد']);
+        return $this->sendResponse([], 'Job Done successfully.');
     }
 
 
@@ -249,7 +267,7 @@ class BusinessController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont own this business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         $userAuth = auth()->user();
@@ -264,7 +282,7 @@ class BusinessController extends BaseController
         $business->user_id = $user->id;
         $business->update();
 
-        return response()->json(['message' => 'مالک جدید با موفقیت انتخاب شد']);
+        return $this->sendResponse([], 'new business selected successfully.');
     }
 
     public function removeMember(User $user)
@@ -277,11 +295,10 @@ class BusinessController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'شما بیزینسی ندارید']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
-//        dd($business);
 
         $business->members()->detach($user);
-        return response()->json(['message' => 'مشاور مورد نظر با موفقیت حذف شد']);
+        return $this->sendResponse([], 'Member removed successfully.');
     }
 }

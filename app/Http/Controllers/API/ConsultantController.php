@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Notifications\ConsultantRequestNotification;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ConsultantController extends BaseController
 {
@@ -21,16 +22,17 @@ class ConsultantController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you join or have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         $user = auth()->user();
         $business = $user->joinedBusinesses()->first();
         $business->loadCount(['customers' , 'landowners']);
-        return response()->json([
+
+        return $this->sendResponse([
             'user' => $user,
-            'business' => new BusinessResource($business),
-        ]);
+            'business' => $business ? new BusinessResource($business) : [],
+        ], 'Consultant retrieved successfully.');
     }
 
     public function search(Request $request)
@@ -41,12 +43,17 @@ class ConsultantController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you join or have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
-        $request->validate([
-            'owner_number' => 'required|max:11|digits:11'
+        $validator = Validator::make($request->all() , [
+            'owner_number' => 'required|digits:11|iran_mobile'
         ]);
+
+        if($validator->fails())
+        {
+            return $this->sendError('Validation Error', $validator->errors() , 400);
+        }
 
         $ownerNumber = $request->input('owner_number');
         $business = Business::whereHas('owner', function ($query) use ($ownerNumber) {
@@ -54,9 +61,12 @@ class ConsultantController extends BaseController
         })->first();
 
         if (!$business) {
-            return response()->json(['message' => 'No business found for the given owner number'], 404);
+            return $this->sendError('Logic Error', ['message' => 'No business found for the given number'] , 400);
         }
-        return new BusinessResource($business);
+
+        return $this->sendResponse([
+            'business' => $business ? new BusinessResource($business) : [],
+        ], 'business retrieved successfully.');
     }
 
     public function join(Request $request)
@@ -67,7 +77,7 @@ class ConsultantController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you join or have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         $user = auth()->user();
@@ -77,7 +87,7 @@ class ConsultantController extends BaseController
 
         $owner->notify(new ConsultantRequestNotification($user));
 
-        return response()->json(['message' => 'درخواست شما ثبت شد و منتظر تایید مالک است']);
+        return $this->sendResponse([], 'Job Done successfully.');
     }
 
     public function leaveMember(User $user)
@@ -88,12 +98,11 @@ class ConsultantController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'شما بیزینسی ندارید']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         $business = $user->joinedBusinesses()->first();
         $business->members()->detach($user);
-        return response()->json(['message' => 'شما با موفقیت از بیزینس انصراف دادید']);
+        return $this->sendResponse([], 'Job Done successfully.');
     }
-
 }

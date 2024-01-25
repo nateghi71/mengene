@@ -38,7 +38,7 @@ class PremiumController extends Controller
 
     public function update(Request $request)
     {
-        $this->authorize('viewBusinessIndex' , Business::class);
+        $this->authorize('viewPremiumIndex' , Business::class);
         $business = auth()->user()->ownedBusiness()->first();
         $premium = Premium::where('business_id' , $business->id)->first();
 

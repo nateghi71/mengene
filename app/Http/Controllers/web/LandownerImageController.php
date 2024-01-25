@@ -12,7 +12,7 @@ class LandownerImageController extends Controller
 {
     public function store($images , $landowner)
     {
-        $imageNames = array();
+        $imageNames = null;
         foreach ($images as $image) {
             $imageName = generateFileName($image->getClientOriginalName());
             $image->move(public_path(env('LANDOWNER_IMAGES_UPLOAD_PATH')), $imageName);
@@ -29,6 +29,7 @@ class LandownerImageController extends Controller
 
     public function edit(Landowner $landowner)
     {
+        $this->authorize('update' , $landowner);
         return view('landowner.edit_image' , compact('landowner'));
     }
 
@@ -43,7 +44,6 @@ class LandownerImageController extends Controller
         $landowner = Landowner::findOrFail($request->landowner_id);
         $landowner->images()->create([
             'image' => $fileName,
-            'is_primary' => 0,
         ]);
         return ['images' => $landowner->images];
     }

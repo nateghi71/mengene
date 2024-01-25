@@ -28,6 +28,13 @@ class AdminSeeder extends Seeder
                 'city_id' => 153,
                 'password' => '$2y$12$wC5JksWejYF0B28mV2rmoefXuaKe1CiojLCYvGS9/SUgaHuCjCTQ.',
             ]);
+//            $role->users()->create([
+//                'name' => 'حسین',
+//                'email' => '',
+//                'number' => '12345678912',
+//                'city_id' => 153,
+//                'password' => Hash::make(12345678),
+//            ]);
 
             Auth::guard('web')->logout();
 

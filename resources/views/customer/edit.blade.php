@@ -175,14 +175,26 @@
 @section('content')
     <div class="card row">
         <div class="card-body px-5 py-4">
-            <div class="d-flex justify-content-between">
-                <div><h3 class="card-title mb-3">ویرایش متقاضی</h3></div>
-                <div><a href="{{route('customer.index')}}" class="btn btn-primary p-2">نمایش متقاضیان</a></div>
-            </div>
-            <hr>
-            <form action="{{route('customer.update' , $customer->id)}}" method="post" autocomplete="off">
+            <form action="{{route('customer.update' , $customer->id)}}" method="post">
                 @csrf
                 @method('PUT')
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h3 class="card-title">ویرایش متقاضی</h3>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="form-check">
+                            <label id="is_star_label" class="form-check-label"><span class="mdi mdi-star-outline fs-4 text-warning"></span></label>
+                            <input type="checkbox" name="is_star" id="is_star" class="d-none" @checked($customer->getRawOriginal('is_star') === 1)>
+                        </div>
+                        @error('is_star')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="me-auto ms-4 mb-3"><a href="{{route('customer.index')}}" class="btn btn-primary p-2">نمایش متقاضیان</a></div>
+                </div>
+                <hr>
+
                 <div class="row mb-4">
                     <div class="form-group d-flex align-items-center">
                         <label class="col-sm-3 ps-3">نوع:</label>
@@ -355,16 +367,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-3">
-                        <div class="form-check">
-                            <label id="is_star_label" class="form-check-label"><span class="mdi mdi-star-outline fs-4 text-warning"></span></label>
-                            <input type="checkbox" name="is_star" id="is_star" class="d-none" @checked($customer->getRawOriginal('is_star') === 1)>
-                        </div>
-                        @error('is_star')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="elevator" class="form-check-label">

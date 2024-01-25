@@ -148,27 +148,37 @@
 @section('content')
     <div class="card row">
         <div class="card-body px-5 py-4">
-            <div class="d-flex justify-content-between">
-                <div><h3 class="card-title mb-3">ایجاد متقاضی</h3></div>
-                <div><a href="{{route('customer.index')}}" class="btn btn-primary p-2">نمایش متقاضیان</a></div>
-            </div>
-            <hr>
-            <form action="{{route('customer.store')}}" method="post" autocomplete="off">
+            <form action="{{route('customer.store')}}" method="post">
                 @csrf
-
+                <div class="d-flex align-items-center">
+                    <div>
+                        <h3 class="card-title">ایجاد متقاضی</h3>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check my-0 py-0">
+                            <label id="is_star_label" class="form-check-label"><span class="mdi mdi-star-outline fs-4 text-warning"></span></label>
+                            <input type="checkbox" name="is_star" id="is_star" class="d-none" @checked(old('is_star') == 'on')>
+                        </div>
+                        @error('is_star')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="me-auto ms-4 mb-3"><a href="{{route('customer.index')}}" class="btn btn-primary p-2">نمایش متقاضیان</a></div>
+                </div>
+                <hr>
                 <div class="row mb-4">
                     <div class="form-group d-flex align-items-center">
                         <label class="col-sm-3 ps-3">نوع:</label>
                         <div class="col-sm-3">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale1">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" checked> خرید </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" @checked(old('type_sale') == 'buy' || old('type_sale') == null)> خرید </label>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale2">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn"> رهن و اجاره </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn" @checked(old('type_sale') == 'rahn')> رهن و اجاره </label>
                             </div>
                         </div>
                         @error('type_sale')
@@ -196,7 +206,7 @@
                         <label for="province">استان:</label>
                         <select class="form-control" id="province">
                             @foreach($provinces as $province)
-                                <option value="{{$province->id}}">{{$province->name}}</option>
+                                <option value="{{$province->id}}" @selected(old('province') == $province->id)>{{$province->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -219,8 +229,8 @@
                     <div class="form-group col-md-3">
                         <label for="access_level">سطح دسترسی:</label>
                         <select class="form-control" name="access_level" id="access_level">
-                            <option value="private">خصوصی</option>
-                            <option value="public">عمومی</option>
+                            <option value="private" @selected(old('access_level') == 'private')>خصوصی</option>
+                            <option value="public" @selected(old('access_level') == 'public')>عمومی</option>
                         </select>
                         @error('access_level')
                         <div class="alert-danger">{{$message}}</div>
@@ -270,8 +280,8 @@
                     <div class="form-group col-md-3">
                         <label for="type_work">نوع مسکن:</label>
                         <select class="form-control" name="type_work" id="type_work">
-                            <option value="home">خانه</option>
-                            <option value="office">دفتر</option>
+                            <option value="home" @selected(old('type_work') == 'home')>خانه</option>
+                            <option value="office" @selected(old('type_work') == 'office')>دفتر</option>
                         </select>
                         @error('type_work')
                         <div class="alert-danger">{{$message}}</div>
@@ -280,8 +290,8 @@
                     <div class="form-group col-md-3">
                         <label for="type_build">نوع خانه:</label>
                         <select class="form-control" name="type_build" id="type_build" onchange="changeTypeBuild()">
-                            <option value="house">ویلایی</option>
-                            <option value="apartment">ساختمان</option>
+                            <option value="house" @selected(old('type_build') == 'house')>ویلایی</option>
+                            <option value="apartment" @selected(old('type_build') == 'apartment')>ساختمان</option>
                         </select>
                         @error('type_build')
                         <div class="alert-danger">{{$message}}</div>
@@ -330,17 +340,8 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <div class="form-check">
-                            <label id="is_star_label" class="form-check-label"><span class="mdi mdi-star-outline fs-4 text-warning"></span></label>
-                            <input type="checkbox" name="is_star" id="is_star" class="d-none" {{ old('is_star') == 'on' ? 'checked' : '' }}>
-                        </div>
-                        @error('is_star')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <div class="form-check">
                             <label for="elevator" class="form-check-label">
-                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" {{ old('elevator') == 'on' ? 'checked' : '' }}>اسانسور
+                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" @checked(old('elevator') == 'on')>اسانسور
                             </label>
                         </div>
                         @error('elevator')
@@ -350,7 +351,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="parking" class="form-check-label">
-                                <input type="checkbox" name="parking" id="parking" class="form-check-input" {{ old('parking') == 'on' ? 'checked' : '' }}>پارکینگ
+                                <input type="checkbox" name="parking" id="parking" class="form-check-input" @checked(old('parking') == 'on')>پارکینگ
                             </label>
                         </div>
                         @error('parking')
@@ -360,7 +361,7 @@
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="store" class="form-check-label">
-                                <input type="checkbox" name="store" id="store" class="form-check-input" {{ old('store') == 'on' ? 'checked' : '' }}>انبار
+                                <input type="checkbox" name="store" id="store" class="form-check-input" @checked(old('store') == 'on')>انبار
                             </label>
                         </div>
                         @error('store')

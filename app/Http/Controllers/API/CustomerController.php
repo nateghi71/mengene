@@ -12,7 +12,9 @@ use App\Http\Resources\LandownerResource;
 use App\Models\Business;
 use App\Models\Customer;
 use App\Models\Landowner;
+use App\Notifications\ReminderForCustomerNotification;
 use Carbon\Carbon;
+use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,14 +25,13 @@ class CustomerController extends BaseController
 {
     public function index()
     {
-//        return auth()->user()->joinedBusinesses()->wherePivot('is_accepted', 1)->exists();
         try
         {
             $this->authorize('viewAny' , Customer::class);
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         $user = auth()->user();
@@ -56,7 +57,9 @@ class CustomerController extends BaseController
     public function dashboard()
     {
         $user = auth('api')->user();
-        return response()->json([$user]);
+        return $this->sendResponse([
+            'user' => $user,
+        ], 'user retrieved successfully');
     }
 
     public function show(Customer $customer)
@@ -67,13 +70,12 @@ class CustomerController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         return $this->sendResponse([
-            'customer' => CustomerResource::collection($customer),
-        ],
-            'Customer retrieved successfully');
+            'customer' => new CustomerResource($customer),
+        ], 'Customer retrieved successfully');
     }
 
     public function store(Request $request)
@@ -84,17 +86,17 @@ class CustomerController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
-        $request->validate([
+        $validator = Validator::make($request->all() , [
             'name' => 'required',
             'number' => 'required|iran_mobile',
-            'city_id' => 'required',
+            'city_id' => 'required|numeric',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required',
+            'scale' => 'required|numeric',
             'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
@@ -111,7 +113,11 @@ class CustomerController extends BaseController
             'expire_date' => 'required'
         ]);
 
-//        dd($request->all());
+        if($validator->fails())
+        {
+            return $this->sendError('Validation Error', $validator->errors() , 400);
+        }
+
         $user = auth()->user();
         $customer = Customer::create([
             'name' => $request->name,
@@ -142,7 +148,8 @@ class CustomerController extends BaseController
 
         event(new CreateCustomerFile($customer , $user));
 
-        return $this->sendResponse(new CustomerResource($customer), 'Customer created successfully.');
+        return $this->sendResponse(['customer' => new CustomerResource($customer)]
+            , 'Customer created successfully.');
     }
 
     public function update(Request $request, Customer $customer)
@@ -153,17 +160,17 @@ class CustomerController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
-        $request->validate([
+        $validator = Validator::make($request->all() , [
             'name' => 'required',
             'number' => 'required|iran_mobile',
-            'city_id' => 'required',
+            'city_id' => 'required|numeric',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required',
+            'scale' => 'required|numeric',
             'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
@@ -179,6 +186,11 @@ class CustomerController extends BaseController
             'is_star' => 'sometimes|nullable',
             'expire_date' => 'required'
         ]);
+
+        if($validator->fails())
+        {
+            return $this->sendError('Validation Error', $validator->errors() , 400);
+        }
 
 //        $user = auth()->user();
         $customer->update([
@@ -207,7 +219,8 @@ class CustomerController extends BaseController
             'expire_date' => $request->expire_date
         ]);
 
-        return $this->sendResponse(new CustomerResource($customer), 'Customer updated successfully.');
+        return $this->sendResponse(['customer' => new CustomerResource($customer)],
+            'Customer updated successfully.');
     }
 
     public function destroy(Customer $customer)
@@ -218,12 +231,10 @@ class CustomerController extends BaseController
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
-//        dd($customer);
 
         $customer->delete();
-
         return $this->sendResponse([], 'Customer deleted successfully.');
     }
 
@@ -231,11 +242,11 @@ class CustomerController extends BaseController
     {
         try
         {
-            $this->authorize('update' , $customer);
+            $this->authorize('star' , Customer::class);
         }
         catch (AuthorizationException $exception)
         {
-            return response()->json(['message' => 'you dont have a business']);
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
         if ($customer->getRawOriginal('is_star') == 0) {
@@ -246,6 +257,26 @@ class CustomerController extends BaseController
             $customer->save();
         }
 
-        return $this->sendResponse(new CustomerResource($customer), 'Customer star status updated successfully.');
+        return $this->sendResponse(['customer' => new CustomerResource($customer)],
+            'Customer star status updated successfully.');
     }
+
+    public function setRemainderTime(Request $request){
+        try
+        {
+            $this->authorize('reminder' , Customer::class);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
+        }
+
+        $customer = Customer::find($request->customer_id);
+        $date = Verta::parse($request->remainder)->datetime()->format('Y-m-d H:i:s');
+        $time = new Carbon($date);
+        auth()->user()->notify((new ReminderForCustomerNotification($customer , $date))->delay($time));
+
+        return $this->sendResponse([], 'alert is set.');
+    }
+
 }

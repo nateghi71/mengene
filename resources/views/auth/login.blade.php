@@ -10,7 +10,7 @@
         <div class="card col-lg-4 mx-auto">
             <div class="card-body px-5 py-5">
                 <h3 class="card-title text-center mb-3">ورود</h3>
-                <form action="{{route('login.handle')}}" method="post" autocomplete="off">
+                <form action="{{route('login.handle')}}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="number">تلفن همراه</label>

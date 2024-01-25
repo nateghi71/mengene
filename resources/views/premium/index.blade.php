@@ -82,7 +82,7 @@
         <div class="row">
             <div class="col-lg-2">
                 <a class="text-decoration-none text-white" href="{{route('dashboard')}}">
-                    <div class="card bg-gradient">
+                    <div class="card bg-danger bg-gradient">
                         <div class="card-body text-center px-0 py-2">
                             بازگشت
                         </div>

@@ -21,11 +21,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('logout', [RegisterController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::post('2fa/store', [RegisterController::class, 'twoFAStore'])->name('api.2fa.store');
@@ -79,7 +74,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('customers/suggestion/{customer}', [SuggestionForCustomerController::class, 'suggested_landowner'])->name('api.customer.suggestions');
     Route::post('customers/suggestion/block', [SuggestionForCustomerController::class, 'send_block_message'])->name('api.customer.send_block_message');
     Route::post('customer/suggestion/share', [SuggestionForCustomerController::class, 'share_file_with_customer'])->name('api.customer.send_share_message');
-    Route::post('customer/remainder_time', [CustomerController::class, 'setRemainderTime'])->name('api.customer.remainder');
+    Route::post('customer/remainder/set_time', [CustomerController::class, 'setRemainderTime'])->name('api.customer.remainder');
 });
 
 Route::middleware('auth:api')->group(function () {
@@ -96,13 +91,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('landowners/suggestion/{landowner}', [SuggestionForLandOwnerController::class, 'suggested_customer'])->name('api.landowner.suggestions');
     Route::post('landowners/suggestion/block', [SuggestionForLandOwnerController::class, 'send_block_message'])->name('api.customer.send_block_message');
     Route::post('landowner/suggestion/share', [SuggestionForLandOwnerController::class, 'share_file_with_customer'])->name('api.landowner.send_share_message');
-    Route::post('landowner/remainder_time', [LandownerController::class, 'setRemainderTime'])->name('api.landowner.remainder');
+    Route::post('landowner/remainder/set_time', [LandownerController::class, 'setRemainderTime'])->name('api.landowner.remainder');
 
     Route::get('landowner/subscription/index', [LandownerController::class, 'indexSub'])->name('api.landowner.subscription.index');
     Route::get('landowner/buy/{landowner}', [LandownerController::class, 'buyFile'])->name('api.landowner.buyFile');
 
-    Route::get('/landowner/images/{landowner}' , [LandownerImageController::class , 'edit'])->name('api.landowner.edit_images');
+//    Route::get('/landowner/images/{landowner}' , [LandownerImageController::class , 'edit'])->name('api.landowner.edit_images');
     Route::post('/landowner/images/add_image' , [LandownerImageController::class , 'add'])->name('api.landowner.add_image');
     Route::post('/landowner/images/delete_image' , [LandownerImageController::class , 'destroy'])->name('api.landowner.delete_image');
-
 });

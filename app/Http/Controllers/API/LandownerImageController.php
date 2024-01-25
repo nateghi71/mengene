@@ -8,6 +8,7 @@ use App\Models\Landowner;
 use App\Models\PictureLandowner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class LandownerImageController extends BaseController
 {
@@ -29,19 +30,23 @@ class LandownerImageController extends BaseController
     }
     public function add(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all() , [
             'add_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        if($validator->fails())
+        {
+            return $this->sendError('Validation Error', $validator->errors() , 400);
+        }
 
         $fileName = generateFileName($request->add_image->getClientOriginalName());
         $request->add_image->move(public_path(env('LANDOWNER_IMAGES_UPLOAD_PATH')),$fileName);
         $landowner = Landowner::findOrFail($request->landowner_id);
         $landowner->images()->create([
             'image' => $fileName,
-            'is_primary' => 0,
         ]);
-        return $this->sendResponse(['images' => $landowner->images], 'landowner images.');
 
+        return $this->sendResponse(['images' => $landowner->images], 'landowner images.');
     }
 
     public function destroy(Request $request)

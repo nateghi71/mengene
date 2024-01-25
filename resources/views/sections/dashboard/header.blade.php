@@ -15,11 +15,11 @@
         {{--        </ul>--}}
         <ul class="navbar-nav w-100">
             <li class="nav-item w-75">
-                <div class="card">
-                    <div class="border text-center text-muted card-body py-2 mt-2 mt-md-0 d-none d-xl-block">
-                        به {{$sectionName}} خوش امدید.
-                    </div>
-                </div>
+{{--                <div class="card">--}}
+{{--                    <div class="border text-center text-muted card-body py-2 mt-2 mt-md-0 d-none d-xl-block">--}}
+{{--                        به {{$sectionName}} خوش امدید.--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">

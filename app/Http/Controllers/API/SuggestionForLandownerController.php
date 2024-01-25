@@ -10,12 +10,22 @@ use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Models\Landowner;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class SuggestionForLandownerController extends BaseController
 {
     public function suggested_customer(Landowner $landowner)
     {
+        try
+        {
+            $this->authorize('viewSuggestion', Landowner::class);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
+        }
+
         $business = auth()->user()->business();
         $landownerId = $landowner->id;
         if ($landowner->getRawOriginal('type_sale') == 'buy')
@@ -73,6 +83,15 @@ class SuggestionForLandownerController extends BaseController
 
     public function send_block_message(Request $request)
     {
+        try
+        {
+            $this->authorize('viewSuggestion', Landowner::class);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
+        }
+
         $request->validate([
             'landowner_id' => 'required',
             'customer_id' => 'required'
@@ -92,6 +111,15 @@ class SuggestionForLandownerController extends BaseController
 
     public function share_file_with_customer(Request $request)
     {
+        try
+        {
+            $this->authorize('viewSuggestion', Landowner::class);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
+        }
+
         $user = auth()->user();
         if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
         {

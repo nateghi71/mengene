@@ -52,7 +52,7 @@
                 <div><a href="{{route('admin.users.index')}}" class="btn btn-primary p-2">نمایش کاربران</a></div>
             </div>
             <hr>
-            <form action="{{ route('admin.users.update' , ['user' => $user->id]) }}" method="post" autocomplete="off">
+            <form action="{{ route('admin.users.update' , ['user' => $user->id]) }}" method="post">
                 @csrf
                 @method('PUT')
                 <div class="form-group">

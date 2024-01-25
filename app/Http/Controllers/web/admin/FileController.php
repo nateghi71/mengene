@@ -35,12 +35,12 @@ class FileController extends Controller
         $request->validate([
             'name' => 'required',
             'number' => 'required|iran_mobile',
-            'city_id' => 'required',
+            'city_id' => 'required|numeric',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
             'type_file' => 'required',
-            'scale' => 'required',
+            'scale' => 'required|numeric',
             'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
@@ -53,8 +53,8 @@ class FileController extends Controller
             'store' => 'nullable',
             'floor' => 'exclude_if:type_build,house|required|numeric',
             'floor_number' => 'exclude_if:type_build,house|required|numeric',
-            'is_star' => 'nullable',
             'expire_date' => 'required',
+            'images' => 'nullable',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -89,8 +89,11 @@ class FileController extends Controller
                 'expire_date' => $request->expire_date
             ]);
 
-            $imageController = new LandownerImageController();
-            $imageController->store($request->images , $landowner);
+            if($request->images !== null)
+            {
+                $imageController = new LandownerImageController();
+                $imageController->store($request->images , $landowner);
+            }
 
             DB::commit();
         }
@@ -131,7 +134,7 @@ class FileController extends Controller
         $request->validate([
             'name' => 'required',
             'number' => 'required|iran_mobile',
-            'city_id' => 'required',
+            'city_id' => 'required|numeric',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
@@ -149,7 +152,6 @@ class FileController extends Controller
             'store' => 'nullable',
             'floor' => 'exclude_if:type_build,house|required|numeric',
             'floor_number' => 'exclude_if:type_build,house|required|numeric',
-            'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 //        $user = auth()->user();
@@ -176,7 +178,6 @@ class FileController extends Controller
             'floor' => $request->type_build === 'apartment' ? $request->floor : 0,
             'floor_number' => $request->type_build === 'apartment' ? $request->floor_number : 0,
 //            'user_id' => $user->id,
-            'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
         return redirect()->route('admin.landowners.index')->with('message' , 'فایل موردنظر اپدیت شد.');

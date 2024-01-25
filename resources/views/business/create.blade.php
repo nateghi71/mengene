@@ -45,7 +45,7 @@
             <div class="card-body px-5 pb-5 pt-2">
                 <p class="sign-up mb-4">ایا می خواهید به یک بیزنس بپیوندید؟<a class="text-decoration-none" href="{{route('consultant.find')}}"> یافتن</a></p>
                 <h3 class="card-title text-center mb-3">ایجاد املاکی</h3>
-                <form action="{{ route('business.store') }}" method="post" enctype="multipart/form-data" autocomplete="off">
+                <form action="{{ route('business.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="name"> نام املاکی: *</label>

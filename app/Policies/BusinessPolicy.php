@@ -54,4 +54,10 @@ class BusinessPolicy
     {
         return $user->joinedBusinesses()->exists();
     }
+
+    public function viewPremiumIndex(User $user)
+    {
+        return $user->ownedBusiness()->exists();
+    }
+
 }

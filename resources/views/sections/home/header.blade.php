@@ -12,8 +12,8 @@
                 <li><a class="nav-link scrollto" href="{{route('welcome').'#home'}}">خانه</a></li>
 {{--                <li><a class="nav-link scrollto" href="{{route('login')}}">ورود</a></li>--}}
                 <a class="nav-link scrollto" href="{{route('dashboard')}}">مدیریت</a>
-                <li><a class="nav-link scrollto" href="{{route('landowner.public.index').'#tableLandowners'}}" target="_blank">مالکان</a></li>
-                <li><a class="nav-link scrollto" href="{{route('customer.public.index').'#tableCustomers'}}" target="_blank">متقاضیان</a></li>
+                <li><a class="nav-link scrollto" href="{{route('landowner.public.index')}}" target="_blank">مالکان</a></li>
+                <li><a class="nav-link scrollto" href="{{route('customer.public.index')}}" target="_blank">متقاضیان</a></li>
                 <li><a class="nav-link scrollto" href="{{route('welcome').'#pricing'}}">تعرفه ها</a></li>
                 <li><a class="nav-link scrollto" href="{{route('welcome').'#contact'}}">ارتباط با ما</a></li>
                 {{--                <li><a class="nav-link scrollto" href="#footer">درباره ما</a></li>--}}

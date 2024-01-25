@@ -41,7 +41,7 @@
         <div class="col-12 mx-auto">
             <div class="px-5 py-5">
                 <div class="table-responsive">
-                    <table id="tableLandowners" class="table table-hover table-striped text-center">
+                    <table class="table table-hover table-striped text-center">
                         <thead>
                         <tr>
                             <th> شماره </th>
@@ -58,7 +58,12 @@
                             <tr>
                                 <td> {{$landowners->firstItem() + $key}} </td>
                                 <td>
-                                    {{$landowner->business->name}}
+                                    @if($landowner->business_id !== null)
+                                        {{$landowner->business->name}}
+                                    @else
+                                        منگنه
+                                    @endif
+
                                     @if($landowner->getRawOriginal('status') == 'active')
                                         <span class="mdi mdi-checkbox-blank-circle text-success"></span>
                                     @elseif($landowner->getRawOriginal('status') == 'unknown')

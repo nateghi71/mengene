@@ -110,21 +110,10 @@
         $('#not_delete_btn').on('click' , function (){
             $('#deletePanel').hide()
         })
-        $('.btn-close').on('click' , function (){
-            $('#message').remove()
-        })
-
     </script>
 @endsection
 
 @section('content')
-    @if (session()->has('message'))
-        <div class="alert alert-success d-flex justify-content-between" id="message">
-            {{session()->get('message')}}
-            <button type="button" class="btn-close" aria-label="Close"></button>
-        </div>
-    @endif
-
     <div id="deletePanel">
         <div id="deleteBox">
             <p class="text-end pb-3">ایا می خواهید لغو همکاری کنید؟</p>

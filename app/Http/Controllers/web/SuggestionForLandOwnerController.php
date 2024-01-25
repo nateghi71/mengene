@@ -15,6 +15,8 @@ class SuggestionForLandOwnerController extends Controller
 {
     public function suggested_customer(Landowner $landowner)
     {
+        $this->authorize('viewSuggestion', Landowner::class);
+
         $business = auth()->user()->business();
         $landownerId = $landowner->id;
         if ($landowner->getRawOriginal('type_sale') == 'buy')
@@ -71,6 +73,8 @@ class SuggestionForLandOwnerController extends Controller
 
     public function send_block_message(Request $request)
     {
+        $this->authorize('viewSuggestion', Landowner::class);
+
         $request->validate([
             'landowner_id' => 'required',
             'customer_id' => 'required'
@@ -91,6 +95,8 @@ class SuggestionForLandOwnerController extends Controller
 
     public function share_file_with_customer(Request $request)
     {
+        $this->authorize('viewSuggestion', Landowner::class);
+
         $user = auth()->user();
         if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
         {

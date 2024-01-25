@@ -65,11 +65,11 @@ class CustomerController extends Controller
         $request->validate([
             'name' => 'required',
             'number' => 'required|iran_mobile',
-            'city_id' => 'required',
+            'city_id' => 'required|numeric',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required',
+            'scale' => 'required|numeric',
             'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
@@ -133,11 +133,11 @@ class CustomerController extends Controller
         $request->validate([
             'name' => 'required',
             'number' => 'required|iran_mobile',
-            'city_id' => 'required',
+            'city_id' => 'required|numeric',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required',
+            'scale' => 'required|numeric',
             'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
@@ -193,7 +193,7 @@ class CustomerController extends Controller
 
     public function star(Customer $customer)
     {
-        $this->authorize('update', $customer);
+        $this->authorize('star', Customer::class);
 
         if ($customer->getRawOriginal('is_star') == 0) {
             $customer->is_star = 1;
@@ -206,6 +206,9 @@ class CustomerController extends Controller
     }
 
     public function setRemainderTime(Request $request){
+
+        $this->authorize('reminder', Customer::class);
+
         $customer = Customer::find($request->customer_id);
         $date = Verta::parse($request->remainder)->datetime()->format('Y-m-d H:i:s');
         $time = new Carbon($date);

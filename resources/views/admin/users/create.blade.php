@@ -44,7 +44,7 @@
                 <div><a href="{{route('admin.users.index')}}" class="btn btn-primary p-2">نمایش کاربران</a></div>
             </div>
             <hr>
-            <form action="{{ route('admin.users.store') }}" method="post" autocomplete="off">
+            <form action="{{ route('admin.users.store') }}" method="post">
                 @csrf
                 <div class="form-group">
                     <label for="name"> نام و نام خانوادگی *</label>

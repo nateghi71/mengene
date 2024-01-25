@@ -28,10 +28,6 @@
 
 @section('scripts')
     <script>
-        $('.btn-close').on('click' , function (){
-            $('#message').remove()
-        })
-
         $('#deletePanel').hide()
 
         $('[id^=open_delete_panel_]').on('click' , function (e){
@@ -57,13 +53,6 @@
             </div>
         </div>
     </div>
-
-    @if (session()->has('message'))
-        <div class="alert alert-success d-flex justify-content-between" id="message">
-            {{session()->get('message')}}
-            <button type="button" class="btn-close" aria-label="Close"></button>
-        </div>
-    @endif
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card">
@@ -73,7 +62,7 @@
                             <img src="{{asset('Admin/assets/images/dashboard/Group126@2x.png')}}" class="gradient-corona-img img-fluid" alt="">
                         </div>
                         <div class="lh-lg col-5 col-sm-7 col-xl-8 py-2">
-                            <h4 class="mb-3 mb-sm-0">توجه!</h4>
+                            <h4 class="mb-3 mb-sm-0">به بخش مشاوران خوش آمدید.</h4>
                             <p class="mb-0 d-none d-sm-block">
                                 از مشاوران خود بخواهید ثبت نام کنند و در قسمت بعدی یافتن املاک را انتخاب کنند و در کادر مربوطه شماره شما را وارد کنند و
                                 بعد پیوستن را انتخاب کنند
@@ -109,8 +98,9 @@
 {{--        </div>--}}
 {{--    </div>--}}
     <div class="row">
-        <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
+        <div class=" col-xl-6 col-sm-6 grid-margin stretch-card">
+            <div @class(['card' , 'bg-secondary bg-gradient bg-opacity-50' => url()->full() !== route('business.consultants'),
+                        'bg-primary bg-gradient bg-opacity-50' => url()->full() === route('business.consultants')])>
                 <a href="{{route('business.consultants')}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">
@@ -124,7 +114,8 @@
             </div>
         </div>
         <div class="col-xl-6 col-sm-6 grid-margin stretch-card">
-            <div class="card bg-primary bg-gradient bg-opacity-50">
+            <div  @class(['card' , 'bg-secondary bg-gradient bg-opacity-50' => url()->full() !== route('business.consultants',['type' => 'notAccepted']) ,
+                            'bg-primary bg-gradient bg-opacity-50' => url()->full() === route('business.consultants',['type' => 'notAccepted'])])>
                 <a href="{{route('business.consultants',['type' => 'notAccepted'])}}" class="text-decoration-none text-white">
                     <div class="card-body">
                         <div class="icon">

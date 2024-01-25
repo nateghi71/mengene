@@ -58,7 +58,13 @@
                         </tr>
                         <tr>
                             <td>نام املاکی</td>
-                            <td>{{$landowner->business->name}}</td>
+                            <td>
+                                @if($landowner->business_id !== null)
+                                    {{$landowner->business->name}}
+                                @else
+                                    منگنه
+                                @endif
+                            </td>
                         </tr>
 
                         <tr>

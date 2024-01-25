@@ -41,6 +41,25 @@ class LandownerController extends Controller
         return view('landowner.index', compact('landowners' ));
     }
 
+    public function indexSub()
+    {
+        $this->authorize('subscription' , Landowner::class);
+        $user = auth()->user();
+        $city_id = $user->business()->city_id;
+        $area = $user->business()->area;
+
+        $files = Landowner::whereNull('business_id')->whereNot('access_level' , 'public')->where('city_id' , $city_id)->where('area' , $area)
+            ->where('expire_date' , '>' , Carbon::now())->filter()->paginate(10)->withQueryString();
+
+        foreach ($files as $file) {
+            if ($file->getRawOriginal('expire_date') > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($file->getRawOriginal('expire_date')) + 1;
+                $file->daysLeft = $daysLeft;
+            }
+        }
+        return view('special_file.index', compact('files'));
+    }
+
     public function show(Landowner $landowner)
     {
         $this->authorize('view', $landowner);
@@ -49,8 +68,8 @@ class LandownerController extends Controller
 
     public function create()
     {
-        $provinces = Province::all();
         $this->authorize('create', Landowner::class);
+        $provinces = Province::all();
         return view('landowner.create' , compact('provinces'));
     }
 
@@ -60,18 +79,18 @@ class LandownerController extends Controller
         $request->validate([
             'name' => 'required',
             'number' => 'required|iran_mobile',
-            'city_id' => 'required',
+            'city_id' => 'required|numeric',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required',
+            'scale' => 'required|numeric',
             'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
             'access_level' => 'required',
-            'rahn_amount' => 'exclude_if:type_sale,buy|required',
-            'rent_amount' => 'exclude_if:type_sale,buy|required',
-            'selling_price' => 'exclude_if:type_sale,rahn|required',
+            'rahn_amount' => 'exclude_if:type_sale,buy|required|numeric',
+            'rent_amount' => 'exclude_if:type_sale,buy|required|numeric',
+            'selling_price' => 'exclude_if:type_sale,rahn|required|numeric',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
@@ -79,6 +98,7 @@ class LandownerController extends Controller
             'floor_number' => 'exclude_if:type_build,house|required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required',
+            'images' => 'nullable',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -113,8 +133,11 @@ class LandownerController extends Controller
                 'expire_date' => $request->expire_date
             ]);
 
-            $imageController = new LandownerImageController();
-            $imageController->store($request->images , $landowner);
+            if($request->images !== null)
+            {
+                $imageController = new LandownerImageController();
+                $imageController->store($request->images , $landowner);
+            }
 
             event(new CreateLandownerFile($landowner , $user));
 
@@ -123,36 +146,16 @@ class LandownerController extends Controller
         catch (\Exception $e)
         {
             DB::rollBack();
-            dd($e->getMessage());
             return back()->with('message' , 'فابل ثبت نشد دویاره امتحان کنید.');
         }
 
         return redirect()->route('landowner.index',['status' => 'active'])->with('message' , 'فایل موردنظر ایجاد شد.');
     }
 
-    public function indexSub()
-    {
-        $this->authorize('subscription' , Landowner::class);
-        $user = auth()->user();
-        $city_id = $user->business()->city_id;
-        $area = $user->business()->area;
-
-        $files = Landowner::whereNull('business_id')->whereNot('access_level' , 'public')->where('city_id' , $city_id)->where('area' , $area)
-            ->where('expire_date' , '>' , Carbon::now())->filter()->paginate(10)->withQueryString();
-
-        foreach ($files as $file) {
-            if ($file->getRawOriginal('expire_date') > Carbon::now()) {
-                $daysLeft = Carbon::now()->diffInDays($file->getRawOriginal('expire_date')) + 1;
-                $file->daysLeft = $daysLeft;
-            }
-        }
-        return view('special_file.index', compact('files'));
-    }
-
     public function edit(Landowner $landowner)
     {
-        $provinces = Province::all();
         $this->authorize('update', $landowner);
+        $provinces = Province::all();
         return view('landowner.edit', compact('landowner' , 'provinces'));
     }
 
@@ -162,11 +165,11 @@ class LandownerController extends Controller
         $request->validate([
             'name' => 'required',
             'number' => 'required|iran_mobile',
-            'city_id' => 'required',
+            'city_id' => 'required|numeric',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required',
+            'scale' => 'required|numeric',
             'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
@@ -224,7 +227,7 @@ class LandownerController extends Controller
 
     public function star(Landowner $landowner)
     {
-        $this->authorize('update', $landowner);
+        $this->authorize('star', Landowner::class);
 
         if ($landowner->getRawOriginal('is_star') == 0) {
             $landowner->is_star = 1;
@@ -249,6 +252,8 @@ class LandownerController extends Controller
     }
 
     public function setRemainderTime(Request $request){
+        $this->authorize('reminder' , Landowner::class);
+
         $landowner = Landowner::find($request->landowner_id);
         $date = Verta::parse($request->remainder)->datetime()->format('Y-m-d H:i:s');
         $time = new Carbon($date);

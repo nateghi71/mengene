@@ -16,6 +16,8 @@ class SuggestionForCustomerController extends Controller
 {
     public function suggested_landowner(Customer $customer)
     {
+        $this->authorize('viewSuggestion', Customer::class);
+
         $business = auth()->user()->business();
         $customerId = $customer->id;
         if ($customer->getRawOriginal('type_sale') == 'buy')
@@ -72,6 +74,8 @@ class SuggestionForCustomerController extends Controller
 
     public function send_block_message(Request $request)
     {
+        $this->authorize('viewSuggestion', Customer::class);
+
         $request->validate([
             'customer_id' => 'required',
             'landowner_id' => 'required'
@@ -92,6 +96,8 @@ class SuggestionForCustomerController extends Controller
 
     public function share_file_with_customer(Request $request)
     {
+        $this->authorize('viewSuggestion', Customer::class);
+
         $user = auth()->user();
         if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
         {

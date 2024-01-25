@@ -24,7 +24,7 @@ class RegisterController extends BaseController
 
         if($validator->fails())
         {
-            return $this->sendError('Validation Error', $validator->errors());
+            return $this->sendError('Validation Error', $validator->errors() , 400);
         }
 
         $userNumber = $request->number;
@@ -41,8 +41,7 @@ class RegisterController extends BaseController
         $smsApi = new SmsAPI();
         $smsApi->sendSmsCode($userNumber , $code);
 
-        $data['random_string'] = $randomString;
-        return $this->sendResponse($data, 'User register successfully.');
+        return $this->sendResponse(['random_string' => $randomString], 'Mobile Number accepted successfully.');
     }
 
     public function twoFAConfirm(Request $request)
@@ -53,13 +52,13 @@ class RegisterController extends BaseController
 
         if($validator->fails())
         {
-            return $this->sendError('Validation Error', $validator->errors());
+            return $this->sendError('Validation Error', $validator->errors() , 400);
         }
 
         $userCode = UserCode::where('random_string', $request->random_string)->first();
 
         if (!$userCode) {
-            return $this->sendError('verifying Error', 'مراحل ثبت نام را از اول اغاز کنید.');
+            return $this->sendError('verifying Error', 'مراحل ثبت نام را از اول اغاز کنید.', 400);
         }
 
         if ($userCode->code === $request->code)
@@ -68,11 +67,10 @@ class RegisterController extends BaseController
                 'number_verified' => 1,
             ]);
 
-            $data['random_string'] = $userCode->random_string;
-            return $this->sendResponse($data, 'User register successfully.');
+            return $this->sendResponse(['random_string' => $userCode->random_string], 'code is correct.');
         }
 
-        return $this->sendError('verifying Error', 'کد وارد شده اشتباه هست.');
+        return $this->sendError('verifying Error', 'کد وارد شده اشتباه هست.' , 400);
     }
 
     public function twoFAResend(Request $request)
@@ -91,13 +89,12 @@ class RegisterController extends BaseController
             $smsApi = new SmsAPI();
             $smsApi->sendSmsCode($userNumber , $code);
 
-            $data['random_string'] = $userCode->random_string ;
-            return $this->sendResponse($data, 'code resend again.');
+            return $this->sendResponse(['random_string' => $userCode->random_string], 'code resend again.');
         }
         else
         {
             // Return an error message indicating that the user needs to wait before requesting a new code
-            $this->sendError('Wait Error', 'لطفا دو دقیقه صبر کنید تا ارسال مجدد کد');
+            $this->sendError('Wait Error', 'لطفا دو دقیقه صبر کنید تا ارسال مجدد کد' , 400);
         }
     }
 
@@ -107,7 +104,7 @@ class RegisterController extends BaseController
         $data = array();
 
         if (!$userCode || !$userCode->number_verified) {
-            return $this->sendError('Error', 'مراحل ثبت نام را از اول اغاز کنید.');
+            return $this->sendError('Error', 'مراحل ثبت نام را از اول اغاز کنید.' , 400);
         }
 
         $validator = Validator::make($request->all(), [
@@ -119,7 +116,7 @@ class RegisterController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error', $validator->errors());
+            return $this->sendError('Validation Error', $validator->errors() , 400);
         }
 
         try {
@@ -134,18 +131,17 @@ class RegisterController extends BaseController
                 'password' => Hash::make($request->password),
             ]);
 
-            $data['token'] = $user->createToken('MyApp')->plainTextToken;
-//            $data['user'] = $user;
+            $token = $user->createToken('MyApp')->plainTextToken;
 
             $userCode->delete();
             DB::commit();
         }
         catch (\Exception $e){
             DB::rollBack();
-            return $this->sendError('Database Error', $e->getMessage());
+            return $this->sendError('Database Error', $e->getMessage() , 500);
         }
 
-        return $this->sendResponse($data, 'User register successfully.');
+        return $this->sendResponse(['token' => $token], 'User register successfully.');
     }
 
     public function login(Request $request)
@@ -154,30 +150,30 @@ class RegisterController extends BaseController
 
         if(!$user)
         {
-            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
+            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised'] , 401);
         }
 
         if (Hash::check($request->password , $user->password)) {
-            $data['token'] = $user->createToken('MyApp')->plainTextToken;
-//            $data['user'] = $user;
+            $token = $user->createToken('MyApp')->plainTextToken;
             if($user->ownedBusiness()->exists())
-                $data['role'] = 'business';
+                $role = 'business';
             elseif ($user->joinedBusinesses()->exists())
-                $data['role'] = 'consultant';
+                $role = 'consultant';
             else
-                $data['role'] = 'nothing';
+                $role = 'nothing';
 
-            return $this->sendResponse($data, 'User login successfully.');
+            return $this->sendResponse([
+                'token' => $token ,
+                'role' => $role,
+            ], 'User login successfully.');
         } else {
-            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised2']);
+            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised2'] , 400);
         }
     }
 
     public function logout()
     {
         auth()->user()->tokens()->delete();
-        return response()->json([
-            'message' => 'successfully logout'
-        ]);
+        return $this->sendResponse([], 'successfully logout.');
     }
 }

@@ -36,4 +36,18 @@ class CustomerPolicy
         return $user->ownedBusiness()->exists() ||
             ($user->joinedBusinesses()->wherePivot('is_accepted', 1)->exists() && $customer->user_id === $user->id);
     }
+    public function star(User $user)
+    {
+        return $user->ownedBusiness()->exists() || $user->joinedBusinesses()->wherePivot('is_accepted', 1)->exists();
+    }
+
+    public function viewSuggestion(User $user)
+    {
+        return $user->ownedBusiness()->exists() || $user->joinedBusinesses()->wherePivot('is_accepted', 1)->exists();
+    }
+
+    public function reminder(User $user)
+    {
+        return $user->ownedBusiness()->exists() || $user->joinedBusinesses()->wherePivot('is_accepted', 1)->exists();
+    }
 }

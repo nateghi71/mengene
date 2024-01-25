@@ -18,6 +18,7 @@ use App\Models\Business;
 use App\Http\Controllers\API\MyBaseController as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Business as BusinessResource;
 use Illuminate\Validation\Rule;
@@ -77,15 +78,14 @@ class BusinessController extends Controller
     }
 
 
-    public function create(Request $request)
+    public function create()
     {
-        $provinces = Province::all();
         $this->authorize('createOrJoin', Business::class);
+        $provinces = Province::all();
         return view('business.create' , compact('provinces'));
     }
 
-    public
-    function store(Request $request)
+    public function store(Request $request)
     {
         $this->authorize('createOrJoin', Business::class);
 
@@ -136,8 +136,8 @@ class BusinessController extends Controller
 
     public function edit(Business $business)
     {
-        $provinces = Province::all();
         $this->authorize('updateBusiness' , $business);
+        $provinces = Province::all();
         return view('business.edit', compact('business' , 'provinces'));
     }
 
@@ -155,6 +155,11 @@ class BusinessController extends Controller
 
         $imageName = null;
         if ($request->hasFile('image')) {
+
+            if(File::exists(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')).$business->image)){
+                File::delete(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')).$business->image);
+            }
+
             $imageName = time() . $request->image->getClientOriginalName();
             $request->image->move(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')), $imageName);
         }
