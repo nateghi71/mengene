@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\MyBaseController as BaseController;
+use App\Http\Controllers\web\PremiumController;
 use App\Http\Resources\BusinessResource;
 use App\Http\Resources\UserResource;
 use App\Models\Business;
@@ -15,9 +16,11 @@ use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use PHPUnit\Exception;
 
 class BusinessController extends BaseController
 {
@@ -32,28 +35,11 @@ class BusinessController extends BaseController
             return response()->json(['message' => 'you dont have a business']);
         }
 
-//        $acceptedMember = collect();
-//        $notAcceptedMember = collect();
-
         $user = auth()->user();
-        $business = $user->ownedBusiness()->first();
-//        $members = $business->members;
-//
-//        foreach ($members as $member) {
-//            $customers = Customer::where('user_id', $member->id)->count();
-//            $landowners = Landowner::where('user_id', $member->id)->count();
-//            $member->added = $customers + $landowners;
-//
-//            if($member->pivot->is_accepted === 1)
-//                $acceptedMember->push($member);
-//            elseif ($member->pivot->is_accepted === 0)
-//                $notAcceptedMember->push($member);
-//        }
+        $business = $user->ownedBusiness()->withCount('customers' , 'landowners')->first();
 
         return $this->sendResponse([
             'user' => $user,
-//            'acceptedMember' => $acceptedMember,
-//            'notAcceptedMember' => $notAcceptedMember,
             'business' => new BusinessResource($business),
         ],'business retrieved successfully.');
     }
@@ -128,27 +114,36 @@ class BusinessController extends BaseController
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $user = auth()->user();
+        try{
+            DB::beginTransaction();
 
-        $imageName = null;
-        if ($request->hasFile('image')) {
-            $imageName = time() . $request->image->getClientOriginalName();
-            $request->image->move(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')), $imageName);
+            $user = auth()->user();
+            $imageName = '';
+            if ($request->hasFile('image')) {
+                $imageName = generateFileName($request->image->getClientOriginalName());
+                $request->image->move(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')), $imageName);
+            }
+
+            $business = Business::create([
+                'name' => $request->name,
+                'en_name' => $request->en_name,
+                'user_id' => $user->id,
+                'image' => $imageName,
+                'city_id' => $request->city_id,
+                'area' => $request->area,
+                'address' => $request->address
+            ]);
+
+            $premium = new PremiumController();
+            $premium->store($business);
+            DB::commit();
+        }
+        catch (\Exception $e)
+        {
+            DB::rollBack();
+            return response()->json(['message' => 'you data not store in database']);
         }
 
-        $business = Business::create([
-            'name' => $request->name,
-            'en_name' => $request->en_name,
-            'user_id' => $user->id,
-            'image' => $imageName,
-            'city_id' => $request->city_id,
-            'area' => $request->area,
-            'address' => $request->address
-        ]);
-//        $premiumInput['business_id'] = $business->id;
-//        $premiumInput['level'] = 'free';
-//        $premiumInput['expire_date'] = Carbon::now()->addYear();
-//        $premium = Premium::create($premiumInput);
 
         return new BusinessResource($business);
     }
@@ -168,7 +163,6 @@ class BusinessController extends BaseController
             'name' => 'required',
             'en_name' => [
                 'required',
-                Rule::unique('businesses')->ignore($business->user_id, 'user_id'),
             ],
             'city_id' => 'required',
             'area' => 'required',
@@ -224,9 +218,23 @@ class BusinessController extends BaseController
             return response()->json(['message' => 'you dont own this business']);
         }
 
+        $userAuth = auth()->user();
+
         $member = $user->businessUser()->first();
-        $member->is_accepted = !$member->is_accepted;
-        $member->save();
+        if ($member->is_accepted == 0) {
+            $userAuth = auth()->user();
+            if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
+                return redirect()->back()->with('message', 'شما نمی توانید مشاور اضافه کنید.');
+            $userAuth->incrementPremiumCountConsultants();
+            $member->joined_date = Carbon::now()->format('Y-m-d');
+
+            $member->is_accepted = 1;
+            $member->save();
+        } else {
+            $userAuth->decrementPremiumCountConsultants();
+            $member->is_accepted = 0;
+            $member->save();
+        }
 
         return response()->json(['message' => ' مشاور مورد نظر با موفقیت افزوده شد']);
     }
@@ -243,7 +251,11 @@ class BusinessController extends BaseController
         {
             return response()->json(['message' => 'you dont own this business']);
         }
+
         $userAuth = auth()->user();
+        if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
+            return redirect()->back()->with('message', 'شما نمی توانید مشاور اضافه کنید.');
+
         $business->members()->attach($userAuth);
         $member = $userAuth->businessUser()->first();
         $member->is_accepted = 1;
@@ -251,6 +263,7 @@ class BusinessController extends BaseController
         $business->members()->detach($user);
         $business->user_id = $user->id;
         $business->update();
+
         return response()->json(['message' => 'مالک جدید با موفقیت انتخاب شد']);
     }
 
@@ -271,46 +284,4 @@ class BusinessController extends BaseController
         $business->members()->detach($user);
         return response()->json(['message' => 'مشاور مورد نظر با موفقیت حذف شد']);
     }
-
-
-    public function buyingPremium(Request $request, Business $business)
-    {
-        if (!$business) {
-            abort(403, 'ابتدا یک بیزینس بسازید ');
-        } else {
-            $gheymat = $request->gheymat;
-            $level = $request->level;
-            //send to bank portal...
-            return response()->json([
-                'message' => 'به صفحه پرداخت منتقل بشوید',
-                'gheymat' => $gheymat,
-                'level' => $level,
-                'business' => new BusinessResource($business),
-            ]);
-        }
-    }
-
-    public function performingPremium(Request $request, Business $business)
-    {
-        if (true) {
-            if (!$business) {
-                abort(403, 'ابتدا یک بیزینس بسازید ');
-            } else {
-                $gheymat = $request->gheymat;
-                $level = $request->level;
-                //send to bank portal...
-                $input['level'] = $request->level;
-                $input['expire_date'] = Carbon::now()->addYear();
-                $premium = $business->premiumLevel()->first();
-                $premium->update($input);
-                return response()->json([
-                    'message' => 'خرید شما با موفقیت تکمیل شد و اکانت شما ویژه شد',
-                    'gheymat' => $gheymat,
-                    'premium' => $premium,
-                    'business' => new BusinessResource($business),
-                ]);
-            }
-        }
-    }
-
 }

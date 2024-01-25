@@ -56,7 +56,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('consultant/join', [ConsultantController::class, 'join'])->name('api.consultant.join');
     Route::get("consultant/{user}/leave", [ConsultantController::class, 'leaveMember'])->name('api.consultant.leave.member');
 
-    Route::post("business/{business}/performingPremium", [BusinessController::class, 'performingPremium'])->name('api.business.performingPremium');
 });
 
 

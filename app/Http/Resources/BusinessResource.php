@@ -18,6 +18,7 @@ class BusinessResource extends JsonResource
             'area' => $this->area,
             'address' => $this->address,
             'user_id' => $this->user_id,
+            "added" => $this->customers_count + $this->landowners_count,
         ];
     }
 }

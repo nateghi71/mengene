@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\CreateLandownerFile;
 use App\HelperClasses\LinkGenerator;
 use App\HelperClasses\SmsAPI;
 use App\HelperClasses\UpdateStatusFile;
@@ -11,10 +12,13 @@ use App\Http\Resources\LandownerResource;
 use App\Models\Business;
 use App\Models\Customer;
 use App\Models\Landowner;
+use App\Notifications\ReminderForLandowerNotification;
 use Carbon\Carbon;
+use Hekmatinasser\Verta\Facades\Verta;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -32,10 +36,10 @@ class LandownerController extends BaseController
         }
 
         $user = auth()->user();
+
         $business = $user->business();
 
-        $landowners = $business->landowners()->landownerType()
-            ->orderBy('is_star', 'desc')->orderBy('status', 'asc')->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
+        $landowners = $business->landowners()->filter()->search()->paginate(10)->withQueryString();
 
         foreach ($landowners as $landowner) {
             if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
@@ -50,35 +54,39 @@ class LandownerController extends BaseController
 
         ], 'Landowners retrieved successfully.');
 
-//        $landowners = $business->landowners()->where('status', 'active')
-//            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
-//        $ilandowners = $business->landowners()->where('status', 'unknown')
-//            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
-//
-//        $indexedLandowners = $landowners->groupBy('type_sale');
-//        $rentLandowners = $indexedLandowners->get('rahn');
-//        $buyLandowners = $indexedLandowners->get('buy');
-//        foreach ($landowners as $file) {
-//            if ($file->expire_date > Carbon::now()) {
-//                $daysLeft = Carbon::now()->diffInDays($file->expire_date) + 1;
-//                $file->daysLeft = $daysLeft;
-//            }
-//        }
-//
-//        $indexediLandowners = $ilandowners->groupBy('type_sale');
-//        $rentiLandowners = $indexediLandowners->get('rahn');
-//        $buyiLandowners = $indexediLandowners->get('buy');
-//
-//        return $this->sendResponse([
-//            'landowners' => LandownerResource::collection($landowners),
-//            'ilandowners' => LandownerResource::collection($ilandowners),
-//            'rentLandowners' => $rentLandowners ? LandownerResource::collection($rentLandowners) : [],
-//            'rentiLandowners' => $rentiLandowners ? LandownerResource::collection($rentiLandowners) : [],
-//            'buyLandowners' => $buyLandowners ? LandownerResource::collection($buyLandowners) : [],
-//            'buyiLandowners' => $buyiLandowners ? LandownerResource::collection($buyiLandowners) : [],
-//        ], 'Landowners retrieved successfully.');
     }
 
+    public function indexSub()
+    {
+        try
+        {
+            $this->authorize('subscription' , Landowner::class);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return response()->json(['message' => 'you dont have a business']);
+        }
+
+        $user = auth()->user();
+        $city_id = $user->business()->city_id;
+        $area = $user->business()->area;
+
+        $files = Landowner::whereNull('business_id')->whereNot('access_level' , 'public')->where('city_id' , $city_id)->where('area' , $area)
+            ->where('expire_date' , '>' , Carbon::now())->filter()->paginate(10)->withQueryString();
+
+        foreach ($files as $file) {
+            if ($file->getRawOriginal('expire_date') > Carbon::now()) {
+                $daysLeft = Carbon::now()->diffInDays($file->getRawOriginal('expire_date')) + 1;
+                $file->daysLeft = $daysLeft;
+            }
+        }
+        return $this->sendResponse([
+            'files' => $files ? LandownerResource::collection($files) : [],
+            'links' => $files ? LandownerResource::collection($files)->response()->getData()->links : [],
+            'meta' => $files ? LandownerResource::collection($files)->response()->getData()->meta : [],
+
+        ], 'Landowners retrieved successfully.');
+    }
 
     public function show(Landowner $landowner)
     {
@@ -107,54 +115,73 @@ class LandownerController extends BaseController
 
         $request->validate([
             'name' => 'required',
-            'number' => 'required|numeric',
+            'number' => 'required|iran_mobile',
             'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required|numeric',
-            'area' => 'required',
+            'scale' => 'required',
+            'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
             'access_level' => 'required',
-            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
+            'rahn_amount' => 'exclude_if:type_sale,buy|required',
+            'rent_amount' => 'exclude_if:type_sale,buy|required',
+            'selling_price' => 'exclude_if:type_sale,rahn|required',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
-            'floor' => 'required|numeric',
-            'floor_number' => 'required|numeric',
+            'floor' => 'exclude_if:type_build,house|required|numeric',
+            'floor_number' => 'exclude_if:type_build,house|required|numeric',
             'is_star' => 'nullable',
-            'expire_date' => 'required'
+            'expire_date' => 'required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $user = auth()->user();
-        $landowner = Landowner::create([
-            'name' => $request->name,
-            'number' => $request->number,
-            'city_id' => $request->city_id,
-            'status' => $request->status,
-            'type_sale' => $request->type_sale,
-            'type_work' => $request->type_work,
-            'type_build' => $request->type_build,
-            'scale' => $request->scale,
-            'area' => $request->area,
-            'number_of_rooms' => $request->number_of_rooms,
-            'description' => $request->description,
-            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
-            'elevator' => $request->elevator,
-            'parking' => $request->parking,
-            'store' => $request->store,
-            'floor' => $request->floor,
-            'floor_number' => $request->floor_number,
-            'business_id' => $user->business()->id,
-            'user_id' => $user->id,
-            'is_star' => $request->is_star,
-            'expire_date' => $request->expire_date
-        ]);
+        try{
+            DB::beginTransaction();
+
+            $user = auth()->user();
+            $landowner = Landowner::create([
+                'name' => $request->name,
+                'number' => $request->number,
+                'city_id' => $request->city_id,
+                'type_sale' => $request->type_sale,
+                'type_work' => $request->type_work,
+                'type_build' => $request->type_build,
+                'type_file' => 'business',
+                'scale' => $request->scale,
+                'area' => $request->area,
+                'number_of_rooms' => $request->number_of_rooms,
+                'description' => $request->description,
+                'access_level' => $request->access_level,
+                'rahn_amount' => $request->type_sale === 'rahn' ? $request->rahn_amount : 0,
+                'rent_amount' => $request->type_sale === 'rahn' ? $request->rent_amount : 0,
+                'selling_price' => $request->type_sale === 'buy' ? $request->selling_price : 0,
+                'elevator' => $request->has('elevator') ? 1 : 0,
+                'parking' => $request->has('parking') ? 1 : 0,
+                'store' => $request->has('store') ? 1 : 0,
+                'floor' => $request->type_build === 'apartment' ? $request->floor : 0,
+                'floor_number' => $request->type_build === 'apartment' ? $request->floor_number : 0,
+                'business_id' => $user->business()->id,
+                'user_id' => $user->id,
+                'is_star' => $request->has('is_star') ? 1 : 0 ,
+                'expire_date' => $request->expire_date
+            ]);
+
+            $imageController = new LandownerImageController();
+            $imageController->store($request->images , $landowner);
+
+            event(new CreateLandownerFile($landowner , $user));
+
+            DB::commit();
+        }
+        catch (\Exception $e)
+        {
+            DB::rollBack();
+            dd($e->getMessage());
+            return $this->sendResponse(new LandownerResource($landowner), 'فابل ثبت نشد دویاره امتحان کنید.');
+        }
 
         return $this->sendResponse(new LandownerResource($landowner), 'Landowner created successfully.');
     }
@@ -172,34 +199,33 @@ class LandownerController extends BaseController
 
         $request->validate([
             'name' => 'required',
-            'number' => 'required',
+            'number' => 'required|iran_mobile',
             'city_id' => 'required',
-            'status' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
             'scale' => 'required',
-            'area' => 'required',
-            'number_of_rooms' => 'required',
+            'area' => 'required|numeric',
+            'number_of_rooms' => 'required|numeric',
             'description' => 'required',
             'access_level' => 'required',
-            'rahn_amount' => 'nullable',
-            'rent_amount' => 'nullable',
-            'selling_price' => 'nullable',
-            'elevator' => 'required',
-            'parking' => 'required',
-            'store' => 'required',
-            'floor' => 'required|numeric',
-            'floor_number' => 'required',
-            'is_star' => 'required',
+            'rahn_amount' => 'exclude_if:type_sale,buy|required',
+            'rent_amount' => 'exclude_if:type_sale,buy|required',
+            'selling_price' => 'exclude_if:type_sale,rahn|required',
+            'elevator' => 'nullable',
+            'parking' => 'nullable',
+            'store' => 'nullable',
+            'floor' => 'exclude_if:type_build,house|required|numeric',
+            'floor_number' => 'exclude_if:type_build,house|required|numeric',
+            'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
 
+//        $user = auth()->user();
         $landowner->update([
             'name' => $request->name,
             'number' => $request->number,
             'city_id' => $request->city_id,
-            'status' => $request->status,
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
@@ -208,19 +234,18 @@ class LandownerController extends BaseController
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
             'access_level' => $request->access_level,
-            'rahn_amount' => $request->has('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->has('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->has('selling_price') ? $request->selling_price : null,
-            'elevator' => $request->elevator,
-            'parking' => $request->parking,
-            'store' => $request->store,
-            'floor' => $request->floor,
-            'floor_number' => $request->floor_number,
+            'rahn_amount' => $request->type_sale === 'rahn' ? $request->rahn_amount : 0,
+            'rent_amount' => $request->type_sale === 'rahn' ? $request->rent_amount : 0,
+            'selling_price' => $request->type_sale === 'buy' ? $request->selling_price : 0,
+            'elevator' => $request->has('elevator') ? 1 : 0,
+            'parking' => $request->has('parking') ? 1 : 0,
+            'store' => $request->has('store') ? 1 : 0,
+            'floor' => $request->type_build === 'apartment' ? $request->floor : 0,
+            'floor_number' => $request->type_build === 'apartment' ? $request->floor_number : 0,
 //            'business_id' => $user->business()->id,
 //            'user_id' => $user->id,
-            'is_star' => $request->is_star,
+            'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
-
         ]);
 
         return $this->sendResponse(new LandownerResource($landowner), 'Landowner updated successfully.');
@@ -262,6 +287,37 @@ class LandownerController extends BaseController
         }
 
         return $this->sendResponse(new LandownerResource($landowner), 'Landowner star status updated successfully.');
+    }
+
+    public function buyFile(Landowner $landowner)
+    {
+        try
+        {
+            $this->authorize('subscription' , Landowner::class);
+        }
+        catch (AuthorizationException $exception)
+        {
+            return response()->json(['message' => 'you dont have a business']);
+        }
+
+        $user = auth()->user();
+        $landowner->update([
+            'type_file' => 'business' ,
+            'business_id' => $user->business()->id,
+            'user_id' => $user->id,
+        ]);
+
+        return $this->sendResponse(new LandownerResource($landowner), 'file is buy.');
+    }
+
+
+    public function setRemainderTime(Request $request){
+        $landowner = Landowner::find($request->landowner_id);
+        $date = Verta::parse($request->remainder)->datetime()->format('Y-m-d H:i:s');
+        $time = new Carbon($date);
+        auth()->user()->notify((new ReminderForLandowerNotification($landowner , $date))->delay($time));
+
+        return $this->sendResponse([], 'alert is set.');
     }
 
 }

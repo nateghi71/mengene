@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             "email" => $this->email,
             "number" => $this->number,
             "city_id" => $this->city_id,
-            "added" => $this->customers_count + $this->landowners_count,
+            "files_added" => $this->customers_count + $this->landowners_count,
         ];
     }
 }

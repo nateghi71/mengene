@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\CreateCustomerFile;
 use App\HelperClasses\LinkGenerator;
 use App\HelperClasses\SmsAPI;
 use App\HelperClasses\UpdateStatusFile;
@@ -33,10 +34,10 @@ class CustomerController extends BaseController
         }
 
         $user = auth()->user();
+
         $business = $user->business();
 
-        $customers = $business->customers()->CustomerType()->orderBy('is_star', 'desc')->orderBy('status', 'asc')
-            ->orderBy('expire_date', 'asc')->paginate(10)->withQueryString();
+        $customers = $business->customers()->filter()->search()->paginate(10)->withQueryString();
 
         foreach ($customers as $customer) {
             if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
@@ -44,40 +45,12 @@ class CustomerController extends BaseController
                 $customer->daysLeft = $daysLeft;
             }
         }
+
         return $this->sendResponse([
             'customers' => $customers ? CustomerResource::collection($customers) : [],
             'links' => $customers ? CustomerResource::collection($customers)->response()->getData()->links : [],
             'meta' => $customers ? CustomerResource::collection($customers)->response()->getData()->meta : [],
         ], 'Customers retrieved successfully.');
-
-//        $customers = $business->customers()->where('status', 'active')
-//            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
-//        $icustomers = $business->customers()->where('status', 'unknown')
-//            ->orderBy('is_star', 'desc')->orderBy('expire_date', 'asc')->get();
-//
-//        $indexedCustomers = $customers->groupBy('type_sale');
-//        $rentCustomers = $indexedCustomers->get('rahn');
-//        $buyCustomers = $indexedCustomers->get('buy');
-//
-//        foreach ($customers as $customer) {
-//            if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
-//                $daysLeft = Carbon::now()->diffInDays($customer->getRawOriginal('expire_date')) + 1;
-//                $customer->daysLeft = $daysLeft;
-//            }
-//        }
-//
-//        $indexediCustomers = $icustomers->groupBy('type_sale');
-//        $rentiCustomers = $indexediCustomers->get('rahn');
-//        $buyiCustomers = $indexediCustomers->get('buy');
-
-//        return $this->sendResponse([
-//            'customers' => CustomerResource::collection($customers),
-//            'icustomers' => CustomerResource::collection($icustomers),
-//            'rentCustomers' => $rentCustomers ? CustomerResource::collection($rentCustomers) : [],
-//            'rentiCustomers' => $rentiCustomers ? CustomerResource::collection($rentiCustomers) : [],
-//            'buyCustomers' => $buyCustomers ? CustomerResource::collection($buyCustomers) : [],
-//            'buyiCustomers' => $buyiCustomers ? CustomerResource::collection($buyiCustomers) : [],
-//        ], 'Customers retrieved successfully.');
     }
 
     public function dashboard()
@@ -116,24 +89,24 @@ class CustomerController extends BaseController
 
         $request->validate([
             'name' => 'required',
-            'number' => 'required|numeric',
+            'number' => 'required|iran_mobile',
             'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required|numeric',
-            'area' => 'required',
+            'scale' => 'required',
+            'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
+            'rahn_amount' => 'exclude_if:type_sale,buy|required',
+            'rent_amount' => 'exclude_if:type_sale,buy|required',
+            'selling_price' => 'exclude_if:type_sale,rahn|required',
             'access_level' => 'required',
-            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
-            'floor' => 'required|numeric',
-            'floor_number' => 'required|numeric',
+            'floor' => 'exclude_if:type_build,house|required|numeric',
+            'floor_number' => 'exclude_if:type_build,house|required|numeric',
             'is_star' => 'nullable',
             'expire_date' => 'required'
         ]);
@@ -147,23 +120,27 @@ class CustomerController extends BaseController
             'type_sale' => $request->type_sale,
             'type_work' => $request->type_work,
             'type_build' => $request->type_build,
+            'type_file' => 'business',
             'scale' => $request->scale,
             'area' => $request->area,
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
-            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
-            'elevator' => $request->elevator,
-            'parking' => $request->parking,
-            'store' => $request->store,
-            'floor' => $request->floor,
-            'floor_number' => $request->floor_number,
+            'access_level' => $request->access_level,
+            'rahn_amount' => $request->type_sale === 'rahn' ? $request->rahn_amount : 0,
+            'rent_amount' => $request->type_sale === 'rahn' ? $request->rent_amount : 0,
+            'selling_price' => $request->type_sale === 'buy' ? $request->selling_price : 0,
+            'elevator' => $request->has('elevator') ? 1 : 0,
+            'parking' => $request->has('parking') ? 1 : 0,
+            'store' => $request->has('store') ? 1 : 0,
+            'floor' => $request->type_build === 'apartment' ? $request->floor : 0,
+            'floor_number' => $request->type_build === 'apartment' ? $request->floor_number : 0,
             'business_id' => $user->business()->id,
             'user_id' => $user->id,
-            'is_star' => $request->is_star,
+            'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
+
+        event(new CreateCustomerFile($customer , $user));
 
         return $this->sendResponse(new CustomerResource($customer), 'Customer created successfully.');
     }
@@ -181,28 +158,29 @@ class CustomerController extends BaseController
 
         $request->validate([
             'name' => 'required',
-            'number' => 'required|numeric',
+            'number' => 'required|iran_mobile',
             'city_id' => 'required',
             'type_sale' => 'required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required|numeric',
-            'area' => 'required',
+            'scale' => 'required',
+            'area' => 'required|numeric',
             'number_of_rooms' => 'required|numeric',
             'description' => 'required',
             'access_level' => 'required',
-            'rahn_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'rent_amount' => [Rule::requiredIf($request->type_sale == 'rahn') , 'numeric'],
-            'selling_price' => [Rule::requiredIf($request->type_sale == 'buy') , 'numeric'],
-            'elevator' => 'nullable',
-            'parking' => 'nullable',
-            'store' => 'nullable',
-            'floor' => 'required|numeric',
-            'floor_number' => 'required|numeric',
-            'is_star' => 'nullable',
+            'rahn_amount' => 'exclude_if:type_sale,buy|required',
+            'rent_amount' => 'exclude_if:type_sale,buy|required',
+            'selling_price' => 'exclude_if:type_sale,rahn|required',
+            'elevator' => 'sometimes|nullable',
+            'parking' => 'sometimes|nullable',
+            'store' => 'sometimes|nullable',
+            'floor' => 'exclude_if:type_build,house|required|numeric',
+            'floor_number' => 'exclude_if:type_build,house|required|numeric',
+            'is_star' => 'sometimes|nullable',
             'expire_date' => 'required'
         ]);
 
+//        $user = auth()->user();
         $customer->update([
             'name' => $request->name,
             'number' => $request->number,
@@ -215,17 +193,17 @@ class CustomerController extends BaseController
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
             'access_level' => $request->access_level,
-            'rahn_amount' => $request->filled('rahn_amount') ? $request->rahn_amount : null,
-            'rent_amount' => $request->filled('rent_amount') ? $request->rent_amount : null,
-            'selling_price' => $request->filled('selling_price') ? $request->selling_price : null,
-            'elevator' => $request->elevator,
-            'parking' => $request->parking,
-            'store' => $request->store,
-            'floor' => $request->floor,
-            'floor_number' => $request->floor_number,
+            'rahn_amount' => $request->type_sale === 'rahn' ? $request->rahn_amount : 0,
+            'rent_amount' => $request->type_sale === 'rahn' ? $request->rent_amount : 0,
+            'selling_price' => $request->type_sale === 'buy' ? $request->selling_price : 0,
+            'elevator' => $request->has('elevator') ? 1 : 0,
+            'parking' => $request->has('parking') ? 1 : 0,
+            'store' => $request->has('store') ? 1 : 0,
+            'floor' => $request->type_build === 'apartment' ? $request->floor : 0,
+            'floor_number' => $request->type_build === 'apartment' ? $request->floor_number : 0,
 //            'business_id' => $user->business()->id,
 //            'user_id' => $user->id,
-            'is_star' => $request->is_star,
+            'is_star' => $request->has('is_star') ? 1 : 0 ,
             'expire_date' => $request->expire_date
         ]);
 
@@ -270,42 +248,4 @@ class CustomerController extends BaseController
 
         return $this->sendResponse(new CustomerResource($customer), 'Customer star status updated successfully.');
     }
-
-//
-//    public function showSuggestions(Customer $customer)
-//    {
-//        if ($customer->type_sale == 'buy') {
-//            $minPrice = $customer->price * 0.8; // 80% of the customer's price
-//            $maxPrice = $customer->price * 1.2; // 120% of the customer's price
-//
-//            $customerId = $customer->id;
-//            $suggestions = Landowner::where('status', 'active')
-//                ->whereDoesntHave('suggestedCustomer', function ($query) use ($customerId) {
-//                    $query->where('customer_id', $customerId);
-//                })
-//                ->whereBetween('price', [$minPrice, $maxPrice])
-//                ->orderBy('price', 'asc')->get();
-//
-//        } elseif ($customer->type_sale == 'rahn') {
-//            //20% diff
-//            $minRahn = $customer->rahn * 0.8;
-//            $maxRahn = $customer->rahn * 1.2;
-//            $minEjareh = $customer->ejareh * 0.8;
-//            $maxEjareh = $customer->ejareh * 1.2;
-//
-//            $customerId = $customer->id;
-//            $suggestions = Landowner::where('status', 'active')
-//                ->whereDoesntHave('suggestedCustomer', function ($query) use ($customerId) {
-//                    $query->where('customer_id', $customerId);
-//                })
-//                ->whereBetween('rahn', [$minRahn, $maxRahn])
-//                ->whereBetween('ejareh', [$minEjareh, $maxEjareh])
-//                ->orderBy('rahn', 'asc')
-//                ->orderBy('ejareh', 'asc')
-//                ->get();
-//        }
-//        return $this->sendResponse([
-//            'Suggestions' => LandownerResource::collection($suggestions),
-//        ], 'Suggestions retrieved successfully.');
-//    }
 }

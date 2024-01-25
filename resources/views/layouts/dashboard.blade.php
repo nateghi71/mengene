@@ -44,7 +44,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 9999;
+            z-index: 99999;
             overflow: hidden;
             background: #000000;
         }

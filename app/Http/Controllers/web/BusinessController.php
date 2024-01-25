@@ -91,24 +91,24 @@ class BusinessController extends Controller
 
         $request->validate([
             'name' => 'required',
-            'en_name' => 'required',
+            'en_name' => 'required|unique:businesses',
             'city_id' => 'required',
             'area' => 'required',
             'address' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $user = auth()->user();
-
-        $imageName = '';
-        if ($request->hasFile('image')) {
-            $imageName = generateFileName($request->image->getClientOriginalName());
-            $request->image->move(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')), $imageName);
-        }
-
         try
         {
             DB::beginTransaction();
+
+            $user = auth()->user();
+            $imageName = '';
+            if ($request->hasFile('image')) {
+                $imageName = generateFileName($request->image->getClientOriginalName());
+                $request->image->move(public_path(env('BUSINESS_IMAGES_UPLOAD_PATH')), $imageName);
+            }
+
             $business = Business::create([
                 'name' => $request->name,
                 'en_name' => $request->en_name,

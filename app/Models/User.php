@@ -68,7 +68,7 @@ class User extends Authenticatable
     }
     public function isMidLevelUser():bool
     {
-        return $this->ownedBusiness()->first()->premium->level === 'midLevel';
+        return $this->ownedBusiness()->first()->premium()->level === 'midLevel';
     }
     public function getPremiumCountSms()
     {

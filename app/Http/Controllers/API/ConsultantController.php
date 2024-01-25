@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\API\MyBaseController as BaseController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BusinessResource;
 use App\Models\Business;
 use App\Models\User;
+use App\Notifications\ConsultantRequestNotification;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
-class ConsultantController extends Controller
+class ConsultantController extends BaseController
 {
     public function index()
     {
@@ -24,6 +26,7 @@ class ConsultantController extends Controller
 
         $user = auth()->user();
         $business = $user->joinedBusinesses()->first();
+        $business->loadCount(['customers' , 'landowners']);
         return response()->json([
             'user' => $user,
             'business' => new BusinessResource($business),
@@ -40,6 +43,10 @@ class ConsultantController extends Controller
         {
             return response()->json(['message' => 'you join or have a business']);
         }
+
+        $request->validate([
+            'owner_number' => 'required|max:11|digits:11'
+        ]);
 
         $ownerNumber = $request->input('owner_number');
         $business = Business::whereHas('owner', function ($query) use ($ownerNumber) {
@@ -64,9 +71,11 @@ class ConsultantController extends Controller
         }
 
         $user = auth()->user();
-//        dd($user);
         $business = Business::where('id', $request->business_id)->first();
+        $owner = $business->owner()->first();
         $business->members()->attach($user);
+
+        $owner->notify(new ConsultantRequestNotification($user));
 
         return response()->json(['message' => 'درخواست شما ثبت شد و منتظر تایید مالک است']);
     }

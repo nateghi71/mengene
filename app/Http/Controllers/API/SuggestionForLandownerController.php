@@ -16,17 +16,24 @@ class SuggestionForLandownerController extends BaseController
 {
     public function suggested_customer(Landowner $landowner)
     {
-        $business = $landowner->business()->first();
+        $business = auth()->user()->business();
         $landownerId = $landowner->id;
         if ($landowner->getRawOriginal('type_sale') == 'buy')
         {
             $minPrice = $landowner->getRawOriginal('selling_price') * 0.8; // 80% of the customer's price
             $maxPrice = $landowner->getRawOriginal('selling_price') * 1.2; // 120% of the customer's price
 
-            $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)->where('type_sale', 'buy')
-                ->whereDoesntHave('suggestedLandowner', function ($query) use ($landownerId) {
+            $businessSuggestions = $business->customers()->whereNot('status', 'deActive')->where('type_sale', 'buy')
+                ->whereDoesntHave('dontSuggestedLandowner', function ($query) use ($landownerId) {
                     $query->where('landowner_id', $landownerId)->where('suggest_business' , 1);
                 })->whereBetween('selling_price', [$minPrice, $maxPrice])->orderBy('selling_price' , 'asc')->limit(10)->get();
+
+            $specialSuggestions = Customer::whereNull('business_id')->where('city_id' , $business->city_id)->where('area' , $business->area)
+                ->where('type_sale', 'buy')->whereDoesntHave('dontSuggestedLandowner', function ($query) use ($landownerId) {
+                    $query->where('landowner_id', $landownerId)->where('suggest_business' , 1);
+                })->whereBetween('selling_price', [$minPrice, $maxPrice])->orderBy('selling_price' , 'asc')->limit(10)->get();
+
+            $suggestions = $businessSuggestions->concat($specialSuggestions);
         }
         else
         {
@@ -36,12 +43,21 @@ class SuggestionForLandownerController extends BaseController
             $minRent = $landowner->getRawOriginal('rent_amount') * 0.8;
             $maxRent = $landowner->getRawOriginal('rent_amount') * 1.2;
 
-            $suggestions = Customer::where('status', 'active')->where('business_id', $business->id)->where('type_sale', 'rahn')
-                ->whereDoesntHave('suggestedLandowner', function ($query) use ($landownerId) {
+            $businessSuggestions = $business->customers()->whereNot('status', 'deActive')->where('type_sale', 'rahn')
+                ->whereDoesntHave('dontSuggestedLandowner', function ($query) use ($landownerId) {
                     $query->where('landowner_id', $landownerId)->where('suggest_business' , 1);
                 })->whereBetween('rahn_amount', [$minRahn, $maxRahn])
                 ->whereBetween('rent_amount', [$minRent, $maxRent])->orderBy('rahn_amount' , 'asc')
                 ->orderBy('rent_amount' , 'asc')->limit(10)->get();
+
+            $specialSuggestions = Customer::whereNull('business_id')->where('city_id' , $business->city_id)->where('area' , $business->area)
+                ->where('type_sale', 'rahn')->whereDoesntHave('dontSuggestedLandowner', function ($query) use ($landownerId) {
+                    $query->where('landowner_id', $landownerId)->where('suggest_business' , 1);
+                })->whereBetween('rahn_amount', [$minRahn, $maxRahn])
+                ->whereBetween('rent_amount', [$minRent, $maxRent])->orderBy('rahn_amount' , 'asc')
+                ->orderBy('rent_amount' , 'asc')->limit(10)->get();
+
+            $suggestions = $businessSuggestions->concat($specialSuggestions);
         }
 
         foreach ($suggestions as $suggestion) {
@@ -50,7 +66,6 @@ class SuggestionForLandownerController extends BaseController
                 $suggestion->daysLeft = $daysLeft;
             }
         }
-
         return $this->sendResponse([
             'Suggestions' => CustomerResource::collection($suggestions),
         ], 'Suggestions retrieved successfully.');
@@ -74,5 +89,28 @@ class SuggestionForLandownerController extends BaseController
 
         return $this->sendResponse(['link' => $link], 'message send successfully.');
     }
+
+    public function share_file_with_customer(Request $request)
+    {
+        $user = auth()->user();
+        if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
+        {
+            $user->incrementPremiumCountSms();
+            $landowner = Landowner::findOrFile($request->landowner_id);
+            $customer = Customer::findOrFile($request->customer_id);
+            if($customer->getRawOriginal('type_sale') == 'rahn')
+                $price = $customer->rahn_amount.'/'.$customer->rent_amount;
+            else
+                $price = $customer->selling_price;
+            $smsApi = new SmsAPI();
+            $smsApi->sendSmsShareFile($landowner->number ,$landowner->name , $customer->scale , $price  , $landowner->business->number);
+            return $this->sendResponse([], 'message send successfully.');
+        }
+        else
+        {
+            return $this->sendResponse([], 'you are not ability for send message');
+        }
+    }
+
 
 }

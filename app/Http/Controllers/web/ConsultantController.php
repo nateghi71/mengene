@@ -28,11 +28,11 @@ class ConsultantController extends Controller
 
     public function search(Request $request)
     {
+        $this->authorize('createOrJoin', Business::class);
+
         $request->validate([
             'owner_number' => 'required|max:11|digits:11'
         ]);
-
-        $this->authorize('createOrJoin', Business::class);
 
         $ownerNumber = $request->input('owner_number');
         $business = Business::whereHas('owner', function ($query) use ($ownerNumber) {
@@ -55,7 +55,7 @@ class ConsultantController extends Controller
         $owner = $business->owner()->first();
         $business->members()->attach($user);
 
-//        $owner->notify(new ConsultantRequestNotification($user));
+        $owner->notify(new ConsultantRequestNotification($user));
 
         return redirect()->route('dashboard')
             ->with('message', 'شما با موفقیت به املاکی مورد نظر پیوستید.');
