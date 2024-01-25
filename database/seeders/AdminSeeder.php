@@ -26,7 +26,7 @@ class AdminSeeder extends Seeder
                 'email' => 'dariush.kianifar@gmail.com',
                 'number' => '09358668218',
                 'city_id' => 153,
-                'password' => 'd8b0381388db8c27e839ee6ae3b5c2c2',
+                'password' => '$2y$12$wC5JksWejYF0B28mV2rmoefXuaKe1CiojLCYvGS9/SUgaHuCjCTQ.',
             ]);
 
             Auth::guard('web')->logout();
