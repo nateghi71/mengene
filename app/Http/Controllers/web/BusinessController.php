@@ -116,7 +116,8 @@ class BusinessController extends Controller
                 'image' => $imageName,
                 'city_id' => $request->city_id,
                 'area' => $request->area,
-                'address' => $request->address
+                'address' => $request->address,
+                'wallet' => 0,
             ]);
 
             $premium = new PremiumController();
