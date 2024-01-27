@@ -4,6 +4,7 @@ use App\Http\Controllers\web\admin\RoleController;
 use App\Http\Controllers\web\admin\UserController;
 use App\Http\Controllers\web\admin\BusinessController as AdminBusinessController;
 use App\Http\Controllers\web\ConsultantController;
+use App\Http\Controllers\web\CreditController;
 use App\Http\Controllers\web\HomeController;
 use App\Http\Controllers\web\LandownerImageController;
 use App\Http\Controllers\web\RandomLinkController;
@@ -60,6 +61,8 @@ Route::middleware('auth')->group(function () {
     Route::get('business/{user}/chooseOwner', [BusinessController::class, 'chooseOwner'])->name('business.chooseOwner');
     Route::get("business/{user}/remove", [BusinessController::class, 'removeMember'])->name('business.remove.member');
     Route::get("business/consultants", [BusinessController::class, 'showConsultants'])->name('business.consultants');
+    Route::get("business/checkout/Increase_credit", [CreditController::class, 'Increase_credit'])->name('business.Increase_credit');
+    Route::post("business/checkout/index", [CreditController::class, 'index'])->name('business.checkout');
 
     Route::post('consultant/join', [ConsultantController::class, 'join'])->name('consultant.join');
     Route::post('consultant/search', [ConsultantController::class, 'search'])->name('consultant.search');

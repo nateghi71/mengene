@@ -40,9 +40,11 @@
                     </ul>
                     <div class="text-center pb-4">
                         @if(auth()->user()->isFreeUser())
-                            <form action="{{route('packages.update')}}" method="post">
+                            <form action="{{route('business.checkout')}}" method="post">
                                 @csrf
+                                <input type="hidden" name="type_payment" value="buy_package">
                                 <input type="hidden" name="level" value="midLevel">
+                                <input type="hidden" name="amount" value="299000">
                                 <button type="submit" class="btn btn-outline-success">پرداخت</button>
                             </form>
                         @elseif(auth()->user()->isMidLevelUser())
@@ -67,9 +69,11 @@
                     </ul>
                     <div class="text-center pb-4">
                         @if(auth()->user()->isFreeUser() || auth()->user()->isMidLevelUser())
-                            <form action="{{route('packages.update')}}" method="post">
+                            <form action="{{route('business.checkout')}}" method="post">
                                 @csrf
+                                <input type="hidden" name="type_payment" value="buy_package">
                                 <input type="hidden" name="level" value="vip">
+                                <input type="hidden" name="amount" value="899000">
                                 <button type="submit" class="btn btn-outline-success">پرداخت</button>
                             </form>
                         @else

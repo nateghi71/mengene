@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\BusinessController;
-use App\Http\Controllers\Api\ConsultantController;
+use App\Http\Controllers\API\ConsultantController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\LandownerController;
 use App\Http\Controllers\Api\LandownerImageController;

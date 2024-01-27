@@ -15,11 +15,14 @@
         {{--        </ul>--}}
         <ul class="navbar-nav w-100">
             <li class="nav-item w-75">
-{{--                <div class="card">--}}
-{{--                    <div class="border text-center text-muted card-body py-2 mt-2 mt-md-0 d-none d-xl-block">--}}
-{{--                        به {{$sectionName}} خوش امدید.--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+                <form action="{{route('business.Increase_credit')}}" class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                    @csrf
+                        <div class="input-group flex-nowrap">
+                            <span class="input-group-text bg-secondary border-0" id="inputGroup-sizing-default">اعتبار حساب:</span>
+                            <input type="text" class="form-control" value="{{auth()->user()->business()->wallet}}" disabled>
+                            <button class="btn btn-outline-success" type="submit" id="button-addon1">افزایش اعتبار</button>
+                         </div>
+                </form>
             </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
@@ -53,11 +56,11 @@
                     </a>
                 </div>
             </li>
-            <li class="nav-item nav-settings d-none d-lg-block">
-                <a class="nav-link" href="#">
-                    <i class="mdi mdi-view-grid"></i>
-                </a>
-            </li>
+{{--            <li class="nav-item nav-settings d-none d-lg-block">--}}
+{{--                <a class="nav-link" href="#">--}}
+{{--                    <i class="mdi mdi-view-grid"></i>--}}
+{{--                </a>--}}
+{{--            </li>--}}
             <li class="nav-item dropdown border-left">
                 @php
                     $notifications = auth()->user()->notifications()->where('type' , \App\Notifications\ConsultantRequestNotification::class)->take(6)->get();
