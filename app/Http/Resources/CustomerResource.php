@@ -22,6 +22,7 @@ class CustomerResource extends JsonResource
             'status' => $this->getRawOriginal('status'),
             'type_sale' => $this->getRawOriginal('type_sale'),
             'type_work' => $this->type_work,
+            'type_file' => $this->type_file,
             'type_build' => $this->type_build,
             'meterage' => $this->getRawOriginal('scale'),
             'rooms' => $this->number_of_rooms,

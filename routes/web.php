@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get("business/consultants", [BusinessController::class, 'showConsultants'])->name('business.consultants');
     Route::get("business/checkout/Increase_credit", [CreditController::class, 'Increase_credit'])->name('business.Increase_credit');
     Route::post("business/checkout/index", [CreditController::class, 'index'])->name('business.checkout');
+    Route::post("business/credit/buy", [CreditController::class, 'buy_credit'])->name('business.buy_credit');
 
     Route::post('consultant/join', [ConsultantController::class, 'join'])->name('consultant.join');
     Route::post('consultant/search', [ConsultantController::class, 'search'])->name('consultant.search');
@@ -79,7 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::post('landowner/remainder/set_time', [LandownerController::class, 'setRemainderTime'])->name('landowner.remainder');
 
     Route::get('landowner/subscription/index', [LandownerController::class, 'indexSub'])->name('landowner.subscription.index');
-    Route::get('landowner/buy/{landowner}', [LandownerController::class, 'buyFile'])->name('landowner.buyFile');
+    Route::post('landowner/subscription/buy', [LandownerController::class, 'buyFile'])->name('landowner.buyFile');
 
     Route::get('/landowner/images/{landowner}' , [LandownerImageController::class , 'edit'])->name('landowner.edit_images');
     Route::post('/landowner/images/add_image' , [LandownerImageController::class , 'add'])->name('landowner.add_image');

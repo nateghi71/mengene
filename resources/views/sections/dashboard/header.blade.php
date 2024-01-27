@@ -15,14 +15,15 @@
         {{--        </ul>--}}
         <ul class="navbar-nav w-100">
             <li class="nav-item w-75">
-                <form action="{{route('business.Increase_credit')}}" class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                    @csrf
-                        <div class="input-group flex-nowrap">
-                            <span class="input-group-text bg-secondary border-0" id="inputGroup-sizing-default">اعتبار حساب:</span>
-                            <input type="text" class="form-control" value="{{auth()->user()->business()->wallet}}" disabled>
-                            <button class="btn btn-outline-success" type="submit" id="button-addon1">افزایش اعتبار</button>
-                         </div>
-                </form>
+                <div class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text p-2 bg-secondary w-75 bg-opacity-10 border-0 text-white">
+                        اعتبار حساب:
+                        <span id="wallet_amount" class="pe-3">{{number_format(auth()->user()->business()->wallet)}} تومان </span>
+                        </span>
+                        <a href="{{route('business.Increase_credit')}}" class="p-2 rounded-start bg-primary bg-gradient bg-opacity-50 text-white text-decoration-none">افزایش اعتبار</a>
+                     </div>
+                </div>
             </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">

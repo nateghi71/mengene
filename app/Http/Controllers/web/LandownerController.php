@@ -239,16 +239,17 @@ class LandownerController extends Controller
         return redirect()->back()->with('message' , 'جایگاه فایل موردنظر تغییر کرد.');
     }
 
-    public function buyFile(Landowner $landowner)
+    public function buyFile(Request $request)
     {
         $this->authorize('subscription' , Landowner::class);
         $user = auth()->user();
+        $landowner = Landowner::findOrFail($request->file_id);
         $landowner->update([
             'type_file' => 'business' ,
             'business_id' => $user->business()->id,
             'user_id' => $user->id,
         ]);
-        return back()->with('message' , 'فایل موردنظر با موفقیت خریداری شد');
+        return redirect()->route('landowner.subscription.index')->with('message' , 'فایل موردنظر با موفقیت خریداری شد');
     }
 
     public function setRemainderTime(Request $request){

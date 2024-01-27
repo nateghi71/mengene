@@ -30,7 +30,6 @@
                 $('#credit_amount_all').text('')
             }
         })
-
     </script>
 @endsection
 
@@ -46,9 +45,13 @@
                             <label for="staticEmail" class="ms-5">مبلغ:</label>
                             <div class="w-50">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="credit_amount" name="credit_amount">
-                                    <span class="input-group-text bg-secondary border-0" id="inputGroup-sizing-default">تومان</span>
+                                    <input type="text" class="form-control" id="credit_amount" name="amount"
+                                           onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                                    <span class="input-group-text bg-secondary rounded-start rounded-end-0 border-0" id="inputGroup-sizing-default">تومان</span>
                                 </div>
+                                @error('amount')
+                                <div class="alert-danger">{{$message}}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-5">
@@ -58,7 +61,7 @@
                             </div>
                         </div>
                         <div class="bg-secondary bg-opacity-10 p-3">
-                            <input type="hidden" name="type_payment" value="buy_credit">
+                            <input type="hidden" name="order_type" value="buy_credit">
                             <button type="submit" class="btn btn-success fs-5 p-2">ادامه<i class="mdi mdi-cart mث-3"></i> </button>
                         </div>
                     </form>

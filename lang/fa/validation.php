@@ -28,7 +28,7 @@ return [
     'between' => [
         'array' => 'The :attribute field must have between :min and :max items.',
         'file' => 'The :attribute field must be between :min and :max kilobytes.',
-        'numeric' => 'The :attribute field must be between :min and :max.',
+        'numeric' => 'فیلد :attribute مقدارش باید بین :min و :max باشد.',
         'string' => 'The :attribute field must be between :min and :max characters.',
     ],
     'boolean' => 'The :attribute field must be true or false.',
@@ -233,6 +233,7 @@ return [
         'is_star' => 'ستاره' ,
         'code' => 'کد' ,
         'response' => 'پاسخ' ,
+        'amount' => 'مبلغ' ,
     ],
 
 ];

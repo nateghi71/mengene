@@ -12,10 +12,10 @@ class SmsForReminder
     {
         $info_cus = $notification->smsReminder($notifiable);
         Log::info($info_cus);
-//        $smsApi = new SmsAPI();
-//        $smsApi->sendSmsReminderForBusiness($notifiable->number , $info_cus['name_cus'], $info_cus['date']);
-//
-//        $smsApi = new SmsAPI();
-//        $smsApi->sendSmsReminderForCustomer($info_cus['number_cus'] , $notifiable->name, $info_cus['message'], $info_cus['date']);
+        $smsApi = new SmsAPI();
+        $smsApi->sendSmsReminderForBusiness($notifiable->number , $info_cus['name_cus'], $info_cus['date']);
+
+        $smsApi = new SmsAPI();
+        $smsApi->sendSmsReminderForCustomer($info_cus['number_cus'] , $notifiable->name, $info_cus['message'], $info_cus['date']);
     }
 }
