@@ -77,6 +77,20 @@
             }
         }
 
+        changeTypeFile()
+        function changeTypeFile()
+        {
+            let selectOptin = $('#type_file').children(':selected').val()
+            if(selectOptin === 'buy')
+            {
+                $('.price').show();
+            }
+            else
+            {
+                $('.price').hide();
+            }
+        }
+
         $(document).ready(function() {
             $("#expire_date").persianDatepicker({
                 format: 'YYYY/MM/DD',
@@ -250,12 +264,20 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="type_file">نوع فایل:</label>
-                        <select class="form-control" name="type_file" id="type_file">
+                        <select class="form-control" name="type_file" id="type_file" onchange="changeTypeFile()">
                             <option value="public" @selected($landowner->getRawOriginal('type_file') === "public")>عمومی</option>
                             <option value="buy" @selected($landowner->getRawOriginal('type_file') === "buy")>فایل پولی</option>
                             <option value="subscription" @selected($landowner->getRawOriginal('type_file') === "subscription")>اشتراک ویژه</option>
                         </select>
                         @error('type_file')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3 price">
+                        <label for="price">قیمت فایل:</label>
+                        <input type="text" name="price" class="form-control" value="{{isset($landowner->filePrice )? $landowner->filePrice->price : 0}}" id="price" placeholder="قیمت فایل"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('price')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>

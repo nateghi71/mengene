@@ -82,5 +82,26 @@
                 </div>
             </li>
         @endcan
+        @can('viewIndex' , \App\Models\Coupon::class)
+            <li class="nav-item menu-items">
+                <a class="nav-link" data-bs-toggle="collapse" href="#coupons" aria-expanded="false" aria-controls="coupons">
+              <span class="menu-icon">
+                <i class="mdi mdi-bullhorn"></i>
+              </span>
+                    <span class="menu-title pe-2">کوپن ها</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="coupons">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="{{route('admin.coupons.index')}}"> نمایش کوپن
+                                ها </a></li>
+                        @can('viewIndex' , \App\Models\Role::class)
+                            <li class="nav-item"><a class="nav-link" href="{{route('admin.coupons.create')}}">ایجاد
+                                    کوپن</a></li>
+                        @endcan
+                    </ul>
+                </div>
+            </li>
+        @endcan
     </ul>
 </nav>

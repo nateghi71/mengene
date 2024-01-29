@@ -4,34 +4,6 @@
     </div>
     <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
         <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item dropdown d-none d-lg-block">
-                <a class="nav-link btn bg-primary bg-gradient bg-opacity-50 create-new-button" id="createbuttonDropdown" data-bs-toggle="dropdown" aria-expanded="false" href="#">ایجاد فایل جدید +</a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
-                    <h6 class="p-3 mb-0 text-end">ایجاد فایل</h6>
-                    <div class="dropdown-divider"></div>
-                    <a href="{{route('admin.users.create')}}" class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-dark rounded-circle">
-                                <i class="mdi mdi-file-outline text-primary"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <p class="preview-subject ellipsis mb-1">ایجاد کاربر</p>
-                        </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="{{route('admin.roles.create')}}" class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-dark rounded-circle">
-                                <i class="mdi mdi-file-outline text-primary"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <p class="preview-subject ellipsis mb-1">ایجاد نقش</p>
-                        </div>
-                    </a>
-                </div>
-            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                     <div class="navbar-profile">

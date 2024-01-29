@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Landowner;
+use App\Models\Order;
+use App\Models\Package;
 use App\Models\Premium;
 use App\Models\User;
 use Carbon\Carbon;
@@ -25,38 +28,59 @@ class PremiumController extends Controller
 {
     public function index()
     {
-        return view('premium.index');
+        $packages = Package::all();
+        return view('premium.index' , compact('packages'));
+    }
+
+    public function get_package(Request $request)
+    {
+        $request->validate([
+            'package_name' => 'required',
+        ]);
+
+        session()->put('package_name' , $request->package_name);
+        return redirect()->route('packages.checkout');
+    }
+    public function checkout()
+    {
+        if(!session()->has('package_name'))
+            return redirect()->route('packages.index');
+
+        $package = Package::where('name' , session('package_name'))->first();
+        $package->coupon_amount = session()->has('coupon') ? session('coupon.amount') : 0;
+        $package->walletCharge = 50000;
+        $package->tax = (($package->price + $package->walletCharge) - $package->coupon_amount) * 0.09;
+        $package->payment = (($package->price + $package->walletCharge) - $package->coupon_amount) + $package->tax;
+        return view('premium.checkout' , compact('package'));
     }
 
     public function store($business)
     {
+        $package = Package::where('name' , 'free')->first();
         $business->premium()->create([
-            'level' => 'free',
-            'expire_date' => Carbon::now()->addDecade(),
+            'package_id' => $package->id,
+            'expire_date' => Carbon::now()->addMonth($package->time),
         ]);
     }
-
-    public function update(Request $request)
+    public function applyCoupon(Request $request)
     {
-        $this->authorize('viewPremiumIndex' , Business::class);
-        $business = auth()->user()->ownedBusiness()->first();
-        $premium = Premium::where('business_id' , $business->id)->first();
-
-        $expire_date = Carbon::now()->addMonth(3);
-        if($request->level == 'midLevel')
-        {
-            $expire_date = Carbon::now()->addMonth(3);
-        }
-        elseif ($request->level == 'vip')
-        {
-            $expire_date = Carbon::now()->addYear();
-        }
-
-        $premium->update([
-            'level' => $request->level,
-            'expire_date' => $expire_date,
+        $request->validate([
+            'code' => 'required'
         ]);
 
-        return redirect()->route('dashboard')->with('message' , 'اکانت شما ارتقا یافت.');
+        if (!auth()->check())
+            return back()->with('message' , 'برای استفاده از کد تخفیف نیاز هست ابتدا وارد وب سایت شوید');
+
+        $result = checkCoupon($request->code);
+        if (array_key_exists('error', $result)) {
+            return back()->with('message' , $result['error']);
+        }
+
+        $coupon = $result['coupon'] ;
+
+        $amount = floor(($request->amount * $coupon->percentage / 100)/1000)*1000;
+        session()->put('coupon', ['id' => $coupon->id, 'code' => $coupon->code, 'amount' => $amount]);
+
+        return back()->with('message' , 'کد تخفیف برای شما ثبت شد');
     }
 }

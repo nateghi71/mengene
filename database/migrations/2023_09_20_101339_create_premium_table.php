@@ -16,7 +16,7 @@ class CreatePremiumTable extends Migration
         Schema::create('premium', function (Blueprint $table) {
             $table->id();
             $table->foreignId('business_id')->constrained('businesses')->onDelete('cascade');
-            $table->enum('level', ['free', 'midLevel', 'vip'])->default('free');
+            $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
             $table->unsignedBigInteger('counter_sms')->default(0);
             $table->unsignedBigInteger('counter_Consultant')->default(0);
             $table->date('expire_date');

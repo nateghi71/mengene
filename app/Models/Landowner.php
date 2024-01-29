@@ -317,4 +317,8 @@ class Landowner extends Model
     {
         return $this->hasMany(PictureLandowner::class , 'landowner_id');
     }
+    public function filePrice()
+    {
+        return $this->hasOne(VipFilePrice::class , 'landowner_id');
+    }
 }

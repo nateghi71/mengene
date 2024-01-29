@@ -124,7 +124,7 @@ class SuggestionForCustomerController extends BaseController
         }
 
         $user = auth()->user();
-        if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
+        if(!$user->isFreeUser() && $user->business()->wallet >= 200)
         {
             $user->incrementPremiumCountSms();
             $landowner = Landowner::findOrFile($request->landowner_id);

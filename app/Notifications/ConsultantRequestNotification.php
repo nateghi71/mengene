@@ -28,7 +28,6 @@ class ConsultantRequestNotification extends Notification
 
     public function toArray(object $notifiable): array
     {
-//        $notifiable->notifications()->orderBy('create_at' , 'desc')->skip(6)->destroy();
         return [
             'message' => $this->consultant->name .' درخواست همکاری به عنوان مشاور را دارد.'
         ];

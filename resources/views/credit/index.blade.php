@@ -39,7 +39,7 @@
             <div class="card">
                 <div class="card-body m-0 p-0">
                     <h4 class="card-title me-5 my-4">شارژ حساب کاربری</h4>
-                    <form action="{{route('business.checkout')}}" method="post" class="pt-4">
+                    <form action="{{route('credits.checkout')}}" method="post" class="pt-4">
                         @csrf
                         <div class="d-flex align-items-center justify-content-center mb-4">
                             <label for="staticEmail" class="ms-5">مبلغ:</label>
@@ -61,7 +61,6 @@
                             </div>
                         </div>
                         <div class="bg-secondary bg-opacity-10 p-3">
-                            <input type="hidden" name="order_type" value="buy_credit">
                             <button type="submit" class="btn btn-success fs-5 p-2">ادامه<i class="mdi mdi-cart mث-3"></i> </button>
                         </div>
                     </form>

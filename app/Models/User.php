@@ -69,27 +69,30 @@ class User extends Authenticatable
     }
     public function isFreeUser() :bool
     {
-        return $this->business()->premium->level === 'free';
+        return $this->business()->premium->package->name === 'free';
     }
-    public function isVipUser():bool
+    public function isBronzeUser():bool
     {
-        return $this->business()->premium->level === 'vip';
+        return $this->business()->premium->package->name;
     }
-    public function isMidLevelUser():bool
+    public function isSilverUser():bool
     {
-        return $this->business()->premium->level === 'midLevel';
+        return $this->business()->premium->package->name === 'silver';
     }
-    public function getPremiumCountSms()
+    public function isGoldenUser():bool
     {
-        return $this->business()->premium->counter_sms;
-    }
-    public function getPremiumCountConsultants()
-    {
-        return $this->business()->premium->counter_Consultants;
+        return $this->business()->premium->package->name === 'golden';
     }
     public function incrementPremiumCountSms()
     {
-        return $this->business()->premium()->increment('counter_sms');
+        $this->business()->wallet -= 200;
+        $this->business()->save();
+        $this->business()->premium()->increment('counter_sms');
+    }
+
+    public function getPremiumCountConsultants()
+    {
+        return $this->business()->premium->counter_Consultants;
     }
     public function incrementPremiumCountConsultants()
     {

@@ -14,6 +14,7 @@
         {{--            </li>--}}
         {{--        </ul>--}}
         <ul class="navbar-nav w-100">
+            @if(!auth()->user()->isFreeUser())
             <li class="nav-item w-75">
                 <div class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
                     <div class="input-group flex-nowrap">
@@ -21,11 +22,13 @@
                         اعتبار حساب:
                         <span id="wallet_amount" class="pe-3">{{number_format(auth()->user()->business()->wallet)}} تومان </span>
                         </span>
-                        <a href="{{route('business.Increase_credit')}}" class="p-2 rounded-start bg-primary bg-gradient bg-opacity-50 text-white text-decoration-none">افزایش اعتبار</a>
+                        <a href="{{route('credits.index')}}" class="p-2 rounded-start bg-primary bg-gradient bg-opacity-50 text-white text-decoration-none">افزایش اعتبار</a>
                      </div>
                 </div>
             </li>
+            @endif
         </ul>
+
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown d-none d-lg-block">
                 <a class="nav-link btn bg-primary bg-gradient bg-opacity-50 create-new-button" id="createbuttonDropdown"

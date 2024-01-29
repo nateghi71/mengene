@@ -7,82 +7,85 @@
 
 @section('content')
     <div class="row content-wrapper full-page-wrapper d-flex align-items-center auth register-half-bg">
-        <div class="col-lg-3 mx-auto mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="text-center pt-3">رایگان</h3>
-                    <ul class="list-unstyled px-3 py-5">
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3"> ثبت اطلاعات متقاضی</span></li>
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3">ثبت اطلاعات ملک</span></li>
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3"> سامانه پیامکی(فقط برای مشتری)</span></li>
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3">مدیریت مشاورین(ندارد)</span></li>
-                    </ul>
-                    <div class="text-center pb-4">
-                        @if(auth()->user()->isFreeUser())
-                            <button type="button" class="btn btn-success">پلن فعلی</button>
-                        @else
-                            <button type="button" class="btn text-danger">غیرفعال</button>
+        @foreach($packages as $package)
+            <div class="col-lg-3 mx-auto mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        @if($package->name === 'free')
+                            <h3 class="text-center pt-3">سرویس رایگان</h3>
+                            <h4 class="text-center pt-3">یکساله رایگان</h4>
+                        @elseif($package->name === 'bronze')
+                            <h3 class="text-center pt-3">سرویس برنزی</h3>
+                            <h4 class="text-center pt-3">سه ماهه 599,000 تومان</h4>
+                        @elseif($package->name === 'silver')
+                            <h3 class="text-center pt-3">سرویس نقره ای</h3>
+                            <h4 class="text-center pt-3">6 ماهه 899,000 تومان</h4>
+                        @elseif($package->name === 'golden')
+                            <h3 class="text-center pt-3">سرویس طلایی</h3>
+                            <h4 class="text-center pt-3">سالانه 1,199,000 تومان</h4>
                         @endif
+                        <ul class="list-unstyled px-2 py-5">
+                            <li class="pb-2">
+                                <i class="mdi mdi-check text-success"></i>
+                                <span class="pe-3"> ثبت اطلاعات متقاضی</span>
+                            </li>
+                            <li class="pb-2">
+                                <i class="mdi mdi-check text-success"></i>
+                                <span class="pe-3">ثبت اطلاعات ملک</span>
+                            </li>
+                            <li class="pb-2">
+                                <i @class(['mdi mdi-check' , 'text-success' => $package->name !== 'free' ,  'text-muted' => $package->name === 'free'])></i>
+                                <span @class(['pe-3' , 'text-muted text-decoration-line-through' => $package->name === 'free'])>
+                                    سامانه پیامکی
+                                </span>
+                            </li>
+                            <li class="pb-2">
+                                <i @class(['mdi mdi-check' , 'text-success' => $package->name !== 'free' ,  'text-muted' => $package->name === 'free'])></i>
+                                <span @class(['pe-3' , 'text-muted text-decoration-line-through' => $package->name === 'free'])>
+                                    مدیریت مشاورین
+                                    @if($package->name === 'bronze')
+                                        (تا 2 عدد مشاور)
+                                    @elseif($package->name === 'silver')
+                                        (تا 3 عدد مشاور)
+                                    @elseif($package->name === 'golden')
+                                        (نامحدود)
+                                    @endif
+                                </span>
+                            </li>
+                            <li class="pb-2">
+                                <i @class(['mdi mdi-check' , 'text-success' => $package->name !== 'free' ,  'text-muted' => $package->name === 'free'])></i>
+                                <span @class(['pe-3' , 'text-muted text-decoration-line-through' => $package->name === 'free'])>
+                                    ثبت هشدار پیامکی
+                                </span>
+                            </li>
+                            <li class="pb-2">
+                                <i @class(['mdi mdi-check' , 'text-success' => $package->name !== 'free' ,  'text-muted' => $package->name === 'free'])></i>
+                                <span @class(['pe-3' , 'text-muted text-decoration-line-through' => $package->name === 'free'])>
+                                    دسترسی به فایل های ویژه
+                                </span>
+                            </li>
+                        </ul>
+                        <div class="text-center pb-4">
+                            @if($package->name === auth()->user()->business()->premium->package->name)
+                                <button type="button" class="btn btn-success">پلن فعلی</button>
+                            @elseif($package->price < auth()->user()->business()->premium->package->price)
+                                <button type="button" class="btn text-danger">غیرفعال</button>
+                            @else
+{{--                                @php--}}
+{{--                                session()->put('packageName' , $package->name);--}}
+{{--                                @endphp--}}
+{{--                                <a href="{{route('packages.checkout')}}" class="btn btn-outline-success p-2">پرداخت</a>--}}
+                                <form action="{{route('packages.get_package')}}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="package_name" value="{{$package->name}}">
+                                    <button type="submit" class="btn btn-outline-success">پرداخت</button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
-
-        </div>
-        <div class="col-lg-3 mx-auto mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="text-center pt-3">سه ماهه 299 تومان</h3>
-                    <ul class="list-unstyled px-2 py-5">
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3"> ثبت اطلاعات متقاضی</span></li>
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3">ثبت اطلاعات ملک</span></li>
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3"> سامانه پیامکی(تا ماهانه 1000 sms)</span></li>
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3">مدیریت مشاورین(تا 4 عدد مشاور)</span></li>
-                    </ul>
-                    <div class="text-center pb-4">
-                        @if(auth()->user()->isFreeUser())
-                            <form action="{{route('business.checkout')}}" method="post">
-                                @csrf
-                                <input type="hidden" name="order_type" value="buy_package">
-                                <input type="hidden" name="level" value="midLevel">
-                                <input type="hidden" name="amount" value="299000">
-                                <button type="submit" class="btn btn-outline-success">پرداخت</button>
-                            </form>
-                        @elseif(auth()->user()->isMidLevelUser())
-                            <button type="button" class="btn btn-success">پلن فعلی</button>
-                        @else
-                            <button type="button" class="btn text-danger">غیرفعال</button>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="col-lg-3 mx-auto mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="text-center pt-3">سالانه 899 تومان</h3>
-                    <ul class="list-unstyled px-3 py-5">
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3"> ثبت اطلاعات متقاضی</span></li>
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3">ثبت اطلاعات ملک</span></li>
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3">سامانه پیامکی(نامحدود)</span></li>
-                        <li class="pb-2"><i class="mdi mdi-check text-success"></i><span class="pe-3">مدیریت مشاورین(نامحدود)</span></li>
-                    </ul>
-                    <div class="text-center pb-4">
-                        @if(auth()->user()->isFreeUser() || auth()->user()->isMidLevelUser())
-                            <form action="{{route('business.checkout')}}" method="post">
-                                @csrf
-                                <input type="hidden" name="order_type" value="buy_package">
-                                <input type="hidden" name="level" value="vip">
-                                <input type="hidden" name="amount" value="899000">
-                                <button type="submit" class="btn btn-outline-success">پرداخت</button>
-                            </form>
-                        @else
-                            <button type="button" class="btn btn-success">پلن فعلی</button>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
+        @endforeach
         <div class="row">
             <div class="col-lg-2">
                 <a class="text-decoration-none text-white" href="{{route('dashboard')}}">

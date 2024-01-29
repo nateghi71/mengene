@@ -13,7 +13,7 @@ class Premium extends Model
 
     protected $fillable = [
         'business_id',
-        'level',
+        'package_id',
         'expire_date',
         'counter_sms',
         'counter_Consultants',
@@ -21,6 +21,10 @@ class Premium extends Model
     public function business()
     {
         return $this->belongsTo(Business::class);
+    }
+    public function package()
+    {
+        return $this->belongsTo(Package::class , 'package_id');
     }
 
 }

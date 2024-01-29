@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\web\admin\CouponController;
 use App\Http\Controllers\web\admin\RoleController;
 use App\Http\Controllers\web\admin\UserController;
 use App\Http\Controllers\web\admin\BusinessController as AdminBusinessController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\web\ConsultantController;
 use App\Http\Controllers\web\CreditController;
 use App\Http\Controllers\web\HomeController;
 use App\Http\Controllers\web\LandownerImageController;
+use App\Http\Controllers\web\PaymentController;
 use App\Http\Controllers\web\RandomLinkController;
 use App\Http\Controllers\web\SpecialLandownerController;
 use App\Http\Controllers\web\SuggestionForCustomerController;
@@ -28,42 +30,45 @@ use App\Http\Controllers\web\PremiumController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/confirmation/{type}/{token}', [RandomLinkController::class, 'confirmPage'])
+    ->middleware('checkRandomLinkExpiration')->name('confirmation.confirmPage');
+Route::post('/confirmation/handleExpired', [RandomLinkController::class, 'handleExpired'])->name('confirmation.handle.expired');
+Route::post('/confirmation/handleSuggestion', [RandomLinkController::class, 'handleSuggestion'])->name('confirmation.handle.suggestion');
+Route::get('/payment/verify/{price}', [PaymentController::class, 'paymentVerify'])->name('payment.verify');
 
+Route::middleware('auth')->group(function (){
+    Route::get('packages/checkout', [PremiumController::class, 'checkout'])->name('packages.checkout');
+    Route::post('/check-coupon', [PremiumController::class, 'applyCoupon'])->name('coupon.apply');
+    Route::post('/payment/buy_package', [PaymentController::class, 'payment_for_package'])->name('payment.package');
+    Route::post('/payment/buy_file', [PaymentController::class, 'payment_for_file'])->name('payment.file');
+    Route::post('/payment/buy_credit', [PaymentController::class, 'payment_for_credit'])->name('payment.credit');
+});
+
+Route::middleware('clearCoupon')->group(function (){
 Route::get('/', [HomeController::class, 'index'])->name('welcome');
 Route::get('public_landowner', [HomeController::class, 'public_landowners'])->name('landowner.public.index');
 Route::get('public_landowner/{landowner}', [HomeController::class, 'show_public_landowners'])->name('landowner.public.show');
 Route::get('public_customer', [HomeController::class, 'public_customers'])->name('customer.public.index');
 Route::get('public_customer/{customer}', [HomeController::class, 'show_public_customers'])->name('customer.public.show');
 Route::get('/get-province-cities-list', [HomeController::class, 'getProvinceCitiesList']);
-
-//Route::get('/dashboard', function () {
-//    return view('dashboard');
-//})->middleware(['auth'])->name('dashboard');
-
-Route::get('/dashboard', [BusinessController::class, 'dashboard'])->name('dashboard')
-    ->middleware('auth');
-
-Route::get('/confirmation/{type}/{token}', [RandomLinkController::class, 'confirmPage'])
-    ->middleware('checkRandomLinkExpiration')->name('confirmation.confirmPage');
-
-Route::post('/confirmation/handleExpired', [RandomLinkController::class, 'handleExpired'])->name('confirmation.handle.expired');
-Route::post('/confirmation/handleSuggestion', [RandomLinkController::class, 'handleSuggestion'])->name('confirmation.handle.suggestion');
-
-Route::prefix('/packages')->middleware('auth')->group(function () {
-    Route::get('/', [PremiumController::class, 'index'])->name('packages.index');
-    Route::post('/store', [PremiumController::class, 'store'])->name('packages.store');
-    Route::post('/update', [PremiumController::class, 'update'])->name('packages.update');
+Route::get('/dashboard', [BusinessController::class, 'dashboard'])->name('dashboard');
 });
 
-Route::middleware('auth')->group(function () {
+Route::group(['middleware' => ['auth', 'clearCoupon']] , function () {
     Route::resource('business' , BusinessController::class)->except(['show']);
     Route::get('business/{user}/accept', [BusinessController::class, 'toggleUserAcceptance'])->name('business.toggleUserAcceptance');
     Route::get('business/{user}/chooseOwner', [BusinessController::class, 'chooseOwner'])->name('business.chooseOwner');
     Route::get("business/{user}/remove", [BusinessController::class, 'removeMember'])->name('business.remove.member');
     Route::get("business/consultants", [BusinessController::class, 'showConsultants'])->name('business.consultants');
-    Route::get("business/checkout/Increase_credit", [CreditController::class, 'Increase_credit'])->name('business.Increase_credit');
-    Route::post("business/checkout/index", [CreditController::class, 'index'])->name('business.checkout');
-    Route::post("business/credit/buy", [CreditController::class, 'buy_credit'])->name('business.buy_credit');
+
+    Route::get("credits", [CreditController::class, 'index'])->name('credits.index');
+    Route::post("credits/checkout", [CreditController::class, 'checkout'])->name('credits.checkout');
+
+    Route::get('packages', [PremiumController::class, 'index'])->name('packages.index');
+    Route::post('packages/get_package', [PremiumController::class, 'get_package'])->name('packages.get_package');
+
+    Route::get('subscription/index', [LandownerController::class, 'indexSub'])->name('landowner.subscription.index');
+    Route::post('subscription/checkout', [LandownerController::class, 'checkout'])->name('landowner.subscription.checkout');
 
     Route::post('consultant/join', [ConsultantController::class, 'join'])->name('consultant.join');
     Route::post('consultant/search', [ConsultantController::class, 'search'])->name('consultant.search');
@@ -78,9 +83,6 @@ Route::middleware('auth')->group(function () {
     Route::post('landowner/suggestion/block', [SuggestionForLandOwnerController::class, 'send_block_message'])->name('landowner.send_block_message');
     Route::post('landowner/suggestion/share', [SuggestionForLandOwnerController::class, 'share_file_with_customer'])->name('landowner.send_share_message');
     Route::post('landowner/remainder/set_time', [LandownerController::class, 'setRemainderTime'])->name('landowner.remainder');
-
-    Route::get('landowner/subscription/index', [LandownerController::class, 'indexSub'])->name('landowner.subscription.index');
-    Route::post('landowner/subscription/buy', [LandownerController::class, 'buyFile'])->name('landowner.buyFile');
 
     Route::get('/landowner/images/{landowner}' , [LandownerImageController::class , 'edit'])->name('landowner.edit_images');
     Route::post('/landowner/images/add_image' , [LandownerImageController::class , 'add'])->name('landowner.add_image');
@@ -99,6 +101,7 @@ Route::middleware('auth')->prefix('admin-panel')->name('admin.')->group(function
     Route::resource('users', UserController::class)->except(['destroy']);
     Route::resource('roles', RoleController::class);
     Route::resource('landowners', FileController::class);
+    Route::resource('coupons', CouponController::class);
     Route::get('/landowners/images/{landowner}' , [FileController::class , 'editImage'])->name('landowner.edit_images');
     Route::get('users/change_status/{user}' , [UserController::class , 'changeStatus'])->name('users.status');
     Route::get('/' , [AdminBusinessController::class , 'adminPanel'])->name('adminPanel');

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Coupon;
+use App\Models\Order;
 use Carbon\Carbon;
 
 function generateFileName($name)
@@ -14,3 +16,19 @@ function generateFileName($name)
     return $year . '_' . $month . '_' . $day . '_' . $hour . '_' . $minute . '_' . $second . '_' . $microsecond . '_' . $name;
 }
 
+function checkCoupon($code)
+{
+    $coupon = Coupon::where('code', $code)->where('expire_date', '>', Carbon::now())->first();
+
+    if ($coupon == null) {
+        session()->forget('coupon');
+        return ['error' => 'کد تخفیف وارد شده وجود ندارد'];
+    }
+
+    if (Order::where('user_id', auth()->id())->where('coupon_id', $coupon->code)->where('payment_status', 1)->exists()) {
+        session()->forget('coupon');
+        return ['error' => 'شما قبلا از این کد تخفیف استفاده کرده اید'];
+    }
+
+    return ['success' => 'کد تخفیف قابل استفاده است.' , 'coupon' => $coupon];
+}

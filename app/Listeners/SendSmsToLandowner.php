@@ -22,7 +22,7 @@ class SendSmsToLandowner
      */
     public function handle(CreateLandownerFile $event): void
     {
-        if($event->user->isVipUser() || ($event->user->isMidLevelUser() && $event->user->getPremiumCountSms() <= 1000))
+        if(!$event->user->isFreeUser() && $event->user->business()->wallet >= 200)
         {
             $event->user->incrementPremiumCountSms();
             $smsApi = new SmsAPI();
