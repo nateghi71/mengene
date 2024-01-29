@@ -4,12 +4,14 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use App\Models\Business;
+use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Landowner;
 use App\Models\Role;
 use App\Models\User;
 use App\Policies\BusinessAdminPolicy;
 use App\Policies\BusinessPolicy;
+use App\Policies\CouponPolicy;
 use App\Policies\CustomerPolicy;
 use App\Policies\LandownerAdminPolicy;
 use App\Policies\LandownerPolicy;
@@ -31,6 +33,7 @@ class AuthServiceProvider extends ServiceProvider
         Business::class => BusinessPolicy::class,
         Role::class => RolePolicy::class,
         User::class => UserManagementPolicy::class,
+        Coupon::class => CouponPolicy::class,
     ];
 
     /**

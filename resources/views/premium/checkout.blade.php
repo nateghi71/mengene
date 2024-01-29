@@ -15,13 +15,7 @@
             <div class="card">
                 <div class="card-body m-0 p-0">
                     <h4 class="card-title me-5 my-4">
-                        @if($order['order_type'] === 'buy_credit')
-                            خرید شارژ حساب کاربری
-                        @elseif($order['order_type'] === 'buy_package')
-                            خرید پلن
-                        @elseif($order['order_type'] === 'buy_file')
-                            خرید فایل
-                        @endif
+                        خرید پلن
                     </h4>
                     <div class="table-responsive d-flex justify-content-center pt-4">
                         <table class="table table-bordered w-50">
@@ -32,37 +26,36 @@
                             </tr>
                             </thead>
                             <tbody class="text-white">
-                            @if($order['order_type'] === 'buy_credit')
                                 <tr>
-                                    <td>خرید شارژ حساب کاربری</td>
-                                    <td>{{number_format($order['amount'])}} تومان </td>
+                                    <td>
+                                        @if($package->name === 'bronze')
+                                            خرید پلن برنزی
+                                        @elseif($package->name === 'silver')
+                                            خرید پلن نقره ای
+                                        @elseif($package->name === 'golden')
+                                            خرید پلن طلایی
+                                        @endif
+                                    </td>
+                                    <td>{{number_format($package->price)}} تومان </td>
                                 </tr>
                                 <tr class="">
-                                    <td>مالیات</td>
-                                    <td>{{number_format($order['tax'])}} تومان  </td>
-                                </tr>
-                                <tr class="bg-secondary bg-opacity-10">
-                                    <td>مقدار پرداختی</td>
-                                    <td>{{number_format($order['amount']+$order['tax'])}} تومان  </td>
-                                </tr>
-                            @elseif($order['order_type'] === 'buy_package')
-                                <tr>
-                                    <td>{{$order['level'] == 'midLevel' ? 'خرید پلن نقره ای' : 'خرید پلن طلایی'}}</td>
-                                    <td>{{number_format($order['amount'])}} تومان </td>
+                                    <td>مالیات بر ارزش افزوده 9 درصد</td>
+                                    <td>{{number_format($package->tax)}} تومان  </td>
                                 </tr>
                                 <tr class="">
-                                    <td>مالیات</td>
-                                    <td>{{number_format($order['tax'])}} تومان  </td>
+                                    <td>شارژ حساب کاربری</td>
+                                    <td>{{number_format($package->walletCharge)}} تومان  </td>
                                 </tr>
                                 <tr>
                                     <td>کد تخفیف</td>
                                     <td>
-                                        <form action="#" method="post">
+                                        <form action="{{route('coupon.apply')}}" method="post">
                                             @csrf
                                                 <div class="input-group">
+                                                    <input type="hidden" name="amount" value="{{$package->price}}">
                                                     <input type="text" name="code" id="code" class="form-control"
                                                            value="{{session()->has('coupon') ? session('coupon')['code'] : ''}}"/>
-                                                    <button id="couponBtn" type="button" class="input-group-btn rounded-end-0 rounded-start btn btn-primary p-2">اعمال</button>
+                                                    <button id="couponBtn" type="submit" class="input-group-btn rounded-end-0 rounded-start btn btn-primary p-2">اعمال</button>
                                                 </div>
                                                 @error('code')
                                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -71,27 +64,15 @@
                                     </td>
                                 </tr>
                                 <tr class="">
-                                    <td>مقدار کوپن</td>
-                                    <td>0 تومان </td>
+                                    <td>مبلغ کد تخفیف</td>
+                                    <td>
+                                        {{$package->coupon_amount}} تومان
+                                    </td>
                                 </tr>
                                 <tr class="bg-secondary bg-opacity-10">
                                     <td>مقدار پرداختی</td>
-                                    <td>{{number_format($order['amount']+$order['tax'])}} تومان  </td>
+                                    <td>{{number_format($package->payment)}} تومان  </td>
                                 </tr>
-                            @elseif($order['order_type'] === 'buy_file')
-                                <tr>
-                                    <td>خرید فایل</td>
-                                    <td>{{number_format($order['amount'])}} تومان </td>
-                                </tr>
-                                <tr class="">
-                                    <td>مالیات</td>
-                                    <td>{{number_format($order['tax'])}} تومان  </td>
-                                </tr>
-                                <tr class="bg-secondary bg-opacity-10">
-                                    <td>مقدار پرداختی</td>
-                                    <td>{{number_format($order['amount']+$order['tax'])}} تومان  </td>
-                                </tr>
-                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -100,33 +81,15 @@
                         <p class="mt-4">پرداخت توسط کلیه کارت های عضو شبکه شتاب قابل انجام است</p>
                     </div>
                     <div class="bg-secondary bg-opacity-10 p-3">
-                        @if($order['order_type'] === 'buy_credit')
-                            <form action="{{route('business.buy_credit')}}" method="post">
-                                @csrf
-                                <input type="hidden" name="amount" value="{{$order['amount']}}">
-                                <button type="submit" class="btn btn-success fs-5 p-2">پرداخت انلاین<i class="mdi mdi-cart "></i> </button>
-                                <a href="{{route('business.Increase_credit')}}" class="btn btn-primary fs-5 p-2"><i class="mdi mdi-arrow-right"></i> بازگشت</a>
-                            </form>
-                        @elseif($order['order_type'] === 'buy_package')
-                            <form action="{{route('packages.update')}}" method="post">
-                                @csrf
-                                <input type="hidden" name="level" value="{{$order['level']}}">
-                                <button type="submit" class="btn btn-success fs-5 p-2">پرداخت انلاین<i class="mdi mdi-cart "></i> </button>
-                                <a href="{{route('packages.index')}}" class="btn btn-primary fs-5 p-2"><i class="mdi mdi-arrow-right"></i> بازگشت</a>
-                            </form>
-                        @elseif($order['order_type'] === 'buy_file')
-                            <form action="{{route('landowner.buyFile')}}" method="post">
-                                @csrf
-                                <input type="hidden" name="file_id" value="{{$order['file_id']}}">
-                                <button type="submit" class="btn btn-success fs-5 p-2">پرداخت انلاین<i class="mdi mdi-cart "></i> </button>
-                                <a href="{{route('landowner.subscription.index')}}" class="btn btn-primary fs-5 p-2"><i class="mdi mdi-arrow-right"></i> بازگشت</a>
-                            </form>
-                        @endif
-
+                        <form action="{{route('payment.package')}}" method="post">
+                            @csrf
+                            <input type="hidden" name="package_name" value="{{$package->name}}">
+                            <button type="submit" class="btn btn-success fs-5 p-2">پرداخت<i class="mdi mdi-cart "></i> </button>
+                            <a href="{{route('packages.index')}}" class="btn btn-primary fs-5 p-2"><i class="mdi mdi-arrow-right"></i> بازگشت</a>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 @endsection

@@ -276,10 +276,8 @@
                                                 @if($file->getRawOriginal('type_file') == 'subscription')
                                                     <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
                                                 @elseif($file->getRawOriginal('type_file') == 'buy')
-                                                    <form action="{{route('business.checkout')}}" method="post">
+                                                    <form action="{{route('landowner.subscription.checkout')}}" method="post">
                                                         @csrf
-                                                        <input type="hidden" name="order_type" value="buy_file">
-                                                        <input type="hidden" name="amount" value="10000">
                                                         <input type="hidden" name="file_id" value="{{$file->id}}">
                                                         <button type="submit" class="btn btn-link"><i class="mdi mdi-eye-off text-danger"></i></button>
                                                     </form>
@@ -293,10 +291,8 @@
                                                 @if($file->getRawOriginal('type_file') == 'subscription')
                                                     <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
                                                 @elseif($file->getRawOriginal('type_file') == 'buy')
-                                                    <form action="{{route('business.checkout')}}" method="post">
+                                                    <form action="{{route('landowner.subscription.checkout')}}" method="post">
                                                         @csrf
-                                                        <input type="hidden" name="order_type" value="buy_file">
-                                                        <input type="hidden" name="amount" value="10000">
                                                         <input type="hidden" name="file_id" value="{{$file->id}}">
                                                         <button type="submit" class="btn btn-link"><i class="mdi mdi-eye-off text-danger"></i></button>
                                                     </form>
@@ -314,10 +310,8 @@
                                                 @if($file->getRawOriginal('type_file') == 'subscription')
                                                     <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
                                                 @elseif($file->getRawOriginal('type_file') == 'buy')
-                                                    <form action="{{route('business.checkout')}}" method="post">
+                                                    <form action="{{route('landowner.subscription.checkout')}}" method="post">
                                                         @csrf
-                                                        <input type="hidden" name="order_type" value="buy_file">
-                                                        <input type="hidden" name="amount" value="10000">
                                                         <input type="hidden" name="file_id" value="{{$file->id}}">
                                                         <button type="submit" class="btn btn-link"><i class="mdi mdi-eye-off text-danger"></i></button>
                                                     </form>
@@ -336,10 +330,8 @@
                                                 @if($file->getRawOriginal('type_file') == 'subscription')
                                                     <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
                                                 @elseif($file->getRawOriginal('type_file') == 'buy')
-                                                    <form action="{{route('business.checkout')}}" method="post">
+                                                    <form action="{{route('landowner.subscription.checkout')}}" method="post">
                                                         @csrf
-                                                        <input type="hidden" name="order_type" value="buy_file">
-                                                        <input type="hidden" name="amount" value="10000">
                                                         <input type="hidden" name="file_id" value="{{$file->id}}">
                                                         <button type="submit" class="btn btn-link"><i class="mdi mdi-eye-off text-danger"></i></button>
                                                     </form>
@@ -353,10 +345,8 @@
                                                 @if($file->getRawOriginal('type_file') == 'subscription')
                                                     <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
                                                 @elseif($file->getRawOriginal('type_file') == 'buy')
-                                                    <form action="{{route('business.checkout')}}" method="post">
+                                                    <form action="{{route('landowner.subscription.checkout')}}" method="post">
                                                         @csrf
-                                                        <input type="hidden" name="order_type" value="buy_file">
-                                                        <input type="hidden" name="amount" value="10000">
                                                         <input type="hidden" name="file_id" value="{{$file->id}}">
                                                         <button type="submit" class="btn btn-link"><i class="mdi mdi-eye-off text-danger"></i></button>
                                                     </form>
@@ -365,10 +355,8 @@
                                         </td>
                                         <td>
                                             @if($file->getRawOriginal('type_file') == 'subscription' && !auth()->user()->isFreeUser())
-                                                <form action="{{route('business.checkout')}}" method="post">
+                                                <form action="{{route('landowner.subscription.checkout')}}" method="post">
                                                     @csrf
-                                                    <input type="hidden" name="order_type" value="buy_file">
-                                                    <input type="hidden" name="amount" value="10000">
                                                     <input type="hidden" name="file_id" value="{{$file->id}}">
                                                     <button type="submit" class="btn btn-link"><i class="mdi mdi-format-vertical-align-top"></i></button>
                                                 </form>
@@ -376,10 +364,8 @@
                                                 @if($file->getRawOriginal('type_file') == 'subscription')
                                                     <a class="text-success text-decoration-none" href="{{route('packages.index')}}"><i class="mdi mdi-eye-off text-danger"></i></a>
                                                 @elseif($file->getRawOriginal('type_file') == 'buy')
-                                                    <form action="{{route('business.checkout')}}" method="post">
+                                                    <form action="{{route('landowner.subscription.checkout')}}" method="post">
                                                         @csrf
-                                                        <input type="hidden" name="order_type" value="buy_file">
-                                                        <input type="hidden" name="amount" value="10000">
                                                         <input type="hidden" name="file_id" value="{{$file->id}}">
                                                         <button type="submit" class="btn btn-link"><i class="mdi mdi-eye-off text-danger"></i></button>
                                                     </form>
@@ -393,10 +379,8 @@
                                                 @if($file->getRawOriginal('type_file') == 'subscription')
                                                     <a class="text-success text-decoration-none" href="{{route('packages.index')}}">خرید اشتراک</a>
                                                 @elseif($file->getRawOriginal('type_file') == 'buy')
-                                                    <form action="{{route('business.checkout')}}" method="post">
+                                                    <form action="{{route('landowner.subscription.checkout')}}" method="post">
                                                         @csrf
-                                                        <input type="hidden" name="order_type" value="buy_file">
-                                                        <input type="hidden" name="amount" value="10000">
                                                         <input type="hidden" name="file_id" value="{{$file->id}}">
                                                         <button type="submit" class="btn btn-link text-decoration-none text-success">خرید فایل</button>
                                                     </form>

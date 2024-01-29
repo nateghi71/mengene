@@ -98,7 +98,7 @@ class SuggestionForLandOwnerController extends Controller
         $this->authorize('viewSuggestion', Landowner::class);
 
         $user = auth()->user();
-        if($user->isVipUser() || ($user->isMidLevelUser() && $user->getPremiumCountSms() <= 1000))
+        if(!$user->isFreeUser() && $user->business()->wallet >= 200)
         {
             $user->incrementPremiumCountSms();
             $landowner = Landowner::findOrFile($request->landowner_id);

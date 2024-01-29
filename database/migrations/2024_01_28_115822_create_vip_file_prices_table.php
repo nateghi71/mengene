@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('files_vip_price', function (Blueprint $table) {
+        Schema::create('vip_file_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('landowner_id')->constrained('landowners')->onDelete('cascade');
             $table->unsignedBigInteger('price');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('files_vip_price');
+        Schema::dropIfExists('vip_file_prices');
     }
 };

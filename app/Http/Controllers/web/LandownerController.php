@@ -119,14 +119,14 @@ class LandownerController extends Controller
                 'number_of_rooms' => $request->number_of_rooms,
                 'description' => $request->description,
                 'access_level' => $request->access_level,
-                'rahn_amount' => $request->type_sale === 'rahn' ? $request->rahn_amount : 0,
-                'rent_amount' => $request->type_sale === 'rahn' ? $request->rent_amount : 0,
-                'selling_price' => $request->type_sale === 'buy' ? $request->selling_price : 0,
+                'rahn_amount' => ($request->type_sale === 'rahn' && $request->rahn_amount !== null) ? $request->rahn_amount : 0,
+                'rent_amount' => ($request->type_sale === 'rahn' && $request->rent_amount !== null) ? $request->rent_amount : 0,
+                'selling_price' => ($request->type_sale === 'buy' && $request->selling_price !== null) ? $request->selling_price : 0,
                 'elevator' => $request->has('elevator') ? 1 : 0,
                 'parking' => $request->has('parking') ? 1 : 0,
                 'store' => $request->has('store') ? 1 : 0,
-                'floor' => $request->type_build === 'apartment' ? $request->floor : 0,
-                'floor_number' => $request->type_build === 'apartment' ? $request->floor_number : 0,
+                'floor' => ($request->type_build === 'apartment' && $request->floor !== null) ? $request->floor : 0,
+                'floor_number' => ($request->type_build === 'apartment' && $request->floor_number !== null) ? $request->floor_number : 0,
                 'business_id' => $user->business()->id,
                 'user_id' => $user->id,
                 'is_star' => $request->has('is_star') ? 1 : 0 ,
@@ -199,14 +199,14 @@ class LandownerController extends Controller
             'number_of_rooms' => $request->number_of_rooms,
             'description' => $request->description,
             'access_level' => $request->access_level,
-            'rahn_amount' => $request->type_sale === 'rahn' ? $request->rahn_amount : 0,
-            'rent_amount' => $request->type_sale === 'rahn' ? $request->rent_amount : 0,
-            'selling_price' => $request->type_sale === 'buy' ? $request->selling_price : 0,
+            'rahn_amount' => ($request->type_sale === 'rahn' && $request->rahn_amount !== null) ? $request->rahn_amount : 0,
+            'rent_amount' => ($request->type_sale === 'rahn' && $request->rent_amount !== null) ? $request->rent_amount : 0,
+            'selling_price' => ($request->type_sale === 'buy' && $request->selling_price !== null) ? $request->selling_price : 0,
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
-            'floor' => $request->type_build === 'apartment' ? $request->floor : 0,
-            'floor_number' => $request->type_build === 'apartment' ? $request->floor_number : 0,
+            'floor' => ($request->type_build === 'apartment' && $request->floor !== null) ? $request->floor : 0,
+            'floor_number' => ($request->type_build === 'apartment' && $request->floor_number !== null) ? $request->floor_number : 0,
 //            'business_id' => $user->business()->id,
 //            'user_id' => $user->id,
             'is_star' => $request->has('is_star') ? 1 : 0 ,
@@ -239,21 +239,25 @@ class LandownerController extends Controller
         return redirect()->back()->with('message' , 'جایگاه فایل موردنظر تغییر کرد.');
     }
 
-    public function buyFile(Request $request)
+    public function checkout(Request $request)
     {
         $this->authorize('subscription' , Landowner::class);
-        $user = auth()->user();
         $landowner = Landowner::findOrFail($request->file_id);
-        $landowner->update([
-            'type_file' => 'business' ,
-            'business_id' => $user->business()->id,
-            'user_id' => $user->id,
-        ]);
-        return redirect()->route('landowner.subscription.index')->with('message' , 'فایل موردنظر با موفقیت خریداری شد');
+        $landowner->tax = $landowner->filePrice->price * 0.09;
+        $landowner->wallet = auth()->user()->business()->wallet;
+        $landowner->payment = $landowner->filePrice->price + $landowner->tax;
+        $landowner->walletAfterUse = ($landowner->wallet - $landowner->payment) > 0 ?($landowner->wallet - $landowner->payment):0;
+        $landowner->paymentAfterWalletUse  = ($landowner->payment - $landowner->wallet) > 0 ? ($landowner->payment - $landowner->wallet):0;
+
+        return view('special_file.checkout' ,compact('landowner'));
     }
 
     public function setRemainderTime(Request $request){
         $this->authorize('reminder' , Landowner::class);
+
+        $user = auth()->user();
+        if($user->isFreeUser() || $user->business()->wallet < 200)
+            return back()->with('message' , 'شما به این امکانات دسترسی ندارید.');
 
         $landowner = Landowner::find($request->landowner_id);
         $date = Verta::parse($request->remainder)->datetime()->format('Y-m-d H:i:s');

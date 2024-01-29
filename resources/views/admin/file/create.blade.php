@@ -18,7 +18,6 @@
                             $("#city").empty();
 
                             $.each(res, function(key, city) {
-                                console.log(city);
                                 $("#city").append('<option value="' + city.id + '">' +
                                     city.name + '</option>');
                             });
@@ -58,6 +57,20 @@
             else if(selectOptin === 'apartment')
             {
                 $('.floor').show();
+            }
+        }
+
+        changeTypeFile()
+        function changeTypeFile()
+        {
+            let selectOption = $('#type_file').children(':selected').val()
+            if(selectOption == 'buy')
+            {
+                $('.price').show();
+            }
+            else
+            {
+                $('.price').hide();
             }
         }
 
@@ -221,12 +234,20 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="type_file">نوع فایل:</label>
-                        <select class="form-control" name="type_file" id="type_file">
+                        <select class="form-control" name="type_file" id="type_file" onchange="changeTypeFile()">
                             <option value="public" @selected(old('type_file') == 'public')>عمومی</option>
                             <option value="buy" @selected(old('type_file') == 'buy')>فایل پولی</option>
                             <option value="subscription" @selected(old('type_file') == 'subscription')>اشتراک ویژه</option>
                         </select>
                         @error('type_file')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3 price">
+                        <label for="price">قیمت فایل:</label>
+                        <input type="text" name="price" class="form-control" value="{{old('price')}}" id="price" placeholder="قیمت فایل"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('price')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>

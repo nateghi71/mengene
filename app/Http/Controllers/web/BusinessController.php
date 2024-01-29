@@ -200,8 +200,11 @@ class BusinessController extends Controller
         $member = $user->businessUser()->first();
         if ($member->is_accepted == 0) {
             $userAuth = auth()->user();
-            if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
+            if($userAuth->isFreeUser()
+                || ($userAuth->isBronzeUser() && $userAuth->getPremiumCountConsultants() > 2)
+                || ($userAuth->isSilverUser() && $userAuth->getPremiumCountConsultants() > 3))
                 return redirect()->back()->with('message', 'شما نمی توانید مشاور اضافه کنید.');
+
             $userAuth->incrementPremiumCountConsultants();
             $member->joined_date = Carbon::now()->format('Y-m-d');
 
@@ -223,7 +226,9 @@ class BusinessController extends Controller
         $this->authorize('chooseOwner', $business);
 
         $userAuth = auth()->user();
-        if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
+        if($userAuth->isFreeUser()
+            || ($userAuth->isBronzeUser() && $userAuth->getPremiumCountConsultants() > 2)
+            || ($userAuth->isSilverUser() && $userAuth->getPremiumCountConsultants() > 3))
             return redirect()->back()->with('message', 'شما نمی توانید مشاور اضافه کنید.');
 
         $business->members()->attach($userAuth);

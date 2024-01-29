@@ -339,6 +339,10 @@ class LandownerController extends BaseController
             return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
+        $user = auth()->user();
+        if($user->isFreeUser() || $user->business()->wallet < 200)
+            return $this->sendError('Logic Error', ['message' => 'شما به این امکانات دسترسی ندارید.'] , 401);
+
         $landowner = Landowner::find($request->landowner_id);
         $date = Verta::parse($request->remainder)->datetime()->format('Y-m-d H:i:s');
         $time = new Carbon($date);

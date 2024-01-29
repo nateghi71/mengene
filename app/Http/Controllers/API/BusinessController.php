@@ -241,7 +241,9 @@ class BusinessController extends BaseController
         if ($member->is_accepted == 0) {
 
             $userAuth = auth()->user();
-            if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
+            if($userAuth->isFreeUser()
+                || ($userAuth->isBronzeUser() && $userAuth->getPremiumCountConsultants() > 2)
+                || ($userAuth->isSilverUser() && $userAuth->getPremiumCountConsultants() > 3))
                 return $this->sendError('Logic Error', ['message' => 'شما نمی توانید مشاور اضافه کنید.'] , 500);
 
             $userAuth->incrementPremiumCountConsultants();
@@ -271,7 +273,9 @@ class BusinessController extends BaseController
         }
 
         $userAuth = auth()->user();
-        if($userAuth->isFreeUser() || ($userAuth->isMidLevelUser() && $userAuth->getPremiumCountConsultants() > 4))
+        if($userAuth->isFreeUser()
+            || ($userAuth->isBronzeUser() && $userAuth->getPremiumCountConsultants() > 2)
+            || ($userAuth->isSilverUser() && $userAuth->getPremiumCountConsultants() > 3))
             return redirect()->back()->with('message', 'شما نمی توانید مشاور اضافه کنید.');
 
         $business->members()->attach($userAuth);
