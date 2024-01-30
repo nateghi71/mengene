@@ -96,7 +96,12 @@
                 format: 'YYYY/MM/DD',
                 minDate: new persianDate(),
                 initialValueType: 'persian',
-                autoClose: true
+                autoClose: true,
+                toolbox:{
+                    calendarSwitch:{
+                        enabled:false,
+                    }
+                }
             });
         });
 

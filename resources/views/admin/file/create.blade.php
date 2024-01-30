@@ -79,7 +79,12 @@
                 initialValue: false,
                 minDate: new persianDate(),
                 format: 'YYYY/MM/DD',
-                autoClose: true
+                autoClose: true,
+                toolbox:{
+                    calendarSwitch:{
+                        enabled:false,
+                    }
+                }
             });
         });
 

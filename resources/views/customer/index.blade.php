@@ -57,6 +57,9 @@
                     text: {
                         fa: 'تایید'
                     },
+                    calendarSwitch:{
+                        enabled:false,
+                    },
                     onSubmit:function (element){
                         let id = element.inputElement.id.slice(10)
                         let input = $('[id^=remainder_input_'+ id +']')
