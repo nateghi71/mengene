@@ -106,8 +106,8 @@ class User extends Authenticatable
     {
         if($this->ownedBusiness()->exists())
             return $this->ownedBusiness()->first();
-        elseif ($this->joinedBusinesses()->wherePivot('is_accepted', 1)->exists())
-            return $this->joinedBusinesses()->wherePivot('is_accepted', 1)->first();
+        elseif ($this->joinedBusinesses()->exists())
+            return $this->joinedBusinesses()->first();
 
         return null;
     }

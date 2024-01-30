@@ -28,12 +28,15 @@ class PremiumController extends Controller
 {
     public function index()
     {
+        $this->authorize('isOwner' , Business::class);
         $packages = Package::all();
         return view('premium.index' , compact('packages'));
     }
 
     public function get_package(Request $request)
     {
+        $this->authorize('isOwner' , Business::class);
+
         $request->validate([
             'package_name' => 'required',
         ]);
@@ -43,6 +46,8 @@ class PremiumController extends Controller
     }
     public function checkout()
     {
+        $this->authorize('isOwner' , Business::class);
+
         if(!session()->has('package_name'))
             return redirect()->route('packages.index');
 
@@ -64,6 +69,8 @@ class PremiumController extends Controller
     }
     public function applyCoupon(Request $request)
     {
+        $this->authorize('isOwner' , Business::class);
+
         $request->validate([
             'code' => 'required'
         ]);

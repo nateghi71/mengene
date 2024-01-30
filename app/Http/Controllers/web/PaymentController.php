@@ -24,6 +24,8 @@ class PaymentController extends Controller
 {
     public function payment_for_file(Request $request)
     {
+        $this->authorize('isOwner' , Business::class);
+
         $request->validate([
             'payment_method' => 'required',
             'file_id' => 'required',
@@ -82,6 +84,8 @@ class PaymentController extends Controller
     }
     public function payment_for_package(Request $request)
     {
+        $this->authorize('isOwner' , Business::class);
+
         $request->validate([
             'package_name' => 'required',
         ]);
@@ -103,6 +107,8 @@ class PaymentController extends Controller
     }
     public function payment_for_credit(Request $request)
     {
+        $this->authorize('isOwner' , Business::class);
+
         $request->validate([
             'amount' => 'required|numeric|between:1000,99999999',
         ]);

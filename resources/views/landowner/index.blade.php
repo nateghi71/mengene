@@ -183,7 +183,7 @@
             </div>
         </div>
     </div>
-    @if($landowners->isEmpty())
+    @if($landowners->isEmpty() && auth()->user()->ownedBusiness()->exists())
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card bg-success bg-gradient bg-opacity-50">
@@ -336,9 +336,11 @@
                             @else
                                 <h4 class="card-title">همه مالکان</h4>
                             @endif
+                            @if(auth()->user()->ownedBusiness()->exists())
                             <div>
                                 <a href="{{route('landowner.subscription.index')}}" class="btn btn-success">فایل های ویژه</a>
                             </div>
+                            @endif
                         </div>
                         <div class="table-responsive">
                             <table class="table text-center">

@@ -14,7 +14,7 @@
         {{--            </li>--}}
         {{--        </ul>--}}
         <ul class="navbar-nav w-100">
-            @if(!auth()->user()->isFreeUser())
+            @if(!auth()->user()->isFreeUser() && auth()->user()->ownedBusiness()->exists())
             <li class="nav-item w-75">
                 <div class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
                     <div class="input-group flex-nowrap">

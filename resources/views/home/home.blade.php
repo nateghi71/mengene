@@ -24,7 +24,7 @@
 
                     </h2>
                     <div class="d-flex justify-content-center justify-content-lg-start">
-                        <a href="{{route('2fa.enter_number')}}" class="btn-get-started scrollto">ثبت نام</a>
+                        <a href="{{route('2fa.enter_number')}}" class="btn-get-started scrollto">ثبت نام / ورود</a>
                         <a href="https://98diha.ir//wp-content/themes/ringtone/api/mengene.apk" target="_blank"
                            class="btn-watch-video m-2">
                             <i class="mdi mdi-android"></i>

@@ -55,7 +55,7 @@ class BusinessPolicy
         return $user->joinedBusinesses()->exists();
     }
 
-    public function viewPremiumIndex(User $user)
+    public function isOwner(User $user)
     {
         return $user->ownedBusiness()->exists();
     }

@@ -10,7 +10,6 @@ use App\Http\Controllers\web\HomeController;
 use App\Http\Controllers\web\LandownerImageController;
 use App\Http\Controllers\web\PaymentController;
 use App\Http\Controllers\web\RandomLinkController;
-use App\Http\Controllers\web\SpecialLandownerController;
 use App\Http\Controllers\web\SuggestionForCustomerController;
 use App\Http\Controllers\web\SuggestionForLandOwnerController;
 use Illuminate\Support\Facades\Route;
@@ -51,7 +50,6 @@ Route::get('public_landowner/{landowner}', [HomeController::class, 'show_public_
 Route::get('public_customer', [HomeController::class, 'public_customers'])->name('customer.public.index');
 Route::get('public_customer/{customer}', [HomeController::class, 'show_public_customers'])->name('customer.public.show');
 Route::get('/get-province-cities-list', [HomeController::class, 'getProvinceCitiesList']);
-Route::get('/dashboard', [BusinessController::class, 'dashboard'])->name('dashboard');
 });
 
 Route::group(['middleware' => ['auth', 'clearCoupon']] , function () {
@@ -60,6 +58,7 @@ Route::group(['middleware' => ['auth', 'clearCoupon']] , function () {
     Route::get('business/{user}/chooseOwner', [BusinessController::class, 'chooseOwner'])->name('business.chooseOwner');
     Route::get("business/{user}/remove", [BusinessController::class, 'removeMember'])->name('business.remove.member');
     Route::get("business/consultants", [BusinessController::class, 'showConsultants'])->name('business.consultants');
+    Route::get('/dashboard', [BusinessController::class, 'dashboard'])->name('dashboard');
 
     Route::get("credits", [CreditController::class, 'index'])->name('credits.index');
     Route::post("credits/checkout", [CreditController::class, 'checkout'])->name('credits.checkout');
@@ -109,7 +108,6 @@ Route::middleware('auth')->prefix('admin-panel')->name('admin.')->group(function
     Route::get('business/{business}' , [AdminBusinessController::class , 'show'])->name('business.show');
     Route::get('business/change_status/{business}' , [AdminBusinessController::class , 'changeStatus'])->name('business.changeStatus');
 });
-
 
 require __DIR__ . '/auth.php';
 

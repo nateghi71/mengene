@@ -77,7 +77,6 @@ class BusinessController extends Controller
             return redirect()->route('business.create');
     }
 
-
     public function create()
     {
         $this->authorize('createOrJoin', Business::class);
