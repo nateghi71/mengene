@@ -69,15 +69,15 @@
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div class="form-group">
-                        <label for="email">ایمیل (اختیاری)</label>
-                        <input type="text" name="email" value="{{old('email')}}" class="form-control" id="email" placeholder="ایمیل">
-                        @error('email')
-                        <div class="alert alert-danger">
-                            {{$message}}
-                        </div>
-                        @enderror
-                    </div>
+{{--                    <div class="form-group">--}}
+{{--                        <label for="email">ایمیل (اختیاری)</label>--}}
+{{--                        <input type="text" name="email" value="{{old('email')}}" class="form-control" id="email" placeholder="ایمیل">--}}
+{{--                        @error('email')--}}
+{{--                        <div class="alert alert-danger">--}}
+{{--                            {{$message}}--}}
+{{--                        </div>--}}
+{{--                        @enderror--}}
+{{--                    </div>--}}
                     <div class="form-group">
                         <label for="password">رمز ورود *</label>
                         <input type="password" name="password" value="{{old('password')}}" class="form-control" id="password" placeholder="رمز ورود">

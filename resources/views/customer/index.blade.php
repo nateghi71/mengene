@@ -5,7 +5,7 @@
 @section('head')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
-        #deletePanel {
+        .deletePanel {
             position: fixed;
             top: 0;
             left: 0;
@@ -16,7 +16,7 @@
             background: rgba(0,0,0,0.5);
         }
 
-        #deleteBox {
+        .deleteBox {
             position: fixed;
             padding: 20px;
             top: 50%;
@@ -35,18 +35,60 @@
 
 @section('scripts')
     <script>
-        $('#deletePanel').hide()
+        $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
-        $('[id^=open_delete_panel_]').on('click' , function (e){
+        function deleteBox(e)
+        {
             e.preventDefault()
-            $('#deletePanel').show()
-            $('#deleteBox').children().children().eq(0).attr('action' , $(this).attr('href'))
-        })
-        $('#not_delete_btn').on('click' , function (){
-            $('#deletePanel').hide()
-        })
+            let wrapper = $('<div>' , {class:'deletePanel'})
+            let box = $('<div>', {class:'deleteBox'})
+            let message = $('<p>' , {
+                class:"text-end pb-3",
+                text:'ایا می خواهید فایل موردنظر را حذف کنید؟'
+            })
 
-        // $("[id^=remainder_input_]").hide()
+            let btnContainer = $('<div>' , {class:"d-flex justify-content-between"})
+            let deleteForm = $('<form>' , {
+                method:"post",
+                action : $(this).attr('href')
+            })
+            let methodInput = $('<input>' , {
+                type:"hidden",
+                name:"_method",
+                value : "DELETE"
+            })
+            let csrfInput = $('<input>' , {
+                type:"hidden",
+                name:"_token",
+                value : "{{ csrf_token() }}"
+            })
+
+
+            let closeBtn = $('<button>' , {
+                class:"btn btn-success",
+                type:"button",
+                click: ()=> wrapper.remove(),
+                text:'خیر'
+            })
+
+            let actionBtn = $('<button>' , {
+                class:"btn btn-danger",
+                type:"submit",
+                text:'بله',
+            })
+
+            wrapper.append(box)
+            box.append(message)
+            box.append(btnContainer)
+            btnContainer.append(closeBtn)
+            btnContainer.append(deleteForm)
+            deleteForm.append(methodInput)
+            deleteForm.append(csrfInput)
+            deleteForm.append(actionBtn)
+
+            $('#selectBox').append(wrapper)
+        }
+
         let datePicker = $("[id^=remainder_]").persianDatepicker({
             timePicker: {
                 enabled: true,
@@ -66,25 +108,6 @@
                         let myDate = new persianDate(element.api.getState().selected.unixDate).format("YYYY-MM-DD HH:mm:ss")
                         input.val(myDate)
                         input.parents('form').submit()
-                        // let input = $('[id^=remainder_input_'+ id +']').get(0)
-                        // console.log($('[id^=remainder_input_'+ id +']').parents('form').get(0))
-                        // let formData = new FormData(input.form)
-                        // $.ajax({
-                        //     method:"post",
-                        //     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        //     url:input.form.action,
-                        //     data: formData,
-                        //     dataType: 'json',
-                        //     processData: false,
-                        //     contentType: false,
-                        //     cache:false,
-                        //     success:function (response){
-                        //         console.log(response.myDate)
-                        //     },
-                        //     error:function (xhr, ajaxOptions, thrownError){
-                        //         console.log("error: " + xhr.status)
-                        //     },
-                        // })
                     }
                 },
                 calendarSwitch:{
@@ -157,18 +180,8 @@
 @endsection
 
 @section('content')
-    <div id="deletePanel">
-        <div id="deleteBox">
-            <p class="text-end pb-3">ایا می خواهید فایل موردنظر را حذف کنید؟</p>
-            <div class="d-flex justify-content-between">
-                <form method="post">
-                    @csrf
-                    @method('DELETE')
-                    <button id="delete_btn" class="btn btn-danger" type="submit">بله</button>
-                </form>
-                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
-            </div>
-        </div>
+    <div id="selectBox">
+
     </div>
 
     <div class="row">
@@ -260,22 +273,32 @@
                         <div class="form-group col-md-3">
                             <select class="form-control" onchange="filter()" id="access_level">
                                 <option value="default">سطح دسترسی</option>
-                                <option value="private" @selected(request()->has('access_level') && request()->access_level == 'private')>خصوصی</option>
-                                <option value="public" @selected(request()->has('access_level') && request()->access_level == 'public')>عمومی</option>
+                                <option value="private" @selected(request()->has('access_level') && request()->access_level == 'private')>نمایش خصوصی</option>
+                                <option value="public" @selected(request()->has('access_level') && request()->access_level == 'public')>نمایش عمومی</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
                             <select class="form-control" onchange="filter()" id="type_work">
-                                <option value="default">نوع مسکن</option>
+                                <option value="default">نوع کاربری</option>
                                 <option value="home" @selected(request()->has('type_work') && request()->type_work == 'home')>خانه</option>
                                 <option value="office" @selected(request()->has('type_work') && request()->type_work == 'office')>دفتر</option>
+                                <option value="commercial" @selected(request()->has('type_work') && request()->type_work == 'commercial')>تجاری</option>
+                                <option value="training" @selected(request()->has('type_work') && request()->type_work == 'training')>اموزشی</option>
+                                <option value="industrial" @selected(request()->has('type_work') && request()->type_work == 'industrial')>صنعتی</option>
+                                <option value="other" @selected(request()->has('type_work') && request()->type_work == 'other')>سایر</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
                             <select class="form-control" onchange="filter()" id="type_build">
-                                <option value="default">نوع خانه</option>
+                                <option value="default">نوع ملک</option>
                                 <option value="house" @selected(request()->has('type_build') && request()->type_build == 'house')>ویلایی</option>
                                 <option value="apartment" @selected(request()->has('type_build') && request()->type_build == 'apartment')>ساختمان</option>
+                                <option value="shop" @selected(request()->has('type_build') && request()->type_build == 'shop')>مغازه</option>
+                                <option value="land" @selected(request()->has('type_build') && request()->type_build == 'land')>زمین</option>
+                                <option value="workshop" @selected(request()->has('type_build') && request()->type_build == 'workshop')>کارگاه</option>
+                                <option value="parking" @selected(request()->has('type_build') && request()->type_build == 'parking')>پارکینگ</option>
+                                <option value="store" @selected(request()->has('type_build') && request()->type_build == 'store')>انباری</option>
+                                <option value="hall" @selected(request()->has('type_build') && request()->type_build == 'hall')>سالن</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\MassPrunable;
@@ -13,7 +14,6 @@ class Notification extends Model
 
     public function prunable(): Builder
     {
-        return static::where('created_at', '<', now()->subDays(3));
+        return static::where('create_at' , '<' , Carbon::now()->subDay(2));
     }
-
 }

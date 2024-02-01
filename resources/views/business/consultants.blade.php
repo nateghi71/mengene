@@ -4,7 +4,7 @@
 
 @section('head')
     <style>
-        #deletePanel {
+        .deletePanel {
             position: fixed;
             top: 0;
             left: 0;
@@ -15,7 +15,7 @@
             background: rgba(0,0,0,0.5);
         }
 
-        #deleteBox {
+        .deleteBox {
             position: fixed;
             padding: 20px;
             top: 50%;
@@ -28,30 +28,64 @@
 
 @section('scripts')
     <script>
-        $('#deletePanel').hide()
+        $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
-        $('[id^=open_delete_panel_]').on('click' , function (e){
+        function deleteBox(e)
+        {
             e.preventDefault()
-            $('#deletePanel').show()
-            $('#deleteBox').children().children().eq(0).attr('href' , $(this).attr('href'))
-        })
-        $('#not_delete_btn').on('click' , function (){
-            $('#deletePanel').hide()
-        })
+            let wrapper = $('<div>' , {class:'deletePanel'})
+            let box = $('<div>', {class:'deleteBox'})
+            let btnContainer = $('<div>' , {class:"d-flex justify-content-between"})
+
+            let message = $('<p>' , {
+                class:"text-end pb-3",
+            })
+
+            if($(this).attr('href').indexOf('chooseOwner') !== -1)
+            {
+                message.text('ایا می خواهید کاربر موردنظر را به عنوان مالک انتخاب کنید؟')
+            }
+            else if($(this).attr('href').indexOf('remove') !== -1)
+            {
+                message.text('ایا می خواهید کاربر موردنظر را حذف کنید؟')
+            }
+            else if($(this).attr('href').indexOf('accept') !== -1 && $(this).hasClass('accept'))
+            {
+                message.text('ایا می خواهید کاربر موردنظر را به عنوان مشاور انتخاب کنید؟')
+            }
+            else if($(this).attr('href').indexOf('accept') !== -1 && !$(this).hasClass('accept'))
+            {
+                message.text('ایا می خواهید کاربر موردنظر را از لیست مشاوران تایید شده خارج کنید؟')
+            }
+
+
+            let closeBtn = $('<button>' , {
+                class:"btn btn-success",
+                type:"button",
+                click: ()=> wrapper.remove(),
+                text:'خیر'
+            })
+
+            let actionBtn = $('<a>' , {
+                class:"btn btn-danger",
+                text:'بله',
+                href: $(this).attr('href')
+            })
+
+            wrapper.append(box)
+            box.append(message)
+            box.append(btnContainer)
+            btnContainer.append(closeBtn)
+            btnContainer.append(actionBtn)
+
+            $('#selectBox').append(wrapper)
+        }
     </script>
 @endsection
 
 @section('content')
-    <div id="deletePanel">
-        <div id="deleteBox">
-            <p class="text-end pb-3">ایا می خواهید فایل موردنظر را حذف کنید؟</p>
-            <div class="d-flex justify-content-between">
-                <a class="btn btn-danger">
-                    بله
-                </a>
-                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
-            </div>
-        </div>
+    <div id="selectBox">
+
     </div>
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
@@ -80,23 +114,6 @@
             </div>
         </div>
     </div>
-{{--    <div class="row">--}}
-{{--        <div class="col-12 grid-margin stretch-card">--}}
-{{--            <div class="card bg-success bg-gradient bg-opacity-50">--}}
-{{--                <div class="card-body py-3 px-0 px-sm-3">--}}
-{{--                    <div class="row align-items-center">--}}
-{{--                        <p class="fs-6 lh-lg">--}}
-{{--                            از مشاوران خود بخواهید ثبت نام کنند و در قسمت بعدی یافتن املاک را انتخاب کنند و در کادر مربوطه شماره شما را وارد کنند و--}}
-{{--                            بعد پیوستن را انتخاب کنند--}}
-{{--                            بعد از ثبت درخواست مشاور--}}
-{{--                            شما میتوانید در قسمت مشاوران آنها را مدیریت کنید(فعال یا غیر فعال سازی)--}}
-{{--                        </p>--}}
-
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
     <div class="row">
         <div class=" col-xl-6 col-sm-6 grid-margin stretch-card">
             <div @class(['card' , 'bg-secondary bg-gradient bg-opacity-50' => url()->full() !== route('business.consultants'),
@@ -174,15 +191,14 @@
                                     <td> {{$member->customers_count + $member->landowners_count}} </td>
                                     <td> {{($member->customers_count + $member->landowners_count) / $member->daysGone}} </td>
                                     <td>
-                                        <a class="text-success text-decoration-none" href="{{ route('business.chooseOwner', ['user' => $member->id]) }}"><i class="mdi mdi-crown"></i></a>
-
+                                        <a class="text-success text-decoration-none" id="open_delete_panel_{{$key}}" href="{{ route('business.chooseOwner', ['user' => $member->id]) }}"><i class="mdi mdi-crown"></i></a>
                                     </td>
                                     <td>
-                                        <a class="text-danger text-decoration-none" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}" ><i class="mdi mdi-account-off"></i></a>
+                                        <a class="text-danger text-decoration-none" id="open_delete_panel_{{$key}}" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}" ><i class="mdi mdi-account-off"></i></a>
                                     </td>
                                     @else
                                         <td>
-                                            <a class="text-success text-decoration-none" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}"><i class="mdi mdi-account-check"></i></a>
+                                            <a class="text-success text-decoration-none accept" id="open_delete_panel_{{$key}}" href="{{ route('business.toggleUserAcceptance', ['user' => $member->id]) }}"><i class="mdi mdi-account-check"></i></a>
                                         </td>
                                         <td>
                                             <a href="{{route('business.remove.member',['user'=>$member->id])}}" id="open_delete_panel_{{$key}}" class="text-danger text-decoration-none" type="button"><i class="mdi mdi-account-remove"></i></a>

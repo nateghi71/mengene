@@ -60,8 +60,7 @@ class PaymentController extends Controller
             else
             {
                 $business = auth()->user()->business();
-                $business->wallet -= $payment_amount;
-                $business->save();
+                $business->decrement('wallet' , $payment_amount);
 
                 $this->buy_file($business,$landowner);
                 return redirect()->route('landowner.index')->with('message' , 'تراکنش با موفقیت انجام شد.');
@@ -90,6 +89,13 @@ class PaymentController extends Controller
             'package_name' => 'required',
         ]);
 
+        if (session()->has('coupon')) {
+            $checkCoupon = checkCoupon(session()->get('coupon.code'));
+            if (array_key_exists('error', $checkCoupon)) {
+                return back()->with('message' , $checkCoupon['error']);
+            }
+        }
+
         $package = Package::where('name' , $request->package_name)->first();
         $price = $package->price;
         $walletCharge = 50000;
@@ -101,6 +107,7 @@ class PaymentController extends Controller
         $invoice->detail(['package' => $package]);
         $invoice->detail(['price' => $price]);
         $invoice->detail(['tax' => $tax]);
+        $invoice->detail(['charge_credit' => $walletCharge]);
         $invoice->detail(['order_type' => 'buy_package']);
 
         return $this->payment($invoice);
@@ -154,7 +161,8 @@ class PaymentController extends Controller
                     OrderPackageItem::create([
                         'price' => $details['price'],
                         'order_id'  => $order->id,
-                        'package_id' => $details['package']->id
+                        'package_id' => $details['package']->id,
+                        'charge_credit' => $details['charge_credit']
                     ]);
                 }
                 elseif ($details['order_type'] === 'buy_file')
@@ -199,7 +207,8 @@ class PaymentController extends Controller
                 $orderItem = OrderPackageItem::where('order_id' , $order->id)->first();
                 $package = $orderItem->package;
                 $business = $order->business;
-                $this->buy_package($business , $package);
+                $credit = $orderItem->charge_credit;
+                $this->buy_package($business , $package , $credit);
             }
             elseif ($order->order_type === 'buy_file')
             {
@@ -223,7 +232,7 @@ class PaymentController extends Controller
         }
     }
 
-    private function buy_package(Business $business , Package $package)
+    private function buy_package(Business $business , Package $package, $credit)
     {
         $premium = Premium::where('business_id' , $business->id)->first();
         $expire_date = Carbon::now()->addMonth($package->time);
@@ -232,8 +241,7 @@ class PaymentController extends Controller
             'package_id' => $package->id,
             'expire_date' => $expire_date,
         ]);
-        $business->wallet += 50000;
-        $business->save();
+        $business->increment('wallet' , $credit);
     }
 
     private function buy_file(Business $business , Landowner $landowner)
@@ -246,7 +254,6 @@ class PaymentController extends Controller
     }
     private function buy_credit(Business $business , $amount)
     {
-        $business->wallet += $amount;
-        $business->save();
+        $business->increment('wallet' , $amount);
     }
 }

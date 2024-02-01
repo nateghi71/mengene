@@ -34,7 +34,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 9999;
+            z-index: 999;
             overflow: hidden;
             background: #000000;
         }
@@ -70,13 +70,6 @@
 <div class="container-scroller">
     <div class="container-fluid page-body-wrapper full-page-wrapper">
         <div class="row w-100 m-0">
-            @if (session()->has('message'))
-                <div class="alert alert-success d-flex justify-content-between" id="message">
-                    {{session()->get('message')}}
-                    <button type="button" class="btn-close" aria-label="Close"></button>
-                </div>
-            @endif
-
             @yield('content')
             <!-- content-wrapper ends -->
         </div>
@@ -106,10 +99,6 @@
             preloader.remove()
         });
     }
-    $('.btn-close').on('click' , function (){
-        $('#message').remove()
-    })
-
 </script>
 
 <!-- endinject -->

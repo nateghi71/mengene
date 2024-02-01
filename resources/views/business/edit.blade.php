@@ -61,14 +61,6 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="en_name">نام انگلیسی: *</label>
-                    <input type="text" name="en_name" class="form-control" value="{{$business->en_name}}" id="en_name" placeholder="نام انگلیسی">
-                    @error('en_name')
-                    <div class="alert-danger">{{$message}}</div>
-                    @enderror
-
-                </div>
-                <div class="form-group">
                     <label for="province">استان املاک:</label>
                     <select class="form-control" id="province">
                         @foreach($provinces as $province)

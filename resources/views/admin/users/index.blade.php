@@ -4,7 +4,7 @@
 
 @section('head')
     <style>
-        #deletePanel {
+        .deletePanel {
             position: fixed;
             top: 0;
             left: 0;
@@ -15,7 +15,7 @@
             background: rgba(0,0,0,0.5);
         }
 
-        #deleteBox {
+        .deleteBox {
             position: fixed;
             padding: 20px;
             top: 50%;
@@ -28,33 +28,48 @@
 
 @section('scripts')
     <script>
-        $('#deletePanel').hide()
+        $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
-        $('[id^=open_delete_panel_]').on('click' , function (e){
+        function deleteBox(e)
+        {
             e.preventDefault()
-            $('#deletePanel').show()
-            $('#deleteBox').children().children().eq(0).attr('action' , $(this).attr('href'))
-        })
-        $('#not_delete_btn').on('click' , function (){
-            $('#deletePanel').hide()
-        })
+            let wrapper = $('<div>' , {class:'deletePanel'})
+            let box = $('<div>', {class:'deleteBox'})
+            let btnContainer = $('<div>' , {class:"d-flex justify-content-between"})
+
+            let message = $('<p>' , {
+                class:"text-end pb-3",
+                text:'ایا می خواهید کاربر موردنظر را تغییر وضعیت دهید؟'
+            })
+
+            let closeBtn = $('<button>' , {
+                class:"btn btn-success",
+                type:"button",
+                click: ()=> wrapper.remove(),
+                text:'خیر'
+            })
+
+            let actionBtn = $('<a>' , {
+                class:"btn btn-danger",
+                text:'بله',
+                href: $(this).attr('href')
+            })
+
+            wrapper.append(box)
+            box.append(message)
+            box.append(btnContainer)
+            btnContainer.append(closeBtn)
+            btnContainer.append(actionBtn)
+
+            $('#selectBox').append(wrapper)
+        }
     </script>
 
 @endsection
 
 @section('content')
-    <div id="deletePanel">
-        <div id="deleteBox">
-            <p class="text-end pb-3">ایا می خواهید فایل موردنظر را حذف کنید؟</p>
-            <div class="d-flex justify-content-between">
-                <form method="post">
-                    @csrf
-                    @method('DELETE')
-                    <button id="delete_btn" class="btn btn-danger" type="submit">بله</button>
-                </form>
-                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
-            </div>
-        </div>
+    <div id="selectBox">
+
     </div>
 
     <div class="row">
@@ -99,7 +114,7 @@
                                         @endcan
                                         @can('changeStatus' , \App\Models\User::class)
                                         <td>
-                                            <a class="btn text-decoration-none" href="{{route('admin.users.status',$user->id)}}">
+                                            <a class="btn text-decoration-none" id="open_delete_panel_{{$key}}" href="{{route('admin.users.status',$user->id)}}">
                                                 {!! $user->status === 'active' ? '<span class="text-danger">غیرفعال کردن</span>' : '<span class="text-success">فعال کردن</span>' !!}
                                             </a>
                                         </td>

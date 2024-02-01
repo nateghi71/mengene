@@ -4,7 +4,7 @@
 
 @section('head')
     <style>
-        #deletePanel {
+        .deletePanel {
             position: fixed;
             top: 0;
             left: 0;
@@ -15,7 +15,7 @@
             background: rgba(0,0,0,0.5);
         }
 
-        #deleteBox {
+        .deleteBox {
             position: fixed;
             padding: 20px;
             top: 50%;
@@ -28,29 +28,48 @@
 
 @section('scripts')
     <script>
-        $('#deletePanel').hide()
+        $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
-        $('[id^=open_delete_panel_]').on('click' , function (e){
+        function deleteBox(e)
+        {
             e.preventDefault()
-            $('#deletePanel').show()
-            $('#deleteBox').children().children().eq(0).attr('href' , $(this).attr('href'))
-        })
-        $('#not_delete_btn').on('click' , function (){
-            $('#deletePanel').hide()
-        })
+            let wrapper = $('<div>' , {class:'deletePanel'})
+            let box = $('<div>', {class:'deleteBox'})
+            let btnContainer = $('<div>' , {class:"d-flex justify-content-between"})
+
+            let message = $('<p>' , {
+                class:"text-end pb-3",
+                text:'ایا می خواهید املاکی موردنظر را تغییر وضعیت دهید؟'
+            })
+
+            let closeBtn = $('<button>' , {
+                class:"btn btn-success",
+                type:"button",
+                click: ()=> wrapper.remove(),
+                text:'خیر'
+            })
+
+            let actionBtn = $('<a>' , {
+                class:"btn btn-danger",
+                text:'بله',
+                href: $(this).attr('href')
+            })
+
+            wrapper.append(box)
+            box.append(message)
+            box.append(btnContainer)
+            btnContainer.append(closeBtn)
+            btnContainer.append(actionBtn)
+
+            $('#selectBox').append(wrapper)
+        }
     </script>
 
 @endsection
 
 @section('content')
-    <div id="deletePanel">
-        <div id="deleteBox">
-            <p class="text-end pb-3">ایا می خواهید املاکی موردنظر را تغییر وضعیت دهید؟</p>
-            <div class="d-flex justify-content-between">
-                <a id="delete_btn" href="#" class="btn btn-danger">بله</a>
-                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
-            </div>
-        </div>
+    <div id="selectBox">
+
     </div>
 
     <div class="row">

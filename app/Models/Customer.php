@@ -20,9 +20,11 @@ class Customer extends Model
      * @var array
      */
     protected $fillable = [
-        'name','number','area','city_id','status','type_sale','type_work','type_build','type_file','scale','number_of_rooms',
-        'description','rahn_amount','access_level','rent_amount','selling_price','elevator','parking','store','floor',
-        'floor_number','business_id','user_id','is_star','expire_date'
+        'is_star' ,'type_sale','access_level','status','name','number','scale','city_id',
+        'area','expire_date','rahn_amount','rent_amount','selling_price','type_work','type_build',
+        'document' ,'discharge','exist_owner','address','year_of_construction','year_of_reconstruction',
+        'number_of_rooms','elevator','parking','store','floor','floor_number','floor_covering' ,'cooling' ,
+        'heating' ,'cabinets' ,'view','type_file','description','business_id','user_id'
     ];
 
     public function scopeFilter(Builder $query)
@@ -112,6 +114,60 @@ class Customer extends Model
         return $query;
     }
 
+    protected function typeSale():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'buy':
+                        return 'فروش';
+                    case 'rahn':
+                        return 'رهن و اجاره';
+                }
+            },
+        );
+    }
+
+    protected function accessLevel():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'public':
+                        return 'عمومی';
+                    case 'private':
+                        return 'خصوصی';
+                }
+            },
+        );
+    }
+    protected function status():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'active':
+                        return 'فعال';
+                    case 'unknown':
+                        return 'نامعلوم';
+                    case 'deActive':
+                        return 'غیرفعال';
+                }
+            },
+        );
+    }
+
+    protected function scale():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => number_format($value , 0 , '/' , ',') . ' متر',
+            set : fn ($value) => str_replace( ',', '', $value),
+        );
+    }
+
     protected function expireDate():Attribute
     {
         return Attribute::make(
@@ -125,13 +181,6 @@ class Customer extends Model
                     return Verta::parse($value)->datetime()->format('Y-m-d');
                 }
             }
-        );
-    }
-    protected function scale():Attribute
-    {
-        return Attribute::make(
-            get : fn ($value) => number_format($value , 0 , '/' , ',') . ' متر',
-            set : fn ($value) => str_replace( ',', '', $value),
         );
     }
     protected function rahnAmount():Attribute
@@ -182,6 +231,91 @@ class Customer extends Model
             set : fn ($value) => str_replace( ',', '', $value),
         );
     }
+
+    protected function typeWork():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'home':
+                        return 'خانه';
+                    case 'office':
+                        return 'دفتر';
+                    case 'commercial':
+                        return 'تجاری';
+                    case 'training':
+                        return 'اموزشی';
+                    case 'industrial':
+                        return 'صنعتی';
+                    case 'other':
+                        return 'سایر';
+                }
+            },
+        );
+    }
+    protected function typeBuild():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'house':
+                        return 'ویلایی';
+                    case 'apartment':
+                        return 'ساختمان';
+                    case 'shop':
+                        return 'مغازه';
+                    case 'land':
+                        return 'زمین';
+                    case 'workshop':
+                        return 'کارگاه';
+                    case 'parking':
+                        return 'پارکینگ';
+                    case 'store':
+                        return 'انباری';
+                    case 'hall':
+                        return 'سالن';
+                }
+            },
+        );
+    }
+    protected function document():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'all':
+                        return 'همه';
+                    case 'six_dongs':
+                        return 'شش دانگ';
+                    case 'mangolehdar':
+                        return 'منقوله دار';
+                    case 'tak_bargeh':
+                        return 'تک برگه';
+                    case 'varasehee':
+                        return 'ورثه ای';
+                    case 'almosana':
+                        return 'المثنی';
+                    case 'vekalati':
+                        return 'وکالتی';
+                    case 'benchag':
+                        return 'بنچاق';
+                    case 'sanad_rahni':
+                        return 'سند رهنی';
+                    case 'gholnameh':
+                        return 'قولنامه';
+                }
+            },
+        );
+    }
+    protected function discharge():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'شده' : 'نشده',
+        );
+    }
     protected function elevator():Attribute
     {
         return Attribute::make(
@@ -200,85 +334,146 @@ class Customer extends Model
             get : fn ($value) => $value ? 'دارد' : 'ندارد',
         );
     }
+    protected function existOwner():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'هست' : 'نیست',
+        );
+    }
     protected function isStar():Attribute
     {
         return Attribute::make(
             get : fn ($value) => $value ? 'دارد' : 'ندارد',
         );
     }
-    protected function accessLevel():Attribute
+
+    protected function floorCovering():Attribute
     {
         return Attribute::make(
             get : function ($value){
                 switch ($value)
                 {
-                    case 'public':
-                        return 'عمومی';
-                    case 'private':
-                        return 'خصوصی';
+                    case 'ceramic':
+                        return 'سرامیک';
+                    case 'mosaic':
+                        return 'موزاییک';
+                    case 'wooden':
+                        return 'منقوله دارچوب';
+                    case 'pvc':
+                        return 'پی وی سی';
+                    case 'others':
+                        return 'سایر';
+                }
+            },
+        );
+    }
+    protected function cooling():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'water_cooler':
+                        return 'کولر ابی';
+                    case 'air_cooler':
+                        return 'کولر گازی';
+                    case 'nothing':
+                        return 'ندارد';
+                }
+            },
+        );
+    }
+    protected function heating():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'heater':
+                        return 'بخاری';
+                    case 'fire_place':
+                        return 'شومینه';
+                    case 'underfloor_heating':
+                        return 'گرمایش از کف';
+                    case 'split':
+                        return 'اسپلیت';
+                    case 'nothing':
+                        return 'ندارد';
+                }
+            },
+        );
+    }
+    protected function cabinets():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'wooden':
+                        return 'بخاری';
+                    case 'memberan':
+                        return 'شومینه';
+                    case 'metal':
+                        return 'گرمایش از کف';
+                    case 'melamine':
+                        return 'اسپلیت';
+                    case 'mdf':
+                        return 'ام دی اف';
+                    case 'mdf_and_metal':
+                        return 'بدنه فلزی و در ام دی اف';
+                    case 'high_glass':
+                        return 'های گلس';
+                    case 'nothing':
+                        return 'ندارد';
+                }
+            },
+        );
+    }
+    protected function view():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'brick':
+                        return 'اجری';
+                    case 'rock':
+                        return 'سنگی';
+                    case 'Cement':
+                        return 'سیمانی';
+                    case 'composite':
+                        return 'کامپوزیت';
+                    case 'Glass':
+                        return 'شیشه ای';
+                    case 'ceramic':
+                        return 'سرامیک';
+                    case 'hybrid':
+                        return 'ترکیبی';
+                    case 'others':
+                        return 'سایر';
+                }
+            },
+        );
+    }
+    protected function type_file():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'business':
+                        return 'املاک';
+                    case 'buy':
+                        return 'فروشی';
+                    case 'subscription':
+                        return 'اشتراکی';
+                    case 'people':
+                        return 'مردم';
                 }
             },
         );
     }
 
-    protected function status():Attribute
-    {
-        return Attribute::make(
-            get : function ($value){
-                switch ($value)
-                {
-                    case 'active':
-                        return 'فعال';
-                    case 'unknown':
-                        return 'نامعلوم';
-                    case 'deActive':
-                        return 'غیرفعال';
-                }
-            },
-        );
-    }
-    protected function typeSale():Attribute
-    {
-        return Attribute::make(
-            get : function ($value){
-                switch ($value)
-                {
-                    case 'buy':
-                        return 'خرید';
-                    case 'rahn':
-                        return 'رهن و اجاره';
-                }
-            },
-        );
-    }
-    protected function typeWork():Attribute
-    {
-        return Attribute::make(
-            get : function ($value){
-                switch ($value)
-                {
-                    case 'home':
-                        return 'خانه';
-                    case 'office':
-                        return 'دفتر';
-                }
-            },
-        );
-    }
-    protected function typeBuild():Attribute
-    {
-        return Attribute::make(
-            get : function ($value){
-                switch ($value)
-                {
-                    case 'house':
-                        return 'ویلایی';
-                    case 'apartment':
-                        return 'ساختمان';
-                }
-            },
-        );
-    }
 
     public function dontSuggestedLandowner()
     {

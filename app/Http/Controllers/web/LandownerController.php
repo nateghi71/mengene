@@ -63,6 +63,10 @@ class LandownerController extends Controller
     public function show(Landowner $landowner)
     {
         $this->authorize('view', $landowner);
+        if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
+            $daysLeft = Carbon::now()->diffInDays($landowner->getRawOriginal('expire_date')) + 1;
+            $landowner->daysLeft = $daysLeft;
+        }
         return view('landowner.show', compact('landowner'));
     }
 
@@ -77,27 +81,39 @@ class LandownerController extends Controller
     {
         $this->authorize('create', Landowner::class);
         $request->validate([
+            'type_sale' => 'required',
+            'access_level' => 'required',
             'name' => 'required',
             'number' => 'required|iran_mobile',
+            'scale' => 'required|numeric',
             'city_id' => 'required|numeric',
-            'type_sale' => 'required',
+            'area' => 'required|numeric',
+            'expire_date' => 'required',
+            'selling_price' => 'exclude_if:type_sale,rahn|required',
+            'rahn_amount' => 'exclude_if:type_sale,buy|required',
+            'rent_amount' => 'exclude_if:type_sale,buy|required',
             'type_work' => 'required',
             'type_build' => 'required',
-            'scale' => 'required|numeric',
-            'area' => 'required|numeric',
-            'number_of_rooms' => 'required|numeric',
-            'description' => 'required',
-            'access_level' => 'required',
-            'rahn_amount' => 'exclude_if:type_sale,buy|required|numeric',
-            'rent_amount' => 'exclude_if:type_sale,buy|required|numeric',
-            'selling_price' => 'exclude_if:type_sale,rahn|required|numeric',
+            'document' => 'exclude_if:type_sale,rahn|required',
+            'address' => 'required',
+            'discharge' => 'nullable',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
-            'floor' => 'exclude_if:type_build,house|required|numeric',
-            'floor_number' => 'exclude_if:type_build,house|required|numeric',
             'is_star' => 'nullable',
-            'expire_date' => 'required',
+            'exist_owner' => 'nullable',
+            //more
+            'year_of_construction' => 'nullable',
+            'year_of_reconstruction' => 'nullable',
+            'number_of_rooms' => 'nullable|numeric',
+            'floor_number' => 'exclude_if:type_build,house|exclude_if:type_build,land|nullable|numeric',
+            'floor' => 'exclude_if:type_build,land|nullable|numeric',
+            'floor_covering' => 'nullable',
+            'cooling' => 'nullable',
+            'heating' => 'nullable',
+            'cabinets' => 'nullable',
+            'view' => 'nullable',
+            'description' => 'nullable',
             'images' => 'nullable',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -107,30 +123,42 @@ class LandownerController extends Controller
 
             $user = auth()->user();
             $landowner = Landowner::create([
+                'type_file' => 'business',
+                'type_sale' => $request->type_sale,
+                'access_level' => $request->access_level,
                 'name' => $request->name,
                 'number' => $request->number,
-                'city_id' => $request->city_id,
-                'type_sale' => $request->type_sale,
-                'type_work' => $request->type_work,
-                'type_build' => $request->type_build,
-                'type_file' => 'business',
                 'scale' => $request->scale,
+                'city_id' => $request->city_id,
                 'area' => $request->area,
-                'number_of_rooms' => $request->number_of_rooms,
-                'description' => $request->description,
-                'access_level' => $request->access_level,
+                'expire_date' => $request->expire_date,
+                'selling_price' => ($request->type_sale === 'buy' && $request->selling_price !== null) ? $request->selling_price : 0,
                 'rahn_amount' => ($request->type_sale === 'rahn' && $request->rahn_amount !== null) ? $request->rahn_amount : 0,
                 'rent_amount' => ($request->type_sale === 'rahn' && $request->rent_amount !== null) ? $request->rent_amount : 0,
-                'selling_price' => ($request->type_sale === 'buy' && $request->selling_price !== null) ? $request->selling_price : 0,
+                'type_work' => $request->type_work,
+                'type_build' => $request->type_build,
+                'document' => $request->document,
+                'address' => $request->address,
+                'discharge' => $request->has('discharge') ? 1 : 0,
                 'elevator' => $request->has('elevator') ? 1 : 0,
                 'parking' => $request->has('parking') ? 1 : 0,
                 'store' => $request->has('store') ? 1 : 0,
-                'floor' => ($request->type_build === 'apartment' && $request->floor !== null) ? $request->floor : 0,
-                'floor_number' => ($request->type_build === 'apartment' && $request->floor_number !== null) ? $request->floor_number : 0,
+                'is_star' => $request->has('is_star') ? 1 : 0 ,
+                'exist_owner' => $request->has('exist_owner') ? 1 : 0,
+                //more
+                'year_of_construction' => $request->year_of_construction,
+                'year_of_reconstruction' => $request->year_of_reconstruction,
+                'number_of_rooms' => $request->number_of_rooms,
+                'floor_number' => ($request->type_build !== 'house' && $request->type_build !== 'land' && $request->floor_number !== null) ? $request->floor_number : 0,
+                'floor' => ($request->type_build !== 'land' && $request->floor !== null) ? $request->floor : 0,
+                'floor_covering' => $request->floor_covering,
+                'cooling' => $request->cooling,
+                'heating' => $request->heating,
+                'cabinets' => $request->cabinets,
+                'view' => $request->view,
+                'description' => $request->description,
                 'business_id' => $user->business()->id,
                 'user_id' => $user->id,
-                'is_star' => $request->has('is_star') ? 1 : 0 ,
-                'expire_date' => $request->expire_date
             ]);
 
             if($request->images !== null)
@@ -139,8 +167,6 @@ class LandownerController extends Controller
                 $imageController->store($request->images , $landowner);
             }
 
-            event(new CreateLandownerFile($landowner , $user));
-
             DB::commit();
         }
         catch (\Exception $e)
@@ -148,6 +174,8 @@ class LandownerController extends Controller
             DB::rollBack();
             return back()->with('message' , 'فابل ثبت نشد دویاره امتحان کنید.');
         }
+
+//        event(new CreateLandownerFile($landowner , $user));
 
         return redirect()->route('landowner.index',['status' => 'active'])->with('message' , 'فایل موردنظر ایجاد شد.');
     }
@@ -163,54 +191,81 @@ class LandownerController extends Controller
     {
         $this->authorize('update', $landowner);
         $request->validate([
+            'type_sale' => 'required',
+            'access_level' => 'required',
             'name' => 'required',
             'number' => 'required|iran_mobile',
-            'city_id' => 'required|numeric',
-            'type_sale' => 'required',
-            'type_work' => 'required',
-            'type_build' => 'required',
             'scale' => 'required|numeric',
+            'city_id' => 'required|numeric',
             'area' => 'required|numeric',
-            'number_of_rooms' => 'required|numeric',
-            'description' => 'required',
-            'access_level' => 'required',
+            'expire_date' => 'required',
+            'selling_price' => 'exclude_if:type_sale,rahn|required',
             'rahn_amount' => 'exclude_if:type_sale,buy|required',
             'rent_amount' => 'exclude_if:type_sale,buy|required',
-            'selling_price' => 'exclude_if:type_sale,rahn|required',
+            'type_work' => 'required',
+            'type_build' => 'required',
+            'document' => 'exclude_if:type_sale,rahn|required',
+            'address' => 'required',
+            'discharge' => 'nullable',
             'elevator' => 'nullable',
             'parking' => 'nullable',
             'store' => 'nullable',
-            'floor' => 'exclude_if:type_build,house|required|numeric',
-            'floor_number' => 'exclude_if:type_build,house|required|numeric',
             'is_star' => 'nullable',
-            'expire_date' => 'required'
+            'exist_owner' => 'nullable',
+            //more
+            'year_of_construction' => 'nullable',
+            'year_of_reconstruction' => 'nullable',
+            'number_of_rooms' => 'nullable|numeric',
+            'floor_number' => 'exclude_if:type_build,house|exclude_if:type_build,land|nullable|numeric',
+            'floor' => 'exclude_if:type_build,land|nullable|numeric',
+            'floor_covering' => 'nullable',
+            'cooling' => 'nullable',
+            'heating' => 'nullable',
+            'cabinets' => 'nullable',
+            'view' => 'nullable',
+            'description' => 'nullable',
+            'images' => 'nullable',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
 //        $user = auth()->user();
         $landowner->update([
+            'type_file' => 'business',
+            'type_sale' => $request->type_sale,
+            'access_level' => $request->access_level,
             'name' => $request->name,
             'number' => $request->number,
-            'city_id' => $request->city_id,
-            'type_sale' => $request->type_sale,
-            'type_work' => $request->type_work,
-            'type_build' => $request->type_build,
             'scale' => $request->scale,
+            'city_id' => $request->city_id,
             'area' => $request->area,
-            'number_of_rooms' => $request->number_of_rooms,
-            'description' => $request->description,
-            'access_level' => $request->access_level,
+            'expire_date' => $request->expire_date,
+            'selling_price' => ($request->type_sale === 'buy' && $request->selling_price !== null) ? $request->selling_price : 0,
             'rahn_amount' => ($request->type_sale === 'rahn' && $request->rahn_amount !== null) ? $request->rahn_amount : 0,
             'rent_amount' => ($request->type_sale === 'rahn' && $request->rent_amount !== null) ? $request->rent_amount : 0,
-            'selling_price' => ($request->type_sale === 'buy' && $request->selling_price !== null) ? $request->selling_price : 0,
+            'type_work' => $request->type_work,
+            'type_build' => $request->type_build,
+            'document' => $request->document,
+            'address' => $request->address,
+            'discharge' => $request->has('discharge') ? 1 : 0,
             'elevator' => $request->has('elevator') ? 1 : 0,
             'parking' => $request->has('parking') ? 1 : 0,
             'store' => $request->has('store') ? 1 : 0,
-            'floor' => ($request->type_build === 'apartment' && $request->floor !== null) ? $request->floor : 0,
-            'floor_number' => ($request->type_build === 'apartment' && $request->floor_number !== null) ? $request->floor_number : 0,
+            'is_star' => $request->has('is_star') ? 1 : 0 ,
+            'exist_owner' => $request->has('exist_owner') ? 1 : 0,
+            //more
+            'year_of_construction' => $request->year_of_construction,
+            'year_of_reconstruction' => $request->year_of_reconstruction,
+            'number_of_rooms' => $request->number_of_rooms,
+            'floor_number' => ($request->type_build !== 'house' && $request->type_build !== 'land' && $request->floor_number !== null) ? $request->floor_number : 0,
+            'floor' => ($request->type_build !== 'land' && $request->floor !== null) ? $request->floor : 0,
+            'floor_covering' => $request->floor_covering,
+            'cooling' => $request->cooling,
+            'heating' => $request->heating,
+            'cabinets' => $request->cabinets,
+            'view' => $request->view,
+            'description' => $request->description,
 //            'business_id' => $user->business()->id,
 //            'user_id' => $user->id,
-            'is_star' => $request->has('is_star') ? 1 : 0 ,
-            'expire_date' => $request->expire_date
         ]);
 
         return redirect()->route('landowner.index',['status' => 'active'])->with('message' , 'فایل موردنظر اپدیت شد.');

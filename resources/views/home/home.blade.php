@@ -256,8 +256,8 @@
                     >
                         <div class="icon-box w-100">
                             <div class="icon"><i class="mdi mdi-home"></i></div>
-                            <h4>ثبت اطلاعات ملک</h4>
-                            <p>داشتن بانک اطلاعاتی از املاک</p>
+                            <h4>وجود فایل های اشتراکی</h4>
+                            <p>با داشتن اکانت ویژه</p>
                         </div>
                     </div>
 
@@ -511,7 +511,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="col-lg-3" data-aos="fade-up" data-aos-delay="100">
                         <div class="box">
                             <h3>رایگان</h3>
                             <!-- <h4><sup>$</sup>0<span>per month</span></h4> -->
@@ -524,51 +524,76 @@
                                 <li class="na">
                                     <i class="mdi mdi-check"></i> <span>مدیریت مشاورین</span>
                                 </li>
+                                <li class="na">
+                                    <i class="mdi mdi-check"></i> <span>وجود فایل های اشتراکی</span>
+                                </li>
                             </ul>
 {{--                            <a href="{{route('2fa.enter_number')}}" class="buy-btn">پلن فعلی</a>--}}
                         </div>
                     </div>
+                    <div
+                        class="col-lg-3 mt-4 mt-lg-0"
+                        data-aos="fade-up"
+                        data-aos-delay="300"
+                    >
+                        <div class="box featured">
+                            <h3>سه ماهه 599,000 </h3>
+                            <!-- <h4><sup>$</sup>49<span>per month</span></h4> -->
+                            <ul>
+                                <li><i class="mdi mdi-check"></i> ثبت اطلاعات متقاضی</li>
+                                <li><i class="mdi mdi-check"></i> ثبت اطلاعات ملک</li>
+                                <li>
+                                    <i class="mdi mdi-check"></i> سامانه پیامکی(شارژی + 50)
+                                </li>
+                                <li>
+                                    <i class="mdi mdi-check"></i>مدیریت مشاورین(تا 2 عدد مشاور)
+                                </li>
+                                <li>
+                                    <i class="mdi mdi-check"></i>وجود فایل های اشتراکی
+                                </li>
+                            </ul>
+                            {{--                            <a href="{{route('2fa.enter_number' , ['level' => 'midLevel'])}}" class="buy-btn">شروع کنید</a>--}}
+                        </div>
+                    </div>
 
                     <div
-                        class="col-lg-4 mt-4 mt-lg-0"
+                        class="col-lg-3 mt-4 mt-lg-0"
                         data-aos="fade-up"
                         data-aos-delay="200"
                     >
                         <div class="box featured">
-                            <h3>سالانه 899 تومان</h3>
+                            <h3>شش ماهه 999,000 </h3>
                             <!-- <h4><sup>$</sup>29<span>per month</span></h4> -->
                             <ul>
                                 <li><i class="mdi mdi-check"></i> ثبت اطلاعات متقاضی</li>
                                 <li><i class="mdi mdi-check"></i> ثبت اطلاعات ملک</li>
-                                <li><i class="mdi mdi-check"></i> سامانه پیامکی(نامحدود)</li>
-                                <li><i class="mdi mdi-check"></i>مدیریت مشاورین(نامحدود)</li>
+                                <li><i class="mdi mdi-check"></i> سامانه پیامکی(شارژی + 50)</li>
+                                <li><i class="mdi mdi-check"></i>مدیریت مشاورین(3 عدد)</li>
+                                <li><i class="mdi mdi-check"></i>وجود فایل های اشتراکی</li>
                             </ul>
 {{--                            <a href="{{route('2fa.enter_number' , ['level' => 'vip'])}}" class="buy-btn">شروع کنید</a>--}}
                         </div>
                     </div>
 
                     <div
-                        class="col-lg-4 mt-4 mt-lg-0"
+                        class="col-lg-3 mt-4 mt-lg-0"
                         data-aos="fade-up"
-                        data-aos-delay="300"
+                        data-aos-delay="200"
                     >
-                        <div class="box">
-                            <h3>سه ماهه 299 تومان</h3>
-                            <!-- <h4><sup>$</sup>49<span>per month</span></h4> -->
+                        <div class="box featured">
+                            <h3>سالانه 1,199,000 </h3>
+                            <!-- <h4><sup>$</sup>29<span>per month</span></h4> -->
                             <ul>
                                 <li><i class="mdi mdi-check"></i> ثبت اطلاعات متقاضی</li>
                                 <li><i class="mdi mdi-check"></i> ثبت اطلاعات ملک</li>
-                                <li>
-                                    <i class="mdi mdi-check"></i> سامانه پیامکی(تا سقف ماهانه 1000
-                                    sms)
-                                </li>
-                                <li>
-                                    <i class="mdi mdi-check"></i>مدیریت مشاورین(تا 4 عدد مشاور)
-                                </li>
+                                <li><i class="mdi mdi-check"></i> سامانه پیامکی(شارژی + 50)</li>
+                                <li><i class="mdi mdi-check"></i>مدیریت مشاورین(نامحدود)</li>
+                                <li><i class="mdi mdi-check"></i>وجود فایل های اشتراکی</li>
                             </ul>
-{{--                            <a href="{{route('2fa.enter_number' , ['level' => 'midLevel'])}}" class="buy-btn">شروع کنید</a>--}}
+                            {{--                            <a href="{{route('2fa.enter_number' , ['level' => 'vip'])}}" class="buy-btn">شروع کنید</a>--}}
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>

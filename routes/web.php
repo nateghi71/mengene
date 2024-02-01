@@ -59,6 +59,7 @@ Route::group(['middleware' => ['auth', 'clearCoupon']] , function () {
     Route::get("business/{user}/remove", [BusinessController::class, 'removeMember'])->name('business.remove.member');
     Route::get("business/consultants", [BusinessController::class, 'showConsultants'])->name('business.consultants');
     Route::get('/dashboard', [BusinessController::class, 'dashboard'])->name('dashboard');
+    Route::get('/notification/{notification}', [BusinessController::class, 'notificationRead'])->name('business.notificationRead');
 
     Route::get("credits", [CreditController::class, 'index'])->name('credits.index');
     Route::post("credits/checkout", [CreditController::class, 'checkout'])->name('credits.checkout');

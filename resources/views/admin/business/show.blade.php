@@ -31,10 +31,6 @@
                                 <td>{{$business->name}}</td>
                             </tr>
                             <tr class="text-white">
-                                <td>نام انگلیسی</td>
-                                <td>{{$business->en_name}}</td>
-                            </tr>
-                            <tr class="text-white">
                                 <td>شهر</td>
                                 <td>{{$business->city->name}}</td>
                             </tr>

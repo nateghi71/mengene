@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
             $table->unsignedBigInteger('price');
+            $table->unsignedBigInteger('charge_credit');
 
             $table->timestamps();
         });

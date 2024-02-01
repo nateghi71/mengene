@@ -107,7 +107,6 @@ class BusinessController extends BaseController
 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'en_name' => 'required|unique:businesses',
             'city_id' => 'required',
             'area' => 'required',
             'address' => 'required',
@@ -131,7 +130,6 @@ class BusinessController extends BaseController
 
             $business = Business::create([
                 'name' => $request->name,
-                'en_name' => $request->en_name,
                 'user_id' => $user->id,
                 'image' => $imageName,
                 'city_id' => $request->city_id,
@@ -168,7 +166,6 @@ class BusinessController extends BaseController
 
         $validator = Validator::make($request->all() , [
             'name' => 'required',
-            'en_name' => 'required',
             'city_id' => 'required',
             'area' => 'required',
             'address' => 'required',
@@ -192,7 +189,6 @@ class BusinessController extends BaseController
 
         $business->update([
             'name' => $request->name,
-            'en_name' => $request->en_name,
             'image' => $request->hasFile('image') ? $imageName : $business->image,
             'city_id' => $request->city_id,
             'area' => $request->area,

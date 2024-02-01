@@ -45,7 +45,7 @@ class LandownerImageController extends Controller
         $landowner->images()->create([
             'image' => $fileName,
         ]);
-        return ['images' => $landowner->images];
+        return back();
     }
 
 
@@ -59,6 +59,6 @@ class LandownerImageController extends Controller
         }
 
         $image->delete();
-        return ['images' => $landowner->images];
+        return back();
     }
 }

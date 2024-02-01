@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-lg-6 error-page-divider text-lg-left pl-lg-4">
                             <h2>متاسفم</h2>
-                            <h3 class="font-weight-light">شما اجازه دسترسی به این صفحه را ندارید</h3>
+                            <h3 class="font-weight-light">{{($exception->getMessage() != null ? $exception->getMessage() : 'شما اجازه دسترسی به این صفحه را ندارید')}}</h3>
                         </div>
                     </div>
                     <div class="row mt-5">

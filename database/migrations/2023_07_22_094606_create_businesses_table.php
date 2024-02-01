@@ -17,7 +17,6 @@ class CreateBusinessesTable extends Migration
             $table->id();
             $table->enum('status', ['active', 'deactive']);
             $table->string('name');
-            $table->string('en_name');
             $table->string('image')->nullable();
             $table->integer('city_id');
             $table->unsignedInteger('area');

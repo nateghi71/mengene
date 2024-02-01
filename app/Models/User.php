@@ -85,8 +85,7 @@ class User extends Authenticatable
     }
     public function incrementPremiumCountSms()
     {
-        $this->business()->wallet -= 200;
-        $this->business()->save();
+        $this->business()->decrement('wallet' , 200);
         $this->business()->premium()->increment('counter_sms');
     }
 

@@ -51,15 +51,22 @@
 
         function buyFunction() {
             $('#priceDiv').show();
+            $('#documentDiv').show();
             $('#rahnDiv').hide();
             $('#rentDiv').hide();
         }
 
         function rahnFunction() {
             $('#priceDiv').hide();
+            $('#documentDiv').hide();
             $('#rahnDiv').show();
             $('#rentDiv').show();
         }
+
+        $('#more').hide();
+        $('#more_btn').on('click' , function (){
+            $('#more').slideToggle();
+        })
 
         changeTypeBuild()
         function changeTypeBuild()
@@ -67,11 +74,19 @@
             let selectOptin = $('#type_build').children(':selected').val()
             if(selectOptin === 'house')
             {
-                $('.floor').hide();
+                $('.floor').show();
+                $('.num-floor').hide();
+
             }
-            else if(selectOptin === 'apartment')
+            else if(selectOptin === 'land')
+            {
+                $('.floor').hide();
+                $('.num-floor').hide();
+            }
+            else
             {
                 $('.floor').show();
+                $('.num-floor').show();
             }
         }
 
@@ -206,13 +221,13 @@
                         <div class="col-sm-3">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale1">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" {{$customer->getRawOriginal('type_sale') === "buy" ? 'checked' : '' }}> خرید </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" @checked($customer->getRawOriginal('type_sale') === "buy")> خرید </label>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale2">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn" {{$customer->getRawOriginal('type_sale') === "rahn" ? 'checked' : '' }}> رهن و اجاره </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn" @checked($customer->getRawOriginal('type_sale') === "rahn")> رهن و اجاره </label>
                             </div>
                         </div>
                         @error('type_sale')
@@ -221,6 +236,16 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="access_level">سطح دسترسی:</label>
+                        <select class="form-control" name="access_level" id="access_level">
+                            <option value="private" @selected($customer->getRawOriginal('access_level') === "private")>نمایش خصوصی</option>
+                            <option value="public" @selected($customer->getRawOriginal('access_level') === "public")>نمایش عمومی</option>
+                        </select>
+                        @error('access_level')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <div class="form-group col-md-3">
                         <label for="name"> نام و نام خانوادگی:</label>
                         <input type="text" name="name" class="form-control" id="name" value="{{$customer->name}}" placeholder="نام">
@@ -233,6 +258,14 @@
                         <input type="text" name="number" class="form-control" value="{{$customer->number}}" id="number" placeholder="شماره تماس"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('number')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="scale">متراژ(متر):</label>
+                        <input type="text" name="scale" class="form-control" value="{{$customer->getRawOriginal('scale')}}" id="scale" placeholder="متراژ"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('scale')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
@@ -261,18 +294,16 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="access_level">سطح دسترسی:</label>
-                        <select class="form-control" name="access_level" id="access_level">
-                            <option value="private" @selected($customer->getRawOriginal('access_level') === "private")>خصوصی</option>
-                            <option value="public" @selected($customer->getRawOriginal('access_level') === "public")>عمومی</option>
-                        </select>
-                        @error('access_level')
+                        <label for="expire_date">زمان باقیمانده:</label>
+                        <input type="text" name="expire_date" class="form-control" value="{{$customer->expire_date}}" id="expire_date" placeholder="زمان باقیمانده"
+                               onkeypress="return false">
+                        @error('expire_date')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div id="priceDiv" class="form-group col-md-3" style="display: block">
                         <div class="d-flex justify-content-between">
-                            <label for="selling_price">قیمت:</label>
+                            <label for="selling_price">قیمت(تومان):</label>
                             <p id="show_selling_price"></p>
                         </div>
                         <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{$customer->getRawOriginal('selling_price')}}" id="selling_price" placeholder="قیمت"
@@ -283,7 +314,7 @@
                     </div>
                     <div id="rahnDiv" class="form-group col-md-3" style="display: none">
                         <div class="d-flex justify-content-between">
-                            <label for="rahn_amount">رهن:</label>
+                            <label for="rahn_amount">رهن(تومان):</label>
                             <p id="show_rahn_amount"></p>
                         </div>
                         <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{$customer->getRawOriginal('rahn_amount')}}" id="rahn_amount" placeholder="رهن"
@@ -294,7 +325,7 @@
                     </div>
                     <div id="rentDiv" class="form-group col-md-3" style="display: none">
                         <div class="d-flex justify-content-between">
-                            <label for="rent_amount">اجاره:</label>
+                            <label for="rent_amount">اجاره(تومان):</label>
                             <p id="show_rent_amount"></p>
                         </div>
                         <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{$customer->getRawOriginal('rent_amount')}}" id="rent_amount" placeholder="اجاره"
@@ -304,74 +335,72 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="scale">متراژ:</label>
-                        <input type="text" name="scale" class="form-control" value="{{$customer->getRawOriginal('scale')}}" id="scale" placeholder="متراژ"
-                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                        @error('scale')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="type_work">نوع مسکن:</label>
+                        <label for="type_work">نوع کاربری:</label>
                         <select class="form-control" name="type_work" id="type_work">
                             <option value="home" @selected($customer->getRawOriginal('type_work') === "home")>خانه</option>
                             <option value="office" @selected($customer->getRawOriginal('type_work') === "office")>دفتر</option>
+                            <option value="commercial" @selected($customer->getRawOriginal('type_work') == 'commercial')>تجاری</option>
+                            <option value="training" @selected($customer->getRawOriginal('type_work') == 'training')>اموزشی</option>
+                            <option value="industrial" @selected($customer->getRawOriginal('type_work') == 'industrial')>صنعتی</option>
+                            <option value="other" @selected($customer->getRawOriginal('type_work') == 'other')>سایر</option>
                         </select>
                         @error('type_work')
-                        <div class="alert-danger">{{$message}}</div>
+                            <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="type_build">نوع خانه:</label>
+                        <label for="type_build">نوع ملک:</label>
                         <select class="form-control" name="type_build" id="type_build" onchange="changeTypeBuild()">
                             <option value="house" @selected($customer->getRawOriginal('type_build') === "house")>ویلایی</option>
                             <option value="apartment" @selected($customer->getRawOriginal('type_build') === "apartment")>ساختمان</option>
+                            <option value="shop" @selected($customer->getRawOriginal('type_build') == 'shop')>مغازه</option>
+                            <option value="land" @selected($customer->getRawOriginal('type_build') == 'land')>زمین</option>
+                            <option value="workshop" @selected($customer->getRawOriginal('type_build') == 'workshop')>کارگاه</option>
+                            <option value="parking" @selected($customer->getRawOriginal('type_build') == 'parking')>پارکینگ</option>
+                            <option value="store" @selected($customer->getRawOriginal('type_build') == 'store')>انباری</option>
+                            <option value="hall" @selected($customer->getRawOriginal('type_build') == 'hall')>سالن</option>
                         </select>
                         @error('type_work')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div class="form-group col-md-3 floor">
-                        <label for="floor_number">تعداد طبقات کل ساختمان:</label>
-                        <input type="text" name="floor_number" class="form-control" value="{{$customer->floor_number}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
-                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                        @error('floor_number')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3 floor">
-                        <label for="floor">شماره طبقه:</label>
-                        <input type="text" name="floor" class="form-control" value="{{$customer->floor}}" id="floor" placeholder="شماره طبقه"
-                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                        @error('floor')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="number_of_rooms">تعداد اتاق:</label>
-                        <input type="text" name="number_of_rooms" class="form-control" value="{{$customer->number_of_rooms}}" id="number_of_rooms" placeholder="تعداد اتاق"
-                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
-                        @error('number_of_rooms')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="expire_date">زمان باقیمانده:</label>
-                        <input type="text" name="expire_date" class="form-control" value="{{$customer->expire_date}}" id="expire_date" placeholder="زمان باقیمانده"
-                               onkeypress="return false">
-                        @error('expire_date')
+                    <div id="documentDiv" class="form-group col-md-3">
+                        <label for="type_build">نوع سند:</label>
+                        <select class="form-control" name="document" id="document">
+                            <option value="all" @selected($customer->getRawOriginal('document') == 'all')>همه</option>
+                            <option value="six_dongs" @selected($customer->getRawOriginal('document') == 'six_dongs')>شش دانگ</option>
+                            <option value="mangolehdar" @selected($customer->getRawOriginal('document') == 'mangolehdar')>منقوله دار</option>
+                            <option value="tak_bargeh" @selected($customer->getRawOriginal('document') == 'tak_bargeh')>تک برگه</option>
+                            <option value="varasehee" @selected($customer->getRawOriginal('document') == 'varasehee')>ورثه ای</option>
+                            <option value="almosana" @selected($customer->getRawOriginal('document') == 'almosana')>المثنی</option>
+                            <option value="vekalati" @selected($customer->getRawOriginal('document') == 'vekalati')>وکالتی</option>
+                            <option value="benchag" @selected($customer->getRawOriginal('document') == 'benchag')>بنچاق</option>
+                            <option value="sanad_rahni" @selected($customer->getRawOriginal('document') == 'sanad_rahni')>سند رهنی</option>
+                            <option value="gholnameh" @selected($customer->getRawOriginal('document') == 'gholnameh')>قولنامه</option>
+                        </select>
+                        @error('document')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="description">آدرس:</label>
-                        <textarea name="description" class="form-control" id="description" placeholder="آدرس" rows="3">{{$customer->description}}</textarea>
-                        @error('description')
+                        <label for="address">آدرس:</label>
+                        <textarea name="address" class="form-control" id="address" placeholder="آدرس" rows="3">{{$customer->address}}</textarea>
+                        @error('address')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                 </div>
                 <div class="row">
+                    <div class="form-group col">
+                        <div class="form-check">
+                            <label for="discharge" class="form-check-label">
+                                <input type="checkbox" name="discharge" id="discharge" class="form-check-input" @checked($customer->getRawOriginal('discharge') === 1)>تخلیه
+                            </label>
+                        </div>
+                        @error('discharge')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                     <div class="form-group col-md-3">
                         <div class="form-check">
                             <label for="elevator" class="form-check-label">
@@ -402,7 +431,146 @@
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
+                    <div class="form-group col">
+                        <div class="form-check">
+                            <label for="exist_owner" class="form-check-label">
+                                <input type="checkbox" name="exist_owner" id="exist_owner" class="form-check-input" @checked($customer->getRawOriginal('exist_owner') === 1)>حضور مالک
+                            </label>
+                        </div>
+                        @error('exist_owner')
+                        <div class="alert-danger">{{$message}}</div>
+                        @enderror
+                    </div>
                 </div>
+                <div class="row mb-3">
+                    <button type="button" id="more_btn" class="btn btn-link text-decoration-none text-end text-white">تنضیمات بیشتر...</button>
+                </div>
+                <div id="more" class="row">
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label for="year_of_construction">سال ساخت:</label>
+                            <input type="text" name="year_of_construction" class="form-control" value="{{$customer->year_of_construction}}" id="year_of_construction" placeholder="سال ساخت"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            @error('year_of_construction')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="year_of_reconstruction">سال بازسازی:</label>
+                            <input type="text" name="year_of_reconstruction" class="form-control" value="{{$customer->year_of_reconstruction}}" id="year_of_reconstruction" placeholder="سال بازساری"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            @error('year_of_reconstruction')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3 floor">
+                            <label for="floor_number">تعداد طبقات کل:</label>
+                            <input type="text" name="floor_number" class="form-control" value="{{$customer->floor_number}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            @error('floor_number')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3 num-floor">
+                            <label for="floor">شماره طبقه:</label>
+                            <input type="text" name="floor" class="form-control" value="{{$customer->floor}}" id="floor" placeholder="شماره طبقه"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            @error('floor')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="number_of_rooms">تعداد اتاق:</label>
+                            <input type="text" name="number_of_rooms" class="form-control" value="{{$customer->number_of_rooms}}" id="number_of_rooms" placeholder="تعداد اتاق"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            @error('number_of_rooms')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="floor_covering">پوشش کف:</label>
+                            <select class="form-control" name="floor_covering" id="floor_covering">
+                                <option value="null" @selected($customer->getRawOriginal('floor_covering') == 'null')>انتخاب گزینه</option>
+                                <option value="ceramic" @selected($customer->getRawOriginal('floor_covering') == 'ceramic')>سرامیک</option>
+                                <option value="mosaic" @selected($customer->getRawOriginal('floor_covering') == 'mosaic')>موزاییک</option>
+                                <option value="wooden" @selected($customer->getRawOriginal('floor_covering') == 'wooden')>منقوله دارچوب</option>
+                                <option value="pvc" @selected($customer->getRawOriginal('floor_covering') == 'pvc')>پی وی سی</option>
+                                <option value="others" @selected($customer->getRawOriginal('floor_covering') == 'other')>سایر</option>
+                            </select>
+                            @error('floor_covering')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="cooling">سرمایش:</label>
+                            <select class="form-control" name="cooling" id="cooling">
+                                <option value="null" @selected($customer->getRawOriginal('cooling') == 'null')>انتخاب گزینه</option>
+                                <option value="water_cooler" @selected($customer->getRawOriginal('cooling') == 'water_cooler')>کولر ابی</option>
+                                <option value="air_cooler" @selected($customer->getRawOriginal('cooling') == 'air_cooler')>کولر گازی</option>
+                                <option value="nothing" @selected($customer->getRawOriginal('cooling') == 'nothing')>ندارد</option>
+                            </select>
+                            @error('cooling')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="heating">گرمایش:</label>
+                            <select class="form-control" name="heating" id="heating">
+                                <option value="null" @selected($customer->getRawOriginal('heating') == 'null')>انتخاب گزینه</option>
+                                <option value="heater" @selected($customer->getRawOriginal('heating') == 'heater')>بخاری</option>
+                                <option value="fire_place" @selected($customer->getRawOriginal('heating') == 'fire_place')>شومینه</option>
+                                <option value="underfloor_heating" @selected($customer->getRawOriginal('heating') == 'underfloor_heating')>گرمایش از کف</option>
+                                <option value="split" @selected($customer->getRawOriginal('heating') == 'split')>اسپلیت</option>
+                                <option value="nothing" @selected($customer->getRawOriginal('heating') == 'nothing')>ندارد</option>
+                            </select>
+                            @error('heating')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="cabinets">کابینت:</label>
+                            <select class="form-control" name="cabinets" id="cabinets">
+                                <option value="null" @selected($customer->getRawOriginal('cabinets') == 'null')>انتخاب گزینه</option>
+                                <option value="wooden" @selected($customer->getRawOriginal('cabinets') == 'wooden')>چوب</option>
+                                <option value="memberan" @selected($customer->getRawOriginal('cabinets') == 'memberan')>ممبران</option>
+                                <option value="metal" @selected($customer->getRawOriginal('cabinets') == 'metal')>فلزی</option>
+                                <option value="melamine" @selected($customer->getRawOriginal('cabinets') == 'melamine')>ملامینه</option>
+                                <option value="mdf" @selected($customer->getRawOriginal('cabinets') == 'mdf')>ام دی اف</option>
+                                <option value="mdf_and_metal" @selected($customer->getRawOriginal('cabinets') == 'mdf_and_metal')>بدنه فلزی و در ام دی اف</option>
+                                <option value="high_glass" @selected($customer->getRawOriginal('cabinets') == 'high_glass')>های گلس</option>
+                                <option value="noting" @selected($customer->getRawOriginal('cabinets') == 'noting')>ندارد</option>
+                            </select>
+                            @error('heating')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="view">نما:</label>
+                            <select class="form-control" name="view" id="view">
+                                <option value="null" @selected($customer->getRawOriginal('view') == 'null')>انتخاب گزینه</option>
+                                <option value="brick" @selected($customer->getRawOriginal('view') == 'brick')>اجری</option>
+                                <option value="rock" @selected($customer->getRawOriginal('view') == 'rock')>سنگی</option>
+                                <option value="Cement" @selected($customer->getRawOriginal('view') == 'Cement')>سیمانی</option>
+                                <option value="composite" @selected($customer->getRawOriginal('view') == 'composite')>کامپوزیت</option>
+                                <option value="Glass" @selected($customer->getRawOriginal('view') == 'Glass')>شیشه ای</option>
+                                <option value="ceramic" @selected($customer->getRawOriginal('view') == 'ceramic')>سرامیک</option>
+                                <option value="hybrid" @selected($customer->getRawOriginal('view') == 'hybrid')>ترکیبی</option>
+                                <option value="others" @selected($customer->getRawOriginal('view') == 'others')>سایر</option>
+                            </select>
+                            @error('view')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="description">توضیحات:</label>
+                            <textarea name="description" class="form-control" id="description" placeholder="توضیحات" rows="3">{{$customer->description}}</textarea>
+                            @error('description')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
                 <div class="text-center pt-3">
                     <button type="submit" class="btn btn-primary w-100 enter-btn">ویرایش</button>
                 </div>

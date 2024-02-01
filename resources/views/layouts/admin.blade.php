@@ -44,7 +44,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 9999;
+            z-index: 999;
             overflow: hidden;
             background: #000000;
         }
@@ -62,31 +62,6 @@
             height: 60px;
             animation: animate-preloader 1s linear infinite;
         }
-
-        /*.darkBox {*/
-        /*    position: fixed;*/
-        /*    top: 0;*/
-        /*    left: 0;*/
-        /*    right: 0;*/
-        /*    bottom: 0;*/
-        /*    z-index: 9999;*/
-        /*    overflow: hidden;*/
-        /*    background: rgba(0, 0, 0, 0.3);*/
-        /*}*/
-
-        /*.darkBox:before {*/
-        /*    content: "";*/
-        /*    position: fixed;*/
-        /*    top: calc(50% - 30px);*/
-        /*    left: calc(50% - 30px);*/
-        /*    border: 2px solid #37517e;*/
-        /*    border-top-color: #fff;*/
-        /*    border-bottom-color: #fff;*/
-        /*    border-radius: 50%;*/
-        /*    width: 30px;*/
-        /*    height: 30px;*/
-        /*    animation: animate-preloader 1s linear infinite;*/
-        /*}*/
 
         @keyframes animate-preloader {
             0% {
@@ -167,6 +142,10 @@
     $('.btn-close').on('click' , function (){
         $('#message').remove()
     })
+    setTimeout(function() {
+        $('#message').remove();
+    }, 10000);
+
 </script>
 <!-- End custom js for this page -->
 @yield('scripts')

@@ -39,6 +39,11 @@
                     <h4 class="card-title me-5 my-4">
                         خرید فایل
                     </h4>
+                    <h5 class="text-center text-success me-5 my-4">
+                        بعد از اعمال کیف پول اگر موجودی شما کافی نباشد مابقی مبلغ را
+                        می توانید از طریق درگاه بانکی بپردازید. اگر مقدار کیف پول کافی باشد دیگر به درگاه
+                        بانک هدایت نمی شوید.
+                    </h5>
                     <form action="{{route('payment.file')}}" method="post">
                     @csrf
                         <div class="table-responsive d-flex justify-content-center pt-4">
@@ -59,7 +64,7 @@
                                     <td>{{number_format($landowner->tax)}} تومان  </td>
                                 </tr>
                                 <tr>
-                                    <td>اعمال کیف پول</td>
+                                    <td>شیوه پرداخت</td>
                                     <td>
                                         <div class="row">
                                             <div class="col-md-6">
@@ -80,7 +85,7 @@
                                     <td>{{number_format($landowner->walletAfterUse)}} تومان  </td>
                                 </tr>
                                 <tr class="bg-secondary bg-opacity-10 wallet">
-                                    <td>مقدار پرداختی  بعد اعمال کیف پول</td>
+                                    <td>مقدار پرداختی از درگاه بانکی بعد اعمال کیف پول</td>
                                     <td>{{number_format($landowner->paymentAfterWalletUse)}} تومان  </td>
                                 </tr>
                                 <tr class="bg-secondary bg-opacity-10 no_wallet">

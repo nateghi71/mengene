@@ -116,7 +116,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'city_id' => ['required'],
-            'email' => ['nullable' , 'max:255' , 'email'],
+//            'email' => ['nullable' , 'max:255' , 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => 'required'
         ]);
@@ -127,7 +127,7 @@ class RegisteredUserController extends Controller
 
             $user = $myRole->users()->create([
                 'name' => $request->name,
-                'email' => $request->email,
+//                'email' => $request->email,
                 'number' => $userCode->user_number,
                 'city_id' => $request->city_id,
                 'password' => Hash::make($request->password),

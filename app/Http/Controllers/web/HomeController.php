@@ -32,6 +32,11 @@ class HomeController extends Controller
     }
     public function show_public_customers(Customer $customer)
     {
+        if ($customer->getRawOriginal('expire_date') > Carbon::now()) {
+            $daysLeft = Carbon::now()->diffInDays($customer->getRawOriginal('expire_date')) + 1;
+            $customer->daysLeft = $daysLeft;
+        }
+
         return view('home.show_public_customer', compact('customer'));
     }
     public function public_landowners()
@@ -50,6 +55,11 @@ class HomeController extends Controller
     }
     public function show_public_landowners(Landowner $landowner)
     {
+        if ($landowner->getRawOriginal('expire_date') > Carbon::now()) {
+            $daysLeft = Carbon::now()->diffInDays($landowner->getRawOriginal('expire_date')) + 1;
+            $landowner->daysLeft = $daysLeft;
+        }
+
         return view('home.show_public_landowner', compact('landowner'));
     }
 

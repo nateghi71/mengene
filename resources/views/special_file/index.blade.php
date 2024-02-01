@@ -194,24 +194,26 @@
                         </div>
                         <div class="form-group col-md-3">
                             <select class="form-control" onchange="filter()" id="type_work">
-                                <option value="default">نوع مسکن</option>
+                                <option value="default">نوع کاربری</option>
                                 <option value="home" @selected(request()->has('type_work') && request()->type_work == 'home')>خانه</option>
                                 <option value="office" @selected(request()->has('type_work') && request()->type_work == 'office')>دفتر</option>
+                                <option value="commercial" @selected(request()->has('type_work') && request()->type_work == 'commercial')>تجاری</option>
+                                <option value="training" @selected(request()->has('type_work') && request()->type_work == 'training')>اموزشی</option>
+                                <option value="industrial" @selected(request()->has('type_work') && request()->type_work == 'industrial')>صنعتی</option>
+                                <option value="other" @selected(request()->has('type_work') && request()->type_work == 'other')>سایر</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
                             <select class="form-control" onchange="filter()" id="type_build">
-                                <option value="default">نوع خانه</option>
+                                <option value="default">نوع ملک</option>
                                 <option value="house" @selected(request()->has('type_build') && request()->type_build == 'house')>ویلایی</option>
                                 <option value="apartment" @selected(request()->has('type_build') && request()->type_build == 'apartment')>ساختمان</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="status">
-                                <option value="default">وضعیت</option>
-                                <option value="active" @selected(request()->has('status') && request()->status == 'active')>فعال</option>
-                                <option value="unknown" @selected(request()->has('status') && request()->status == 'unknown')>نامعلوم</option>
-                                <option value="deActive" @selected(request()->has('status') && request()->status == 'deActive')>عیرفعال</option>
+                                <option value="shop" @selected(request()->has('type_build') && request()->type_build == 'shop')>مغازه</option>
+                                <option value="land" @selected(request()->has('type_build') && request()->type_build == 'land')>زمین</option>
+                                <option value="workshop" @selected(request()->has('type_build') && request()->type_build == 'workshop')>کارگاه</option>
+                                <option value="parking" @selected(request()->has('type_build') && request()->type_build == 'parking')>پارکینگ</option>
+                                <option value="store" @selected(request()->has('type_build') && request()->type_build == 'store')>انباری</option>
+                                <option value="hall" @selected(request()->has('type_build') && request()->type_build == 'hall')>سالن</option>
                             </select>
                         </div>
                     </div>

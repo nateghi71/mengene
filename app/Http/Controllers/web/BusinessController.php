@@ -5,6 +5,7 @@ namespace App\Http\Controllers\web;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Landowner;
+use App\Models\Notification;
 use App\Models\Premium;
 use App\Models\Province;
 use App\Models\User;
@@ -35,6 +36,11 @@ class BusinessController extends Controller
         $business = $user->ownedBusiness()->withCount('customers' , 'landowners')->first();
 
         return view('business.index', compact('business'));
+    }
+    public function notificationRead(Notification $notification)
+    {
+        $notification->delete();
+        return back();
     }
     public function showConsultants()
     {
@@ -90,8 +96,6 @@ class BusinessController extends Controller
 
         $request->validate([
             'name' => 'required',
-            'en_name' => 'required|unique:businesses',
-            'city_id' => 'required',
             'area' => 'required',
             'address' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -110,10 +114,9 @@ class BusinessController extends Controller
 
             $business = Business::create([
                 'name' => $request->name,
-                'en_name' => $request->en_name,
                 'user_id' => $user->id,
                 'image' => $imageName,
-                'city_id' => $request->city_id,
+                'city_id' => $user->city_id,
                 'area' => $request->area,
                 'address' => $request->address,
                 'wallet' => 0,
@@ -145,7 +148,6 @@ class BusinessController extends Controller
         $this->authorize('updateBusiness' , $business);
         $request->validate([
             'name' => 'required',
-            'en_name' => 'required',
             'city_id' => 'required',
             'area' => 'required',
             'address' => 'required',
@@ -165,12 +167,10 @@ class BusinessController extends Controller
 
         $business->update([
             'name' => $request->name,
-            'en_name' => $request->en_name,
             'image' => $request->hasFile('image') ? $imageName : $business->image,
             'city_id' => $request->city_id,
             'area' => $request->area,
             'address' => $request->address,
-            'wallet' => 0,
         ]);
 
         return redirect()->route('dashboard')->with('message' , 'املاکی موردنظر اپدیت شد.');

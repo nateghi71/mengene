@@ -41,12 +41,6 @@
             <div class="px-5 py-5">
                 <div class="table-responsive">
                     <table class="table table-bordered text-center">
-{{--                        <thead>--}}
-{{--                        <tr>--}}
-{{--                            <th>#</th>--}}
-{{--                            <th>#</th>--}}
-{{--                        </tr>--}}
-{{--                        </thead>--}}
                         <tbody>
                         <tr>
                             <td>وضعیت</td>
@@ -67,21 +61,39 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>شماره املاکی</td>
+                            <td>
+                                @if($customer->business_id !== null)
+                                    {{$customer->business->user->number}}
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>متراژ</td>
+                            <td>{{$customer->scale}}</td>
+                        </tr>
+                        <tr>
                             <td>شهر</td>
                             <td>{{$customer->city->name}}</td>
                         </tr>
                         <tr>
-                            <td>نوع مسکن</td>
-                            <td>{{$customer->type_work}}</td>
+                            <td>منطقه شهرداری</td>
+                            <td>{{$customer->area}}</td>
                         </tr>
                         <tr>
-                            <td>نوع خانه</td>
-                            <td>{{$customer->type_build}}</td>
+                            <td>زمان باقیمانده</td>
+                            <td>{{$customer->daysLeft . ' روز' ?? 'منقضی'}}</td>
                         </tr>
                         @if($customer->getRawOriginal('type_sale') == 'buy')
                             <tr>
                                 <td>قیمت</td>
                                 <td>{{$customer->selling_price}}</td>
+                            </tr>
+                            <tr>
+                                <td>نوع سند</td>
+                                <td>{{$customer->document}}</td>
                             </tr>
                         @elseif($customer->getRawOriginal('type_sale') == 'rahn')
                             <tr>
@@ -94,20 +106,24 @@
                             </tr>
                         @endif
                         <tr>
-                            <td>متراژ</td>
-                            <td>{{$customer->scale}}</td>
+                            <td>نوع کاربری</td>
+                            <td>{{$customer->type_work}}</td>
                         </tr>
                         <tr>
-                            <td>تعداد اتاق</td>
-                            <td>{{$customer->number_of_rooms}}</td>
+                            <td>نوع ملک</td>
+                            <td>{{$customer->type_build}}</td>
                         </tr>
                         <tr>
-                            <td>شماره طبقه</td>
-                            <td>{{$customer->floor_number}}</td>
+                            <td>ادرس</td>
+                            <td>{{$customer->address}}</td>
                         </tr>
                         <tr>
-                            <td>زمان باقیمانده</td>
-                            <td>{{$customer->expire_date}}</td>
+                            <td>تخلیه</td>
+                            <td>{{$customer->discharge}}</td>
+                        </tr>
+                        <tr>
+                            <td>حضور کاربر</td>
+                            <td>{{$customer->exist_owner}}</td>
                         </tr>
                         <tr>
                             <td>اسانسور</td>
@@ -121,9 +137,67 @@
                             <td>انبار</td>
                             <td>{{$customer->store}}</td>
                         </tr>
+                        @if($customer->getRawOriginal('type_work') !== 'home' && $customer->getRawOriginal('type_work') !== 'land')
+                            <tr>
+                                <td>تعداد طبقات کل ساختمان</td>
+                                <td>{{$customer->floor_number}}</td>
+                            </tr>
+                            <tr>
+                                <td>شماره طبقه</td>
+                                <td>{{$customer->floor}}</td>
+                            </tr>
+                        @endif
+                        @if($customer->year_of_construction !== null)
+                            <tr>
+                                <td>سال ساخت</td>
+                                <td>{{$customer->year_of_construction}}</td>
+                            </tr>
+                        @endif
+                        @if($customer->year_of_reconstruction !== null)
+                            <tr>
+                                <td>سال بازسازی</td>
+                                <td>{{$customer->year_of_reconstruction}}</td>
+                            </tr>
+                        @endif
+                        @if($customer->number_of_rooms !== null)
+                            <tr>
+                                <td>تعداد اتاق</td>
+                                <td>{{$customer->number_of_rooms}}</td>
+                            </tr>
+                        @endif
+                        @if($customer->getRawOriginal('floor_covering') !== 'null')
+                            <tr>
+                                <td>پوشش کف</td>
+                                <td>{{$customer->floor_covering}}</td>
+                            </tr>
+                        @endif
+                        @if($customer->getRawOriginal('cooling') !== 'null')
+                            <tr>
+                                <td>سرمایش</td>
+                                <td>{{$customer->cooling}}</td>
+                            </tr>
+                        @endif
+                        @if($customer->getRawOriginal('heating') !== 'null')
+                            <tr>
+                                <td>گرمایش</td>
+                                <td>{{$customer->heating}}</td>
+                            </tr>
+                        @endif
+                        @if($customer->getRawOriginal('cabinets') !== 'null')
+                            <tr>
+                                <td>کابینت</td>
+                                <td>{{$customer->cabinets}}</td>
+                            </tr>
+                        @endif
+                        @if($customer->getRawOriginal('view') !== 'null')
+                            <tr>
+                                <td>نما</td>
+                                <td>{{$customer->view}}</td>
+                            </tr>
+                        @endif
                         <tr>
-                            <td>توضیحات و آدرس</td>
-                            <td>{{$customer->description}}</td>
+                            <td>توضیحات</td>
+                            <td>{{$customer->description ?? '-'}}</td>
                         </tr>
                         </tbody>
                     </table>

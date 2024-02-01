@@ -83,7 +83,7 @@
                     <div class="dropdown-divider"></div>
 
                     @foreach($notifications as $notification)
-                        <a class="dropdown-item preview-item">
+                        <a href="{{route('business.notificationRead' , $notification->id)}}" class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
                                 <i class="mdi mdi-account-multiple"></i>
                             </div>
@@ -104,8 +104,7 @@
                    data-bs-toggle="dropdown">
                     @php
                         $notifications = auth()->user()->notifications()->where('type' , \App\Notifications\ReminderForCustomerNotification::class)
-                        ->orWhere('type' , \App\Notifications\ReminderForLandowerNotification::class)
-                        ->orWhere('type' , \App\Notifications\ReminderForSpecialLandownerNotification::class)->take(6)->get();
+                        ->orWhere('type' , \App\Notifications\ReminderForLandowerNotification::class)->take(6)->get();
                     @endphp
 
                     <i class="mdi mdi-bell"></i>
@@ -119,7 +118,7 @@
                     <div class="dropdown-divider"></div>
 
                     @foreach($notifications as $notification)
-                        <a class="dropdown-item preview-item">
+                        <a href="{{route('business.notificationRead' , $notification->id)}}" class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
                                 <i class="mdi mdi-bell"></i>
                             </div>

@@ -16,7 +16,6 @@ class BusinessFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'en_name' => $this->faker->name,
             'user_id' => rand(1,2),
             'image' => $this->faker->image,
             'city' => $this->faker->city,

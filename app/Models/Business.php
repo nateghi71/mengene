@@ -20,7 +20,7 @@ class Business extends Model
      * @var array
      */
     protected $fillable = [
-        'status', 'name', 'en_name', 'user_id', 'image', 'city_id', 'area', 'address','wallet',
+        'status', 'name', 'user_id', 'image', 'city_id', 'area', 'address','wallet',
     ];
 
     public function customers()

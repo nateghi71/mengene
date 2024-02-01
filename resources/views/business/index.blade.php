@@ -4,7 +4,7 @@
 
 @section('head')
     <style>
-        #deletePanel {
+        .deletePanel {
             position: fixed;
             top: 0;
             left: 0;
@@ -15,7 +15,7 @@
             background: rgba(0,0,0,0.5);
         }
 
-        #deleteBox {
+        .deleteBox {
             position: fixed;
             padding: 20px;
             top: 50%;
@@ -102,30 +102,67 @@
                 plugins: transactionhistoryChartPlugins
             });
         }
-        $('#deletePanel').hide()
 
-        $('#open_delete_panel').on('click' , function (){
-            $('#deletePanel').show()
-        })
-        $('#not_delete_btn').on('click' , function (){
-            $('#deletePanel').hide()
-        })
+        $('#open_delete_panel').on('click' , deleteBox)
+
+        function deleteBox(e)
+        {
+            e.preventDefault()
+            let wrapper = $('<div>' , {class:'deletePanel'})
+            let box = $('<div>', {class:'deleteBox'})
+            let message = $('<p>' , {
+                class:"text-end pb-3",
+                text:'ایا می خواهید املاکی را حذف کنید؟'
+            })
+
+            let btnContainer = $('<div>' , {class:"d-flex justify-content-between"})
+            let deleteForm = $('<form>' , {
+                method:"post",
+                action : $(this).attr('href')
+            })
+            let methodInput = $('<input>' , {
+                type:"hidden",
+                name:"_method",
+                value : "DELETE"
+            })
+            let csrfInput = $('<input>' , {
+                type:"hidden",
+                name:"_token",
+                value : "{{ csrf_token() }}"
+            })
+
+
+            let closeBtn = $('<button>' , {
+                class:"btn btn-success",
+                type:"button",
+                click: ()=> wrapper.remove(),
+                text:'خیر'
+            })
+
+            let actionBtn = $('<button>' , {
+                class:"btn btn-danger",
+                type:"submit",
+                text:'بله',
+            })
+
+            wrapper.append(box)
+            box.append(message)
+            box.append(btnContainer)
+            btnContainer.append(closeBtn)
+            btnContainer.append(deleteForm)
+            deleteForm.append(methodInput)
+            deleteForm.append(csrfInput)
+            deleteForm.append(actionBtn)
+
+            $('#selectBox').append(wrapper)
+        }
+
     </script>
 @endsection
 
 @section('content')
-    <div id="deletePanel">
-        <div id="deleteBox">
-            <p class="text-end pb-3">ایا می خواهید املاکی را حذف کنید؟</p>
-            <div class="d-flex justify-content-between">
-                <form action="{{route('business.destroy',['business'=>$business->id])}}" method="post">
-                    @csrf
-                    @method('DELETE')
-                    <button id="delete_btn" class="btn btn-danger" type="submit">بله</button>
-                </form>
-                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
-            </div>
-        </div>
+    <div id="selectBox">
+
     </div>
 
     <div class="row">
@@ -373,9 +410,7 @@
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
                                             <p class="text-white">
-                                                <button id="open_delete_panel" class="fs-4 btn btn-link text-decoration-none text-danger" type="button">
-                                                    <i class="mdi mdi-delete"></i>
-                                                </button>
+                                                <a href="{{route('business.destroy',['business'=>$business->id])}}" id="open_delete_panel" class="text-decoration-none text-danger"><i class="fs-4 mdi mdi-delete"></i></a>
                                             </p>
                                             <p class="text-muted mb-0">حذف املاکی</p>
                                         </div>
