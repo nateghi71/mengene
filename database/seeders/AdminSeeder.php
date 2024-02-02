@@ -21,19 +21,12 @@ class AdminSeeder extends Seeder
             DB::beginTransaction();
             $role = Role::where('name' , 'admin')->first();
 
-//            $role->users()->create([
-//                'name' => 'Admin',
-//                'email' => 'dariush.kianifar@gmail.com',
-//                'number' => '09358668218',
-//                'city_id' => 153,
-//                'password' => '$2y$12$wC5JksWejYF0B28mV2rmoefXuaKe1CiojLCYvGS9/SUgaHuCjCTQ.',
-//            ]);
             $role->users()->create([
-                'name' => 'حسین',
-                'email' => '',
-                'number' => '12345678912',
+                'name' => 'Admin',
+                'email' => 'dariush.kianifar@gmail.com',
+                'number' => '09358668218',
                 'city_id' => 153,
-                'password' => Hash::make(12345678),
+                'password' => '$2y$12$wC5JksWejYF0B28mV2rmoefXuaKe1CiojLCYvGS9/SUgaHuCjCTQ.',
             ]);
 
             Auth::guard('web')->logout();

@@ -123,6 +123,8 @@ class SuggestionForLandownerController extends BaseController
         $user = auth()->user();
         if(!$user->isFreeUser() && $user->business()->wallet >= 200)
         {
+            $user->business()->decrement('wallet' , 200);
+
             $user->incrementPremiumCountSms();
             $landowner = Landowner::findOrFile($request->landowner_id);
             $customer = Customer::findOrFile($request->customer_id);

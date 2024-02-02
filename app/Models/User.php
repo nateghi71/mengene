@@ -85,7 +85,6 @@ class User extends Authenticatable
     }
     public function incrementPremiumCountSms()
     {
-        $this->business()->decrement('wallet' , 200);
         $this->business()->premium()->increment('counter_sms');
     }
 
@@ -95,11 +94,11 @@ class User extends Authenticatable
     }
     public function incrementPremiumCountConsultants()
     {
-        return $this->business()->premium()->increment('counter_Consultant');
+        $this->business()->premium()->increment('counter_Consultant');
     }
     public function decrementPremiumCountConsultants()
     {
-        return $this->business()->premium()->decrement('counter_Consultant');
+        $this->business()->premium()->decrement('counter_Consultant');
     }
     public function business()
     {

@@ -24,6 +24,8 @@ class SendSmsToLandowner
     {
         if(!$event->user->isFreeUser() && $event->user->business()->wallet >= 200)
         {
+            $event->user->business()->decrement('wallet' , 200);
+
             $event->user->incrementPremiumCountSms();
             $smsApi = new SmsAPI();
             $smsApi->sendSmsRegisterFile($event->landowner->number , $event->landowner->name , $event->user->business()->name , $event->user->business()->number);

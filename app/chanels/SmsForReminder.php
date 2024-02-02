@@ -13,10 +13,14 @@ class SmsForReminder
         $info_cus = $notification->smsReminder($notifiable);
         $smsApi = new SmsAPI();
         $smsApi->sendSmsReminderForBusiness($notifiable->number , $info_cus['name_cus'], $info_cus['date']);
-        auth()->user()->incrementPremiumCountSms();
+        $user = auth()->user();
+        $user->incrementPremiumCountSms();
+        $user->business()->decrement('wallet' , 200);
 
         $smsApi = new SmsAPI();
         $smsApi->sendSmsReminderForCustomer($info_cus['number_cus'] , $notifiable->name, $info_cus['message'], $info_cus['date']);
-        auth()->user()->incrementPremiumCountSms();
+        $user->incrementPremiumCountSms();
+        $user->business()->decrement('wallet' , 200);
+
     }
 }
