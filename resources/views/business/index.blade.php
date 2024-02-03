@@ -378,6 +378,33 @@
                                 </div>
                                 <div class="preview-item border-bottom">
                                     <div class="preview-thumbnail">
+                                        <div class="preview-icon bg-primary">
+                                            <i class="mdi mdi-file-document"></i>
+                                        </div>
+                                    </div>
+                                    <div class="preview-item-content d-sm-flex flex-grow">
+                                        <div class="flex-grow">
+                                            <h6 class="preview-subject">نام سرویس :</h6>
+                                            <p class="text-muted mb-0">تاریخ پایان سرویس</p>
+                                        </div>
+                                        <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
+                                            <p class="text-white">
+                                                @if(auth()->user()->business()->premium->package->name == 'free')
+                                                    رایگان
+                                                @elseif(auth()->user()->business()->premium->package->name == 'bronze')
+                                                    برنزی
+                                                @elseif(auth()->user()->business()->premium->package->name == 'silver')
+                                                    نقره ای
+                                                @elseif(auth()->user()->business()->premium->package->name == 'golden')
+                                                    طلایی
+                                                @endif
+                                            </p>
+                                            <p class="text-muted mb-0">{{verta(auth()->user()->business()->premium->expire_date)}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="preview-item border-bottom">
+                                    <div class="preview-thumbnail">
                                         <div class="preview-icon bg-warning">
                                             <i class="mdi mdi-tooltip-edit"></i>
                                         </div>

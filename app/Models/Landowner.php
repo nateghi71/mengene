@@ -191,48 +191,21 @@ class Landowner extends Model
     protected function rahnAmount():Attribute
     {
         return Attribute::make(
-            get : function ($value){
-                if($value < 1000)
-                {
-                    return number_format($value , 0 , '/' , ',') . ' میلیون';
-                }
-                else
-                {
-                    $tempValue = $value/1000;
-                    return number_format($tempValue , 3 , '/' , ',') . ' میلیارد';
-                }}  ,
+            get : fn ($value) => number_format($value , 0 , '/' , ',') . ' تومان',
             set : fn ($value) => str_replace( ',', '', $value),
         );
     }
     protected function rentAmount():Attribute
     {
         return Attribute::make(
-            get : function ($value){
-                if($value < 1000)
-                {
-                    return number_format($value , 0 , '/' , ',') . ' میلیون';
-                }
-                else
-                {
-                    $tempValue = $value/1000;
-                    return number_format($tempValue , 3 , '/' , ',') . ' میلیارد';
-                }}  ,
+            get : fn ($value) => number_format($value , 0 , '/' , ',') . ' تومان',
             set : fn ($value) => str_replace( ',', '', $value),
         );
     }
     protected function sellingPrice():Attribute
     {
         return Attribute::make(
-            get : function ($value){
-                if($value < 1000)
-                {
-                    return number_format($value , 0 , '/' , ',') . ' میلیون';
-                }
-                else
-                {
-                    $tempValue = $value/1000;
-                    return number_format($tempValue , 3 , '/' , ',') . ' میلیارد';
-                }}  ,
+            get : fn ($value) => number_format($value , 0 , '/' , ',') . ' تومان',
             set : fn ($value) => str_replace( ',', '', $value),
         );
     }

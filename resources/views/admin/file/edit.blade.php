@@ -120,7 +120,7 @@
             });
         });
 
-        function separateNum(input , show = null) {
+        function separateNum(input) {
             var nStr = input.value + '';
             nStr = nStr.replace(/\,/g, "");
             x = nStr.split('.');
@@ -131,25 +131,6 @@
                 x1 = x1.replace(rgx, '$1' + ',' + '$2');
             }
             input.value = x1 + x2;
-            if(show)
-            {
-                if (input.value)
-                {
-                    let amount = input.value.replaceAll(',', '')
-                    amount = parseFloat(amount);
-                    if (amount < 1000) {
-                        show.textContent = amount + ' میلیون تومان';
-                    }
-                    else {
-                        amount = (amount / 1000).toFixed(3)
-                        show.textContent = amount.toString().replaceAll('.', '/') + ' میلیارد تومان';
-                    }
-                }
-                else
-                {
-                    show.textContent = '';
-                }
-            }
         }
 
         let scaleElement = $('#scale');
@@ -159,21 +140,21 @@
         });
 
         let priceElement = $('#selling_price');
-        separateNum(priceElement.get(0) , $('#show_selling_price').get(0));
+        separateNum(priceElement.get(0));
         priceElement.on('keyup' , function (e){
-            separateNum(this , $('#show_selling_price').get(0));
+            separateNum(this);
         });
 
         let rahnElement = $('#rahn_amount');
-        separateNum(rahnElement.get(0) , $('#show_rahn_amount').get(0));
+        separateNum(rahnElement.get(0));
         rahnElement.on('keyup' , function (e){
-            separateNum(this , $('#show_rahn_amount').get(0));
+            separateNum(this);
         });
 
         let rentElement = $('#rent_amount');
-        separateNum(rentElement.get(0) , $('#show_rent_amount').get(0));
+        separateNum(rentElement.get(0));
         rentElement.on('keyup' , function (e){
-            separateNum(this , $('#show_rent_amount').get(0));
+            separateNum(this);
         });
 
         let label = $('#is_star_label')
@@ -328,32 +309,23 @@
                         @enderror
                     </div>
                     <div id="priceDiv" class="form-group col-md-3" style="display: block">
-                        <div class="d-flex justify-content-between">
-                            <label for="selling_price">قیمت(تومان):</label>
-                            <p id="show_selling_price"></p>
-                        </div>
-                        <input maxlength="9" type="text" name="selling_price" class="form-control" value="{{$landowner->getRawOriginal('selling_price')}}" id="selling_price" placeholder="قیمت"
+                        <label for="selling_price">قیمت(تومان):</label>
+                        <input type="text" name="selling_price" class="form-control" value="{{$landowner->getRawOriginal('selling_price')}}" id="selling_price" placeholder="قیمت"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('selling_price')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div id="rahnDiv" class="form-group col-md-3" style="display: none">
-                        <div class="d-flex justify-content-between">
-                            <label for="rahn_amount">رهن(تومان):</label>
-                            <p id="show_rahn_amount"></p>
-                        </div>
-                        <input maxlength="9" type="text" name="rahn_amount" class="form-control" value="{{$landowner->getRawOriginal('rahn_amount')}}" id="rahn_amount" placeholder="رهن"
+                        <label for="rahn_amount">رهن(تومان):</label>
+                        <input type="text" name="rahn_amount" class="form-control" value="{{$landowner->getRawOriginal('rahn_amount')}}" id="rahn_amount" placeholder="رهن"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rahn_amount')
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div id="rentDiv" class="form-group col-md-3" style="display: none">
-                        <div class="d-flex justify-content-between">
-                            <label for="rent_amount">اجاره(تومان):</label>
-                            <p id="show_rent_amount"></p>
-                        </div>
+                        <label for="rent_amount">اجاره(تومان):</label>
                         <input maxlength="9" type="text" name="rent_amount" class="form-control" value="{{$landowner->getRawOriginal('rent_amount')}}" id="rent_amount" placeholder="اجاره"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rent_amount')

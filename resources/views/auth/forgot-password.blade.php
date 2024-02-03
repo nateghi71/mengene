@@ -1,36 +1,34 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+@extends('layouts.auth')
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+@section('title' , 'تغییر پسورد')
+
+@section('scripts')
+@endsection
+
+@section('content')
+    <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+        <div class="card col-lg-4 mx-auto">
+            <div class="card-body px-5 py-5">
+                <form action="{{ route('password.send') }}" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <label for="number">تلفن همراه</label>
+                        <input type="text" name="number" value="{{old('number')}}" class="form-control" id="number"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('number')
+                        <div class="alert alert-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-100 enter-btn">تایید</button>
+                    </div>
+                </form>
+
+            </div>
         </div>
+    </div>
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
-
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
-        <form method="POST" action="{{ route('password.send') }}">
-            @csrf
-
-            <!-- Email Address -->
-            <div>
-                <x-label for="number" :value="__('Number')" />
-
-                <x-input id="number" class="block mt-1 w-full" type="text" name="number" :value="old('number')" required autofocus />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Send Password Reset Link') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+@endsection

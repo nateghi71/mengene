@@ -226,7 +226,7 @@ class PaymentController extends Controller
                 $this->buy_credit($business,$amount);
             }
 
-            return redirect()->route('dashboard')->with('message' , $receipt->getReferenceId().'تراکنش با موفقیت انجام شد. با شماره ارجاع ');
+            return redirect()->route('dashboard')->with('message' , 'تراکنش با موفقیت انجام شد. با شماره ارجاع ' . $receipt->getReferenceId());
         } catch (InvalidPaymentException $exception) {
             return redirect()->route('dashboard')->with('message' , $exception->getMessage());
         }
@@ -234,8 +234,16 @@ class PaymentController extends Controller
 
     private function buy_package(Business $business , Package $package, $credit)
     {
-        $premium = Premium::where('business_id' , $business->id)->first();
-        $expire_date = Carbon::now()->addMonth($package->time);
+        if($business->premium->package->name !== 'free')
+        {
+            $premium = Premium::where('business_id' , $business->id)->first();
+            $expire_date = (new Carbon($premium->expire_date))->addMonth($package->time);
+        }
+        else
+        {
+            $premium = Premium::where('business_id' , $business->id)->first();
+            $expire_date = Carbon::now()->addMonth($package->time);
+        }
 
         $premium->update([
             'package_id' => $package->id,

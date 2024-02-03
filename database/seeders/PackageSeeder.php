@@ -17,7 +17,7 @@ class PackageSeeder extends Seeder
         Package::create([
             'name' => 'free',
             'price' => 0,
-            'time' => 12000,
+            'time' => 12,
         ]);
         Package::create([
             'name' => 'bronze',

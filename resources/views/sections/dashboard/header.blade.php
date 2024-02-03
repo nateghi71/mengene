@@ -28,26 +28,6 @@
                     </div>
                 </li>
                @endif
-                <li class="nav-item w-75">
-                    <div class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                        <div class="input-group flex-nowrap">
-                            <span class="input-group-text p-2 bg-secondary bg-opacity-10 border-0 text-white">
-                                نوع سرویس:
-                                <span id="wallet_amount" class="pe-3">
-                                    @if(auth()->user()->business()->premium->package->name == 'free')
-                                        رایگان
-                                    @elseif(auth()->user()->business()->premium->package->name == 'bronze')
-                                        برنزی
-                                    @elseif(auth()->user()->business()->premium->package->name == 'silver')
-                                        نقره ای
-                                    @elseif(auth()->user()->business()->premium->package->name == 'golden')
-                                        طلایی
-                                    @endif
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </li>
             @endif
         </ul>
 
