@@ -37,8 +37,7 @@
                                 <input type="checkbox" name="remember_me" class="form-check-input">مرا بخاطر بسپار
                             </label>
                         </div>
-                        <a href="#" class="forgot-pass text-decoration-none">فراموشی پسورد</a>
-
+                        <a href="{{route('password.request')}}" class="forgot-pass text-decoration-none">فراموشی پسورد</a>
                     </div>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary w-100 enter-btn">ورود</button>

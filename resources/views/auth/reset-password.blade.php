@@ -1,48 +1,48 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+@extends('layouts.auth')
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+@section('title' , 'ورود')
 
-        <form method="POST" action="{{ route('password.update') }}">
-            @csrf
+@section('scripts')
+@endsection
 
-            <!-- Password Reset Token -->
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+@section('content')
+    <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+        <div class="card col-lg-4 mx-auto">
+            <div class="card-body px-5 py-5">
+                <h3 class="card-title text-center mb-3">ورود</h3>
+                <form action="{{route('password.update')}}" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <label for="number">تلفن همراه</label>
+                        <input type="text" name="number" value="{{old('number')}}" class="form-control" id="number"
+                               onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                        @error('number')
+                        <div class="alert alert-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="password">رمز ورود</label>
+                        <input type="password" name="password" value="{{old('password')}}" class="form-control" id="password" placeholder="رمز ورود">
+                        @error('password')
+                        <div class="alert alert-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="password_confirmation">تکرار رمز ورود</label>
+                        <input type="password" name="password_confirmation" value="{{old('password_confirmation')}}" class="form-control" id="password_confirmation" placeholder="تکرار رمز ورود">
+                        <input type="hidden" name="token" value="{{$token}}">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-100 enter-btn">تایید</button>
+                    </div>
+                </form>
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="number" :value="__('Email')" />
-
-                <x-input id="number" class="block mt-1 w-full" type="text" name="number" :value="old('number', $request->number)" required autofocus />
             </div>
+        </div>
+    </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required />
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                    type="password"
-                                    name="password_confirmation" required />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Reset Password') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+@endsection
