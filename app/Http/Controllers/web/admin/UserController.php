@@ -36,7 +36,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'number' => 'required|numeric|digits:11|unique:users,number',
+            'number' => 'required|iran_mobile|digits:11|unique:users,number',
             'city_id' => 'required',
             'email' => 'nullable|max:255|email',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -88,7 +88,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'number' => 'required|numeric|digits:11|unique:users,number',
+            'number' => 'required|iran_mobile|digits:11',
             'city_id' => 'required',
             'email' => 'nullable|max:255|email',
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],

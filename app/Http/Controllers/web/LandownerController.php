@@ -175,7 +175,7 @@ class LandownerController extends Controller
             return back()->with('message' , 'فابل ثبت نشد دویاره امتحان کنید.');
         }
 
-//        event(new CreateLandownerFile($landowner , $user));
+        event(new CreateLandownerFile($landowner , $user));
 
         return redirect()->route('landowner.index',['status' => 'active'])->with('message' , 'فایل موردنظر ایجاد شد.');
     }
