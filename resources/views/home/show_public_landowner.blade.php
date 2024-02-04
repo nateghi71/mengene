@@ -51,22 +51,22 @@
                             <td>{{$landowner->type_sale}}</td>
                         </tr>
                         <tr>
-                            <td>نام املاکی</td>
+                            <td>نام</td>
                             <td>
                                 @if($landowner->business_id !== null)
                                     {{$landowner->business->name}}
                                 @else
-                                    منگنه
+                                    {{$landowner->name}}
                                 @endif
                             </td>
                         </tr>
                         <tr>
-                            <td>شماره املاکی</td>
+                            <td>شماره تلفن</td>
                             <td>
                                 @if($landowner->business_id !== null)
                                     {{$landowner->business->user->number}}
                                 @else
-                                    -
+                                    {{$landowner->number}}
                                 @endif
                             </td>
                         </tr>
