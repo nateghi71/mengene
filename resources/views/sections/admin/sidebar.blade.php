@@ -103,5 +103,23 @@
                 </div>
             </li>
         @endcan
+        <li class="nav-item menu-items">
+            <a class="nav-link" data-bs-toggle="collapse" href="#orders" aria-expanded="false" aria-controls="orders">
+              <span class="menu-icon">
+                <i class="mdi mdi-bullhorn"></i>
+              </span>
+                <span class="menu-title pe-2">سفارش ها</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="orders">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"><a class="nav-link" href="{{route('admin.orders.index')}}"> نمایش سفارش
+                        ها </a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('admin.orders.create')}}">ایجاد
+                            سفارش</a></li>
+                </ul>
+            </div>
+        </li>
+
     </ul>
 </nav>

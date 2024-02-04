@@ -7,6 +7,7 @@ use App\Models\Business;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\Landowner;
+use App\Models\Order;
 use App\Models\Role;
 use App\Models\User;
 use App\Policies\BusinessAdminPolicy;
@@ -15,6 +16,7 @@ use App\Policies\CouponPolicy;
 use App\Policies\CustomerPolicy;
 use App\Policies\LandownerAdminPolicy;
 use App\Policies\LandownerPolicy;
+use App\Policies\OrderPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserManagementPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -34,6 +36,7 @@ class AuthServiceProvider extends ServiceProvider
         Role::class => RolePolicy::class,
         User::class => UserManagementPolicy::class,
         Coupon::class => CouponPolicy::class,
+        Order::class => OrderPolicy::class,
     ];
 
     /**

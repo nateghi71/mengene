@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\web\admin\CouponController;
+use App\Http\Controllers\web\admin\OrderController;
 use App\Http\Controllers\web\admin\RoleController;
 use App\Http\Controllers\web\admin\UserController as AdminUserController;
 use App\Http\Controllers\web\admin\BusinessController as AdminBusinessController;
@@ -108,8 +109,9 @@ Route::middleware('auth')->prefix('admin-panel')->name('admin.')->group(function
     Route::resource('roles', RoleController::class);
     Route::resource('landowners', FileController::class);
     Route::resource('coupons', CouponController::class);
+    Route::resource('orders', OrderController::class);
     Route::get('/landowners/images/{landowner}' , [FileController::class , 'editImage'])->name('landowner.edit_images');
-    Route::get('users/change_status/{user}' , [UserController::class , 'changeStatus'])->name('users.status');
+    Route::get('users/change_status/{user}' , [AdminUserController::class , 'changeStatus'])->name('users.status');
     Route::get('/' , [AdminBusinessController::class , 'adminPanel'])->name('adminPanel');
     Route::get('business' , [AdminBusinessController::class , 'index'])->name('business.index');
     Route::get('business/{business}' , [AdminBusinessController::class , 'show'])->name('business.show');
