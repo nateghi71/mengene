@@ -62,11 +62,6 @@
                     </a>
                 </div>
             </li>
-{{--            <li class="nav-item nav-settings d-none d-lg-block">--}}
-{{--                <a class="nav-link" href="#">--}}
-{{--                    <i class="mdi mdi-view-grid"></i>--}}
-{{--                </a>--}}
-{{--            </li>--}}
             <li class="nav-item dropdown border-left">
                 @php
                     $notifications = auth()->user()->notifications()->where('type' , \App\Notifications\ConsultantRequestNotification::class)->take(6)->get();
@@ -85,15 +80,18 @@
                     <div class="dropdown-divider"></div>
 
                     @foreach($notifications as $notification)
-                        <a href="{{route('business.notificationRead' , $notification->id)}}" class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <i class="mdi mdi-account-multiple"></i>
-                            </div>
+                        <div class="dropdown-item preview-item">
+                            <a href="{{route('business.notificationRead' , $notification->id)}}">
+                                <div class="preview-thumbnail text-danger">
+                                    <i class="mdi mdi-close"></i>
+                                </div>
+                            </a>
                             <div class="preview-item-content">
                                 <p class="preview-subject  mb-1">{{$notification->data['message']}}</p>
                                 <p class="text-muted mb-0"> {{verta($notification->created_at)}} </p>
                             </div>
-                        </a>
+                        </div>
+
                         <div class="dropdown-divider"></div>
                     @endforeach
                     @if($notifications->count() > 0)
@@ -120,15 +118,17 @@
                     <div class="dropdown-divider"></div>
 
                     @foreach($notifications as $notification)
-                        <a href="{{route('business.notificationRead' , $notification->id)}}" class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <i class="mdi mdi-bell"></i>
-                            </div>
+                        <div class="dropdown-item preview-item">
+                            <a href="{{route('business.notificationRead' , $notification->id)}}">
+                                <div class="preview-thumbnail">
+                                    <i class="mdi mdi-close"></i>
+                                </div>
+                            </a>
                             <div class="preview-item-content">
                                 <p class="preview-subject mb-1">{{$notification->data['message']}}</p>
                                 <p class="text-muted mb-0"> {{verta($notification->created_at)}} </p>
                             </div>
-                        </a>
+                        </div>
                         <div class="dropdown-divider"></div>
                     @endforeach
                     @if($notifications->count() > 0)
@@ -147,17 +147,19 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
                      aria-labelledby="profileDropdown">
-                    <form action="{{route('logout')}}" method="post" class="dropdown-item preview-item">
+                    <form action="{{route('logout')}}" method="post">
                         @csrf
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-dark rounded-circle">
-                                <i class="mdi mdi-logout text-danger"></i>
+                        <div class="dropdown-item preview-item">
+                            <div class="preview-thumbnail">
+                                <div class="preview-icon bg-dark rounded-circle">
+                                    <i class="mdi mdi-logout text-danger"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <button type="submit"
-                                    class="btn btn-link text-decoration-none w-100 text-white preview-subject mb-1">خروج
-                            </button>
+                            <div class="preview-item-content">
+                                <button type="submit" class="btn btn-link text-decoration-none w-100 text-white preview-subject mb-1">
+                                    خروج
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>

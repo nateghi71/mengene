@@ -90,7 +90,7 @@ class UserController extends Controller
             'number' => 'required|iran_mobile|digits:11',
             'city_id' => 'required',
             'email' => 'nullable|max:255|email',
-            'password' => 'required|confirmed',
+            'password' => 'nullable|confirmed',
             'role' => 'required'
         ]);
 
@@ -99,7 +99,7 @@ class UserController extends Controller
             'email' => $request->email,
             'number' => $request->number,
             'city_id' => $request->city_id,
-            'password' => $request->has('password') ? Hash::make($request->password) : $user->password,
+            'password' => $request->password !== null ? Hash::make($request->password) : $user->password,
             'role_id' => $request->role
         ]);
 

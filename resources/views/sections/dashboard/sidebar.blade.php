@@ -19,18 +19,18 @@
                 </div>
                 <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
                 <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
-                    <a href="#" class="dropdown-item preview-item">
+                    <a href="{{route('profile.edit_user')}}" class="dropdown-item preview-item">
                         <div class="preview-thumbnail">
                             <div class="preview-icon bg-dark rounded-circle">
                                 <i class="mdi mdi-settings text-primary"></i>
                             </div>
                         </div>
                         <div class="preview-item-content">
-                            <p class="preview-subject ellipsis mb-1 text-small">تنظیمات حساب</p>
+                            <p class="preview-subject ellipsis mb-1 text-small">ویرایش حساب</p>
                         </div>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item preview-item">
+                    <a href="{{route('profile.edit_password')}}" class="dropdown-item preview-item">
                         <div class="preview-thumbnail">
                             <div class="preview-icon bg-dark rounded-circle">
                                 <i class="mdi mdi-onepassword text-info"></i>

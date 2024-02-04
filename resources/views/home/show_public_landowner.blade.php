@@ -71,7 +71,7 @@
                             <td>شماره تلفن</td>
                             <td>
                                 @if($landowner->business_id !== null)
-                                    {{$landowner->business->user->number}}
+                                    {{$landowner->business->owner->number}}
                                 @else
                                     {{$landowner->number}}
                                 @endif

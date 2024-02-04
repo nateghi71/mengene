@@ -62,7 +62,7 @@
                                 @if($customer->business_id !== null)
                                     {{$customer->business->name}}
                                 @else
-                                    منگنه
+                                    {{$customer->name}}
                                 @endif
                             </td>
                         </tr>
@@ -70,9 +70,9 @@
                             <td>شماره املاکی</td>
                             <td>
                                 @if($customer->business_id !== null)
-                                    {{$customer->business->user->number}}
+                                    {{$customer->business->owner->number}}
                                 @else
-                                    -
+                                    {{$customer->number}}
                                 @endif
                             </td>
                         </tr>

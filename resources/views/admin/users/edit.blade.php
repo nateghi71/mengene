@@ -1,6 +1,6 @@
-@extends('layouts.admin' , ['sectionName' => 'ویرایش نقش'])
+@extends('layouts.admin' , ['sectionName' => 'ویرایش کاربر'])
 
-@section('title' , 'ویرایش نقش')
+@section('title' , 'ویرایش کاربر')
 
 @section('head')
 @endsection

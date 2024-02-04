@@ -2,13 +2,14 @@
 
 use App\Http\Controllers\web\admin\CouponController;
 use App\Http\Controllers\web\admin\RoleController;
-use App\Http\Controllers\web\admin\UserController;
+use App\Http\Controllers\web\admin\UserController as AdminUserController;
 use App\Http\Controllers\web\admin\BusinessController as AdminBusinessController;
 use App\Http\Controllers\web\ConsultantController;
 use App\Http\Controllers\web\CreditController;
 use App\Http\Controllers\web\HomeController;
 use App\Http\Controllers\web\LandownerImageController;
 use App\Http\Controllers\web\PaymentController;
+use App\Http\Controllers\web\ProfileController;
 use App\Http\Controllers\web\RandomLinkController;
 use App\Http\Controllers\web\SuggestionForCustomerController;
 use App\Http\Controllers\web\SuggestionForLandOwnerController;
@@ -61,6 +62,11 @@ Route::group(['middleware' => ['auth', 'clearCoupon']] , function () {
     Route::get('/dashboard', [BusinessController::class, 'dashboard'])->name('dashboard');
     Route::get('/notification/{notification}', [BusinessController::class, 'notificationRead'])->name('business.notificationRead');
 
+    Route::get("profile/edit_user", [ProfileController::class, 'edit_user'])->name('profile.edit_user');
+    Route::post("profile/update_user", [ProfileController::class, 'update_user'])->name('profile.update_user');
+    Route::get("profile/edit_password", [ProfileController::class, 'edit_password'])->name('profile.edit_password');
+    Route::post("profile/update_password", [ProfileController::class, 'update_password'])->name('profile.update_password');
+
     Route::get("credits", [CreditController::class, 'index'])->name('credits.index');
     Route::post("credits/checkout", [CreditController::class, 'checkout'])->name('credits.checkout');
 
@@ -98,7 +104,7 @@ Route::group(['middleware' => ['auth', 'clearCoupon']] , function () {
 });
 
 Route::middleware('auth')->prefix('admin-panel')->name('admin.')->group(function () {
-    Route::resource('users', UserController::class)->except(['destroy']);
+    Route::resource('users', AdminUserController::class)->except(['destroy']);
     Route::resource('roles', RoleController::class);
     Route::resource('landowners', FileController::class);
     Route::resource('coupons', CouponController::class);
