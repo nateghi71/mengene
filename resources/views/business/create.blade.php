@@ -43,7 +43,7 @@
     <div class="content-wrapper full-page-wrapper d-flex align-items-center auth register-half-bg">
         <div class="card col-lg-4 mx-auto">
             <div class="card-body px-5 pb-5 pt-2">
-                <p class="sign-up mb-4">ایا می خواهید به یک بیزنس بپیوندید؟<a class="text-decoration-none" href="{{route('consultant.find')}}"> یافتن</a></p>
+                <p class="sign-up mb-4">ورود به عنوان مشاور و پیوستن به املاکی:<a class="text-decoration-none" href="{{route('consultant.find')}}"> مشاورین</a></p>
                 <h3 class="card-title text-center mb-3">ایجاد املاکی</h3>
                 <form action="{{ route('business.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
@@ -69,7 +69,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="image">عکس مجوز کسب: *</label>
+                        <label for="image">عکس جواز کسب: *</label>
                         <input type="file" name="image" class="form-control" id="image" placeholder="عکس">
                         @error('image')
                         <div class="alert-danger">{{$message}}</div>

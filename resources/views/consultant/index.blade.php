@@ -4,7 +4,7 @@
 
 @section('head')
     <style>
-        #deletePanel {
+        .deletePanel {
             position: fixed;
             top: 0;
             left: 0;
@@ -15,13 +15,11 @@
             background: rgba(0,0,0,0.5);
         }
 
-        #deleteBox {
+        .deleteBox {
             position: fixed;
             padding: 20px;
             top: calc(50% - 60px);
             left: calc(50% - 140px);
-            width: 280px;
-            height: 120px;
             background: rgba(0,0,0,1);
         }
     </style>
@@ -102,28 +100,47 @@
                 plugins: transactionhistoryChartPlugins
             });
         }
-        $('#deletePanel').hide()
+        $('#open_delete_panel').on('click' , deleteBox)
 
-        $('#open_delete_panel').on('click' , function (){
-            $('#deletePanel').show()
-        })
-        $('#not_delete_btn').on('click' , function (){
-            $('#deletePanel').hide()
-        })
+        function deleteBox(e)
+        {
+            e.preventDefault()
+            let wrapper = $('<div>' , {class:'deletePanel'})
+            let box = $('<div>', {class:'deleteBox'})
+            let btnContainer = $('<div>' , {class:"d-flex justify-content-between"})
+
+            let message = $('<p>' , {
+                class:"text-end pb-3",
+                text:'ایا می خواهید از کار با این اژانس املاک انصراف دهید؟'
+            })
+
+            let closeBtn = $('<button>' , {
+                class:"btn btn-success",
+                type:"button",
+                click: ()=> wrapper.remove(),
+                text:'خیر'
+            })
+
+            let actionBtn = $('<a>' , {
+                class:"btn btn-danger",
+                text:'بله',
+                href: $(this).attr('href')
+            })
+
+            wrapper.append(box)
+            box.append(message)
+            box.append(btnContainer)
+            btnContainer.append(closeBtn)
+            btnContainer.append(actionBtn)
+
+            $('#selectBox').append(wrapper)
+        }
     </script>
 @endsection
 
 @section('content')
-    <div id="deletePanel">
-        <div id="deleteBox">
-            <p class="text-end pb-3">ایا می خواهید لغو همکاری کنید؟</p>
-            <div class="d-flex justify-content-between">
-                <a href="{{route('consultant.leave.member',['user'=>auth()->id()])}}" class="btn btn-danger">
-                    بله
-                </a>
-                <button id="not_delete_btn" class="btn btn-success" type="button">خیر</button>
-            </div>
-        </div>
+    <div id="selectBox">
+
     </div>
 
     <div class="row">
@@ -321,7 +338,7 @@
                                         </div>
                                         <div class="me-auto text-sm-right pt-2 pt-sm-0 text-start">
                                             <p class="text-white">
-                                                <button id="open_delete_panel" class="btn btn-outline-danger" type="button">لغو همکاری</button>
+                                                <a href="{{route('consultant.leave.member',['user' => auth()->user()->id])}}" id="open_delete_panel" class="btn btn-outline-danger">لغو همکاری</a>
                                             </p>
                                             <p class="text-muted mb-0">لغو همکاری</p>
                                         </div>

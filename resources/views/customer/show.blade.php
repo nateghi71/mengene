@@ -123,7 +123,7 @@
                                 <td>{{$customer->discharge}}</td>
                             </tr>
                             <tr>
-                                <td>حضور کاربر</td>
+                                <td>حضور مالک</td>
                                 <td>{{$customer->exist_owner}}</td>
                             </tr>
                             <tr>

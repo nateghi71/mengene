@@ -39,7 +39,7 @@ class UserController extends Controller
             'number' => 'required|iran_mobile|digits:11|unique:users,number',
             'city_id' => 'required',
             'email' => 'nullable|max:255|email',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => 'required|confirmed',
             'role' => 'required'
         ]);
 
@@ -59,8 +59,7 @@ class UserController extends Controller
         }
         catch (\Exception $e){
             DB::rollBack();
-            dd($e->getMessage());
-            return redirect()->back()->with('error' , 'در دیتابیس خطایی رخ داد.');
+            return redirect()->back()->with('message' , 'در دیتابیس خطایی رخ داد.');
         }
 
         return redirect()->route('admin.users.index');
@@ -91,27 +90,18 @@ class UserController extends Controller
             'number' => 'required|iran_mobile|digits:11',
             'city_id' => 'required',
             'email' => 'nullable|max:255|email',
-            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'password' => 'required|confirmed',
             'role' => 'required'
         ]);
 
-        try {
-            DB::beginTransaction();
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'number' => $request->number,
-                'city_id' => $request->city_id,
-                'password' => $request->has('password') ? Hash::make($request->password) : $user->password,
-            ]);
-
-            $user->syncRoles($request->role);
-            DB::commit();
-        }
-        catch (\Exception $e){
-            DB::rollBack();
-            return redirect()->back()->with('error' , 'در دیتابیس خطایی رخ داد.');
-        }
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'number' => $request->number,
+            'city_id' => $request->city_id,
+            'password' => $request->has('password') ? Hash::make($request->password) : $user->password,
+            'role_id' => $request->role
+        ]);
 
         return redirect()->route('admin.users.index');
     }
@@ -151,6 +141,5 @@ class UserController extends Controller
         return back()->with(
             'message', 'The provided credentials do not match our records.',
         )->withInput();
-
     }
 }

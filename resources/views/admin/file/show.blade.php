@@ -18,7 +18,7 @@
                         <h4 class="card-title text-center">عکس ها</h4>
                         <div class="row mx-5 mt-4">
                             @foreach ($landowner->images as $image)
-                                <div class="col-md-3">
+                                <div class="col-md-3 mx-auto">
                                     <div class="card mb-3">
                                         <img width="100" height="170" class="card-img-top" src="{{ url(env('LANDOWNER_IMAGES_UPLOAD_PATH') . $image->image) }}"
                                              alt="{{ $landowner->name }}">
@@ -125,7 +125,7 @@
                                 <td>{{$landowner->discharge}}</td>
                             </tr>
                             <tr>
-                                <td>حضور کاربر</td>
+                                <td>حضور مالک</td>
                                 <td>{{$landowner->exist_owner}}</td>
                             </tr>
                             <tr>

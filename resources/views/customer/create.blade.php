@@ -293,8 +293,8 @@
                     <div class="form-group col-md-3">
                         <label for="type_work">نوع کاربری:</label>
                         <select class="form-control" name="type_work" id="type_work">
-                            <option value="home" @selected(old('type_work') == 'home')>خانه</option>
-                            <option value="office" @selected(old('type_work') == 'office')>دفتر</option>
+                            <option value="home" @selected(old('type_work') == 'home')>مسکونی</option>
+                            <option value="office" @selected(old('type_work') == 'office')>اداری</option>
                             <option value="commercial" @selected(old('type_work') == 'commercial')>تجاری</option>
                             <option value="training" @selected(old('type_work') == 'training')>اموزشی</option>
                             <option value="industrial" @selected(old('type_work') == 'industrial')>صنعتی</option>
@@ -399,23 +399,23 @@
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <button type="button" id="more_btn" class="btn btn-link text-decoration-none text-end text-white">تنضیمات بیشتر...</button>
+                    <button type="button" id="more_btn" class="btn btn-link text-decoration-none text-end text-white">گزینه های بیشتر...</button>
                 </div>
 
                 <div id="more" class="row">
                     <div class="row">
                         <div class="form-group col-md-3">
                             <label for="year_of_construction">سال ساخت:</label>
-                            <input type="text" name="year_of_construction" class="form-control" value="{{old('year_of_construction')}}" id="year_of_construction" placeholder="سال ساخت"
-                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            <input type="text" name="year_of_construction" class="form-control" value="{{old('year_of_construction')}}" id="year_of_construction" placeholder="مانند : 1391"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="4">
                             @error('year_of_construction')
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3">
                             <label for="year_of_reconstruction">سال بازسازی:</label>
-                            <input type="text" name="year_of_reconstruction" class="form-control" value="{{old('year_of_reconstruction')}}" id="year_of_reconstruction" placeholder="سال بازساری"
-                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            <input type="text" name="year_of_reconstruction" class="form-control" value="{{old('year_of_reconstruction')}}" id="year_of_reconstruction" placeholder="مانند : 1391"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="4">
                             @error('year_of_reconstruction')
                             <div class="alert-danger">{{$message}}</div>
                             @enderror

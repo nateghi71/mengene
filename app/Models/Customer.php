@@ -212,9 +212,9 @@ class Customer extends Model
                 switch ($value)
                 {
                     case 'home':
-                        return 'خانه';
+                        return 'مسکونی';
                     case 'office':
-                        return 'دفتر';
+                        return 'اداری';
                     case 'commercial':
                         return 'تجاری';
                     case 'training':

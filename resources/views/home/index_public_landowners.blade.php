@@ -61,7 +61,7 @@
                                     @if($landowner->business_id !== null)
                                         {{$landowner->business->name}}
                                     @else
-                                        منگنه
+                                        {{$landowner->name}}
                                     @endif
 
                                     @if($landowner->getRawOriginal('status') == 'active')

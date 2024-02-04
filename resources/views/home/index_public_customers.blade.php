@@ -61,7 +61,7 @@
                                         @if($customer->business_id !== null)
                                         {{$customer->business->name}}
                                         @else
-                                            منگنه
+                                            {{$customer->name}}
                                         @endif
                                         @if($customer->getRawOriginal('status') == 'active')
                                             <span class="mdi mdi-checkbox-blank-circle text-success"></span>

@@ -18,7 +18,14 @@
                     data-aos="fade-up"
                     data-aos-delay="200"
                 >
-                    <h1>نمایش اطلاعات : {{ $landowner->name }}</h1>
+                    <h1>نمایش اطلاعات :
+                        @if($landowner->business_id !== null)
+                            {{$landowner->business->name}}
+                        @else
+                            {{$landowner->name}}
+                        @endif
+
+                    </h1>
                 </div>
                 <div
                     class="col-lg-6 order-1 order-lg-2 hero-img"

@@ -18,7 +18,13 @@
                     data-aos="fade-up"
                     data-aos-delay="200"
                 >
-                    <h1>نمایش اطلاعات : {{ $customer->name }}</h1>
+                    <h1>نمایش اطلاعات :
+                        @if($customer->business_id !== null)
+                            {{$customer->business->name}}
+                        @else
+                            {{$customer->name}}
+                        @endif
+                    </h1>
                 </div>
                 <div
                     class="col-lg-6 order-1 order-lg-2 hero-img"

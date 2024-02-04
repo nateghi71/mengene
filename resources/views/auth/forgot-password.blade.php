@@ -2,15 +2,13 @@
 
 @section('title' , 'تغییر پسورد')
 
-@section('scripts')
-@endsection
-
 @section('content')
     <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
         <div class="card col-lg-4 mx-auto">
             <div class="card-body px-5 py-5">
                 <form action="{{ route('password.send') }}" method="post">
                     @csrf
+
                     <div class="form-group">
                         <label for="number">تلفن همراه</label>
                         <input type="text" name="number" value="{{old('number')}}" class="form-control" id="number"

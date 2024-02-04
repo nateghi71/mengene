@@ -738,7 +738,7 @@
                                 <p>09358668218</p>
                             </div>
 
-                            <div style="width: 100%"><iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d413.77004546981306!2d59.53924177811008!3d36.28984181283104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1695759443759!5m2!1sen!2s" width="350" height="320" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+{{--                            <div style="width: 100%"><iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d413.77004546981306!2d59.53924177811008!3d36.28984181283104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1695759443759!5m2!1sen!2s" width="350" height="320" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>--}}
                         </div>
                     </div>
 

@@ -19,7 +19,7 @@
 
                             $.each(res, function(key, city) {
                                 let selected = false;
-                                if(city.id == "{{old('city_id')}}")
+                                if(city.id == "{{(old('city_id') == null) ? auth()->user()->city_id : old('city_id')}}")
                                 {
                                     selected = true;
                                 }
@@ -222,7 +222,7 @@
                         @enderror
                     </div>
                     <div class="form-group col-md-3 price">
-                        <label for="price">قیمت فایل:</label>
+                        <label for="price">قیمت فایل(تومان):</label>
                         <input type="text" name="price" class="form-control" value="{{old('price')}}" id="price" placeholder="قیمت فایل"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('price')
@@ -266,7 +266,7 @@
                         <label for="province">استان:</label>
                         <select class="form-control" name="province" id="province">
                             @foreach($provinces as $province)
-                                <option value="{{$province->id}}" @selected(old('province') == $province->id)>{{$province->name}}</option>
+                                <option value="{{$province->id}}" @selected((old('province') == null) ? auth()->user()->city->province_id == $province->id : old('$province') == $province->id)>{{$province->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -321,8 +321,8 @@
                     <div class="form-group col-md-3">
                         <label for="type_work">نوع کاربری:</label>
                         <select class="form-control" name="type_work" id="type_work">
-                            <option value="home" @selected(old('type_work') == 'home')>خانه</option>
-                            <option value="office" @selected(old('type_work') == 'office')>دفتر</option>
+                            <option value="home" @selected(old('type_work') == 'home')>مسکونی</option>
+                            <option value="office" @selected(old('type_work') == 'office')>اداری</option>
                             <option value="commercial" @selected(old('type_work') == 'commercial')>تجاری</option>
                             <option value="training" @selected(old('type_work') == 'training')>اموزشی</option>
                             <option value="industrial" @selected(old('type_work') == 'industrial')>صنعتی</option>
@@ -435,23 +435,23 @@
                 </div>
 
                 <div class="row mb-3">
-                    <button type="button" id="more_btn" class="btn btn-link text-decoration-none text-end text-white">تنضیمات بیشتر...</button>
+                    <button type="button" id="more_btn" class="btn btn-link text-decoration-none text-end text-white">گزینه های بیشتر...</button>
                 </div>
 
                 <div id="more" class="row">
                     <div class="row">
                         <div class="form-group col-md-3">
                             <label for="year_of_construction">سال ساخت:</label>
-                            <input type="text" name="year_of_construction" class="form-control" value="{{old('year_of_construction')}}" id="year_of_construction" placeholder="سال ساخت"
-                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            <input type="text" name="year_of_construction" class="form-control" value="{{old('year_of_construction')}}" id="year_of_construction" placeholder="مانند : 1391"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="4">
                             @error('year_of_construction')
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3">
                             <label for="year_of_reconstruction">سال بازسازی:</label>
-                            <input type="text" name="year_of_reconstruction" class="form-control" value="{{old('year_of_reconstruction')}}" id="year_of_reconstruction" placeholder="سال بازساری"
-                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            <input type="text" name="year_of_reconstruction" class="form-control" value="{{old('year_of_reconstruction')}}" id="year_of_reconstruction" placeholder="مانند : 1391"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="4">
                             @error('year_of_reconstruction')
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
