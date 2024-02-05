@@ -140,11 +140,13 @@
                                 <td>انبار</td>
                                 <td>{{$landowner->store}}</td>
                             </tr>
-                            @if($landowner->getRawOriginal('type_work') !== 'home' && $landowner->getRawOriginal('type_work') !== 'land')
+                            @if($landowner->getRawOriginal('type_build') !== 'land')
                                 <tr>
                                     <td>تعداد طبقات کل ساختمان</td>
                                     <td>{{$landowner->floor_number}}</td>
                                 </tr>
+                            @endif
+                            @if($landowner->getRawOriginal('type_build') !== 'land' && $landowner->getRawOriginal('type_build') !== 'house')
                                 <tr>
                                     <td>شماره طبقه</td>
                                     <td>{{$landowner->floor}}</td>

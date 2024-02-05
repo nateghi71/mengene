@@ -11,7 +11,7 @@ class CustomerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -64,14 +64,14 @@ class CustomerRequest extends FormRequest
             'number' => to_english_numbers($this->input('number')),
             'area' => to_english_numbers($this->input('area')),
             'scale' => to_english_numbers(str_replace( ',', '', $this->input('scale'))),
-            'selling_price' => to_english_numbers(str_replace( ',', '', $this->input('selling_price'))),
-            'rahn_amount' => to_english_numbers(str_replace( ',', '', $this->input('selling_price'))),
-            'rent_amount' => to_english_numbers(str_replace( ',', '', $this->input('selling_price'))),
-            'year_of_construction' => to_english_numbers($this->input('year_of_construction')),
-            'year_of_reconstruction' => to_english_numbers($this->input('year_of_reconstruction')),
-            'number_of_rooms' => to_english_numbers($this->input('number_of_rooms')),
-            'floor_number' => to_english_numbers($this->input('floor_number')),
-            'floor' => to_english_numbers($this->input('floor')),
+            'selling_price' => ($this->input('selling_price') !== null) ? to_english_numbers(str_replace( ',', '', $this->input('selling_price'))) : $this->input('selling_price'),
+            'rahn_amount' => ($this->input('rahn_amount') !== null) ? to_english_numbers(str_replace( ',', '', $this->input('rahn_amount'))) : $this->input('rahn_amount'),
+            'rent_amount' => ($this->input('rent_amount') !== null) ? to_english_numbers(str_replace( ',', '', $this->input('rent_amount'))) : $this->input('rent_amount'),
+            'year_of_construction' => ($this->input('year_of_construction') !== null) ? to_english_numbers($this->input('year_of_construction')) : $this->input('year_of_construction'),
+            'year_of_reconstruction' => ($this->input('year_of_reconstruction') !== null) ? to_english_numbers($this->input('year_of_reconstruction')) : $this->input('year_of_reconstruction'),
+            'number_of_rooms' => ($this->input('number_of_rooms') !== null) ? to_english_numbers($this->input('number_of_rooms')) : $this->input('number_of_rooms'),
+            'floor_number' => ($this->input('floor_number') !== null) ? to_english_numbers($this->input('floor_number')) : $this->input('floor_number'),
+            'floor' => ($this->input('floor') !== null) ? to_english_numbers($this->input('floor')) : $this->input('floor'),
         ]);
     }
 }

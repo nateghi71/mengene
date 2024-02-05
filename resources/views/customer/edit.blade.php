@@ -68,6 +68,14 @@
         $('#more').hide();
         $('#more_btn').on('click' , function (){
             $('#more').slideToggle();
+            if($(this).hasClass('text-danger'))
+            {
+                $(this).removeClass('text-danger').addClass('text-white').text('گزینه های بیشتر...');
+            }
+            else
+            {
+                $(this).removeClass('text-white').addClass('text-danger').text('بستن');
+            }
         })
 
         changeTypeBuild()
