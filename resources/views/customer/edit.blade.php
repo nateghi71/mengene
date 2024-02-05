@@ -52,6 +52,7 @@
         function buyFunction() {
             $('#priceDiv').show();
             $('#documentDiv').show();
+            $('#ownerDiv').hide();
             $('#rahnDiv').hide();
             $('#rentDiv').hide();
         }
@@ -59,6 +60,7 @@
         function rahnFunction() {
             $('#priceDiv').hide();
             $('#documentDiv').hide();
+            $('#ownerDiv').show();
             $('#rahnDiv').show();
             $('#rentDiv').show();
         }
@@ -403,7 +405,7 @@
                         <div class="alert-danger">{{$message}}</div>
                         @enderror
                     </div>
-                    <div class="form-group col">
+                    <div id="ownerDiv" class="form-group col">
                         <div class="form-check">
                             <label for="exist_owner" class="form-check-label">
                                 <input type="checkbox" name="exist_owner" id="exist_owner" class="form-check-input" @checked($customer->getRawOriginal('exist_owner') === 1)>حضور مالک

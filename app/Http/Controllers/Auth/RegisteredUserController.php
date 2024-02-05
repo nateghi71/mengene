@@ -34,6 +34,8 @@ class RegisteredUserController extends Controller
 
     public function twoFAStore(Request $request)
     {
+        $request->number = to_english_numbers($request->number);
+
         $request->validate([
             'number' => 'required|iran_mobile|digits:11|unique:users,number'
         ]);
@@ -81,6 +83,8 @@ class RegisteredUserController extends Controller
 
     public function twoFAConfirm(Request $request)
     {
+        $request->code = to_english_numbers($request->code);
+
         $request->validate([
             'code' => 'required|numeric|digits:6'
         ]);
@@ -104,7 +108,6 @@ class RegisteredUserController extends Controller
 
     public function register()
     {
-
         $provinces = Province::all();
         return view('auth.register' , compact('provinces'));
     }

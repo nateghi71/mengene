@@ -19,6 +19,8 @@ class ProfileController extends Controller
     public function update_user(Request $request)
     {
         $user = auth()->user();
+        $request->number = to_english_numbers($request->number);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'number' => 'required|iran_mobile|digits:11',

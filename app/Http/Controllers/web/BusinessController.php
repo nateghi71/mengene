@@ -93,6 +93,7 @@ class BusinessController extends Controller
     public function store(Request $request)
     {
         $this->authorize('createOrJoin', Business::class);
+        $request->area = to_english_numbers($request->area);
 
         $request->validate([
             'name' => 'required',
@@ -146,6 +147,8 @@ class BusinessController extends Controller
     public function update(Request $request, Business $business)
     {
         $this->authorize('updateBusiness' , $business);
+        $request->area = to_english_numbers($request->area);
+
         $request->validate([
             'name' => 'required',
             'city_id' => 'required',

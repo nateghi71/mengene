@@ -44,7 +44,7 @@ class FileController extends Controller
         $request->validate([
             'type_file' => 'required',
             'status' => 'required',
-            'price' => 'exclude_if:type_file,subscription|exclude_if:type_file,public|required|numeric',
+            'price' => 'exclude_if:type_file,subscription|exclude_if:type_file,public|required|numeric|between:1000,99999999',
             'type_sale' => 'required',
             'name' => 'required',
             'number' => 'required|iran_mobile',
@@ -182,7 +182,7 @@ class FileController extends Controller
             $request->validate([
                 'type_file' => 'required',
                 'status' => 'required',
-                'price' => 'exclude_if:type_file,subscription|exclude_if:type_file,public|required|numeric',
+                'price' => 'exclude_if:type_file,subscription|exclude_if:type_file,public|required|numeric|between:1000,99999999',
                 'type_sale' => 'required',
                 'name' => 'required',
                 'number' => 'required|iran_mobile',

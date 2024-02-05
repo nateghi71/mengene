@@ -22,6 +22,7 @@ class CreditController extends Controller
     public function checkout(Request $request)
     {
         $this->authorize('isOwner' , Business::class);
+        $request->amount = to_english_numbers($request->amount);
 
         if (auth()->user()->isFreeUser())
             return back()->with('message' , 'شما به این امکانات دسترسی ندارید.');

@@ -7,6 +7,7 @@ use App\HelperClasses\LinkGenerator;
 use App\HelperClasses\SmsAPI;
 use App\HelperClasses\UpdateStatusFile;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomerRequest;
 use App\Models\Landowner;
 use App\Models\Province;
 use App\Models\RandomLink;
@@ -64,44 +65,9 @@ class CustomerController extends Controller
         return view('customer.create', compact('provinces'));
     }
 
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
         $this->authorize('create' , Customer::class);
-        $request->validate([
-            'type_sale' => 'required',
-            'access_level' => 'required',
-            'name' => 'required',
-            'number' => 'required|iran_mobile',
-            'scale' => 'required|numeric',
-            'city_id' => 'required|numeric',
-            'area' => 'required|numeric',
-            'expire_date' => 'required',
-            'selling_price' => 'exclude_if:type_sale,rahn|required',
-            'rahn_amount' => 'exclude_if:type_sale,buy|required',
-            'rent_amount' => 'exclude_if:type_sale,buy|required',
-            'type_work' => 'required',
-            'type_build' => 'required',
-            'document' => 'exclude_if:type_sale,rahn|required',
-            'address' => 'required',
-            'discharge' => 'nullable',
-            'elevator' => 'nullable',
-            'parking' => 'nullable',
-            'store' => 'nullable',
-            'is_star' => 'nullable',
-            'exist_owner' => 'nullable',
-            //more
-            'year_of_construction' => 'nullable',
-            'year_of_reconstruction' => 'nullable',
-            'number_of_rooms' => 'nullable|numeric',
-            'floor_number' => 'exclude_if:type_build,house|exclude_if:type_build,land|nullable|numeric',
-            'floor' => 'exclude_if:type_build,land|nullable|numeric',
-            'floor_covering' => 'nullable',
-            'cooling' => 'nullable',
-            'heating' => 'nullable',
-            'cabinets' => 'nullable',
-            'view' => 'nullable',
-            'description' => 'nullable',
-        ]);
 
         $user = auth()->user();
         $customer = Customer::create([
@@ -155,45 +121,10 @@ class CustomerController extends Controller
         return view('customer.edit', compact('customer' , 'provinces'));
     }
 
-    public function update(Request $request, Customer $customer)
+    public function update(CustomerRequest $request, Customer $customer)
     {
         $this->authorize('update', $customer);
 
-        $request->validate([
-            'type_sale' => 'required',
-            'access_level' => 'required',
-            'name' => 'required',
-            'number' => 'required|iran_mobile',
-            'scale' => 'required|numeric',
-            'city_id' => 'required|numeric',
-            'area' => 'required|numeric',
-            'expire_date' => 'required',
-            'selling_price' => 'exclude_if:type_sale,rahn|required',
-            'rahn_amount' => 'exclude_if:type_sale,buy|required',
-            'rent_amount' => 'exclude_if:type_sale,buy|required',
-            'type_work' => 'required',
-            'type_build' => 'required',
-            'document' => 'exclude_if:type_sale,rahn|required',
-            'address' => 'required',
-            'discharge' => 'nullable',
-            'elevator' => 'nullable',
-            'parking' => 'nullable',
-            'store' => 'nullable',
-            'is_star' => 'nullable',
-            'exist_owner' => 'nullable',
-            //more
-            'year_of_construction' => 'nullable',
-            'year_of_reconstruction' => 'nullable',
-            'number_of_rooms' => 'nullable|numeric',
-            'floor_number' => 'exclude_if:type_build,house|exclude_if:type_build,land|nullable|numeric',
-            'floor' => 'exclude_if:type_build,land|nullable|numeric',
-            'floor_covering' => 'nullable',
-            'cooling' => 'nullable',
-            'heating' => 'nullable',
-            'cabinets' => 'nullable',
-            'view' => 'nullable',
-            'description' => 'nullable',
-        ]);
 //        $user = auth()->user();
         $customer->update([
             'type_file' => 'business',

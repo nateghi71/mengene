@@ -34,6 +34,13 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'number' => to_english_numbers($this->input('number'))
+        ]);
+    }
+
     /**
      * Attempt to authenticate the request's credentials.
      *

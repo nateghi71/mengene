@@ -18,6 +18,7 @@ class ResetPasswordController extends Controller
     }
     public function sendLink(Request $request)
     {
+        $request->number = to_english_numbers($request->number);
         $request->validate([
             'number' => 'required|iran_mobile'
         ]);
@@ -36,6 +37,8 @@ class ResetPasswordController extends Controller
     }
     public function updatePassword(Request $request)
     {
+        $request->number = to_english_numbers($request->number);
+
         $request->validate([
             'token' => 'required',
             'number' => 'required|iran_mobile',

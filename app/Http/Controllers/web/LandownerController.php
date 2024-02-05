@@ -6,6 +6,7 @@ use App\Events\CreateLandownerFile;
 use App\HelperClasses\LinkGenerator;
 use App\HelperClasses\SmsAPI;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LandownerRequest;
 use App\Models\Province;
 use App\Models\User;
 use App\Notifications\ReminderForLandowerNotification;
@@ -77,46 +78,9 @@ class LandownerController extends Controller
         return view('landowner.create' , compact('provinces'));
     }
 
-    public function store(Request $request)
+    public function store(LandownerRequest $request)
     {
         $this->authorize('create', Landowner::class);
-        $request->validate([
-            'type_sale' => 'required',
-            'access_level' => 'required',
-            'name' => 'required',
-            'number' => 'required|iran_mobile',
-            'scale' => 'required|numeric',
-            'city_id' => 'required|numeric',
-            'area' => 'required|numeric',
-            'expire_date' => 'required',
-            'selling_price' => 'exclude_if:type_sale,rahn|required',
-            'rahn_amount' => 'exclude_if:type_sale,buy|required',
-            'rent_amount' => 'exclude_if:type_sale,buy|required',
-            'type_work' => 'required',
-            'type_build' => 'required',
-            'document' => 'exclude_if:type_sale,rahn|required',
-            'address' => 'required',
-            'discharge' => 'nullable',
-            'elevator' => 'nullable',
-            'parking' => 'nullable',
-            'store' => 'nullable',
-            'is_star' => 'nullable',
-            'exist_owner' => 'nullable',
-            //more
-            'year_of_construction' => 'nullable',
-            'year_of_reconstruction' => 'nullable',
-            'number_of_rooms' => 'nullable|numeric',
-            'floor_number' => 'exclude_if:type_build,house|exclude_if:type_build,land|nullable|numeric',
-            'floor' => 'exclude_if:type_build,land|nullable|numeric',
-            'floor_covering' => 'nullable',
-            'cooling' => 'nullable',
-            'heating' => 'nullable',
-            'cabinets' => 'nullable',
-            'view' => 'nullable',
-            'description' => 'nullable',
-            'images' => 'nullable',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
 
         try{
             DB::beginTransaction();
@@ -187,46 +151,9 @@ class LandownerController extends Controller
         return view('landowner.edit', compact('landowner' , 'provinces'));
     }
 
-    public function update(Request $request, Landowner $landowner)
+    public function update(LandownerRequest $request, Landowner $landowner)
     {
         $this->authorize('update', $landowner);
-        $request->validate([
-            'type_sale' => 'required',
-            'access_level' => 'required',
-            'name' => 'required',
-            'number' => 'required|iran_mobile',
-            'scale' => 'required|numeric',
-            'city_id' => 'required|numeric',
-            'area' => 'required|numeric',
-            'expire_date' => 'required',
-            'selling_price' => 'exclude_if:type_sale,rahn|required',
-            'rahn_amount' => 'exclude_if:type_sale,buy|required',
-            'rent_amount' => 'exclude_if:type_sale,buy|required',
-            'type_work' => 'required',
-            'type_build' => 'required',
-            'document' => 'exclude_if:type_sale,rahn|required',
-            'address' => 'required',
-            'discharge' => 'nullable',
-            'elevator' => 'nullable',
-            'parking' => 'nullable',
-            'store' => 'nullable',
-            'is_star' => 'nullable',
-            'exist_owner' => 'nullable',
-            //more
-            'year_of_construction' => 'nullable',
-            'year_of_reconstruction' => 'nullable',
-            'number_of_rooms' => 'nullable|numeric',
-            'floor_number' => 'exclude_if:type_build,house|exclude_if:type_build,land|nullable|numeric',
-            'floor' => 'exclude_if:type_build,land|nullable|numeric',
-            'floor_covering' => 'nullable',
-            'cooling' => 'nullable',
-            'heating' => 'nullable',
-            'cabinets' => 'nullable',
-            'view' => 'nullable',
-            'description' => 'nullable',
-            'images' => 'nullable',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
 
 //        $user = auth()->user();
         $landowner->update([

@@ -115,6 +115,7 @@ class PaymentController extends Controller
     public function payment_for_credit(Request $request)
     {
         $this->authorize('isOwner' , Business::class);
+        $request->amount = to_english_numbers($request->amount);
 
         $request->validate([
             'amount' => 'required|numeric|between:1000,99999999',
