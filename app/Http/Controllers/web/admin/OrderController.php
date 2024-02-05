@@ -60,7 +60,7 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $this->authorize('viewShow' , Coupon::class);
+        $this->authorize('viewShow' , Order::class);
 
         return view('admin.orders.show' , compact('order'));
     }
