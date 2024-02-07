@@ -12,6 +12,7 @@ use App\Http\Controllers\web\LandownerImageController;
 use App\Http\Controllers\web\PaymentController;
 use App\Http\Controllers\web\ProfileController;
 use App\Http\Controllers\web\RandomLinkController;
+use App\Http\Controllers\web\RentContractController;
 use App\Http\Controllers\web\SuggestionForCustomerController;
 use App\Http\Controllers\web\SuggestionForLandOwnerController;
 use Illuminate\Support\Facades\Route;
@@ -102,6 +103,8 @@ Route::group(['middleware' => ['auth', 'clearCoupon']] , function () {
     Route::post('customer/suggestion/block', [SuggestionForCustomerController::class, 'send_block_message'])->name('customer.send_block_message');
     Route::post('customer/suggestion/share', [SuggestionForCustomerController::class, 'share_file_with_customer'])->name('customer.send_share_message');
     Route::post('customer/remainder/set_time', [CustomerController::class, 'setRemainderTime'])->name('customer.remainder');
+
+    Route::resource('rent_contract' , RentContractController::class);
 });
 
 Route::middleware('auth')->prefix('admin-panel')->name('admin.')->group(function () {

@@ -33,9 +33,14 @@ function checkCoupon($code)
     return ['success' => 'کد تخفیف قابل استفاده است.' , 'coupon' => $coupon];
 }
 
-function to_english_numbers(string $string) {
-    $persinDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-    $replaces = range(0, 9);
+function to_english_numbers($string) {
+    if($string !== null)
+    {
+        $persinDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        $replaces = range(0, 9);
 
-    return str_replace($persinDigits, $replaces , $string);
+        return str_replace($persinDigits, $replaces , $string);
+    }
+
+    return $string;
 }
