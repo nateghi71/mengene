@@ -22,9 +22,13 @@ class Customer extends Model
     protected $fillable = [
         'is_star' ,'type_sale','access_level','status','name','number','scale','city_id',
         'area','expire_date','rahn_amount','rent_amount','selling_price','type_work','type_build',
-        'document' ,'discharge','exist_owner','address','year_of_construction','year_of_reconstruction',
-        'number_of_rooms','elevator','parking','store','floor','floor_number','floor_covering' ,'cooling' ,
-        'heating' ,'cabinets' ,'view','type_file','description','business_id','user_id'
+        'document' ,'address','year_of_construction','year_of_reconstruction',
+        'number_of_rooms','floor','floor_number','floor_covering' ,'cooling' ,
+        'heating' ,'cabinets' ,'view','type_file','description','business_id','user_id',
+        'number_of_unit_in_floor', 'number_unit', 'postal_code', 'plaque', 'state_of_electricity',
+        'state_of_water', 'state_of_gas', 'state_of_phone', 'Direction_of_building', 'water_heater',
+        'discharge', 'elevator', 'parking', 'store', 'is_star', 'exist_owner', 'terrace', 'air_conditioning_system',
+        'yard', 'pool', 'sauna', 'Jacuzzi', 'video_iphone', 'Underground', 'Wall_closet',
     ];
 
     public function scopeFilter(Builder $query)
@@ -283,6 +287,105 @@ class Customer extends Model
             },
         );
     }
+    protected function stateOfElectricity():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'nothing':
+                        return 'ندارد';
+                    case 'shared':
+                        return 'اشتراکی';
+                    case 'exclusive':
+                        return 'اختصاصی';
+                }
+            },
+        );
+    }
+    protected function stateOfWater():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'nothing':
+                        return 'ندارد';
+                    case 'shared':
+                        return 'اشتراکی';
+                    case 'exclusive':
+                        return 'اختصاصی';
+                }
+            },
+        );
+    }
+    protected function stateOfGas():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'nothing':
+                        return 'ندارد';
+                    case 'shared':
+                        return 'اشتراکی';
+                    case 'exclusive':
+                        return 'اختصاصی';
+                }
+            },
+        );
+    }
+    protected function stateOfPhone():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'nothing':
+                        return 'ندارد';
+                    case 'working':
+                        return 'فعال است';
+                    case 'not_working':
+                        return 'فعال نیست';
+                }
+            },
+        );
+    }
+    protected function DirectionOfBuilding():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'north':
+                        return 'شمال';
+                    case 'south':
+                        return 'جنوب';
+                    case 'east':
+                        return 'شرق';
+                    case 'west':
+                        return 'غرب';
+                }
+            },
+        );
+    }
+    protected function waterHeater():Attribute
+    {
+        return Attribute::make(
+            get : function ($value){
+                switch ($value)
+                {
+                    case 'water_heater':
+                        return 'ابگرمکن';
+                    case 'powerhouse':
+                        return 'موتورخانه';
+                    case 'package':
+                        return 'پکیج';
+                }
+            },
+        );
+    }
+
     protected function discharge():Attribute
     {
         return Attribute::make(
@@ -313,6 +416,61 @@ class Customer extends Model
             get : fn ($value) => $value ? 'هست' : 'نیست',
         );
     }
+    protected function terrace():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'دارد' : 'ندارد',
+        );
+    }
+    protected function airConditioningSystem():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'دارد' : 'ندارد',
+        );
+    }
+    protected function yard():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'دارد' : 'ندارد',
+        );
+    }
+    protected function pool():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'دارد' : 'ندارد',
+        );
+    }
+    protected function sauna():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'دارد' : 'ندارد',
+        );
+    }
+    protected function Jacuzzi():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'دارد' : 'ندارد',
+        );
+    }
+    protected function videoIphone():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'دارد' : 'ندارد',
+        );
+    }
+    protected function Underground():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'دارد' : 'ندارد',
+        );
+    }
+    protected function WallCloset():Attribute
+    {
+        return Attribute::make(
+            get : fn ($value) => $value ? 'دارد' : 'ندارد',
+        );
+    }
+
     protected function isStar():Attribute
     {
         return Attribute::make(

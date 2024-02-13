@@ -25,7 +25,7 @@ class LandownerResource extends JsonResource
             'meterage' => $this->getRawOriginal('scale'),
             'city_id' => $this->city_id,
             'area' => $this->area,
-            'expire_date' => $this->$this->getRawOriginal('expire_date'),
+            'expire_date' => $this->getRawOriginal('expire_date'),
             'rahn' =>  $this->getRawOriginal('rahn_amount'),
             'ejareh' =>  $this->getRawOriginal('rent_amount'),
             'price' => $this->getRawOriginal('selling_price'),

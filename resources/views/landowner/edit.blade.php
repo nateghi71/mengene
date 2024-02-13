@@ -72,16 +72,19 @@
             {
                 $('.floor').show();
                 $('.num-floor').hide();
+                $('.unit').hide();
             }
             else if(selectOptin === 'land')
             {
                 $('.floor').hide();
                 $('.num-floor').hide();
+                $('.unit').hide();
             }
             else
             {
                 $('.floor').show();
                 $('.num-floor').show();
+                $('.unit').show();
             }
         }
 
@@ -113,15 +116,17 @@
 
         $('#more').hide();
         $('#more_btn').on('click' , function (){
-            $('#more').slideToggle();
-            if($(this).hasClass('text-danger'))
-            {
-                $(this).removeClass('text-danger').addClass('text-white').text('گزینه های بیشتر...');
-            }
-            else
-            {
-                $(this).removeClass('text-white').addClass('text-danger').text('بستن');
-            }
+            let moreBtn = $(this)
+            $('#more').slideToggle(400 , 'swing' , function (){
+                if(moreBtn.hasClass('text-danger'))
+                {
+                    moreBtn.removeClass('text-danger').addClass('text-white').text('گزینه های بیشتر...');
+                }
+                else
+                {
+                    moreBtn.removeClass('text-white').addClass('text-danger').text('بستن');
+                }
+            });
         })
 
         let scaleElement = $('#scale');
@@ -367,58 +372,6 @@
                         @enderror
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-group col">
-                        <div class="form-check">
-                            <label for="discharge" class="form-check-label">
-                                <input type="checkbox" name="discharge" id="discharge" class="form-check-input" @checked($landowner->getRawOriginal('discharge') === 1)>تخلیه
-                            </label>
-                        </div>
-                        @error('discharge')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <div class="form-check">
-                            <label for="elevator" class="form-check-label">
-                                <input type="checkbox" name="elevator" id="elevator" class="form-check-input" @checked($landowner->getRawOriginal('elevator') === 1)>اسانسور
-                            </label>
-                        </div>
-                        @error('elevator')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <div class="form-check">
-                            <label for="parking" class="form-check-label">
-                                <input type="checkbox" name="parking" id="parking" class="form-check-input" @checked($landowner->getRawOriginal('parking') === 1)>پارکینگ
-                            </label>
-                        </div>
-                        @error('parking')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-3">
-                        <div class="form-check">
-                            <label for="store" class="form-check-label">
-                                <input type="checkbox" name="store" id="store" class="form-check-input" @checked($landowner->getRawOriginal('store') === 1)>انبار
-                            </label>
-                        </div>
-                        @error('store')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                    <div id="ownerDiv" class="form-group col">
-                        <div class="form-check">
-                            <label for="exist_owner" class="form-check-label">
-                                <input type="checkbox" name="exist_owner" id="exist_owner" class="form-check-input" @checked($landowner->getRawOriginal('exist_owner') === 1)>حضور مالک
-                            </label>
-                        </div>
-                        @error('exist_owner')
-                        <div class="alert-danger">{{$message}}</div>
-                        @enderror
-                    </div>
-                </div>
                 <div class="row mb-3">
                     <button type="button" id="more_btn" class="btn btn-link text-decoration-none text-end text-white">گزینه های بیشتر...</button>
                 </div>
@@ -538,6 +491,111 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
+                        <div class="form-group col-md-3 unit">
+                            <label for="number_of_unit_in_floor">تعداد واحد در طبقه:</label>
+                            <input type="text" name="number_of_unit_in_floor" class="form-control" value="{{$landowner->number_of_unit_in_floor}}" id="number_of_unit_in_floor" placeholder="تعداد واحد در طبقه"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            @error('number_of_unit_in_floor')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3 unit">
+                            <label for="number_unit">شماره واحد:</label>
+                            <input type="text" name="number_unit" class="form-control" value="{{$landowner->number_unit}}" id="number_unit" placeholder="شماره واحد"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            @error('number_unit')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3 floor">
+                            <label for="postal_code">کد پستی:</label>
+                            <input type="text" name="postal_code" class="form-control" value="{{$landowner->postal_code}}" id="postal_code" placeholder="کد پستی"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            @error('postal_code')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3 floor">
+                            <label for="plaque">شماره پلاک:</label>
+                            <input type="text" name="plaque" class="form-control" value="{{$landowner->plaque}}" id="plaque" placeholder="شماره پلاک"
+                                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                            @error('plaque')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="state_of_electricity">وضعیت برق:</label>
+                            <select class="form-control" name="state_of_electricity" id="state_of_electricity">
+                                <option value="null" @selected($landowner->getRawOriginal('state_of_electricity') == 'null')>انتخاب گزینه</option>
+                                <option value="nothing" @selected($landowner->getRawOriginal('state_of_electricity') == 'nothing')>ندارد</option>
+                                <option value="shared" @selected($landowner->getRawOriginal('state_of_electricity') == 'shared')>اشتراکی</option>
+                                <option value="exclusive" @selected($landowner->getRawOriginal('state_of_electricity') == 'exclusive')>اختصاصی</option>
+                            </select>
+                            @error('state_of_electricity')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="state_of_water">وضعیت اب:</label>
+                            <select class="form-control" name="state_of_water" id="state_of_water">
+                                <option value="null" @selected($landowner->getRawOriginal('state_of_water') == 'null')>انتخاب گزینه</option>
+                                <option value="nothing" @selected($landowner->getRawOriginal('state_of_water') == 'nothing')>ندارد</option>
+                                <option value="shared" @selected($landowner->getRawOriginal('state_of_water') == 'shared')>اشتراکی</option>
+                                <option value="exclusive" @selected($landowner->getRawOriginal('state_of_water') == 'exclusive')>اختصاصی</option>
+                            </select>
+                            @error('state_of_water')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="state_of_gas">وضعیت گاز:</label>
+                            <select class="form-control" name="state_of_gas" id="state_of_gas">
+                                <option value="null" @selected($landowner->getRawOriginal('state_of_gas') == 'null')>انتخاب گزینه</option>
+                                <option value="nothing" @selected($landowner->getRawOriginal('state_of_gas') == 'nothing')>ندارد</option>
+                                <option value="shared" @selected($landowner->getRawOriginal('state_of_gas') == 'shared')>اشتراکی</option>
+                                <option value="exclusive" @selected($landowner->getRawOriginal('state_of_gas') == 'exclusive')>اختصاصی</option>
+                            </select>
+                            @error('state_of_gas')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="state_of_phone">وضعیت تلفن:</label>
+                            <select class="form-control" name="state_of_phone" id="state_of_phone">
+                                <option value="null" @selected($landowner->getRawOriginal('state_of_phone') == 'null')>انتخاب گزینه</option>
+                                <option value="nothing" @selected($landowner->getRawOriginal('state_of_phone') == 'nothing')>ندارد</option>
+                                <option value="working" @selected($landowner->getRawOriginal('state_of_phone') == 'working')>دایر</option>
+                                <option value="not_working" @selected($landowner->getRawOriginal('state_of_phone') == 'not_working')>دایر نیست</option>
+                            </select>
+                            @error('state_of_phone')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="Direction_of_building">جهت ساختمان:</label>
+                            <select class="form-control" name="Direction_of_building" id="Direction_of_building">
+                                <option value="null" @selected($landowner->getRawOriginal('Direction_of_building') == 'null')>انتخاب گزینه</option>
+                                <option value="north" @selected($landowner->getRawOriginal('Direction_of_building') == 'north')>شمال</option>
+                                <option value="south" @selected($landowner->getRawOriginal('Direction_of_building') == 'south')>جنوب</option>
+                                <option value="east" @selected($landowner->getRawOriginal('Direction_of_building') == 'east')>شرق</option>
+                                <option value="west" @selected($landowner->getRawOriginal('Direction_of_building') == 'west')>غرب</option>
+                            </select>
+                            @error('Direction_of_building')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="water_heater">تامین کننده اب گرم:</label>
+                            <select class="form-control" name="water_heater" id="water_heater">
+                                <option value="null" @selected($landowner->getRawOriginal('water_heater') == 'null')>انتخاب گزینه</option>
+                                <option value="water_heater" @selected($landowner->getRawOriginal('water_heater') == 'water_heater')>ابگرمکن</option>
+                                <option value="powerhouse" @selected($landowner->getRawOriginal('water_heater') == 'powerhouse')>موتورخانه</option>
+                                <option value="package" @selected($landowner->getRawOriginal('water_heater') == 'package')>پکیج</option>
+                            </select>
+                            @error('water_heater')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
                         <div class="form-group col-md-6">
                             <label for="description">توضیحات:</label>
                             <textarea name="description" class="form-control" id="description" placeholder="توضیحات" rows="3">{{$landowner->description}}</textarea>
@@ -546,6 +604,150 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="row row-cols-md-5">
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="discharge" class="form-check-label">
+                                    <input type="checkbox" name="discharge" id="discharge" class="form-check-input" @checked($landowner->getRawOriginal('discharge') === 1)>تخلیه
+                                </label>
+                            </div>
+                            @error('discharge')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="elevator" class="form-check-label">
+                                    <input type="checkbox" name="elevator" id="elevator" class="form-check-input" @checked($landowner->getRawOriginal('elevator') === 1)>اسانسور
+                                </label>
+                            </div>
+                            @error('elevator')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="parking" class="form-check-label">
+                                    <input type="checkbox" name="parking" id="parking" class="form-check-input" @checked($landowner->getRawOriginal('parking') === 1)>پارکینگ
+                                </label>
+                            </div>
+                            @error('parking')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="store" class="form-check-label">
+                                    <input type="checkbox" name="store" id="store" class="form-check-input" @checked($landowner->getRawOriginal('store') === 1)>انبار
+                                </label>
+                            </div>
+                            @error('store')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div id="ownerDiv" class="form-group col">
+                            <div class="form-check">
+                                <label for="exist_owner" class="form-check-label">
+                                    <input type="checkbox" name="exist_owner" id="exist_owner" class="form-check-input" @checked($landowner->getRawOriginal('exist_owner') === 1)>حضور مالک
+                                </label>
+                            </div>
+                            @error('exist_owner')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="terrace" class="form-check-label">
+                                    <input type="checkbox" name="terrace" id="terrace" class="form-check-input" @checked($landowner->getRawOriginal('terrace') == 1)>تراس
+                                </label>
+                            </div>
+                            @error('terrace')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="air_conditioning_system" class="form-check-label">
+                                    <input type="checkbox" name="air_conditioning_system" id="air_conditioning_system" class="form-check-input" @checked($landowner->getRawOriginal('air_conditioning_system') == 1)>سیستم تهویه
+                                </label>
+                            </div>
+                            @error('air_conditioning_system')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="yard" class="form-check-label">
+                                    <input type="checkbox" name="yard" id="yard" class="form-check-input" @checked($landowner->getRawOriginal('yard') == 1)>حیاط
+                                </label>
+                            </div>
+                            @error('yard')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="pool" class="form-check-label">
+                                    <input type="checkbox" name="pool" id="pool" class="form-check-input" @checked($landowner->getRawOriginal('pool') == 1)>استخر
+                                </label>
+                            </div>
+                            @error('pool')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="sauna" class="form-check-label">
+                                    <input type="checkbox" name="sauna" id="sauna" class="form-check-input" @checked($landowner->getRawOriginal('sauna') == 1)>سونا
+                                </label>
+                            </div>
+                            @error('sauna')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="Jacuzzi" class="form-check-label">
+                                    <input type="checkbox" name="Jacuzzi" id="Jacuzzi" class="form-check-input" @checked($landowner->getRawOriginal('Jacuzzi') == 1)>جکوزی
+                                </label>
+                            </div>
+                            @error('Jacuzzi')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="video_iphone" class="form-check-label">
+                                    <input type="checkbox" name="video_iphone" id="video_iphone" class="form-check-input" @checked($landowner->getRawOriginal('video_iphone') == 1)>ایفون تصویری
+                                </label>
+                            </div>
+                            @error('video_iphone')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="Underground" class="form-check-label">
+                                    <input type="checkbox" name="Underground" id="Underground" class="form-check-input" @checked($landowner->getRawOriginal('Underground') == 1)>زیرزمین
+                                </label>
+                            </div>
+                            @error('Underground')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group col">
+                            <div class="form-check">
+                                <label for="Wall_closet" class="form-check-label">
+                                    <input type="checkbox" name="Wall_closet" id="Wall_closet" class="form-check-input" @checked($landowner->getRawOriginal('Wall_closet') == 1)>کمد دیواری
+                                </label>
+                            </div>
+                            @error('Wall_closet')
+                            <div class="alert-danger">{{$message}}</div>
+                            @enderror
+                        </div>
+
+                    </div>
+
                 </div>
                 <div class="text-center pt-3">
                     <button type="submit" class="btn btn-primary w-100 enter-btn">ویرایش</button>

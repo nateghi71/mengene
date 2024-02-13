@@ -104,7 +104,7 @@ Route::group(['middleware' => ['auth', 'clearCoupon']] , function () {
     Route::post('customer/suggestion/share', [SuggestionForCustomerController::class, 'share_file_with_customer'])->name('customer.send_share_message');
     Route::post('customer/remainder/set_time', [CustomerController::class, 'setRemainderTime'])->name('customer.remainder');
 
-    Route::resource('rent_contract' , RentContractController::class);
+    Route::resource('rent_contracts' , RentContractController::class);
 });
 
 Route::middleware('auth')->prefix('admin-panel')->name('admin.')->group(function () {
