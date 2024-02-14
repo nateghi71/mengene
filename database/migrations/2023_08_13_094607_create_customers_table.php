@@ -49,23 +49,14 @@ class CreateCustomersTable extends Migration
 
             $table->integer('number_of_unit_in_floor')->nullable(); //just apartment
             $table->integer('number_unit')->nullable(); //just apartment
-            $table->integer('number_of_parking')->nullable(); //just apartment
-            $table->integer('scale_of_parking')->nullable(); //just apartment
-            $table->integer('number_of_wc')->nullable(); //just apartment
             $table->integer('postal_code')->nullable(); //just apartment
-            $table->integer('number_of_store')->nullable(); //just apartment
-            $table->integer('scale_of_store')->nullable(); //just apartment
-            $table->integer('price_per_meter')->nullable();
             $table->integer('plaque')->nullable();
-            $table->integer('number_of_dongs')->nullable();
             $table->enum('state_of_electricity' , ['null','nothing','shared','exclusive']);
             $table->enum('state_of_water' , ['null','nothing','shared','exclusive']);
             $table->enum('state_of_gas' , ['null','nothing','shared','exclusive']);
             $table->enum('state_of_phone' , ['null','nothing','working','not_working']);
             $table->enum('Direction_of_building' , ['null','north','south','east','west']);
             $table->enum('water_heater' , ['null','water_heater','powerhouse','package']);
-            $table->enum('kitchen' , ['null','open','iranian']);
-            $table->enum('wc' , ['null','iranian','frangi','iranian_and_frangi']);
             $table->text('description')->nullable();
             $table->foreignId('business_id')->nullable()->constrained('businesses')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
@@ -78,9 +69,6 @@ class CreateCustomersTable extends Migration
             $table->boolean('terrace')->default(0);
             $table->boolean('air_conditioning_system')->default(0);
             $table->boolean('yard')->default(0);
-            $table->boolean('furniture')->default(0);
-            $table->boolean('Water_Well')->default(0);
-            $table->boolean('green_space')->default(0);
             $table->boolean('pool')->default(0);
             $table->boolean('sauna')->default(0);
             $table->boolean('Jacuzzi')->default(0);
