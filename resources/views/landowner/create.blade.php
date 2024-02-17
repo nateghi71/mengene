@@ -90,21 +90,39 @@
             let selectOptin = $('#type_build').children(':selected').val()
             if(selectOptin === 'house')
             {
-                $('.floor').show();
-                $('.num-floor').hide();
-                $('.unit').hide();
+                $('.year_of_construction , .year_of_reconstruction , .number_of_rooms , .floor_number , .floor_covering' +
+                    ',.cooling , .heating , .cabinets , .view' +
+                    ', .postal_code , .plaque , .state_of_electricity , .state_of_water , .state_of_gas' +
+                    ',.state_of_phone  ,.water_heater ,.discharge  , .parking , .store , .exist_owner , .terrace' +
+                    ',.air_conditioning_system , .yard , .pool , .sauna , .Jacuzzi , .video_iphone , .Underground , .Wall_closet').show().children('input,select').each(function (){$(this).attr('name' , $(this).attr('id'))});
+                $('.floor , .number_of_unit_in_floor , .number_unit, .Direction_of_building, .elevator').hide().children('input,select').attr('name', '');
             }
-            else if(selectOptin === 'land')
+            else if(selectOptin === 'apartment')
             {
-                $('.floor').hide();
-                $('.num-floor').hide();
-                $('.unit').hide();
+                $('.year_of_construction , .year_of_reconstruction , .number_of_rooms , .floor_number , .floor , .floor_covering' +
+                    ',.cooling , .heating , .cabinets , .view , .number_of_unit_in_floor' +
+                    ',.number_unit , .postal_code , .plaque , .state_of_electricity , .state_of_water , .state_of_gas' +
+                    ',.state_of_phone , .Direction_of_building ,.water_heater ,.discharge , .elevator , .parking , .store , .exist_owner , .terrace' +
+                    ',.air_conditioning_system , .yard , .pool , .sauna , .Jacuzzi , .video_iphone , .Wall_closet').show().children('input,select').each(function (){$(this).attr('name' , $(this).attr('id'))});
+                $('.Underground').hide().children('input,select').attr('name', '');
             }
-            else
+            else if(selectOptin === 'shop')
             {
-                $('.floor').show();
-                $('.num-floor').show();
-                $('.unit').show();
+                $('.year_of_construction , .year_of_reconstruction  , .floor_covering' +
+                    ',.cooling , .heating ,.state_of_electricity , .state_of_water , .state_of_gas' +
+                    ',.state_of_phone   ,.discharge  , .exist_owner ,.air_conditioning_system').show().children('input,select').each(function (){$(this).attr('name' , $(this).attr('id'))});
+                $('.floor, .view, .number_of_unit_in_floor,.number_unit, .Direction_of_building, .elevator, .parking' +
+                    ' , .cabinets , .store ,.water_heater, .video_iphone , .Underground , .terrace, .yard , .pool , .sauna , .Jacuzzi' +
+                ', .postal_code , .plaque, .number_of_rooms , .floor_number , .Wall_closet').hide().children('input,select').attr('name', '');
+            }
+            else if(selectOptin === 'store' || selectOptin === 'hall' || selectOptin === 'parking'
+                || selectOptin === 'workshop' || selectOptin === 'land')
+            {
+                $('.year_of_construction , .year_of_reconstruction , .number_of_rooms , .floor_number , .floor_covering' +
+                    ',.cooling , .heating , .cabinets , .view , .number_of_unit_in_floor,.floor' +
+                    ',.number_unit , .postal_code , .plaque , .state_of_electricity , .state_of_water , .state_of_gas' +
+                    ',.state_of_phone , .Direction_of_building ,.water_heater ,.discharge , .elevator , .parking , .store , .exist_owner , .terrace' +
+                    ',.air_conditioning_system , .yard , .pool , .sauna , .Jacuzzi , .video_iphone , .Underground , .Wall_closet').hide().children('input,select').attr('name', '');
             }
         }
 
@@ -378,7 +396,7 @@
                 </div>
                 <div id="more" class="row">
                     <div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 year_of_construction">
                             <label for="year_of_construction">سال ساخت:</label>
                             <input type="text" name="year_of_construction" class="form-control" value="{{old('year_of_construction')}}" id="year_of_construction" placeholder="مانند : 1391"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="4">
@@ -386,7 +404,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 year_of_reconstruction">
                             <label for="year_of_reconstruction">سال بازسازی:</label>
                             <input type="text" name="year_of_reconstruction" class="form-control" value="{{old('year_of_reconstruction')}}" id="year_of_reconstruction" placeholder="مانند : 1391"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="4">
@@ -394,7 +412,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 number_of_rooms">
                             <label for="number_of_rooms">تعداد اتاق:</label>
                             <input type="text" name="number_of_rooms" class="form-control" value="{{old('number_of_rooms')}}" id="number_of_rooms" placeholder="تعداد اتاق"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
@@ -402,7 +420,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3 floor">
+                        <div class="form-group col-md-3 floor_number">
                             <label for="floor_number">تعداد طبقات کل:</label>
                             <input type="text" name="floor_number" class="form-control" value="{{old('floor_number')}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
@@ -410,7 +428,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3 num-floor">
+                        <div class="form-group col-md-3 floor">
                             <label for="floor">شماره طبقه:</label>
                             <input type="text" name="floor" class="form-control" value="{{old('floor')}}" id="floor" placeholder="شماره طبقه"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
@@ -418,7 +436,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 floor_covering">
                             <label for="floor_covering">پوشش کف:</label>
                             <select class="form-control" name="floor_covering" id="floor_covering">
                                 <option value="null" @selected(old('floor_covering') == 'null')>انتخاب گزینه</option>
@@ -432,7 +450,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 cooling">
                             <label for="cooling">سرمایش:</label>
                             <select class="form-control" name="cooling" id="cooling">
                                 <option value="null" @selected(old('cooling') == 'null')>انتخاب گزینه</option>
@@ -444,7 +462,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 heating">
                             <label for="heating">گرمایش:</label>
                             <select class="form-control" name="heating" id="heating">
                                 <option value="null" @selected(old('heating') == 'null')>انتخاب گزینه</option>
@@ -458,7 +476,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 cabinets">
                             <label for="cabinets">کابینت:</label>
                             <select class="form-control" name="cabinets" id="cabinets">
                                 <option value="null" @selected(old('cabinets') == 'null')>انتخاب گزینه</option>
@@ -471,11 +489,11 @@
                                 <option value="high_glass" @selected(old('cabinets') == 'high_glass')>های گلس</option>
                                 <option value="noting" @selected(old('cabinets') == 'noting')>ندارد</option>
                             </select>
-                            @error('heating')
+                            @error('cabinets')
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 view">
                             <label for="view">نما:</label>
                             <select class="form-control" name="view" id="view">
                                 <option value="null" @selected(old('view') == 'null')>انتخاب گزینه</option>
@@ -492,7 +510,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3 unit">
+                        <div class="form-group col-md-3 number_of_unit_in_floor">
                             <label for="number_of_unit_in_floor">تعداد واحد در طبقه:</label>
                             <input type="text" name="number_of_unit_in_floor" class="form-control" value="{{old('number_of_unit_in_floor')}}" id="number_of_unit_in_floor" placeholder="تعداد واحد در طبقه"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
@@ -500,7 +518,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3 unit">
+                        <div class="form-group col-md-3 number_unit">
                             <label for="number_unit">شماره واحد:</label>
                             <input type="text" name="number_unit" class="form-control" value="{{old('number_unit')}}" id="number_unit" placeholder="شماره واحد"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
@@ -508,7 +526,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3 floor">
+                        <div class="form-group col-md-3 postal_code">
                             <label for="postal_code">کد پستی:</label>
                             <input type="text" name="postal_code" class="form-control" value="{{old('postal_code')}}" id="postal_code" placeholder="کد پستی"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
@@ -516,7 +534,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3 floor">
+                        <div class="form-group col-md-3 plaque">
                             <label for="plaque">شماره پلاک:</label>
                             <input type="text" name="plaque" class="form-control" value="{{old('plaque')}}" id="plaque" placeholder="شماره پلاک"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
@@ -524,7 +542,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 state_of_electricity">
                             <label for="state_of_electricity">وضعیت برق:</label>
                             <select class="form-control" name="state_of_electricity" id="state_of_electricity">
                                 <option value="null" @selected(old('state_of_electricity') == 'null')>انتخاب گزینه</option>
@@ -536,7 +554,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 state_of_water">
                             <label for="state_of_water">وضعیت اب:</label>
                             <select class="form-control" name="state_of_water" id="state_of_water">
                                 <option value="null" @selected(old('state_of_water') == 'null')>انتخاب گزینه</option>
@@ -548,7 +566,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 state_of_gas">
                             <label for="state_of_gas">وضعیت گاز:</label>
                             <select class="form-control" name="state_of_gas" id="state_of_gas">
                                 <option value="null" @selected(old('state_of_gas') == 'null')>انتخاب گزینه</option>
@@ -560,7 +578,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 state_of_phone">
                             <label for="state_of_phone">وضعیت تلفن:</label>
                             <select class="form-control" name="state_of_phone" id="state_of_phone">
                                 <option value="null" @selected(old('state_of_phone') == 'null')>انتخاب گزینه</option>
@@ -572,7 +590,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 Direction_of_building">
                             <label for="Direction_of_building">جهت ساختمان:</label>
                             <select class="form-control" name="Direction_of_building" id="Direction_of_building">
                                 <option value="null" @selected(old('Direction_of_building') == 'null')>انتخاب گزینه</option>
@@ -585,7 +603,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3 water_heater">
                             <label for="water_heater">تامین کننده اب گرم:</label>
                             <select class="form-control" name="water_heater" id="water_heater">
                                 <option value="null" @selected(old('water_heater') == 'null')>انتخاب گزینه</option>
@@ -597,17 +615,16 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 description">
                             <label for="description">توضیحات:</label>
                             <textarea name="description" class="form-control" id="description" placeholder="توضیحات" rows="3">{{old('description')}}</textarea>
                             @error('description')
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-
                     </div>
                     <div class="row row-cols-md-5">
-                        <div class="form-group col">
+                        <div class="form-group col discharge">
                             <div class="form-check">
                                 <label for="discharge" class="form-check-label">
                                     <input type="checkbox" name="discharge" id="discharge" class="form-check-input" @checked(old('discharge') == 'on')>تخلیه
@@ -617,7 +634,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col elevator">
                             <div class="form-check">
                                 <label for="elevator" class="form-check-label">
                                     <input type="checkbox" name="elevator" id="elevator" class="form-check-input" @checked(old('elevator') == 'on')>اسانسور
@@ -627,7 +644,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col parking">
                             <div class="form-check">
                                 <label for="parking" class="form-check-label">
                                     <input type="checkbox" name="parking" id="parking" class="form-check-input" @checked(old('parking') == 'on')>پارکینگ
@@ -637,7 +654,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col store">
                             <div class="form-check">
                                 <label for="store" class="form-check-label">
                                     <input type="checkbox" name="store" id="store" class="form-check-input" @checked(old('store') == 'on')>انبار
@@ -647,7 +664,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div id="ownerDiv" class="form-group col">
+                        <div id="ownerDiv" class="form-group col exist_owner">
                             <div class="form-check">
                                 <label for="exist_owner" class="form-check-label">
                                     <input type="checkbox" name="exist_owner" id="exist_owner" class="form-check-input" @checked(old('exist_owner') == 'on')>حضور مالک
@@ -657,7 +674,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col terrace">
                             <div class="form-check">
                                 <label for="terrace" class="form-check-label">
                                     <input type="checkbox" name="terrace" id="terrace" class="form-check-input" @checked(old('terrace') == 'on')>تراس
@@ -667,7 +684,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col air_conditioning_system">
                             <div class="form-check">
                                 <label for="air_conditioning_system" class="form-check-label">
                                     <input type="checkbox" name="air_conditioning_system" id="air_conditioning_system" class="form-check-input" @checked(old('air_conditioning_system') == 'on')>سیستم تهویه
@@ -677,7 +694,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col yard">
                             <div class="form-check">
                                 <label for="yard" class="form-check-label">
                                     <input type="checkbox" name="yard" id="yard" class="form-check-input" @checked(old('yard') == 'on')>حیاط
@@ -687,7 +704,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col pool">
                             <div class="form-check">
                                 <label for="pool" class="form-check-label">
                                     <input type="checkbox" name="pool" id="pool" class="form-check-input" @checked(old('pool') == 'on')>استخر
@@ -697,7 +714,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col sauna">
                             <div class="form-check">
                                 <label for="sauna" class="form-check-label">
                                     <input type="checkbox" name="sauna" id="sauna" class="form-check-input" @checked(old('sauna') == 'on')>سونا
@@ -707,7 +724,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col Jacuzzi">
                             <div class="form-check">
                                 <label for="Jacuzzi" class="form-check-label">
                                     <input type="checkbox" name="Jacuzzi" id="Jacuzzi" class="form-check-input" @checked(old('Jacuzzi') == 'on')>جکوزی
@@ -717,7 +734,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col video_iphone">
                             <div class="form-check">
                                 <label for="video_iphone" class="form-check-label">
                                     <input type="checkbox" name="video_iphone" id="video_iphone" class="form-check-input" @checked(old('video_iphone') == 'on')>ایفون تصویری
@@ -727,7 +744,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col Underground">
                             <div class="form-check">
                                 <label for="Underground" class="form-check-label">
                                     <input type="checkbox" name="Underground" id="Underground" class="form-check-input" @checked(old('Underground') == 'on')>زیرزمین
@@ -737,7 +754,7 @@
                             <div class="alert-danger">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col Wall_closet">
                             <div class="form-check">
                                 <label for="Wall_closet" class="form-check-label">
                                     <input type="checkbox" name="Wall_closet" id="Wall_closet" class="form-check-input" @checked(old('Wall_closet') == 'on')>کمد دیواری
@@ -752,6 +769,7 @@
                 </div>
 
                 <div class="text-center pt-3">
+                    <input type="hidden" name="type_file" value="business">
                     <button type="submit" class="btn btn-primary w-100 enter-btn">ایجاد</button>
                 </div>
             </form>

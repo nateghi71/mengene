@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\MyBaseController as BaseController;
 use App\Http\Controllers\Controller;
 use App\Models\Business;
+use App\Models\Package;
 use App\Models\Premium;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -14,9 +15,10 @@ class PremiumController extends BaseController
 {
     public function store($business)
     {
+        $package = Package::where('name' , 'free')->first();
         $business->premium()->create([
-            'level' => 'free',
-            'expire_date' => Carbon::now()->addDecade(),
+            'package_id' => $package->id,
+            'expire_date' => Carbon::now()->addMonth($package->time),
         ]);
     }
 
