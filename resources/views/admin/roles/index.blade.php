@@ -27,7 +27,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
         function deleteBox(e)
@@ -100,32 +100,32 @@
                             <table class="table text-center">
                                 <thead>
                                 <tr>
-                                    <th> # </th>
-                                    <th> نام </th>
+                                    <th class="text-white"> # </th>
+                                    <th class="text-white"> نام </th>
                                     @can('viewShow' , \App\Models\Role::class)
-                                    <th> نمایش </th>
+                                    <th class="text-white"> نمایش </th>
                                     @endcan
                                     @can('edit' , \App\Models\Role::class)
-                                    <th> ویرایش </th>
+                                    <th class="text-white"> ویرایش </th>
                                     @endcan
                                     @can('delete' , \App\Models\Role::class)
-                                    <th>حذف</th>
+                                    <th class="text-white">حذف</th>
                                     @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($roles as $key => $role)
                                     <tr>
-                                        <td>{{$roles->firstItem() + $key}}</td>
-                                        <td>{{$role->name}}</td>
+                                        <td class="text-white">{{$roles->firstItem() + $key}}</td>
+                                        <td class="text-white">{{$role->name}}</td>
                                         @can('viewShow' , \App\Models\Role::class)
-                                        <td><a class="btn text-decoration-none" href="{{route('admin.roles.show',$role->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td class="text-white"><a class="btn text-decoration-none" href="{{route('admin.roles.show',$role->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         @endcan
                                         @can('edit' , \App\Models\Role::class)
-                                        <td><a class="btn text-decoration-none" href="{{route('admin.roles.edit',$role->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
+                                        <td class="text-white"><a class="btn text-decoration-none" href="{{route('admin.roles.edit',$role->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
                                         @endcan
                                         @can('delete' , \App\Models\Role::class)
-                                        <td><a href="{{route('admin.roles.destroy',$role->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a></td>
+                                        <td class="text-white"><a href="{{route('admin.roles.destroy',$role->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a></td>
                                         @endcan
                                     </tr>
                                 @endforeach

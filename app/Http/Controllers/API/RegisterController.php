@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\HelperClasses\SmsAPI;
 use App\Http\Controllers\API\MyBaseController as BaseController;
+use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserCode;
@@ -14,8 +15,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 
-class RegisterController extends BaseController
+class RegisterController extends Controller
 {
+    use MyBaseController;
+
     public function twoFAStore(Request $request)
     {
         $validator = Validator::make($request->all() , [

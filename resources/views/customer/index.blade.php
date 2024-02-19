@@ -34,7 +34,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
         function deleteBox(e)
@@ -121,7 +121,16 @@
             minDate: new persianDate(),
         });
 
+        $('#search-input').on('change' , filter)
+        $('#sort-by').on('change' , filter)
+        $('#type_sale').on('change' , filter)
+        $('#access_level').on('change' , filter)
+        $('#type_work').on('change' , filter)
+        $('#type_build').on('change' , filter)
+        $('#status').on('change' , filter)
+
         function filter() {
+            console.log('heyyyyyyyyy')
             let typeSale = $('#type_sale').val();
             if (typeSale == "default") {
                 $('#filter-type-sale').prop('disabled', true);
@@ -246,10 +255,10 @@
                 <div class="card-body py-2 row">
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <input type="text" class="form-control" onchange="filter()" value="{{ request()->has('search') ? request()->search : '' }}" id="search-input" placeholder="جستوجو بر اساس نام">
+                            <input type="text" class="form-control" value="{{ request()->has('search') ? request()->search : '' }}" id="search-input" placeholder="جستوجو بر اساس نام">
                         </div>
                         <div class="form-group col-md-6">
-                            <select class="form-control" onchange="filter()" id="sort-by">
+                            <select class="form-control" id="sort-by">
                                 <option value="default">مرتب سازی</option>
                                 <option value="max_days" @selected(request()->has('sortBy') && request()->sortBy == 'max_days')>بیشترین روزهای باقی مانده</option>
                                 <option value="min_days" @selected(request()->has('sortBy') && request()->sortBy == 'min_days')>کمترین روزهای باقی مانده</option>
@@ -264,21 +273,21 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="type_sale">
+                            <select class="form-control" id="type_sale">
                                 <option value="default">نوع</option>
                                 <option value="buy" @selected(request()->has('type_sale') && request()->type_sale == 'buy')>خرید</option>
                                 <option value="rahn" @selected(request()->has('type_sale') && request()->type_sale == 'rahn')>رهن و اجاره</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="access_level">
+                            <select class="form-control" id="access_level">
                                 <option value="default">سطح دسترسی</option>
                                 <option value="private" @selected(request()->has('access_level') && request()->access_level == 'private')>نمایش خصوصی</option>
                                 <option value="public" @selected(request()->has('access_level') && request()->access_level == 'public')>نمایش عمومی</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="type_work">
+                            <select class="form-control" id="type_work">
                                 <option value="default">نوع کاربری</option>
                                 <option value="home" @selected(request()->has('type_work') && request()->type_work == 'home')>خانه</option>
                                 <option value="office" @selected(request()->has('type_work') && request()->type_work == 'office')>دفتر</option>
@@ -289,7 +298,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="type_build">
+                            <select class="form-control" id="type_build">
                                 <option value="default">نوع ملک</option>
                                 <option value="house" @selected(request()->has('type_build') && request()->type_build == 'house')>ویلایی</option>
                                 <option value="apartment" @selected(request()->has('type_build') && request()->type_build == 'apartment')>ساختمان</option>
@@ -302,7 +311,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="status">
+                            <select class="form-control" id="status">
                                 <option value="default">وضعیت</option>
                                 <option value="active" @selected(request()->has('status') && request()->status == 'active')>فعال</option>
                                 <option value="unknown" @selected(request()->has('status') && request()->status == 'unknown')>نامعلوم</option>
@@ -329,13 +338,13 @@
                         <div class="table-responsive">
                             <table class="table text-center">
                                 <thead>
-                                <tr>
-                                    <th> # </th>
-                                    <th> نام </th>
-                                    <th> شماره تماس </th>
-                                    <th> ثبت کننده </th>
-                                    <th> نوع </th>
-                                    <th>
+                                <tr class="text-white">
+                                    <th class="text-white"> # </th>
+                                    <th class="text-white"> نام </th>
+                                    <th class="text-white"> شماره تماس </th>
+                                    <th class="text-white"> ثبت کننده </th>
+                                    <th class="text-white"> نوع </th>
+                                    <th class="text-white">
                                         @if($customers->pluck('status')->contains('غیرفعال') ||
                                             $customers->pluck('type_sale')->contains('خرید') && $customers->pluck('type_sale')->contains('رهن و اجاره'))
                                             قیمت / رهن
@@ -345,22 +354,22 @@
                                             قیمت
                                         @endif
                                     </th>
-                                    <th>زمان باقیمانده </th>
-                                    <th> پیشنهادات </th>
-                                    <th>تنظیم هشدار</th>
-                                    <th> نمایش </th>
-                                    <th> ویرایش </th>
-                                    <th>حذف</th>
+                                    <th class="text-white">زمان باقیمانده </th>
+                                    <th class="text-white"> پیشنهادات </th>
+                                    <th class="text-white">تنظیم هشدار</th>
+                                    <th class="text-white"> نمایش </th>
+                                    <th class="text-white"> ویرایش </th>
+                                    <th class="text-white">حذف</th>
                                 </tr>
                                 </thead>
-                                <tbody class="text-white">
+                                <tbody>
                                 @foreach($customers as $key => $customer)
                                     <tr @class(['self_file' => auth()->user()->id === $customer->user->id])>
-                                        <td>
+                                        <td class="text-white">
                                             <a class="text-decoration-none" href="{{route('customer.star',$customer->id)}}">{!!$customer->getRawOriginal('is_star') ?
                                                 '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
                                         </td>
-                                        <td>
+                                        <td class="text-white">
                                             {{$customer->name}}
                                             @if($customer->getRawOriginal('status') == 'active')
                                                 <span class="mdi mdi-checkbox-blank-circle text-success"></span>
@@ -370,13 +379,13 @@
                                                 <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
                                             @endif
                                         </td>
-                                        <td>{{$customer->number}}</td>
-                                        <td>{{$customer->user->name}}</td>
-                                        <td>{{$customer->type_sale}}</td>
-                                        <td>{{$customer->getRawOriginal('selling_price') !== 0 ? $customer->selling_price : $customer->rahn_amount}}</td>
-                                        <td>{{$customer->daysLeft ? $customer->daysLeft . ' روز' : 'منقضی'}} </td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('customer.suggestions',$customer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
-                                        <td>
+                                        <td class="text-white">{{$customer->number}}</td>
+                                        <td class="text-white">{{$customer->user->name}}</td>
+                                        <td class="text-white">{{$customer->type_sale}}</td>
+                                        <td class="text-white">{{$customer->getRawOriginal('selling_price') !== 0 ? $customer->selling_price : $customer->rahn_amount}}</td>
+                                        <td class="text-white">{{$customer->daysLeft ? $customer->daysLeft . ' روز' : 'منقضی'}} </td>
+                                        <td class="text-white"><a class="text-white text-decoration-none" href="{{route('customer.suggestions',$customer->id)}}"><i class="mdi mdi-format-list-bulleted"></i></a></td>
+                                        <td class="text-white">
                                             <form action="{{route('customer.remainder')}}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="remainder" id="remainder_input_{{$key}}">
@@ -384,9 +393,9 @@
                                                 <button id="remainder_{{$key}}" class="btn btn-link text-white text-decoration-none" type="button"><i class="mdi mdi-bell"></i></button>
                                             </form>
                                         </td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('customer.show',$customer->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="text-white text-decoration-none" href="{{route('customer.edit',$customer->id)}}"><i class="mdi mdi-lead-pencil"></i></a></td>
-                                        <td>
+                                        <td class="text-white"><a class="text-white text-decoration-none" href="{{route('customer.show',$customer->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td class="text-white"><a class="text-white text-decoration-none" href="{{route('customer.edit',$customer->id)}}"><i class="mdi mdi-lead-pencil"></i></a></td>
+                                        <td class="text-white">
                                             <a href="{{route('customer.destroy',$customer->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger" type="button"><i class="mdi mdi-delete"></i></a>
                                         </td>
                                     </tr>

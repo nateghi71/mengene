@@ -27,7 +27,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
         function deleteBox(e)
@@ -99,47 +99,47 @@
                             <table class="table text-center">
                                 <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>نام</th>
-                                    <th>کد</th>
-                                    <th>درصد</th>
-                                    <th>تاریخ انقضا</th>
+                                    <th class="text-white">#</th>
+                                    <th class="text-white">نام</th>
+                                    <th class="text-white">کد</th>
+                                    <th class="text-white">درصد</th>
+                                    <th class="text-white">تاریخ انقضا</th>
                                     @can('viewShow' , \App\Models\Coupon::class)
-                                        <th> نمایش </th>
+                                        <th class="text-white"> نمایش </th>
                                     @endcan
                                     @can('edit' , \App\Models\Coupon::class)
-                                        <th> ویرایش </th>
+                                        <th class="text-white"> ویرایش </th>
                                     @endcan
                                     @can('delete' , \App\Models\Coupon::class)
-                                        <th>حذف</th>
+                                        <th class="text-white">حذف</th>
                                     @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($coupons as $key => $coupon)
                                     <tr>
-                                        <td>{{$coupons->firstItem() + $key}}</td>
-                                        <th>
+                                        <td class="text-white">{{$coupons->firstItem() + $key}}</td>
+                                        <th class="text-white">
                                             {{$coupon->name}}
                                         </th>
-                                        <th>
+                                        <th class="text-white">
                                             {{$coupon->code}}
                                         </th>
 
-                                        <th>
+                                        <th class="text-white">
                                             {{$coupon->percentage}}
                                         </th>
-                                        <th>
+                                        <th class="text-white">
                                             {{$coupon->expire_date}}
                                         </th>
                                         @can('viewShow' , \App\Models\Coupon::class)
-                                            <td><a class="btn text-decoration-none" href="{{route('admin.coupons.show',$coupon->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                            <td class="text-white"><a class="btn text-decoration-none" href="{{route('admin.coupons.show',$coupon->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         @endcan
                                         @can('edit' , \App\Models\Coupon::class)
-                                            <td><a class="btn text-decoration-none" href="{{route('admin.coupons.edit',$coupon->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
+                                            <td class="text-white"><a class="btn text-decoration-none" href="{{route('admin.coupons.edit',$coupon->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
                                         @endcan
                                         @can('delete' , \App\Models\Coupon::class)
-                                            <td><a href="{{route('admin.coupons.destroy',$coupon->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a></td>
+                                            <td class="text-white"><a href="{{route('admin.coupons.destroy',$coupon->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a></td>
                                         @endcan
                                     </tr>
                                 @endforeach

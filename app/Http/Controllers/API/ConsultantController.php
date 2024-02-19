@@ -12,8 +12,10 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ConsultantController extends BaseController
+class ConsultantController extends Controller
 {
+    use MyBaseController;
+
     public function index()
     {
         try

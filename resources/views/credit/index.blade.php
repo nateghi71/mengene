@@ -6,14 +6,14 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         function separateNum(input) {
-            var nStr = input.value + '';
+            let nStr = input.value + '';
             nStr = nStr.replace(/\,/g, "");
-            x = nStr.split('.');
-            x1 = x[0];
-            x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
+            let x = nStr.split('.');
+            let x1 = x[0];
+            let x2 = x.length > 1 ? '.' + x[1] : '';
+            let rgx = /(\d+)(\d{3})/;
             while (rgx.test(x1)) {
                 x1 = x1.replace(rgx, '$1' + ',' + '$2');
             }

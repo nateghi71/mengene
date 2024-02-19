@@ -13,8 +13,10 @@ use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
-class SuggestionForCustomerController extends BaseController
+class SuggestionForCustomerController extends Controller
 {
+    use MyBaseController;
+
     public function suggested_landowner(Customer $customer)
     {
         try

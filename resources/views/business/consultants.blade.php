@@ -27,7 +27,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
         function deleteBox(e)

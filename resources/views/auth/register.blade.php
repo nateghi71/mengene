@@ -3,7 +3,7 @@
 @section('title' , 'ثبت نام')
 
 @section('scripts')
-    <script>
+    <script type="module">
         function getCities(){
             var provinceID = $('#province').val();
             if (provinceID) {

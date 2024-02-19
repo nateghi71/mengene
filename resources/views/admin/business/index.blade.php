@@ -27,7 +27,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
         function deleteBox(e)
@@ -82,31 +82,31 @@
                             <table class="table text-center">
                                 <thead>
                                 <tr>
-                                    <th> # </th>
-                                    <th> نام </th>
-                                    <th> شهر </th>
-                                    <th> شماره تماس </th>
+                                    <th class="text-white"> # </th>
+                                    <th class="text-white"> نام </th>
+                                    <th class="text-white"> شهر </th>
+                                    <th class="text-white"> شماره تماس </th>
                                     @can('viewShow' , \App\Models\Business::class)
-                                    <th> نمایش </th>
+                                    <th class="text-white"> نمایش </th>
                                     @endcan
                                     @can('changeStatus' , \App\Models\Business::class)
-                                    <th>تغییر وضعیت</th>
+                                    <th class="text-white">تغییر وضعیت</th>
                                     @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($businesses as $key => $business)
                                     <tr>
-                                        <td>{{$businesses->firstItem() + $key}}</td>
-                                        <td>{{$business->name}}</td>
-                                        <td>{{$business->city->name}}</td>
-                                        <td>{{$business->owner->number}}</td>
+                                        <td class="text-white">{{$businesses->firstItem() + $key}}</td>
+                                        <td class="text-white">{{$business->name}}</td>
+                                        <td class="text-white">{{$business->city->name}}</td>
+                                        <td class="text-white">{{$business->owner->number}}</td>
                                         @can('viewShow' , \App\Models\Business::class)
-                                        <td><a class="btn text-decoration-none" href="{{route('admin.business.show',$business->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td class="text-white"><a class="btn text-decoration-none" href="{{route('admin.business.show',$business->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         @endcan
                                         @can('changeStatus' , \App\Models\Business::class)
 
-                                        <td>
+                                        <td class="text-white">
                                             <a href="{{route('admin.business.changeStatus',$business->id)}}" id="open_delete_panel_{{$key}}" class="text-decoration-none" type="button">
                                                 {!! $business->status === 'active' ? '<span class="text-danger">غیرفعال کردن</span>' : '<span class="text-success">فعال کردن</span>' !!}
                                             </a>

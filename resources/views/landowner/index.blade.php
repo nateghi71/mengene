@@ -26,6 +26,7 @@
 
         .self_file {
             background: #000;
+            /*color: white;*/
         }
 
         .minute-input, .second-input, .hour-input {
@@ -36,7 +37,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
         function deleteBox(e)
@@ -122,6 +123,14 @@
             initialValue: false,
             minDate: new persianDate(),
         });
+
+        $('#search-input').on('change' , filter)
+        $('#sort-by').on('change' , filter)
+        $('#type_sale').on('change' , filter)
+        $('#access_level').on('change' , filter)
+        $('#type_work').on('change' , filter)
+        $('#type_build').on('change' , filter)
+        $('#status').on('change' , filter)
 
         function filter() {
             let typeSale = $('#type_sale').val();
@@ -243,12 +252,12 @@
                 <div class="card-body py-2 row">
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <input type="text" class="form-control" onchange="filter()"
+                            <input type="text" class="form-control"
                                    value="{{ request()->has('search') ? request()->search : '' }}" id="search-input"
                                    placeholder="جستوجو بر اساس نام">
                         </div>
                         <div class="form-group col-md-6">
-                            <select class="form-control" onchange="filter()" id="sort-by">
+                            <select class="form-control" id="sort-by">
                                 <option value="default">مرتب سازی</option>
                                 <option
                                     value="max_days" @selected(request()->has('sortBy') && request()->sortBy == 'max_days')>
@@ -287,7 +296,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="type_sale">
+                            <select class="form-control" id="type_sale">
                                 <option value="default">نوع</option>
                                 <option
                                     value="buy" @selected(request()->has('type_sale') && request()->type_sale == 'buy')>
@@ -300,7 +309,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="access_level">
+                            <select class="form-control" id="access_level">
                                 <option value="default">سطح دسترسی</option>
                                 <option
                                     value="private" @selected(request()->has('access_level') && request()->access_level == 'private')>
@@ -313,7 +322,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="type_work">
+                            <select class="form-control" id="type_work">
                                 <option value="default">نوع کاربری</option>
                                 <option
                                     value="home" @selected(request()->has('type_work') && request()->type_work == 'home')>
@@ -330,7 +339,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="type_build">
+                            <select class="form-control" id="type_build">
                                 <option value="default">نوع ملک</option>
                                 <option
                                     value="house" @selected(request()->has('type_build') && request()->type_build == 'house')>
@@ -349,7 +358,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="status">
+                            <select class="form-control" id="status">
                                 <option value="default">وضعیت</option>
                                 <option
                                     value="active" @selected(request()->has('status') && request()->status == 'active')>
@@ -391,13 +400,13 @@
                         <div class="table-responsive">
                             <table class="table text-center">
                                 <thead>
-                                <tr class="text-white">
-                                    <th> #</th>
-                                    <th> نام</th>
-                                    <th> شماره تماس</th>
-                                    <th> ثبت کننده</th>
-                                    <th> نوع</th>
-                                    <th>
+                                <tr>
+                                    <th class="text-white"> #</th>
+                                    <th class="text-white"> نام</th>
+                                    <th class="text-white"> شماره تماس</th>
+                                    <th class="text-white"> ثبت کننده</th>
+                                    <th class="text-white"> نوع</th>
+                                    <th class="text-white">
                                         @if($landowners->pluck('status')->contains('غیرفعال') ||
                                             $landowners->pluck('type_sale')->contains('فروش') && $landowners->pluck('type_sale')->contains('رهن و اجاره'))
                                             قیمت / رهن
@@ -407,24 +416,24 @@
                                             قیمت
                                         @endif
                                     </th>
-                                    <th>زمان باقیمانده</th>
-                                    <th> پیشنهادات</th>
+                                    <th class="text-white">زمان باقیمانده</th>
+                                    <th class="text-white"> پیشنهادات</th>
                                     @if(auth()->user()->ownedBusiness()->exists() && !auth()->user()->isFreeUser())
-                                        <th>تنظیم هشدار</th>
+                                        <th class="text-white">تنظیم هشدار</th>
                                     @endif
-                                    <th> نمایش</th>
-                                    <th> ویرایش</th>
-                                    <th>حذف</th>
+                                    <th class="text-white"> نمایش</th>
+                                    <th class="text-white"> ویرایش</th>
+                                    <th class="text-white">حذف</th>
                                 </tr>
                                 </thead>
                                 <tbody class="text-white">
                                 @foreach($landowners as $key => $landowner)
                                     <tr @class(['self_file' => auth()->user()->id === $landowner->user->id])>
-                                        <td>
+                                        <td class="text-white">
                                             <a class="text-decoration-none"
                                                href="{{route('landowner.star',$landowner->id)}}">{!!$landowner->getRawOriginal('is_star') ? '<span class="mdi mdi-star fs-4 text-warning"></span>' : '<span class="mdi mdi-star-outline fs-4 text-warning"></span>'!!} </a>
                                         </td>
-                                        <td>
+                                        <td class="text-white">
                                             {{$landowner->name}}
                                             @if($landowner->getRawOriginal('status') == 'active')
                                                 <span class="mdi mdi-checkbox-blank-circle text-success"></span>
@@ -435,16 +444,16 @@
                                                 <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
                                             @endif
                                         </td>
-                                        <td>{{$landowner->number}}</td>
-                                        <td>{{$landowner->user->name}}</td>
-                                        <td>{{$landowner->type_sale}}</td>
-                                        <td>{{$landowner->getRawOriginal('selling_price') !== 0 ? $landowner->selling_price : $landowner->rahn_amount}}</td>
-                                        <td>{{$landowner->daysLeft ? $landowner->daysLeft . ' روز' : 'منقضی'}}</td>
-                                        <td><a class="text-white text-decoration-none"
+                                        <td class="text-white">{{$landowner->number}}</td>
+                                        <td class="text-white">{{$landowner->user->name}}</td>
+                                        <td class="text-white">{{$landowner->type_sale}}</td>
+                                        <td class="text-white">{{$landowner->getRawOriginal('selling_price') !== 0 ? $landowner->selling_price : $landowner->rahn_amount}}</td>
+                                        <td class="text-white">{{$landowner->daysLeft ? $landowner->daysLeft . ' روز' : 'منقضی'}}</td>
+                                        <td class="text-white"><a class="text-white text-decoration-none"
                                                href="{{route('landowner.suggestions',$landowner->id)}}"><i
                                                     class="mdi mdi-format-list-bulleted"></i></a></td>
                                         @if(auth()->user()->ownedBusiness()->exists() && !auth()->user()->isFreeUser())
-                                            <td>
+                                            <td class="text-white">
                                                 <form action="{{route('landowner.remainder')}}" method="post">
                                                     @csrf
                                                     <input type="hidden" name="remainder" id="remainder_input_{{$key}}">
@@ -455,10 +464,10 @@
                                                 </form>
                                             </td>
                                         @endif
-                                        <td>
+                                        <td class="text-white">
                                             <a class="text-white text-decoration-none" href="{{route('landowner.show',$landowner->id)}}"><i class="mdi mdi-eye"></i></a>
                                         </td>
-                                        <td>
+                                        <td class="text-white">
                                             <button type="button" class="btn btn-link text-decoration-none text-white" id="edit" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="mdi mdi-lead-pencil"></i>
                                             </button>
@@ -467,7 +476,7 @@
                                                 <li><a class="dropdown-item" href="{{route('landowner.edit_images',$landowner->id)}}">ویرایش عکس</a></li>
                                             </ul>
                                         </td>
-                                        <td>
+                                        <td class="text-white">
                                             <a href="{{route('landowner.destroy',$landowner->id)}}"
                                                id="open_delete_panel_{{$key}}" class="text-decoration-none text-danger"
                                                type="button"><i class="mdi mdi-delete"></i></a>

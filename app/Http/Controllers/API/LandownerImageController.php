@@ -10,8 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
-class LandownerImageController extends BaseController
+class LandownerImageController extends Controller
 {
+    use MyBaseController;
+
     public function store($images , $landowner)
     {
         $imageNames = array();

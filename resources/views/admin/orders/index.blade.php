@@ -27,7 +27,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
         function deleteBox(e)
@@ -99,36 +99,36 @@
                             <table class="table text-center">
                                 <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>کاربر</th>
-                                    <th>املاکی</th>
-                                    <th>مقدار پرداختی</th>
-                                    <th>موفقیت پرداخت</th>
-                                    <th> نمایش </th>
-                                    <th> ویرایش </th>
-                                    <th>حذف</th>
+                                    <th class="text-white">#</th>
+                                    <th class="text-white">کاربر</th>
+                                    <th class="text-white">املاکی</th>
+                                    <th class="text-white">مقدار پرداختی</th>
+                                    <th class="text-white">موفقیت پرداخت</th>
+                                    <th class="text-white"> نمایش </th>
+                                    <th class="text-white"> ویرایش </th>
+                                    <th class="text-white">حذف</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($orders as $key => $order)
                                     <tr>
-                                        <td>{{$orders->firstItem() + $key}}</td>
-                                        <th>
+                                        <td class="text-white">{{$orders->firstItem() + $key}}</td>
+                                        <th class="text-white">
                                             {{$order->user->name}}
                                         </th>
-                                        <th>
+                                        <th class="text-white">
                                             {{$order->business->name}}
                                         </th>
 
-                                        <th>
+                                        <th class="text-white">
                                             {{number_format($order->paying_amount)}}
                                         </th>
-                                        <th>
+                                        <th class="text-white">
                                             {{$order->payment_status}}
                                         </th>
-                                        <td><a class="btn text-decoration-none" href="{{route('admin.orders.show',$order->id)}}"><i class="mdi mdi-eye"></i></a></td>
-                                        <td><a class="btn text-decoration-none" href="{{route('admin.orders.edit',$order->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
-                                        <td><a href="{{route('admin.orders.destroy',$order->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a></td>
+                                        <td class="text-white"><a class="btn text-decoration-none" href="{{route('admin.orders.show',$order->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td class="text-white"><a class="btn text-decoration-none" href="{{route('admin.orders.edit',$order->id)}}"><i class="mdi mdi-autorenew"></i></a></td>
+                                        <td class="text-white"><a href="{{route('admin.orders.destroy',$order->id)}}" id="open_delete_panel_{{$key}}" class="btn btn-outline-danger" type="button"><i class="mdi mdi-delete"></i></a></td>
                                     </tr>
                                 @endforeach
                                 </tbody>

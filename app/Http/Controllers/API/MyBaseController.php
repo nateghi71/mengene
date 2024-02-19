@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
 
 
-class MyBaseController extends Controller
+Trait MyBaseController
 {
     public function sendResponse($result, $message)
     {

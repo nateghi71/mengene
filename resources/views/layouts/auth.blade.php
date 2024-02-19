@@ -5,16 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title' , 'mengene')</title>
+    @vite(['resources/js/app.js', 'resources/scss/app.scss'])
     <!-- plugins:css -->
-    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">
-    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/css/vendor.bundle.base.css')}}">
+{{--    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">--}}
+{{--    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/css/vendor.bundle.base.css')}}">--}}
     <!-- endinject -->
     <!-- Plugin css for this page -->
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
     <!-- Layout styles -->
-    <link rel="stylesheet" href="{{asset('Admin/assets/css/style.css')}}">
+{{--    <link rel="stylesheet" href="{{asset('Admin/assets/css/style.css')}}">--}}
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{asset('Home/assets/img/icon_m.png')}}" />
     <style>
@@ -97,18 +98,18 @@
     <div id="preloader"></div>
 <!-- container-scroller -->
 <!-- plugins:js -->
-<script src="{{asset('Admin/assets/vendors/js/vendor.bundle.base.js')}}"></script>
+{{--<script src="{{asset('Admin/assets/vendors/js/vendor.bundle.base.js')}}"></script>--}}
 <!-- endinject -->
 <!-- Plugin js for this page -->
 <!-- End plugin js for this page -->
 <!-- inject:js -->
-<script src="{{asset('Admin/assets/js/off-canvas.js')}}"></script>
-<script src="{{asset('Admin/assets/js/hoverable-collapse.js')}}"></script>
-<script src="{{asset('Admin/assets/js/misc.js')}}"></script>
-<script src="{{asset('Admin/assets/js/settings.js')}}"></script>
-<script src="{{asset('Admin/assets/js/todolist.js')}}"></script>
+{{--<script src="{{asset('Admin/assets/js/off-canvas.js')}}"></script>--}}
+{{--<script src="{{asset('Admin/assets/js/hoverable-collapse.js')}}"></script>--}}
+{{--<script src="{{asset('Admin/assets/js/misc.js')}}"></script>--}}
+{{--<script src="{{asset('Admin/assets/js/settings.js')}}"></script>--}}
+{{--<script src="{{asset('Admin/assets/js/todolist.js')}}"></script>--}}
 
-<script>
+<script type="module">
     let preloader = $('#preloader');
     if (preloader) {
         console.log(preloader.get(0))

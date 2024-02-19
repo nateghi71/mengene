@@ -7,7 +7,7 @@
 @endsection
 
 @section('scripts')
-<script>
+<script type="module">
     $('#form_add_image #add_image').on('change' , function (){
         this.form.submit()
     })

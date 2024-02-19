@@ -11,8 +11,10 @@ use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
-class PremiumController extends BaseController
+class PremiumController extends Controller
 {
+    use MyBaseController;
+
     public function store($business)
     {
         $package = Package::where('name' , 'free')->first();

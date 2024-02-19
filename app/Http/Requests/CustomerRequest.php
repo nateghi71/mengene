@@ -6,19 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
@@ -27,7 +19,7 @@ class CustomerRequest extends FormRequest
             'price' => 'exclude_if:type_file,business,subscription,public,people|required|numeric|between:1000,99999999',
 
             'type_sale' => 'required',
-            'access_level' => 'required',
+            'access_level' => 'exclude_if:type_file,buy,subscription,public,people|required',
             'name' => 'required',
             'number' => 'required|iran_mobile',
             'scale' => 'required|numeric',
@@ -90,9 +82,10 @@ class CustomerRequest extends FormRequest
             'number' => to_english_numbers($this->input('number')),
             'area' => to_english_numbers($this->input('area')),
             'scale' => to_english_numbers(str_replace( ',', '', $this->input('scale'))),
-            'selling_price' => ($this->input('type_sale') === 'buy' && $this->input('selling_price') !== null) ? to_english_numbers(str_replace( ',', '', $this->input('selling_price'))) : 0,
-            'rahn_amount' => ($this->input('type_sale') === 'rahn' && $this->input('rahn_amount') !== null) ? to_english_numbers(str_replace( ',', '', $this->input('rahn_amount'))) : 0,
-            'rent_amount' => ($this->input('type_sale') === 'rahn' && $this->input('rent_amount') !== null) ? to_english_numbers(str_replace( ',', '', $this->input('rent_amount'))) : 0,
+            'selling_price' => $this->has('selling_price') ? to_english_numbers(str_replace( ',', '', $this->input('selling_price'))) : 0,
+            'rahn_amount' => $this->has('rahn_amount') ? to_english_numbers(str_replace( ',', '', $this->input('rahn_amount'))) : 0,
+            'rent_amount' => $this->has('rent_amount') ? to_english_numbers(str_replace( ',', '', $this->input('rent_amount'))) : 0,
+            'document' => $this->has('document') ? $this->input('document') : 'six_dongs',
             'year_of_construction' => $this->has('year_of_construction') ? to_english_numbers($this->input('year_of_construction')) : null,
             'year_of_reconstruction' => $this->has('year_of_reconstruction') ? to_english_numbers($this->input('year_of_reconstruction')) : null,
             'number_of_rooms' => $this->has('number_of_rooms') ? to_english_numbers($this->input('number_of_rooms')) : null,

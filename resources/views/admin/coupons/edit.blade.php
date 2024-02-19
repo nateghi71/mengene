@@ -6,7 +6,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         $(document).ready(function() {
             $("#expire_date").persianDatepicker({
                 format: 'YYYY/MM/DD',

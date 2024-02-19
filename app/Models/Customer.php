@@ -125,7 +125,7 @@ class Customer extends Model
                 switch ($value)
                 {
                     case 'buy':
-                        return 'فروش';
+                        return 'خرید';
                     case 'rahn':
                         return 'رهن و اجاره';
                 }

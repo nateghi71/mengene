@@ -26,7 +26,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         if ($("#transaction-history").length) {
             let business = @json($business);
             let landowner = (business.landowners_count * 100 )/(business.customers_count + business.landowners_count);

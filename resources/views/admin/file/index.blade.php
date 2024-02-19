@@ -27,7 +27,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
         function deleteBox(e)
@@ -98,12 +98,12 @@
                             <table class="table text-center">
                                 <thead>
                                 <tr>
-                                    <th> #</th>
-                                    <th> نام</th>
-                                    <th> شماره تماس</th>
-                                    <th> ثبت کننده</th>
-                                    <th> نوع</th>
-                                    <th>
+                                    <th class="text-white"> #</th>
+                                    <th class="text-white"> نام</th>
+                                    <th class="text-white"> شماره تماس</th>
+                                    <th class="text-white"> ثبت کننده</th>
+                                    <th class="text-white"> نوع</th>
+                                    <th class="text-white">
                                         @if($landowners->pluck('status')->contains('غیرفعال') ||
                                             $landowners->pluck('type_sale')->contains('خرید') && $landowners->pluck('type_sale')->contains('رهن و اجاره'))
                                             قیمت / رهن
@@ -113,23 +113,23 @@
                                             قیمت
                                         @endif
                                     </th>
-                                    <th>زمان باقیمانده</th>
+                                    <th class="text-white">زمان باقیمانده</th>
                                     @can('adminViewShow' , \App\Models\landowner::class)
-                                        <th> نمایش</th>
+                                        <th class="text-white"> نمایش</th>
                                     @endcan
                                     @can('adminEdit' , \App\Models\landowner::class)
-                                        <th> ویرایش</th>
+                                        <th class="text-white"> ویرایش</th>
                                     @endcan
                                     @can('adminDelete' , \App\Models\landowner::class)
-                                        <th>حذف
+                                        <th class="text-white">حذف
                                     @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($landowners as $key => $landowner)
                                     <tr>
-                                        <td>{{$landowners->firstItem() + $key}}</td>
-                                        <td>
+                                        <td class="text-white">{{$landowners->firstItem() + $key}}</td>
+                                        <td class="text-white">
                                             {{$landowner->name}}
                                             @if($landowner->getRawOriginal('status') == 'active')
                                                 <span class="mdi mdi-checkbox-blank-circle text-success"></span>
@@ -140,18 +140,18 @@
                                                 <span class="mdi mdi-checkbox-blank-circle text-danger"></span>
                                             @endif
                                         </td>
-                                        <td>{{$landowner->number}}</td>
-                                        <td>{{$landowner->user->name}}</td>
-                                        <td>{{$landowner->type_sale}}</td>
-                                        <td>{{$landowner->getRawOriginal('selling_price') !== 0 ? $landowner->selling_price : $landowner->rahn_amount}}</td>
-                                        <td>{{$landowner->daysLeft ? $landowner->daysLeft . ' روز' : 'منقضی'}} </td>
+                                        <td class="text-white">{{$landowner->number}}</td>
+                                        <td class="text-white">{{$landowner->user->name}}</td>
+                                        <td class="text-white">{{$landowner->type_sale}}</td>
+                                        <td class="text-white">{{$landowner->getRawOriginal('selling_price') !== 0 ? $landowner->selling_price : $landowner->rahn_amount}}</td>
+                                        <td class="text-white">{{$landowner->daysLeft ? $landowner->daysLeft . ' روز' : 'منقضی'}} </td>
                                         @can('adminViewShow' , \App\Models\landowner::class)
-                                            <td><a class="text-white text-decoration-none"
+                                            <td class="text-white"><a class="text-white text-decoration-none"
                                                    href="{{route('admin.landowners.show',$landowner->id)}}"><i
                                                             class="mdi mdi-eye"></i></a></td>
                                         @endcan
                                         @can('adminEdit' , \App\Models\landowner::class)
-                                            <td>
+                                            <td class="text-white">
                                                 <button type="button" class="btn btn-link text-decoration-none text-white" id="edit" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="mdi mdi-lead-pencil"></i>
                                                 </button>
@@ -162,7 +162,7 @@
                                             </td>
                                         @endcan
                                         @can('adminDelete' , \App\Models\landowner::class)
-                                            <td>
+                                            <td class="text-white">
                                                 <a href="{{route('admin.landowners.destroy',$landowner->id)}}"
                                                    id="open_delete_panel_{{$key}}"
                                                    class="text-decoration-none text-danger" type="button"><i

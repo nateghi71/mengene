@@ -3,7 +3,13 @@
 @section('title' , 'ایجاد مالک')
 
 @section('scripts')
-    <script>
+{{--    <script src="{{asset('Admin/assets/js/jquery.validate.min.js')}}"></script>--}}
+    <script type="module">
+        // $('#file_form').validate(
+        //     {
+        //
+        //     }
+        // )
         function getCities(){
             var provinceID = $('#province').val();
             if (provinceID) {
@@ -38,35 +44,23 @@
         }
         getCities()
         $('#province').on('change' , getCities)
+        $('input[name=type_sale]').on('change' , changeTypeSale)
+        $('#type_build').on('change' , changeTypeBuild)
 
-        // setTimeout(function() {
-        //     $('.alert-danger').remove();
-        // }, 5000);
-
-        if("{{ old('type_sale') == 'buy' || old('type_sale') == null }}")
+        changeTypeSale()
+        function changeTypeSale()
         {
-            buyFunction()
-        }
-        else
-        {
-            rahnFunction()
-        }
-
-        function buyFunction() {
-            $('#priceDiv').show();
-            $('#documentDiv').show();
-            $('#ownerDiv').hide();
-            $('#rahnDiv').hide();
-            $('#rentDiv').hide();
-        }
-
-        function rahnFunction() {
-            $('#priceDiv').hide();
-            $('#documentDiv').hide();
-            $('#ownerDiv').show();
-
-            $('#rahnDiv').show();
-            $('#rentDiv').show();
+            let selectOption = $('input[name=type_sale]:checked').val()
+            if(selectOption === 'buy')
+            {
+                $('#priceDiv,#documentDiv').show().children('input,select').each(function (){$(this).attr('name' , $(this).attr('id'))});
+                $('#ownerDiv,#rahnDiv,#rentDiv').hide().children('input,select').attr('name', '');
+            }
+            else if(selectOption === 'rahn')
+            {
+                $('#priceDiv,#documentDiv').hide().children('input,select').attr('name', '');
+                $('#rahnDiv,#rentDiv,#ownerDiv').show().children('input,select').each(function (){$(this).attr('name' , $(this).attr('id'))});
+            }
         }
 
         $('#more').hide();
@@ -113,7 +107,7 @@
                     ',.state_of_phone   ,.discharge  , .exist_owner ,.air_conditioning_system').show().children('input,select').each(function (){$(this).attr('name' , $(this).attr('id'))});
                 $('.floor, .view, .number_of_unit_in_floor,.number_unit, .Direction_of_building, .elevator, .parking' +
                     ' , .cabinets , .store ,.water_heater, .video_iphone , .Underground , .terrace, .yard , .pool , .sauna , .Jacuzzi' +
-                ', .postal_code , .plaque, .number_of_rooms , .floor_number , .Wall_closet').hide().children('input,select').attr('name', '');
+                ', .postal_code , .plaque, .number_of_rooms , .floor_number , .Wall_closet, .exist_owner').hide().children('input,select').attr('name', '');
             }
             else if(selectOptin === 'store' || selectOptin === 'hall' || selectOptin === 'parking'
                 || selectOptin === 'workshop' || selectOptin === 'land')
@@ -141,12 +135,12 @@
             });
         });
         function separateNum(input) {
-            var nStr = input.value + '';
+            let nStr = input.value + '';
             nStr = nStr.replace(/\,/g, "");
-            x = nStr.split('.');
-            x1 = x[0];
-            x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
+            let x = nStr.split('.');
+            let x1 = x[0];
+            let x2 = x.length > 1 ? '.' + x[1] : '';
+            let rgx = /(\d+)(\d{3})/;
             while (rgx.test(x1)) {
                 x1 = x1.replace(rgx, '$1' + ',' + '$2');
             }
@@ -201,7 +195,7 @@
 @section('content')
     <div class="card row">
         <div class="card-body px-5 py-4">
-            <form action="{{route('landowner.store')}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('landowner.store')}}" method="post" enctype="multipart/form-data" id="file_form">
                 @csrf
                 <div class="d-flex align-items-center">
                     <div>
@@ -225,13 +219,13 @@
                         <div class="col-sm-3">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale1">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" onclick="buyFunction()" value="buy" @checked(old('type_sale') == 'buy' || old('type_sale') == null)> فروش </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale1" value="buy" @checked(old('type_sale') == 'buy' || old('type_sale') == null)> فروش </label>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-check">
                                 <label class="form-check-label" for="type_sale2">
-                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" onclick="rahnFunction()" value="rahn"  @checked(old('type_sale') == 'rahn')> رهن و اجاره </label>
+                                    <input type="radio" class="form-check-input" name="type_sale" id="type_sale2" value="rahn"  @checked(old('type_sale') == 'rahn')> رهن و اجاره </label>
                             </div>
                         </div>
                         @error('type_sale')
@@ -345,7 +339,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="type_build">نوع ملک:</label>
-                        <select class="form-control" name="type_build" id="type_build" onchange="changeTypeBuild()">
+                        <select class="form-control" name="type_build" id="type_build">
                             <option value="house" @selected(old('type_build') == 'house')>ویلایی</option>
                             <option value="apartment" @selected(old('type_build') == 'apartment')>ساختمان</option>
                             <option value="shop" @selected(old('type_build') == 'shop')>مغازه</option>

@@ -27,7 +27,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         $('[id^=open_delete_panel_]').on('click' , deleteBox)
 
         function deleteBox(e)
@@ -82,38 +82,38 @@
                             <table class="table text-center">
                                 <thead>
                                 <tr>
-                                    <th> # </th>
-                                    <th> نام </th>
-                                    <th> شماره </th>
-                                    <th> شهر </th>
-                                    <th> نقش </th>
+                                    <th class="text-white"> # </th>
+                                    <th class="text-white"> نام </th>
+                                    <th class="text-white"> شماره </th>
+                                    <th class="text-white"> شهر </th>
+                                    <th class="text-white"> نقش </th>
                                     @can('viewShow' , \App\Models\User::class)
-                                    <th> نمایش </th>
+                                    <th class="text-white"> نمایش </th>
                                     @endcan
                                     @can('edit' , \App\Models\User::class)
-                                    <th> ویرایش </th>
+                                    <th class="text-white"> ویرایش </th>
                                     @endcan
                                     @can('changeStatus' , \App\Models\User::class)
-                                    <th> وضعیت
+                                    <th class="text-white"> وضعیت
                                     @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($users as $key => $user)
                                     <tr>
-                                        <td>{{$users->firstItem() + $key}}</td>
-                                        <td>{{$user->name}}</td>
-                                        <td>{{$user->number}}</td>
-                                        <td>{{$user->city->name}}</td>
-                                        <td>{{$user->role->name}}</td>
+                                        <td class="text-white">{{$users->firstItem() + $key}}</td>
+                                        <td class="text-white">{{$user->name}}</td>
+                                        <td class="text-white">{{$user->number}}</td>
+                                        <td class="text-white">{{$user->city->name}}</td>
+                                        <td class="text-white">{{$user->role->name}}</td>
                                         @can('viewShow' , \App\Models\User::class)
-                                        <td><a class="btn text-decoration-none" href="{{route('admin.users.show',$user->id)}}"><i class="mdi mdi-eye"></i></a></td>
+                                        <td class="text-white"><a class="btn text-decoration-none" href="{{route('admin.users.show',$user->id)}}"><i class="mdi mdi-eye"></i></a></td>
                                         @endcan
                                         @can('edit' , \App\Models\User::class)
-                                        <td><a class="btn text-decoration-none" href="{{route('admin.users.edit',$user->id)}}"><i class="mdi mdi-pencil"></i></a></td>
+                                        <td class="text-white"><a class="btn text-decoration-none" href="{{route('admin.users.edit',$user->id)}}"><i class="mdi mdi-pencil"></i></a></td>
                                         @endcan
                                         @can('changeStatus' , \App\Models\User::class)
-                                        <td>
+                                        <td class="text-white">
                                             <a class="btn text-decoration-none" id="open_delete_panel_{{$key}}" href="{{route('admin.users.status',$user->id)}}">
                                                 {!! $user->status === 'active' ? '<span class="text-danger">غیرفعال کردن</span>' : '<span class="text-success">فعال کردن</span>' !!}
                                             </a>

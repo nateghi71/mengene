@@ -30,7 +30,7 @@
 @endsection
 
 @section('scripts')
-    <script>
+    <script type="module">
         let datePicker = $("[id^=remainder_]").persianDatepicker({
             timePicker: {
                 enabled: true,
@@ -59,6 +59,13 @@
             initialValue: false,
             minDate: new persianDate(),
         });
+
+        $('#sort-by').on('change' , filter)
+        $('#type_sale').on('change' , filter)
+        $('#type_work').on('change' , filter)
+        $('#type_build').on('change' , filter)
+        $('#status').on('change' , filter)
+
         function filter() {
             let typeSale = $('#type_sale').val();
             if (typeSale == "default") {
@@ -164,7 +171,7 @@
                 <div class="card-body py-2 row">
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <select class="form-control" onchange="filter()" id="sort-by">
+                            <select class="form-control" id="sort-by">
                                 <option value="default">مرتب سازی</option>
                                 <option value="max_days" @selected(request()->has('sortBy') && request()->sortBy == 'max_days')>بیشترین روزهای باقی مانده</option>
                                 <option value="min_days" @selected(request()->has('sortBy') && request()->sortBy == 'min_days')>کمترین روزهای باقی مانده</option>
@@ -179,21 +186,21 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="type_sale">
+                            <select class="form-control" id="type_sale">
                                 <option value="default">نوع</option>
                                 <option value="buy" @selected(request()->has('type_sale') && request()->type_sale == 'buy')>فروش</option>
                                 <option value="rahn" @selected(request()->has('type_sale') && request()->type_sale == 'rahn')>رهن و اجاره</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="type_file">
+                            <select class="form-control" id="type_file">
                                 <option value="default">نوع فایل</option>
                                 <option value="subscription" @selected(request()->has('type_file') && request()->type_file == 'subscription')>اشتراکی</option>
                                 <option value="buy" @selected(request()->has('type_file') && request()->type_file == 'buy')>پولی</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="type_work">
+                            <select class="form-control" id="type_work">
                                 <option value="default">نوع کاربری</option>
                                 <option value="home" @selected(request()->has('type_work') && request()->type_work == 'home')>خانه</option>
                                 <option value="office" @selected(request()->has('type_work') && request()->type_work == 'office')>دفتر</option>
@@ -204,7 +211,7 @@
                             </select>
                         </div>
                         <div class="form-group col-md-3">
-                            <select class="form-control" onchange="filter()" id="type_build">
+                            <select class="form-control" id="type_build">
                                 <option value="default">نوع ملک</option>
                                 <option value="house" @selected(request()->has('type_build') && request()->type_build == 'house')>ویلایی</option>
                                 <option value="apartment" @selected(request()->has('type_build') && request()->type_build == 'apartment')>ساختمان</option>

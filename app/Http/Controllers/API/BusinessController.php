@@ -22,8 +22,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use PHPUnit\Exception;
 
-class BusinessController extends BaseController
+class BusinessController extends Controller
 {
+    use MyBaseController;
     public function index()
     {
         try
