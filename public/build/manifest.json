@@ -1,0 +1,74 @@
+{
+  "resources/fonts/dashboard/Yekan.ttf": {
+    "file": "assets/Yekan-zmb9je_X.ttf",
+    "src": "resources/fonts/dashboard/Yekan.ttf"
+  },
+  "resources/fonts/dashboard/iranyekanwebbold.ttf": {
+    "file": "assets/iranyekanwebbold-b9NfvJAF.ttf",
+    "src": "resources/fonts/dashboard/iranyekanwebbold.ttf"
+  },
+  "resources/fonts/dashboard/iranyekanweblight.ttf": {
+    "file": "assets/iranyekanweblight-nGG-QIy9.ttf",
+    "src": "resources/fonts/dashboard/iranyekanweblight.ttf"
+  },
+  "resources/fonts/dashboard/iranyekanwebregular.ttf": {
+    "file": "assets/iranyekanwebregular-X_hb152z.ttf",
+    "src": "resources/fonts/dashboard/iranyekanwebregular.ttf"
+  },
+  "resources/fonts/dashboard/materialdesignicons-webfont.eot": {
+    "file": "assets/materialdesignicons-webfont-OWtXZZ3R.eot",
+    "src": "resources/fonts/dashboard/materialdesignicons-webfont.eot"
+  },
+  "resources/fonts/dashboard/materialdesignicons-webfont.ttf": {
+    "file": "assets/materialdesignicons-webfont-go9nydPi.ttf",
+    "src": "resources/fonts/dashboard/materialdesignicons-webfont.ttf"
+  },
+  "resources/fonts/dashboard/materialdesignicons-webfont.woff": {
+    "file": "assets/materialdesignicons-webfont-oMeLOwbK.woff",
+    "src": "resources/fonts/dashboard/materialdesignicons-webfont.woff"
+  },
+  "resources/fonts/dashboard/materialdesignicons-webfont.woff2": {
+    "file": "assets/materialdesignicons-webfont-PG5eMg0i.woff2",
+    "src": "resources/fonts/dashboard/materialdesignicons-webfont.woff2"
+  },
+  "resources/fonts/dashboard/yekan_bold.ttf": {
+    "file": "assets/yekan_bold-0DHQUKLJ.ttf",
+    "src": "resources/fonts/dashboard/yekan_bold.ttf"
+  },
+  "resources/fonts/dashboard/yekan_light.ttf": {
+    "file": "assets/yekan_light-rL2Lbmh4.ttf",
+    "src": "resources/fonts/dashboard/yekan_light.ttf"
+  },
+  "resources/fonts/dashboard/yekan_medium.ttf": {
+    "file": "assets/yekan_medium-9Ge0OIXl.ttf",
+    "src": "resources/fonts/dashboard/yekan_medium.ttf"
+  },
+  "resources/images/dashboard/auth/Login_bg.jpg": {
+    "file": "assets/Login_bg-_8_3MKSn.jpg",
+    "src": "resources/images/dashboard/auth/Login_bg.jpg"
+  },
+  "resources/images/dashboard/auth/lockscreen-bg.jpg": {
+    "file": "assets/lockscreen-bg-pQMRi4XN.jpg",
+    "src": "resources/images/dashboard/auth/lockscreen-bg.jpg"
+  },
+  "resources/js/dashboard.js": {
+    "file": "assets/dashboard-GR_6J0FY.js",
+    "isEntry": true,
+    "src": "resources/js/dashboard.js"
+  },
+  "resources/js/home.js": {
+    "file": "assets/home-w40geAFS.js",
+    "isEntry": true,
+    "src": "resources/js/home.js"
+  },
+  "resources/scss/dashboard.scss": {
+    "file": "assets/dashboard-A6Q2Qj80.css",
+    "isEntry": true,
+    "src": "resources/scss/dashboard.scss"
+  },
+  "resources/scss/home.scss": {
+    "file": "assets/home-DkoCfqcs.js",
+    "isEntry": true,
+    "src": "resources/scss/home.scss"
+  }
+}

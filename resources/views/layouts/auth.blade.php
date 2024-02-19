@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title' , 'mengene')</title>
-    @vite(['resources/js/app.js', 'resources/scss/app.scss'])
+    @vite(['resources/js/dashboard.js', 'resources/scss/dashboard.scss'])
     <!-- plugins:css -->
 {{--    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/mdi/css/materialdesignicons.min.css')}}">--}}
 {{--    <link rel="stylesheet" href="{{asset('Admin/assets/vendors/css/vendor.bundle.base.css')}}">--}}

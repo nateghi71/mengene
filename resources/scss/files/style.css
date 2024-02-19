@@ -15836,25 +15836,25 @@ input:focus {
 @font-face {
   font-family: 'Rubik';
   font-weight: 300;
-  src: url("../../fonts/yekan_light.ttf");
+  src: url("/resources/fonts/dashboard/yekan_light.ttf");
   /* IE9 Compat Modes */ }
 
 @font-face {
   font-family: 'Rubik';
   font-weight: 400;
-  src: url("../../fonts/Yekan.ttf");
+  src: url("/resources/fonts/dashboard/Yekan.ttf");
   /* IE9 Compat Modes */ }
 
 @font-face {
   font-family: 'Rubik';
   font-weight: 500;
-  src: url("../../fonts/yekan_medium.ttf");
+  src: url("/resources/fonts/dashboard/yekan_medium.ttf");
   /* IE9 Compat Modes */ }
 
 @font-face {
   font-family: 'Rubik';
   font-weight: 700;
-  src: url("../../fonts/yekan_bold.ttf");
+  src: url("/resources/fonts/dashboard/yekan_bold.ttf");
   /* IE9 Compat Modes */ }
 
 /* Backgrounds  */
@@ -19905,7 +19905,7 @@ div.tagsinput {
 /* === Landing screens === */
 /* Auth */
 .auth.login-bg {
-  background: url("../../images/auth/Login_bg.jpg");
+  background: url("/resources/images/dashboard/auth/Login_bg.jpg");
   background-size: cover; }
 
 .auth .login-half-bg {
@@ -19913,7 +19913,7 @@ div.tagsinput {
   background-size: cover; }
 
 .auth.register-half-bg {
-  background: url("../../images/auth/lockscreen-bg.jpg");
+  background: url("/resources/images/dashboard/auth/lockscreen-bg.jpg");
   background-size: cover; }
 
 .auth.lock-full-bg {

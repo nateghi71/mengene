@@ -9,7 +9,7 @@
             <div  class="profile-desc">
                 <div class="profile-pic">
                     <div class="count-indicator">
-                        <img class="img-xs rounded-circle" src="{{asset('Admin/assets/images/faces-clipart/pic-4.png')}}" alt="">
+                        <img class="img-xs rounded-circle" src="{{asset('images/dashboard/pic-4.png')}}" alt="">
                         <span class="count bg-success"></span>
                     </div>
                     <div class="profile-name">
