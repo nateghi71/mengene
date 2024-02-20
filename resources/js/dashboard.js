@@ -8,14 +8,15 @@ import.meta.glob([
 import jQuery from 'jquery'
 window.$ = jQuery
 
+
+import 'jquery-validation/dist/jquery.validate.js'
+
 import persianDate from 'persian-date'
 window.persianDate = persianDate
 
 import Chart from 'chart.js/dist/Chart.bundle.js'
 window.Chart = Chart
-
 import 'bootstrap'
-
 
 (function($) {
     'use strict';

@@ -109,6 +109,12 @@
                     calendarSwitch:{
                         enabled:false,
                     }
+                },
+                onSelect:function ()
+                {
+                    $('#expire_date').siblings('.error').remove()
+                    console.log($('#expire_date').siblings('.error').get(0))
+                    $('#expire_date').siblings('#expire_date-error').remove()
                 }
             });
         });
@@ -180,6 +186,157 @@
                 star.prop('checked' , false)
             }
         });
+
+        $('#file_form').validate({
+            errorPlacement: function(label, element) {
+                label.addClass('text-danger mt-1 fs-6');
+                label.insertAfter(element);
+            },
+            rules: {
+                name : {
+                    required : true,
+                    minlength: 2
+                },
+                number : {
+                    required : true,
+                    digits: true,
+                    minlength: 11
+                },
+                scale : {
+                    required : true,
+                    digits: true,
+                },
+                city_id : {
+                    required : true,
+                },
+                area : {
+                    required : true,
+                    digits: true,
+                },
+                expire_date : {
+                    required : true,
+                },
+                selling_price : {
+                    required : true,
+                },
+                rahn_amount : {
+                    required : true,
+                },
+                rent_amount : {
+                    required : true,
+                },
+                address : {
+                    required : true,
+                },
+                //more
+                year_of_construction : {
+                    required : false,
+                    digits: true,
+                },
+                year_of_reconstruction : {
+                    required : false,
+                    digits: true,
+                },
+                number_of_rooms : {
+                    required : false,
+                    digits: true,
+                },
+                floor_number : {
+                    required : false,
+                    digits: true,
+                },
+                floor : {
+                    required : false,
+                    digits: true,
+                },
+                number_of_unit_in_floor : {
+                    required : false,
+                    digits: true,
+                },
+                number_unit : {
+                    required : false,
+                    digits: true,
+                },
+                postal_code : {
+                    required : false,
+                    digits: true,
+                },
+                plaque : {
+                    required : false,
+                    digits: true,
+                },
+            },
+            messages: {
+                name: {
+                    required : "وارد کردن نام ضروری است.",
+                    minlength: "حداقل دو کاراکتر موردنیاز می باشد."
+                },
+                number : {
+                    required : "وارد کردن شماره تلفن ضروری است.",
+                    digits: 'شماره تلفن باید به صورت عددی باشد.',
+                    minlength: "حداقل 11 عدد موردنیاز می باشد."
+                },
+                scale : {
+                    required : "وارد کردن متراژ ضروری است.",
+                    digits: 'متراژ باید به صورت عددی باشد.',
+                },
+                city_id : {
+                    required : "وارد کردن شهر ضروری است.",
+                },
+                area : {
+                    required : "وارد کردن منطقه شهرداری ضروری است.",
+                    digits: 'منطقه شهرداری باید به صورت عددی باشد.',
+                },
+                expire_date : {
+                    required : "وارد کردن زمان باقیمانده ضروری است.",
+                },
+                selling_price : {
+                    required : "وارد کردن قیمت ضروری است.",
+                },
+                rahn_amount : {
+                    required : "وارد کردن رهن ضروری است.",
+                },
+                rent_amount : {
+                    required : "وارد کردن اجاره ضروری است.",
+                },
+                address : {
+                    required : "وارد کردن ادرس ضروری است.",
+                },
+                year_of_construction : {
+                    digits: 'سال ساخت باید به صورت عددی باشد.',
+                },
+                year_of_reconstruction : {
+                    digits: 'سال بازسازی باید به صورت عددی باشد.',
+                },
+                number_of_rooms : {
+                    digits: 'تعداد اتاق باید به صورت عددی باشد.',
+                },
+                floor_number : {
+                    digits: 'تعداد طبقات باید به صورت عددی باشد.',
+                },
+                floor : {
+                    digits: 'شماره طبقه باید به صورت عددی باشد.',
+                },
+                number_of_unit_in_floor : {
+                    digits: 'تعداد واحد در طبقه باید به صورت عددی باشد.',
+                },
+                number_unit : {
+                    digits: 'شماره واحد باید به صورت عددی باشد.',
+                },
+                postal_code : {
+                    digits: 'کد پستی باید به صورت عددی باشد.',
+                },
+                plaque : {
+                    digits: 'پلاک باید به صورت عددی باشد.',
+                },
+            }
+        })
+
+        $('input').on('keyup' , function (){
+            if($(this).val() !== '')
+                $(this).siblings('.error').remove()
+        })
+
     </script>
 
 @endsection
@@ -187,7 +344,7 @@
 @section('content')
     <div class="card row">
         <div class="card-body px-5 py-4">
-            <form action="{{route('customer.store')}}" method="post">
+            <form action="{{route('customer.store')}}" method="post" id="file_form">
                 @csrf
                 <div class="d-flex align-items-center">
                     <div>
@@ -199,7 +356,7 @@
                             <input type="checkbox" name="is_star" id="is_star" class="d-none" @checked(old('is_star') == 'on')>
                         </div>
                         @error('is_star')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="me-auto ms-4 mb-3"><a href="{{route('customer.index')}}" class="btn btn-primary p-2">نمایش متقاضیان</a></div>
@@ -221,7 +378,7 @@
                             </div>
                         </div>
                         @error('type_sale')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                 </div>
@@ -233,14 +390,14 @@
                             <option value="public" @selected(old('access_level') == 'public')>نمایش عمومی</option>
                         </select>
                         @error('access_level')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
                         <label for="name"> نام و نام خانوادگی:</label>
                         <input type="text" name="name" class="form-control" id="name" value="{{old('name')}}" placeholder="نام">
                         @error('name')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
@@ -248,7 +405,7 @@
                         <input type="text" name="number" class="form-control" value="{{old('number')}}" id="number" placeholder="شماره تماس"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('number')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
@@ -256,7 +413,7 @@
                         <input type="text" name="scale" class="form-control" value="{{old('scale')}}" id="scale" placeholder="متراژ"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('scale')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
@@ -272,7 +429,7 @@
                         <select name="city_id" class="form-control" id="city">
                         </select>
                         @error('city_id')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
@@ -280,7 +437,7 @@
                         <input type="text" name="area" class="form-control" value="{{(old('area') == null) ? auth()->user()->business()->area : old('area')}}" id="area" placeholder="منطقه شهرداری"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('area')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
@@ -288,7 +445,7 @@
                         <input type="text" name="expire_date" class="form-control" value="{{old('expire_date')}}" id="expire_date" placeholder="زمان باقیمانده"
                                onkeypress="return false">
                         @error('expire_date')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div id="priceDiv" class="form-group col-md-3" style="display: block">
@@ -296,7 +453,7 @@
                         <input type="text" name="selling_price" class="form-control" value="{{old('selling_price')}}" id="selling_price" placeholder="قیمت"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('selling_price')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div id="rahnDiv" class="form-group col-md-3" style="display: none">
@@ -304,7 +461,7 @@
                         <input type="text" name="rahn_amount" class="form-control" value="{{old('rahn_amount')}}" id="rahn_amount" placeholder="رهن"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rahn_amount')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div id="rentDiv" class="form-group col-md-3" style="display: none">
@@ -312,7 +469,7 @@
                         <input type="text" name="rent_amount" class="form-control" value="{{old('rent_amount')}}" id="rent_amount" placeholder="اجاره"
                                onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                         @error('rent_amount')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
@@ -326,7 +483,7 @@
                             <option value="other" @selected(old('type_work') == 'other')>سایر</option>
                         </select>
                         @error('type_work')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-3">
@@ -342,7 +499,7 @@
                             <option value="hall" @selected(old('type_build') == 'hall')>سالن</option>
                         </select>
                         @error('type_build')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div id="documentDiv" class="form-group col-md-3">
@@ -360,14 +517,14 @@
                             <option value="gholnameh" @selected(old('document') == 'gholnameh')>قولنامه</option>
                         </select>
                         @error('document')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                     <div class="form-group col-md-6">
                         <label for="address">آدرس:</label>
                         <textarea name="address" class="form-control" id="address" placeholder="آدرس" rows="3">{{old('address')}}</textarea>
                         @error('address')
-                        <div class="alert-danger">{{$message}}</div>
+                        <div class="error text-danger">{{$message}}</div>
                         @enderror
                     </div>
                 </div>
@@ -382,7 +539,7 @@
                             <input type="text" name="year_of_construction" class="form-control" value="{{old('year_of_construction')}}" id="year_of_construction" placeholder="مانند : 1391"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="4">
                             @error('year_of_construction')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 year_of_reconstruction">
@@ -390,7 +547,7 @@
                             <input type="text" name="year_of_reconstruction" class="form-control" value="{{old('year_of_reconstruction')}}" id="year_of_reconstruction" placeholder="مانند : 1391"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" maxlength="4">
                             @error('year_of_reconstruction')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 number_of_rooms">
@@ -398,7 +555,7 @@
                             <input type="text" name="number_of_rooms" class="form-control" value="{{old('number_of_rooms')}}" id="number_of_rooms" placeholder="تعداد اتاق"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                             @error('number_of_rooms')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 floor_number">
@@ -406,7 +563,7 @@
                             <input type="text" name="floor_number" class="form-control" value="{{old('floor_number')}}" id="floor_number" placeholder="تعداد طبقات کل ساختمان"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                             @error('floor_number')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 floor">
@@ -414,7 +571,7 @@
                             <input type="text" name="floor" class="form-control" value="{{old('floor')}}" id="floor" placeholder="شماره طبقه"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                             @error('floor')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 floor_covering">
@@ -428,7 +585,7 @@
                                 <option value="others" @selected(old('floor_covering') == 'other')>سایر</option>
                             </select>
                             @error('floor_covering')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 cooling">
@@ -440,7 +597,7 @@
                                 <option value="nothing" @selected(old('cooling') == 'nothing')>ندارد</option>
                             </select>
                             @error('cooling')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 heating">
@@ -454,7 +611,7 @@
                                 <option value="nothing" @selected(old('heating') == 'nothing')>ندارد</option>
                             </select>
                             @error('heating')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 cabinets">
@@ -471,7 +628,7 @@
                                 <option value="noting" @selected(old('cabinets') == 'noting')>ندارد</option>
                             </select>
                             @error('cabinets')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 view">
@@ -488,7 +645,7 @@
                                 <option value="others" @selected(old('view') == 'others')>سایر</option>
                             </select>
                             @error('view')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 number_of_unit_in_floor">
@@ -496,7 +653,7 @@
                             <input type="text" name="number_of_unit_in_floor" class="form-control" value="{{old('number_of_unit_in_floor')}}" id="number_of_unit_in_floor" placeholder="تعداد واحد در طبقه"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                             @error('number_of_unit_in_floor')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 number_unit">
@@ -504,7 +661,7 @@
                             <input type="text" name="number_unit" class="form-control" value="{{old('number_unit')}}" id="number_unit" placeholder="شماره واحد"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                             @error('number_unit')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 postal_code">
@@ -512,7 +669,7 @@
                             <input type="text" name="postal_code" class="form-control" value="{{old('postal_code')}}" id="postal_code" placeholder="کد پستی"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                             @error('postal_code')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 plaque">
@@ -520,7 +677,7 @@
                             <input type="text" name="plaque" class="form-control" value="{{old('plaque')}}" id="plaque" placeholder="شماره پلاک"
                                    onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                             @error('plaque')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 state_of_electricity">
@@ -532,7 +689,7 @@
                                 <option value="exclusive" @selected(old('state_of_electricity') == 'exclusive')>اختصاصی</option>
                             </select>
                             @error('state_of_electricity')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 state_of_water">
@@ -544,7 +701,7 @@
                                 <option value="exclusive" @selected(old('state_of_water') == 'exclusive')>اختصاصی</option>
                             </select>
                             @error('state_of_water')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 state_of_gas">
@@ -556,7 +713,7 @@
                                 <option value="exclusive" @selected(old('state_of_gas') == 'exclusive')>اختصاصی</option>
                             </select>
                             @error('state_of_gas')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 state_of_phone">
@@ -568,7 +725,7 @@
                                 <option value="not_working" @selected(old('state_of_phone') == 'not_working')>دایر نیست</option>
                             </select>
                             @error('state_of_phone')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 state_of_phone">
@@ -581,7 +738,7 @@
                                 <option value="west" @selected(old('Direction_of_building') == 'west')>غرب</option>
                             </select>
                             @error('state_of_phone')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-3 state_of_phone">
@@ -593,14 +750,14 @@
                                 <option value="package" @selected(old('water_heater') == 'package')>پکیج</option>
                             </select>
                             @error('state_of_phone')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-6 description">
                             <label for="description">توضیحات:</label>
                             <textarea name="description" class="form-control" id="description" placeholder="توضیحات" rows="3">{{old('description')}}</textarea>
                             @error('description')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                     </div>
@@ -612,7 +769,7 @@
                                 </label>
                             </div>
                             @error('discharge')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col elevator">
@@ -622,7 +779,7 @@
                                 </label>
                             </div>
                             @error('elevator')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col parking">
@@ -632,7 +789,7 @@
                                 </label>
                             </div>
                             @error('parking')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col store">
@@ -642,7 +799,7 @@
                                 </label>
                             </div>
                             @error('store')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div id="ownerDiv" class="form-group col exist_owner">
@@ -652,7 +809,7 @@
                                 </label>
                             </div>
                             @error('exist_owner')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col terrace">
@@ -662,7 +819,7 @@
                                 </label>
                             </div>
                             @error('terrace')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col air_conditioning_system">
@@ -672,7 +829,7 @@
                                 </label>
                             </div>
                             @error('air_conditioning_system')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col yard">
@@ -682,7 +839,7 @@
                                 </label>
                             </div>
                             @error('yard')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col pool">
@@ -692,7 +849,7 @@
                                 </label>
                             </div>
                             @error('pool')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col sauna">
@@ -702,7 +859,7 @@
                                 </label>
                             </div>
                             @error('sauna')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col Jacuzzi">
@@ -712,7 +869,7 @@
                                 </label>
                             </div>
                             @error('Jacuzzi')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col video_iphone">
@@ -722,7 +879,7 @@
                                 </label>
                             </div>
                             @error('video_iphone')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col Underground">
@@ -732,7 +889,7 @@
                                 </label>
                             </div>
                             @error('Underground')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                         <div class="form-group col Wall_closet">
@@ -742,7 +899,7 @@
                                 </label>
                             </div>
                             @error('Wall_closet')
-                            <div class="alert-danger">{{$message}}</div>
+                            <div class="error text-danger">{{$message}}</div>
                             @enderror
                         </div>
                     </div>
