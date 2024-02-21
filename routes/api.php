@@ -5,6 +5,7 @@ use App\Http\Controllers\API\ConsultantController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\LandownerController;
 use App\Http\Controllers\Api\LandownerImageController;
+use App\Http\Controllers\API\PremiumController;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\SuggestionForCustomerController;
 use App\Http\Controllers\API\SuggestionForLandownerController;
@@ -46,6 +47,9 @@ Route::middleware('auth:api')->group(function () {
     Route::put('business/{user}/toggle-user-acceptance', [BusinessController::class, 'toggleUserAcceptance'])->name('api.business.toggleUserAcceptance');
     Route::put('business/{user}/choose-owner', [BusinessController::class, 'chooseOwner'])->name('api.business.chooseOwner');
     Route::get("business/{user}/remove", [BusinessController::class, 'removeMember'])->name('api.business.remove.member');
+
+    Route::post("packages/get_package", [PremiumController::class, 'get_package'])->name('api.packages.get_package');
+    Route::get("packages/package_name", [PremiumController::class, 'package_name'])->name('api.packages.package_name');
 
     Route::get('consultant/index', [ConsultantController::class, 'index'])->name('api.consultant.show');
     Route::post('consultant/search', [ConsultantController::class, 'search'])->name('api.consultant.search');

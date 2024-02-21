@@ -168,6 +168,7 @@ class RegisterController extends Controller
             return $this->sendResponse([
                 'token' => $token ,
                 'role' => $role,
+                'package_name' => $user->business()->premium->package->name,
             ], 'User login successfully.');
         } else {
             return $this->sendError('Unauthorised.', ['error' => 'Unauthorised2'] , 400);

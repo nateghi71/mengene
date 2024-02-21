@@ -10,6 +10,7 @@ use App\Models\Premium;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class PremiumController extends Controller
 {
@@ -24,7 +25,12 @@ class PremiumController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function package_name()
+    {
+        return auth()->user()->business()->premium->package->name;
+    }
+
+    public function get_package(Request $request)
     {
         try
         {
@@ -35,26 +41,22 @@ class PremiumController extends Controller
             return $this->sendError('Authorization Error', $exception->getMessage() , 401);
         }
 
-        $business = auth()->user()->ownedBusiness()->first();
-        $premium = Premium::where('business_id' , $business->id)->first();
-
-        $expire_date = Carbon::now()->addMonth(3);
-        if($request->level == 'midLevel')
+        if(Hash::check($request->str_key , '$2y$12$fDryj4vnzYd.6GNFKa2ifufPGNtfVEDI8lmlvgkv51NUaesx8sS0G'))
         {
-            $expire_date = Carbon::now()->addMonth(3);
-        }
-        elseif ($request->level == 'vip')
-        {
-            $expire_date = Carbon::now()->addYear();
+            $package = Package::where('name' , $request->package_name)->first();
+
+            $business = auth()->user()->ownedBusiness()->first();
+            $premium = Premium::where('business_id' , $business->id)->first();
+            $expire_date = Carbon::now()->addMonth($package->time);
+
+            $premium->update([
+                'package_id' => $package->id,
+                'expire_date' => $expire_date,
+            ]);
+
+            return $this->sendResponse([], 'Package Is Buy.');
         }
 
-        $premium = $premium->update([
-            'level' => $request->level,
-            'expire_date' => $expire_date,
-        ]);
-
-        return $this->sendResponse(['level' => $premium->level], 'premium buy successfully.');
+        return $this->sendError('Unauthorised.', ['error' => 'Unauthorised2'] , 422);
     }
-
-
 }
