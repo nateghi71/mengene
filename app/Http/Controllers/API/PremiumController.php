@@ -32,14 +32,14 @@ class PremiumController extends Controller
 
     public function get_package(Request $request)
     {
-        try
-        {
-            $this->authorize('viewPremiumIndex' , Business::class);
-        }
-        catch (AuthorizationException $exception)
-        {
-            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
-        }
+//        try
+//        {
+//            $this->authorize('viewPremiumIndex' , Business::class);
+//        }
+//        catch (AuthorizationException $exception)
+//        {
+//            return $this->sendError('Authorization Error', $exception->getMessage() , 401);
+//        }
 
         if(Hash::check($request->str_key , '$2y$12$fDryj4vnzYd.6GNFKa2ifufPGNtfVEDI8lmlvgkv51NUaesx8sS0G'))
         {
